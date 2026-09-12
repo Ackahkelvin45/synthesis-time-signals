@@ -950,3 +950,36 @@ three draw cleanly. Only C2-rep7 is broken.
 
 **Also.** `build_coverage_binary` is idempotent (parallel shards no longer
 race on the compile); macOS has no `timeout` binary (use a perl alarm).
+
+## D26 — Phase 1a result: H1 is null on json-parser; refinement does not improve on the seed
+
+Registered analysis (paper/preregistration.md, frozen at 4762bad), primary
+outcome `auc_branch_reach` (10^4 inputs x 20 fresh seeds per replicate),
+failed cells scored 0. Data: eval/matrix/stage1a.jsonl (800 cells), report
+eval/matrix/stage1a_report.md.
+
+| | C2 proxy | A5 no steering |
+|---|---|---|
+| final, replicate means (10) | 51.0 ± 19.3 (median 63.9) | 63.7 ± 2.8 (median 64.6) |
+| unusable output generators | 2 (rep7, rep10: gated at 0.00 on all 5 iterations) | 0 |
+| Δ final − seed per replicate | −1.0 ± 0.8, sign-flip p = 0.031, 2/10 positive | +0.1 ± 1.2, p = 0.77, 6/10 positive |
+
+H1 (C2 vs A5): Δmean −12.7, Vargha-Delaney A12 = 0.36 (bootstrap 95% CI
+[0.14, 0.63]), permutation p = 0.24. Not a practical difference by the
+registered thresholds; the point estimate favours the control. Among usable
+generators the conditions are indistinguishable (exploratory: C2 63.69 over
+8 vs A5 63.68 over 10). Neither loop improves on its own seed: the proxy
+steer's per-replicate delta is small and NEGATIVE (8 of the 8 usable
+replicates went down, typically by 1-3 points), the control's is noise.
+
+Reading, per the pre-registered predictions: on this target the structural
+steering signal does not earn its place, and refinement of any kind adds
+nothing beyond the seed at this budget. The mean difference between
+conditions is entirely the two replicates where the proxy loop's model
+repeated a broken construct five times and the loop handed back an unusable
+generator; the control never did, but with n = 10 per arm that asymmetry
+(2/10 vs 0/10) is not itself established. The H1-null contingency governs
+phase 1b. Caveats: one target, the in-sample development target, whose
+default build aborts on every object (finding #1); the held-out targets are
+where the question is properly answered. Served model for every call:
+deepseek-flash. Cost of phase 1a: $0.515.
