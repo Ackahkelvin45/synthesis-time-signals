@@ -104,6 +104,18 @@ _TARGET_FORMAT = "JSON"
 _TARGET_GRAMMAR = GRAMMAR_FILE
 _TARGET_NOTES = ADAPT_FILE
 
+# --- ablations (paper RQ3): switch OFF one proxy-signal component at a time ------
+# Set only via --ablate. Budgets are NOT reallocated when a component is off, so
+# every condition sees the same sample sizes; only the signal differs.
+#   production  no production-coverage-gap steer          (decide_refinement step 2)
+#   capmass     no deep-nesting (cap-mass) steer            (step 3)
+#   novelty     no quiet-failure guardrail revert           (step 0)
+#   probes      no single-feature probes / repair signal    (step 4; probes not run)
+#   signal      NO signal at all: the model is just asked to "improve" the strategy
+#               with no run summary and no score rollback — the key control (A5).
+_ABLATABLE = {"production", "capmass", "novelty", "probes", "signal"}
+_ABLATE: set = set()
+
 
 def select_target(name: str) -> Path:
     """Switch the loop to registered target `name`; return its default-mode
@@ -343,7 +355,8 @@ ACC_REVERT_MARGIN = 0.05     # and acceptance must rise by more than this
 def decide_refinement(summary: dict,
                       prev: dict | None = None,
                       probe_acceptance: dict | None = None,
-                      new_crash: bool = False) -> tuple[str, str]:
+                      new_crash: bool = False,
+                      ablate: "set[str] | None" = None) -> tuple[str, str]:
     """Return (action, detail): the single, mechanical change for the next
     iteration. Priority is fixed so exactly one edit happens per iteration (the
     critic's 'sequence, don't parallelize' requirement), and every branch names
@@ -354,7 +367,8 @@ def decide_refinement(summary: dict,
     #    JSON and retreating from edge cases. Revert the last edit.
     #    `if prev` (not `is not None`): a gated iteration can hand us {}, which
     #    would pass an is-not-None check and then KeyError on the lookups.
-    if prev and "acceptance_rate" in prev and "novelty" in prev:
+    ab = ablate or set()
+    if "novelty" not in ab and prev and "acceptance_rate" in prev and "novelty" in prev:
         acc_rose = summary["acceptance_rate"] - prev["acceptance_rate"] > ACC_REVERT_MARGIN
         novelty_fell = prev["novelty"] - summary["novelty"] > NOVELTY_REVERT_MARGIN
         if acc_rose and novelty_fell:
@@ -368,15 +382,15 @@ def decide_refinement(summary: dict,
 
     # 2. Primary steer: close a production coverage gap (unconfounded).
     gap = summary.get("productions_gap", [])
-    if gap:
+    if "production" not in ab and gap:
         return ("add_or_upweight_production", gap[0])
 
     # 3. Primary steer: push nesting depth into the deep band (stresses first pass).
-    if summary.get("cap_distance_mass", 0.0) < CAP_MASS_TARGET:
+    if "capmass" not in ab and summary.get("cap_distance_mass", 0.0) < CAP_MASS_TARGET:
         return ("generate_nesting_toward_cap", f"target depth {CAP_BAND[0]}-{CAP_BAND[1]}")
 
     # 4. Repair (only via single-feature probes -> unambiguous attribution).
-    if probe_acceptance:
+    if "probes" not in ab and probe_acceptance:
         from probes import PROBE_EXPECT_VALID  # noqa: E402
         for name, rate in sorted(probe_acceptance.items()):
             if PROBE_EXPECT_VALID.get(name) and rate < PROBE_FAIL_RATE:
@@ -844,7 +858,12 @@ def run_live(harness: Path, max_examples: int) -> int:
 
     config = LLMConfig.from_env()
     stop = StopController(price_in=config.price_in, price_out=config.price_out)
-    RUNS.mkdir(exist_ok=True)
+    RUNS.mkdir(parents=True, exist_ok=True)
+    # Provenance for the experiment matrix: what produced this run directory.
+    (RUNS / "config.json").write_text(json.dumps({
+        "target": _TARGET_NAME, "ablate": sorted(_ABLATE),
+        "model": config.describe(), "max_examples": max_examples,
+    }, indent=2))
     print(f"[live] model: {config.describe()}  (max_iters={stop.max_iters}, "
           f"budget=${stop.max_usd}, wall={stop.max_seconds/60:.0f}min)")
 
@@ -855,6 +874,8 @@ def run_live(harness: Path, max_examples: int) -> int:
     best_code: str | None = None
     best_summary: dict | None = None
     best_score = float("-inf")
+    current_iter: int | None = None   # which iteration current_code came from
+    best_iter: int | None = None
     action: tuple[str, str] = ("seed", "initial seed from grammar")
     last_build_error: str | None = None  # Path-A: carried into the next re-seed
 
@@ -872,7 +893,8 @@ def run_live(harness: Path, max_examples: int) -> int:
         if current_code is None:
             messages = seed_prompt(last_build_error)
         else:
-            messages = refine_prompt(current_code, prev_summary or {}, action)
+            messages = refine_prompt(
+                current_code, {} if "signal" in _ABLATE else (prev_summary or {}), action)
         (idir / "prompt.md").write_text(messages[-1]["content"])
 
         # --- obtain a usable strategy (F1/F2: never let a bad one kill/burn) ---
@@ -884,6 +906,7 @@ def run_live(harness: Path, max_examples: int) -> int:
             action = ("fix_generator_error", detail)
             last_build_error = detail            # so the next re-seed isn't blind
             current_code = best_code or current_code  # don't advance on garbage
+            current_iter = best_iter if best_code else current_iter
             evolution.append(f"iter {it}: build rejected ({detail}) -> rollback")
             continue
         last_build_error = None  # a clean build clears the carried error
@@ -930,6 +953,7 @@ def run_live(harness: Path, max_examples: int) -> int:
                 # used to pass decide_refinement's `is not None` guard and then
                 # KeyError, killing the run before cost.md was ever written.
                 current_code = code
+                current_iter = it
                 evolution.append(f"iter {it}: gated at acc={acc0:.2f}; full run skipped")
                 continue
 
@@ -953,13 +977,19 @@ def run_live(harness: Path, max_examples: int) -> int:
             print(f"[live] iter {it}: generator errored mid-run ({detail}); rolling back")
             action = ("fix_generator_error", detail)
             current_code = best_code or code
+            current_iter = best_iter if best_code else it
             evolution.append(f"iter {it}: mid-run error ({detail}) -> rollback")
             continue
 
         summary = summarize(samples, divergences, sorted(known_signatures),
                             reject_reasons=reject_reasons)
-        probe_rates = run_probes(harness, per_probe=PROBE_EXAMPLES_EACH)
-        broken, deviations = classify_probes(probe_rates)
+        if "probes" in _ABLATE:
+            # Ablation A4: no repair signal. The probe budget was still subtracted
+            # from main_budget, so every condition sees the same sample size.
+            probe_rates, broken, deviations = {}, {}, {}
+        else:
+            probe_rates = run_probes(harness, per_probe=PROBE_EXAMPLES_EACH)
+            broken, deviations = classify_probes(probe_rates)
         new_crash = "crash" in summary["outcomes"]
         sc = _score(summary)
 
@@ -989,27 +1019,39 @@ def run_live(harness: Path, max_examples: int) -> int:
         # separate flag, NOT a huge score — folding it into the scalar made the
         # tolerance ~1e5 and froze the loop on the first crashing strategy.
         drop = best_score - sc
-        regressed = (best_code is not None and not new_crash
+        regressed = ("signal" not in _ABLATE and best_code is not None and not new_crash
                      and drop > max(2.0, 0.10 * abs(best_score)))
 
         # Decide the next edit BEFORE mutating `best_*`, so a guardrail-issued
         # revert still has the previous best to roll back to (it used to be
         # overwritten one line earlier, making the revert a silent no-op).
-        if regressed:
+        if "signal" in _ABLATE:
+            # Ablation A5 (the key control): NO steering signal. The model is simply
+            # asked to improve the strategy — no run summary, no score-based
+            # rollback; only the validity machinery (build screen, acceptance gate
+            # + repair) stays. If this matches the full loop, the signal design is
+            # not earning its keep.
+            action = ("improve_strategy",
+                      "make it a better fuzzer for this grammar (no run feedback is provided)")
+        elif regressed:
             action = ("revert_last_edit", f"score {sc:.1f} < best {best_score:.1f}")
         else:
-            action = decide_refinement(summary, prev_summary, broken, new_crash)
+            action = decide_refinement(summary, prev_summary, broken, new_crash,
+                                       ablate=_ABLATE)
 
         if action[0] == "revert_last_edit" and best_code is not None:
             current_code, prev_summary = best_code, best_summary
+            current_iter = best_iter
         else:
             current_code, prev_summary = code, summary
+            current_iter = it
 
         # `best` must only ever improve. Previously it was overwritten every
         # non-regressed iteration, so the score ratcheted DOWN (57->54->51...)
         # while each individual drop stayed inside the tolerance band.
         if new_crash or sc > best_score:
             best_code, best_summary, best_score = code, summary, sc
+            best_iter = it
 
         line = (f"iter {it}: acc={summary['acceptance_rate']} "
                 f"novelty={summary['novelty']} cap_mass={summary['cap_distance_mass']} "
@@ -1033,6 +1075,17 @@ def run_live(harness: Path, max_examples: int) -> int:
             (idir / "triage.json").write_text(json.dumps(grouped, indent=2))
             print(f"[live] CRASH triaged -> {len(grouped)} unique signature(s); "
                   f"see crashes/ and runs/iter-{it}/triage.json")
+
+    # The loop's OUTPUT: the strategy it would hand back at stop (after any
+    # revert). Written explicitly so evaluations never have to guess whether
+    # "iter-5" or "the best" is the result — on a run whose last iteration
+    # regressed and rolled back, iter-5 is NOT the output.
+    if current_code is not None:
+        (RUNS / "final_strategy.py").write_text(current_code)
+        (RUNS / "final.json").write_text(json.dumps({
+            "source_iter": current_iter, "best_iter": best_iter,
+            "best_score": None if best_score == float("-inf") else best_score,
+        }, indent=2))
 
     banner = ("> **MOCK RUN — NOT A REAL LLM RUN.** Produced with `LLM_MOCK=1`: the "
               "strategy is a fixed canned generator, identical every iteration, so "
@@ -1133,6 +1186,7 @@ def _to_jsonish(obj) -> str:
 
 
 def main() -> int:
+    global RUNS, _ABLATE
     ap = argparse.ArgumentParser(description="agentic fuzzing loop (json-parser/JSON)")
     ap.add_argument("--replay", metavar="ITER_DIR",
                     help="re-run a committed runs/iter-N strategy offline (no API)")
@@ -1142,12 +1196,26 @@ def main() -> int:
                     help="registered target (fuzz/targets.py); default json-parser")
     ap.add_argument("--harness", default=None,
                     help="harness binary (default: the target's default-mode build)")
+    ap.add_argument("--run-name", default=None,
+                    help="write this run under runs/<target>/<run-name>/ (ablations, "
+                         "other models) instead of the canonical run directory")
+    ap.add_argument("--ablate", default=None,
+                    help="comma list of signal components to switch OFF: "
+                         + ",".join(sorted(_ABLATABLE)))
     ap.add_argument("--max-examples", type=int, default=EXAMPLES_PER_RUN)
     args = ap.parse_args()
     # Select the target FIRST: it fixes the grammar/notes/prompt realities and the
     # runs/ location, and supplies the default harness when --harness is absent.
     default_harness = select_target(args.target)
     args.harness = args.harness or str(default_harness)
+    if args.run_name:
+        RUNS = RUNS / args.run_name
+    _ABLATE = ({a.strip() for a in args.ablate.split(",") if a.strip()}
+               if args.ablate else set())
+    unknown = _ABLATE - _ABLATABLE
+    if unknown:
+        raise SystemExit(f"unknown --ablate component(s) {sorted(unknown)}; "
+                         f"choose from {sorted(_ABLATABLE)}")
 
     if args.replay:
         return run_replay(Path(args.harness), Path(args.replay), args.max_examples)

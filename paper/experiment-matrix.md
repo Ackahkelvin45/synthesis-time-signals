@@ -75,7 +75,30 @@ Run C1/C2 (and ideally the ablations) under each model. Keep the cost table.
 
 - **20 seeds per cell** (up from 12) for tighter CIs. Same seed set under every
   condition and target -> randomized block design -> paired tests.
-- Draws are seeded (`run_seed`, `database=None`) so cells reproduce.
+- Input sets are reproducible by construction (`eval/cell.py`: history-fixed
+  subprocess draw, cached and hashed; every row carries its input-set id).
+
+## Loop replicates (design addition — learned from the parson run)
+
+The loop itself is stochastic (the LLM), so "the evolved strategy" is ONE draw
+of a high-variance process: the first parson run gated its first two
+iterations on a Hypothesis-API mistake, peaked at iteration 4 and REVERTED at
+iteration 5. Two consequences, both implemented:
+
+- **What counts as the output.** The loop writes `final_strategy.py` +
+  `final.json` (what it hands back after any revert). For older runs,
+  `cell.final_strategy_path` reconstructs it from `evolution.md` by replaying
+  the loop's own bookkeeping (verified: json-parser -> iter-5, parson ->
+  iter-4). `seed` = the first WORKING iteration (json-parser -> iter-1
+  repaired; parson -> iter-3), recorded in the condition label. The matrix and
+  the experiment never read iter-1 / iter-5 blindly.
+- **RQ2 needs loop replicates, not just draw seeds.** Draw seeds average out
+  input noise for a FIXED generator; they cannot average out loop variance.
+  Run >=3 loop replicates per target (`--run-name rep1..repN`), evaluate each
+  replicate's seed/final as conditions (`run:repN:seed`, `run:repN:final`),
+  and report RQ2 as the distribution of per-replicate paired deltas. Cost is
+  cents per replicate; it is the difference between "one lucky run" and a
+  claim about the method.
 
 ## Budgets (held constant in every cell, so comparisons are fair)
 
@@ -194,13 +217,21 @@ Automate all of it with a matrix runner (below); never run cells by hand.
    produce one identical hash; `coverage.py` run twice is byte-identical and
    reproduces the committed 42.2% / 83.1% exactly. The random baseline's
    input-set id is identical across targets (true apples-to-apples).
-2. **Ablation flags** in `agent.py` (`--ablate ...`) incl. the A5 naive-refine
-   prompt.
-3. **Matrix runner** (`eval/matrix.py`): iterates targets x conditions x seeds
-   x models, calls `cell.measure_cell`, writes one row per cell to a single
-   CSV/JSONL, resumable (skip cells already done).
-4. **Aggregator + figures** (`eval/report.py`): reads the matrix output, runs
-   the statistical plan, emits the per-RQ tables and figures for the paper.
+2. **Ablation flags — DONE.** `agent.py --ablate production,capmass,novelty,
+   probes,signal` (any subset) and `--run-name <sub>` (writes under
+   `runs/<target>/<sub>/`). Budgets are never reallocated when a component is
+   off, so conditions differ only in the signal. `signal` is the A5 control:
+   no run summary, no score rollback, generic "improve" instruction — only the
+   validity machinery (build screen, acceptance gate + repair) remains. Every
+   run now writes `config.json` (target, ablations, model) and
+   `final_strategy.py` + `final.json` (the loop's OUTPUT after any revert).
+3. **Matrix runner — DONE** (`eval/matrix.py`): targets x conditions x seeds,
+   one JSONL row per cell with its input-set id, resumable. Conditions
+   `random | seed | evolved | run:<sub>:<seed|final|N>`.
+4. **Aggregator — DONE** (`eval/report.py`): mean ± 95% CI per (target,
+   condition); paired tests for RQ1/RQ2; the `run:*` family vs `evolved` with
+   Holm correction within target; cross-target summary as mean of per-target
+   deltas. Figures: still to add (tables first).
 5. **Generalize `proxy_validation.py` — DONE** (`--target`, per-target output);
    the matrix runner will supersede its n=5 per-iteration view with n=K seeds.
 

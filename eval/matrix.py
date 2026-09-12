@@ -1,0 +1,153 @@
+"""matrix.py — the experiment-matrix runner (paper Tier A/B). MEASUREMENT ONLY.
+
+Sweeps cells = (target x condition x seed) and appends ONE JSON row per cell to
+a JSONL file. Resumable: cells already present in the file are skipped, so a
+sweep can be interrupted, extended (more seeds, more conditions, more targets)
+or re-run without redoing work. Every row carries its input-set id (see
+eval/cell.py), so a reader can verify identical inputs by hash.
+
+Conditions (a condition names a fixed generator; nothing is re-run through the
+LLM here — loop runs are produced separately by fuzz/loop/agent.py):
+  random             builtin st.text() baseline (no grammar knowledge)
+  seed               the run's first WORKING iteration (normally iter-1; when the
+                     model's first attempts were gated, the first that draws)
+  evolved            the loop's OUTPUT (final_strategy.py, or reconstructed from
+                     evolution.md after any revert — NOT blindly iter-5)
+  run:<sub>:<what>   the same for a differently-configured loop run under
+                     runs/<t>/<sub>/ — an ablation (run:ablate-signal:final) or
+                     another model (run:model-x:final); <what> = seed | final | N
+
+    .venv/bin/python eval/matrix.py --targets json-parser,parson \
+        --conditions random,seed,evolved --k 20 --n 150 --out eval/matrix/main.jsonl
+Then aggregate with eval/report.py.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "eval"))
+
+from cell import (BUILTIN_TEXT, build_coverage_binary, effective_strategy_path,  # noqa: E402
+                  final_strategy_path, input_set_id, measure_cell, draw_examples,
+                  runs_dir, seed_strategy_path)
+
+METRICS = ("region", "line", "branch", "acceptance", "novelty", "cap_mass",
+           "productions", "crashes")
+
+
+def _rel(p: Path) -> str:
+    """Repo-relative for display, or absolute when outside the repo (scratch dirs)."""
+    try:
+        return str(p.relative_to(ROOT))
+    except ValueError:
+        return str(p)
+
+
+def resolve_condition(target: str, cond: str) -> str | None:
+    """Map a condition name to a strategy reference for `target`, or None (with
+    a printed reason) when the loop run it needs does not exist yet."""
+    rd = runs_dir(target)
+    if cond == "random":
+        return BUILTIN_TEXT
+    # `seed` / `evolved` replay the loop's own bookkeeping (cell.py): the first
+    # WORKING iteration, and the loop's OUTPUT after any revert.
+    if cond == "seed":
+        p = seed_strategy_path(rd)
+        return str(p) if p else None
+    if cond == "evolved":
+        p = final_strategy_path(rd)
+        return str(p) if p else None
+    if cond.startswith("run:"):
+        try:
+            _, sub, it = cond.split(":")
+        except ValueError:
+            raise SystemExit(f"bad condition '{cond}' (want run:<subdir>:<seed|final|N>)")
+        sd = rd / sub
+        if it == "seed":
+            p = seed_strategy_path(sd)
+        elif it == "final":
+            p = final_strategy_path(sd)
+        else:
+            d = sd / f"iter-{it}"
+            p = effective_strategy_path(d) if (d / "strategy.py").exists() else None
+        return str(p) if p else None
+    raise SystemExit(f"unknown condition '{cond}'")
+
+
+def _slug(s: str) -> str:
+    return "".join(c if c.isalnum() else "_" for c in s)
+
+
+def load_done(out: Path) -> set[tuple]:
+    done = set()
+    if out.exists():
+        for line in out.read_text().splitlines():
+            if line.strip():
+                r = json.loads(line)
+                done.add((r["target"], r["condition"], r["seed"], r["n"]))
+    return done
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="experiment matrix runner")
+    ap.add_argument("--targets", default="json-parser")
+    ap.add_argument("--conditions", default="random,seed,evolved")
+    ap.add_argument("--k", type=int, default=20, help="seeds per cell (0..k-1)")
+    ap.add_argument("--n", type=int, default=150, help="examples per seed")
+    ap.add_argument("--out", default="eval/matrix/main.jsonl")
+    args = ap.parse_args()
+
+    out = (ROOT / args.out) if not Path(args.out).is_absolute() else Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    targets = [t.strip() for t in args.targets.split(",") if t.strip()]
+    conds = [c.strip() for c in args.conditions.split(",") if c.strip()]
+    done = load_done(out)
+    print(f"[matrix] {len(done)} cells already in {_rel(out)}; "
+          f"sweeping {len(targets)} target(s) x {len(conds)} condition(s) x K={args.k} at N={args.n}")
+
+    todo = skipped = 0
+    with out.open("a") as fh:
+        for target in targets:
+            build_coverage_binary(target)
+            for cond in conds:
+                ref = resolve_condition(target, cond)
+                if ref is None:
+                    print(f"[matrix] {target}/{cond}: no loop run for it yet — skipped "
+                          f"(run fuzz/loop/agent.py --target {target} first)")
+                    continue
+                for seed in range(args.k):
+                    key = (target, cond, seed, args.n)
+                    if key in done:
+                        skipped += 1
+                        continue
+                    t0 = time.time()
+                    ex = draw_examples(ref, args.n, seed)
+                    r = measure_cell(target, ex, f"mx_{_slug(target)}_{_slug(cond)}_{seed}")
+                    row = {
+                        "target": target, "condition": cond, "seed": seed, "n": args.n,
+                        "strategy_ref": ref if ref.startswith("builtin:")
+                        else str(Path(ref).relative_to(ROOT)),
+                        "input_set": input_set_id(ref, args.n, seed),
+                        **{m: r[m] for m in METRICS},
+                        "wall_s": round(time.time() - t0, 2),
+                    }
+                    fh.write(json.dumps(row) + "\n")
+                    fh.flush()
+                    done.add(key)
+                    todo += 1
+                    print(f"[matrix] {target:12} {cond:22} seed={seed:2d} "
+                          f"region={r['region']:.1f} branch={r['branch']:.1f} "
+                          f"nov={r['novelty']:2d} acc={r['acceptance']:.2f} "
+                          f"({row['wall_s']}s)")
+    print(f"[matrix] done: {todo} new cells, {skipped} skipped (already present) -> "
+          f"{_rel(out)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

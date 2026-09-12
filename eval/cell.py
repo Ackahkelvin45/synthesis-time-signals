@@ -145,6 +145,74 @@ def effective_strategy(iter_dir: Path):
     return load_strategy_file(effective_strategy_path(iter_dir))
 
 
+def _iter_dirs(rd: Path) -> list[Path]:
+    return sorted((d for d in rd.glob("iter-*") if d.is_dir()),
+                  key=lambda d: int(d.name.split("-")[1]))
+
+
+def seed_strategy_path(rd: Path) -> Path | None:
+    """The grammar-SEED strategy of a run: the earliest iteration whose effective
+    strategy actually draws. Normally iteration 1; when the model's first
+    attempts were unusable and gated (a high-variance author), it is the first
+    working one — which has had repair prompts but no signal-steered refinement
+    of a working base. Callers should report which iteration it resolved to."""
+    for d in _iter_dirs(rd):
+        cand = effective_strategy_path(d)
+        if cand.exists() and _draws_ok(cand):
+            return cand
+    return None
+
+
+_REVERT_MARKERS = ("REGRESSION->rollback", "next: revert_last_edit")
+
+
+def final_strategy_path(rd: Path) -> Path | None:
+    """The loop's OUTPUT strategy — what it hands back at stop.
+
+    Authoritative when the loop wrote runs/<..>/final_strategy.py (agent.py does
+    now). For runs made before that, it is reconstructed from evolution.md by
+    replaying run_live's own bookkeeping: `current` becomes this iteration
+    unless the iteration reverted (then the best so far); gated iterations still
+    advance `current`; build/mid-run failures fall back to the best. On a run
+    whose last iteration regressed and rolled back, this is NOT iter-5.
+    """
+    f = rd / "final_strategy.py"
+    if f.exists():
+        return f
+    ev = rd / "evolution.md"
+    if not ev.exists():
+        return None
+    import re
+    current = best = None
+    best_score = float("-inf")
+    for line in ev.read_text().splitlines():
+        m = re.match(r"- iter (\d+): (.*)", line)
+        if not m:
+            continue
+        it, rest = int(m.group(1)), m.group(2)
+        if "build rejected" in rest or "mid-run error" in rest:
+            current = best if best is not None else current
+        elif "gated at" in rest:
+            current = it
+        else:
+            sm = re.search(r"score=([\d.]+)", rest)
+            sc = float(sm.group(1)) if sm else float("-inf")
+            if any(k in rest for k in _REVERT_MARKERS) and best is not None:
+                current = best              # reverted to the previous best...
+            else:
+                current = it
+            if "crash=True" in rest or sc > best_score:
+                best, best_score = it, sc   # ...and best updates AFTER (same order as run_live)
+    if current is None:
+        return None
+    d = rd / f"iter-{current}"
+    cand = effective_strategy_path(d) if (d / "strategy.py").exists() else None
+    if (cand is None or not _draws_ok(cand)) and best is not None and best != current:
+        bd = rd / f"iter-{best}"
+        cand = effective_strategy_path(bd) if (bd / "strategy.py").exists() else cand
+    return cand
+
+
 # --- reproducible input sets -------------------------------------------------------
 
 def _ref_bytes(ref: str) -> bytes:

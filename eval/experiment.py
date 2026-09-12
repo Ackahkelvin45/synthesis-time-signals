@@ -36,8 +36,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "eval"))
 
-from cell import (BUILTIN_TEXT, build_coverage_binary, effective_strategy_path,  # noqa: E402
-                  measure_ref, runs_dir, target_src)
+from cell import (BUILTIN_TEXT, build_coverage_binary, final_strategy_path,  # noqa: E402
+                  measure_ref, runs_dir, seed_strategy_path, target_src)
 
 PERM_ITERS = 20000
 PERM_SEED = 12345
@@ -111,19 +111,24 @@ def main() -> int:
         ROOT / "eval" / ("experiment.md" if target == "json-parser" else f"experiment_{target}.md"))
 
     rd = runs_dir(target)
-    if not (rd / "iter-1").exists() or not (rd / "iter-5" / "strategy.py").exists():
-        print(f"[exp] {target}: no loop run under {rd.relative_to(ROOT)}/ (need iter-1 and "
-              f"iter-5). Run the loop with --target {target} first.")
+    seed_p, final_p = seed_strategy_path(rd), final_strategy_path(rd)
+    if seed_p is None or final_p is None:
+        print(f"[exp] {target}: no usable loop run under {rd.relative_to(ROOT)}/ "
+              f"(seed={seed_p}, final={final_p}). Run the loop with --target {target} first.")
         return 1
 
     print(f"[exp] {target}: building coverage binary; K={K} seeds x N={N} examples x 3 conditions")
     build_coverage_binary(target)
 
     # Strategies by REFERENCE so every cell's inputs are reproducible and hashed.
+    # `seed` = the run's first WORKING iteration; `evolved` = the loop's OUTPUT
+    # after any revert (cell.seed_strategy_path / final_strategy_path). On the
+    # json-parser run these resolve to iter-1 (repaired) and iter-5, as before.
+    final_label = "loop output" if final_p.name == "final_strategy.py" else final_p.parent.name
     conditions = {
         "A. baseline (random)": BUILTIN_TEXT,
-        "B. seed (iter-1, no refine)": str(effective_strategy_path(rd / "iter-1")),
-        "C. evolved (iter-5)": str(rd / "iter-5" / "strategy.py"),
+        f"B. seed ({seed_p.parent.name}, no refine)": str(seed_p),
+        f"C. evolved ({final_label})": str(final_p),
     }
     metrics = ["region", "line", "branch", "acceptance", "novelty", "cap_mass"]
     data = {c: {m: [] for m in metrics} for c in conditions}

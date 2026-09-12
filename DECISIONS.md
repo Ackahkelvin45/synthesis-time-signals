@@ -500,3 +500,42 @@ paired by seed). What was affected is exact cross-script reproduction of the
 numbers — which is precisely what a reviewer re-running an artifact does. This
 is a trap any Hypothesis-based LLM-fuzzing evaluation can fall into; it goes in
 the paper's reproducibility section as a contribution, not a footnote.
+
+## D14 — First live run on a second target, and what "the loop's output" means
+
+**Run.** The loop ran live against parson (T2) with the same protocol as
+json-parser (default parse harness, 5 iterations, deepseek-chat, $0.023).
+Iterations 1 and 2 were gated: the model passed multi-character escape strings
+as a Hypothesis `alphabet` (InvalidArgument) and its repair repeated the same
+mistake — a new entry for the LLM-as-author failure taxonomy (Appendix C).
+Iteration 3 was the first working generator, iteration 4 the best (score
+56.6), and iteration 5 regressed (43.3) so the loop rolled back. The probes
+flagged `duplicate_keys` as a parson-only deviation every iteration, unprompted.
+
+**Design gap it exposed.** The evaluations read "evolved" as literally
+`iter-5/strategy.py` and "seed" as `iter-1`. On this run both are wrong: the
+loop's output is the rolled-back iteration 4, and iteration 1 never ran. On the
+json-parser run the naive reading happened to be right (iter-5 was accepted,
+iter-1's repair worked), which is why it went unnoticed.
+
+**Fix.** The loop now writes `final_strategy.py` + `final.json` (the strategy
+it hands back after any revert, with its source iteration) and `config.json`
+(target, ablations, model). For runs made before that, `cell.final_strategy_path`
+reconstructs the output from `evolution.md` by replaying run_live's own
+bookkeeping — current = this iteration unless it reverted (then the best so
+far); gated iterations still advance current; best updates after — and
+`cell.seed_strategy_path` returns the first iteration that actually draws.
+Verified against both runs (json-parser: iter-1 repaired / iter-5, so every
+committed number stands; parson: iter-3 / iter-4). `matrix.py` and
+`experiment.py` resolve conditions only this way.
+
+**Consequence for the paper.** Draw seeds average out input noise for a fixed
+generator but cannot average out the loop's own variance; RQ2 must be reported
+over >=3 loop replicates per target (`--run-name repN`), as a distribution of
+per-replicate paired deltas. Recorded in paper/experiment-matrix.md.
+
+**Also landed.** `--ablate` (production, capmass, novelty, probes, signal — the
+last being the "no signal at all" control) with budgets held constant across
+conditions; the matrix runner (`eval/matrix.py`, resumable, input-set ids per
+row) and aggregator (`eval/report.py`, paired tests, Holm-corrected ablation
+family, cross-target summary).
