@@ -102,6 +102,7 @@ MAX_ITERS = 5
 _TARGET_NAME = "json-parser"
 _TARGET_FORMAT = "JSON"
 _TARGET_GRAMMAR = GRAMMAR_FILE
+_TARGET_GRAMMARS = (GRAMMAR_FILE,)   # every grammar file shown to the model (lexer + parser)
 _TARGET_NOTES = ADAPT_FILE
 
 # --- ablations (paper RQ3): switch OFF one proxy-signal component at a time ------
@@ -139,7 +140,7 @@ _PROMPT_MODE = "anon"
 def select_target(name: str) -> Path:
     """Switch the loop to registered target `name`; return its default-mode
     harness path. Idempotent for json-parser (restores the defaults)."""
-    global _TARGET_NAME, _TARGET_FORMAT, _TARGET_GRAMMAR, _TARGET_NOTES, RUNS, CAP_BAND, CAP_DEPTH
+    global _TARGET_NAME, _TARGET_FORMAT, _TARGET_GRAMMAR, _TARGET_GRAMMARS, _TARGET_NOTES, RUNS, CAP_BAND, CAP_DEPTH
     _ensure_fuzz_on_path()
     from targets import TARGETS, binary_name  # noqa: E402
     if name not in TARGETS:
@@ -148,6 +149,7 @@ def select_target(name: str) -> Path:
     _TARGET_NAME = name
     _TARGET_FORMAT = t["format"]
     _TARGET_GRAMMAR = ROOT / t["grammar"]
+    _TARGET_GRAMMARS = tuple(ROOT / g for g in t.get("grammars", (t["grammar"],)))
     _TARGET_NOTES = ROOT / t["notes"]
     CAP_BAND = tuple(t.get("cap_band", (1500, 2048)))
     CAP_DEPTH = CAP_BAND[1]
@@ -375,9 +377,10 @@ def decide_refinement(summary: dict,
 
     # 4. Repair (only via single-feature probes -> unambiguous attribution).
     if "probes" not in ab and probe_acceptance:
-        from probes import PROBE_EXPECT_VALID  # noqa: E402
+        from probes import probes_for  # noqa: E402
+        _, expect_valid = probes_for(_TARGET_FORMAT)
         for name, rate in sorted(probe_acceptance.items()):
-            if PROBE_EXPECT_VALID.get(name) and rate < PROBE_FAIL_RATE:
+            if expect_valid.get(name) and rate < PROBE_FAIL_RATE:
                 return ("fix_feature_encoding", f"{name} probe accepted only {rate:.0%}")
 
     # 5. Nothing indicated: broaden exploration.
@@ -435,7 +438,7 @@ def run_strategy(harness: Path, strategy, max_examples: int,
     """
     _ensure_fuzz_on_path()
     from runner import run_once, Outcome  # noqa: E402
-    from oracle import classify_divergence  # noqa: E402
+    from oracle import classify_divergence_for  # noqa: E402
     from hypothesis import given, settings, seed as hyp_seed, HealthCheck
     from hypothesis.errors import FlakyFailure
 
@@ -478,7 +481,7 @@ def run_strategy(harness: Path, strategy, max_examples: int,
                 rec["reject_reason"] = reason  # json-parser's "why rejected" string
             log_records.append(rec)
         if r.outcome in (Outcome.VALID, Outcome.REJECT):
-            d = classify_divergence(r.outcome is Outcome.VALID, data)
+            d = classify_divergence_for(_TARGET_FORMAT, r.outcome is Outcome.VALID, data)
             if d is not None:
                 divergences.append(d)
         if r.outcome is Outcome.CRASH:
@@ -522,12 +525,14 @@ def run_probes(harness: Path, per_probe: int = 20) -> dict[str, dict]:
     """
     _ensure_fuzz_on_path()
     from runner import run_once  # noqa: E402
-    from oracle import oracle_accepts  # noqa: E402
-    from probes import PROBES  # noqa: E402
+    from oracle import oracle_for  # noqa: E402
+    from probes import probes_for  # noqa: E402
     from hypothesis import given, settings, HealthCheck
 
+    oracle_accepts = oracle_for(_TARGET_FORMAT) or (lambda data: False)
+    probes, _ = probes_for(_TARGET_FORMAT)
     rates: dict[str, dict] = {}
-    for name, strat in PROBES.items():
+    for name, strat in probes.items():
         counts = Counter()
         oracle_ok = [0, 0]  # [accepted, total]
 
@@ -556,11 +561,12 @@ def classify_probes(rates: dict[str, dict]) -> tuple[dict[str, float], dict[str,
     generator_broken: {name: target_rate}   -> feed to decide_refinement (repair)
     target_deviations: {name: {...}}         -> findings (json-parser vs RFC)
     """
-    from probes import PROBE_EXPECT_VALID  # noqa: E402
+    from probes import probes_for  # noqa: E402
+    _, expect_valid = probes_for(_TARGET_FORMAT)
     broken: dict[str, float] = {}
     deviations: dict[str, dict] = {}
     for name, r in rates.items():
-        if not PROBE_EXPECT_VALID.get(name):
+        if not expect_valid.get(name):
             continue  # near_valid_malformed is meant to be rejected
         if r["target"] < PROBE_FAIL_RATE:
             if r["oracle"] >= 0.5:
@@ -618,6 +624,22 @@ _TARGET_REALITIES = {
 """,
 }
 
+_TARGET_REALITIES["tomlc99"] = """\
+- Respect the parser realities in the adaptation notes: arrays and inline
+  tables recurse per nesting level and depth up to ~2048 is fine, so concentrate
+  interesting depth in that band; NEVER emit a raw NUL byte (the parse API is
+  NUL-terminated, so the harness skips such input; `\\u0000` inside a string is
+  fine). Emit COMPLETE documents (key/value lines, tables, arrays of tables),
+  and cover every value kind: strings of all four quoting forms with escapes,
+  integers in all bases with underscores and extremes, floats incl. inf/nan,
+  booleans, all four date-time forms, arrays and inline tables.
+- NOTE: the parser ACCEPTS leading zeros (007), floats like `1.` and `.5`,
+  raw control characters in strings and comments, a trailing comma in an
+  inline table, and calendar-invalid dates; it REJECTS duplicate keys and
+  tables, newlines inside inline tables, and non-ASCII bare keys. Expect those
+  outcomes; they are deviations, not defects.
+"""
+
 _REQUIREMENTS_TAIL = """\
 - The output must be `str` (the candidate JSON text; NUL/control chars are ok).
 - API pitfall: `st.tuples(a, b)` DRAWS TUPLES, not strings. Always `.map` a tuple
@@ -632,6 +654,10 @@ _ANON_PATTERNS: dict[str, list[tuple[str, str]]] = {
                     (r"\bjson_parse_ex\b", "the parse function"),
                     (r"\bjson_parse\b", "the parse function"),
                     (r"\bjson\.c\b", "target.c")],
+    "tomlc99": [(r"\btomlc99(?:'s)?", "the parser"), (r"\btomlc17\b", "a successor library"),
+                (r"\btoml_parse(?:_file)?\b", "the parse function"),
+                (r"\btoml\.c\b", "target.c"), (r"\bCVE-\d{4}-\d+\b", "a known issue"),
+                (r"#\d{2,3}\b", "a known issue")],
     "parson": [(r"\b[Pp]arson(?:'s)?", "the parser"),
                (r"\bjson_parse_(?:string|file)(?:_with_comments)?\b", "the parse function"),
                (r"\bparson\.c\b", "target.c")],
@@ -682,7 +708,7 @@ _PROMPT_MODE = "anon"
 
 
 def seed_prompt(prev_error: str | None = None) -> list[dict]:
-    grammar = _TARGET_GRAMMAR.read_text()
+    grammar = "\n\n".join(g.read_text() for g in _TARGET_GRAMMARS)
     notes = _anonymize(_TARGET_NOTES.read_text())
     header = "parser" if _PROMPT_MODE == "anon" else _TARGET_NAME
     # Path-A fix: a build-rejected attempt with no working baseline still
@@ -1046,8 +1072,8 @@ def run_live(harness: Path, max_examples: int) -> int:
 
         # Budget the assignment's 500-examples-per-iteration across every
         # harness-facing sample this iteration makes.
-        from probes import PROBES  # noqa: E402
-        probe_budget = len(PROBES) * PROBE_EXAMPLES_EACH
+        from probes import probes_for  # noqa: E402
+        probe_budget = len(probes_for(_TARGET_FORMAT)[0]) * PROBE_EXAMPLES_EACH
         main_budget = max(1, max_examples - GATE_COST - probe_budget)
 
         acc0, gen_err = safe_validate(strategy, harness, n=VALIDATE_EXAMPLES)

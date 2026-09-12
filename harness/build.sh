@@ -64,7 +64,22 @@ case "$TARGET" in
     SRC="$ROOT/vendor/parson/parson.c";    INC="$ROOT/vendor/parson"
     HSRC="$ROOT/targets/parson/harness.c"; BASE="harness_parson"
     VALID_MODES="default control roundtrip o2" ;;
-  *) echo "unknown TARGET '$TARGET' (use: json-parser|parson)" >&2; exit 1 ;;
+  tomlc99)
+    SRC="$ROOT/vendor/tomlc99/toml.c";     INC="$ROOT/vendor/tomlc99"
+    HSRC="$ROOT/targets/tomlc99/harness.c"; BASE="harness_tomlc99"
+    VALID_MODES="default control o2 bug-issue50" ;;
+  *) echo "unknown TARGET '$TARGET' (use: json-parser|parson|tomlc99)" >&2; exit 1 ;;
+esac
+
+# Ground-truth bug builds (paper RQ4): MODE=bug-<name> compiles the SAME
+# harness against the pre-fix source under vendor/<target>-bugs/<name>/ with
+# the full sanitizer set. Never a source of loop findings (assert_real_target
+# rejects it); used only by the campaign runner and the PoC positive controls.
+case "$MODE" in
+  bug-*)
+    BUGDIR="$ROOT/vendor/${TARGET}-bugs/${MODE#bug-}"
+    [ -d "$BUGDIR" ] || { echo "no bug source at $BUGDIR" >&2; exit 1; }
+    SRC="$BUGDIR/$(basename "$SRC")"; INC="$BUGDIR" ;;
 esac
 
 case " $VALID_MODES " in
@@ -81,6 +96,7 @@ case "$MODE" in
   roundtrip) EXTRA=(-DROUNDTRIP -DHARNESS_MODE='"roundtrip"') ;;
   hunt)      EXTRA=(-fno-sanitize=pointer-overflow -DHARNESS_MODE='"hunt"') ;;
   o2)        EXTRA=(-DHARNESS_MODE='"o2"') ;;
+  bug-*)     EXTRA=(-DHARNESS_MODE="\"$MODE\"") ;;
   unmask)    "${PYTHON:-python3}" "$HERE/apply_unmask.py"
              EXTRA=(-DHARNESS_MODE='"unmask"')
              SRC="$OUT/_patched/json.c"; INC="$OUT/_patched" ;;

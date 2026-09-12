@@ -5,6 +5,7 @@ Run:  .venv/bin/python eval/test_eval.py   (needs ./run.sh build for the curve)
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -179,6 +180,23 @@ def main() -> int:
     import hashlib as _hh
     check("grammarinator: generator sha256 matches the pin",
           _hh.sha256((ROOT / pin["generator"]).read_bytes()).hexdigest() == pin["sha256"])
+
+    # --- grammar features: JVM server == Python runtime (same grammar) ---------
+    corpus = {"JSON": ['1', '[1,2,]', '{"a":[true]}', '[' * 500 + '1' + ']' * 500, 'x'],
+              "TOML": ['a = 1\n', 'a = \n', 'x = [[1,[2]]]\n', 'a = ' + '[' * 300 + '1' + ']' * 300 + '\n']}
+    F_json = _fm.get("JSON")
+    if F_json._java_server() is not None:
+        import subprocess as _sp2
+        prog = ("import sys,json; sys.path.insert(0,'fuzz'); import formats\n"
+                "c=" + repr(corpus) + "\n"
+                "print(json.dumps({f:[[sorted(p),d] for p,d in (formats.get(f).features(x) for x in xs)] for f,xs in c.items()}))")
+        py = json.loads(_sp2.run([sys.executable, "-c", prog], cwd=ROOT, capture_output=True, text=True,
+                                 env={**os.environ, "FORMATS_PY": "1"}).stdout)
+        jv = {f: [[sorted(p), d] for p, d in (_fm.get(f).features(x) for x in xs)] for f, xs in corpus.items()}
+        check("JVM feature server agrees with the Python runtime on JSON and TOML (incl. deep, invalid)",
+              py == jv, f"{py} vs {jv}")
+    else:
+        print("  SKIP  JVM feature server not built (harness/build_java.sh)")
 
     print(f"\n{_p} passed, {_f} failed")
     return 1 if _f else 0

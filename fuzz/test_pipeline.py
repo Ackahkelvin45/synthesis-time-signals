@@ -115,6 +115,34 @@ def main() -> int:
     check("o2 (uninstrumented) build exists and reports its mode",
           o2.exists() and harness_mode(o2) == "o2")
 
+    print("== tomlc99 (T4, TOML): contract + ground-truth positive controls ==")
+    sys.path.insert(0, str(ROOT / "fuzz"))
+    from targets import TARGETS  # noqa: E402
+    T4 = BUILD / "harness_tomlc99"
+    if T4.exists():
+        check("tomlc99 VALID on a TOML document",
+              run_once(T4, b'a = 1\n[t]\nb = "x"\narr = [1, {c = 3}]\n').outcome is Outcome.VALID)
+        r = run_once(T4, b'a = \n')
+        check("tomlc99 REJECT with the parser's reason",
+              r.outcome is Outcome.REJECT and b"reject: " in r.stderr, r.signature_source())
+        check("tomlc99 SKIP on embedded NUL (NUL-terminated API)",
+              run_once(T4, b'a = "x\x00y"\n').detail == "embedded-nul")
+        check("tomlc99 control build crashes on the marker",
+              run_once(BUILD / "harness_tomlc99_control", b'a = "__CRASH__"\n').outcome is Outcome.CRASH)
+        bugs = TARGETS["tomlc99"]["bugs"]
+        poc50 = bugs["issue50"]["poc"].encode()
+        check("ground truth: issue-50 PoC crashes the PRE-FIX build",
+              run_once(BUILD / "harness_tomlc99_bug-issue50", poc50).outcome is Outcome.CRASH)
+        check("ground truth: issue-50 PoC is a clean REJECT on the fixed build",
+              run_once(T4, poc50).outcome is Outcome.REJECT)
+        rr = run_once(T4, bugs["recursion"]["poc"].encode(), timeout_s=30)
+        check("ground truth: recursion PoC overflows the stack on the pinned HEAD",
+              rr.outcome is Outcome.CRASH and b"stack-overflow" in rr.stderr, rr.signature_source())
+        check("depth 2048 (the steer band) is safely VALID on tomlc99",
+              run_once(T4, b'a = ' + b'[' * 2048 + b'1' + b']' * 2048 + b'\n').outcome is Outcome.VALID)
+    else:
+        print("  SKIP  tomlc99 binaries not built")
+
     print("== both sanitizers active + symbolized (real build flags) ==")
     env = {**__import__("os").environ, **SANITIZER_ENV}
     a = subprocess.run([str(selftest), "asan"], stderr=subprocess.PIPE, env=env)

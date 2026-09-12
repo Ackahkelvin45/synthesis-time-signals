@@ -175,6 +175,26 @@ def main() -> int:
               "parson" not in body_p.lower())
     finally:
         A.select_target("json-parser")
+    A.select_target("tomlc99")
+    try:
+        body_t = A.seed_prompt()[-1]["content"]
+        leak_t = ("tomlc99", "toml_parse", "toml.c", "CVE-", "tomlc17")
+        check("anon seed prompt (tomlc99) leaks no identifier",
+              not any(k in body_t for k in leak_t), [k for k in leak_t if k in body_t])
+        check("tomlc99 seed prompt carries BOTH grammar files (lexer + parser)",
+              "lexer grammar TomlLexer" in body_t and "parser grammar TomlParser" in body_t)
+        check("tomlc99 prompt asks for TOML, not JSON",
+              "TOML grammar" in body_t and "JSON grammar" not in body_t)
+        from probes import probes_for  # noqa: E402
+        from oracle import oracle_for  # noqa: E402
+        pt, et = probes_for("TOML")
+        check("TOML probes cover the same six roles as JSON's",
+              set(pt) == set(probes_for("JSON")[0]) and et["near_valid_malformed"] is False)
+        check("TOML oracle is tomllib-strict (rejects 007, accepts 1_000)",
+              oracle_for("TOML")(b"a = 007\n") is False and oracle_for("TOML")(b"a = 1_000\n") is True)
+        check("no oracle for an unregistered format", oracle_for("XML") is None)
+    finally:
+        A.select_target("json-parser")
     A._PROMPT_MODE = "legacy"
     try:
         check("legacy prompt text is byte-identical to the pilot's",

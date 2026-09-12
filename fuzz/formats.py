@@ -26,6 +26,10 @@ large stack and a raised recursion limit; a parse that still fails counts as
 from __future__ import annotations
 
 import importlib
+import os
+import shutil
+import struct
+import subprocess
 import sys
 import threading
 from dataclasses import dataclass, field
@@ -72,14 +76,25 @@ class GrammarFormat:
         toks = [t for t in syms if t not in skipped]
         self.PRODS = tuple(dict.fromkeys([*P.ruleNames, *toks, *lits]))
         self._rule_names = set(P.ruleNames)
-        self._sym = {i: n for i, n in enumerate(P.symbolicNames) if n and n != "<INVALID>"}
+        # A named token whose only spelling is punctuation ("L_BRACKET": '[')
+        # is grammar syntax, not a production a generator can be missing;
+        # treat it like JSON's implicit '[' literal and leave it out.
+        punct = {P.symbolicNames[i] for i, lit in enumerate(P.literalNames)
+                 if lit and lit != "<INVALID>" and not lit.strip("'").isalnum()
+                 and i < len(P.symbolicNames) and P.symbolicNames[i] != "<INVALID>"}
+        self._sym = {i: n for i, n in enumerate(P.symbolicNames)
+                     if n and n != "<INVALID>" and n not in punct}
         self._lit = {i: n.strip("'") for i, n in enumerate(P.literalNames) if n}
-        self._skipped = skipped
+        self._skipped = skipped | punct
+        self.PRODS = tuple(p for p in self.PRODS if p not in punct)
+
+    lexer_g4: str | None = None    # grammar file holding the lexer rules (default <name>.g4)
 
     def _skipped_tokens(self) -> set[str]:
-        """Token names whose lexer rule is `-> skip` (whitespace/comments):
-        they never reach the parser, so they are not coverable productions."""
-        g4 = ROOT / "grammar" / f"{self.name}.g4"
+        """Token names whose lexer rule is `-> skip` or hidden-channel
+        (whitespace/comments): they never reach the parser, so they are not
+        coverable productions."""
+        g4 = ROOT / "grammar" / (self.lexer_g4 or f"{self.name}.g4")
         out: set[str] = set()
         if not g4.exists():
             return out
@@ -122,9 +137,72 @@ class GrammarFormat:
             threading.stack_size(old_size)
         return result[0]
 
+    # --- JVM feature server (same grammar, ~50x faster on deep inputs) ---------
+    _java: "subprocess.Popen | None" = None
+    _java_tried: bool = False
+
+    def _java_server(self):
+        """A live FeatureServer process for this format, or None (no JDK build,
+        no `java`, or FORMATS_PY=1 to force the Python runtime for parity tests)."""
+        if self._java is not None and self._java.poll() is None:
+            return self._java
+        if self._java_tried or os.environ.get("FORMATS_PY") == "1":
+            return None
+        self._java_tried = True
+        base = ROOT / "build" / "antlr-java"
+        jar = base / "antlr4-4.13.2-complete.jar"
+        classes = base / self.gen_dir.name
+        java = shutil.which("java")
+        if not (java and jar.exists() and (classes / "FeatureServer.class").exists()):
+            return None
+        try:
+            self._java = subprocess.Popen(
+                [java, "-Xss1g", "-cp", f"{jar}{os.pathsep}{classes}", "FeatureServer",
+                 f"gen.{self.lexer_cls}", f"gen.{self.parser_cls}", self.start_rule],
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        except OSError:
+            self._java = None
+        return self._java
+
+    def _features_java(self, text: str) -> "tuple[set[str], int] | None":
+        p = self._java_server()
+        if p is None:
+            return None
+        try:
+            data = text.encode("utf-8", "surrogatepass")
+            p.stdin.write(struct.pack(">I", len(data)) + data)
+            p.stdin.flush()
+            line = p.stdout.readline().decode("utf-8", "replace").rstrip("\n")
+        except (BrokenPipeError, OSError, ValueError):
+            self._java = None
+            return None
+        parts = line.split(" ")
+        if len(parts) != 5 or parts[0] != "F":
+            self._java = None
+            return None
+        if parts[1] != "1":
+            return set(), 0
+        depth = int(parts[2])
+        names = self._parser.ruleNames
+        prods: set[str] = set()
+        if parts[3] != "-":
+            prods.update(names[int(i)] for i in parts[3].split(","))
+        if parts[4] != "-":
+            for tt in (int(i) for i in parts[4].split(",")):
+                if tt in self._sym and self._sym[tt] not in self._skipped:
+                    prods.add(self._sym[tt])
+                if tt in self._lit and self._lit[tt].isalpha():
+                    prods.add(self._lit[tt])
+        return prods, depth
+
     # --- features ---------------------------------------------------------------
     def features(self, text: str) -> tuple[set[str], int]:
-        """(productions, depth) in ONE parse. Empty set / 0 if unparseable."""
+        """(productions, depth) in ONE parse. Empty set / 0 if unparseable.
+        Uses the JVM server when built (identical grammar and ANTLR version;
+        parity is tested), else the Python runtime."""
+        fast = self._features_java(text)
+        if fast is not None:
+            return fast
         tree = self.parse(text)
         if tree is None:
             return set(), 0
@@ -165,7 +243,9 @@ class GrammarFormat:
 _REGISTRY: dict[str, dict] = {
     "JSON": dict(gen_dir=GEN / "json", lexer_cls="JSONLexer", parser_cls="JSONParser",
                  start_rule="json"),
-    # TOML / XML entries are added with their targets (plan step 11).
+    "TOML": dict(gen_dir=GEN / "toml", lexer_cls="TomlLexer", parser_cls="TomlParser",
+                 start_rule="document", lexer_g4="TomlLexer.g4"),
+    # XML is added with libexpat (Stage 2).
 }
 _CACHE: dict[str, GrammarFormat] = {}
 

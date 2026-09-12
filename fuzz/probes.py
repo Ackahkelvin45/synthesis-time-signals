@@ -87,3 +87,53 @@ def is_strict_json(text: str) -> bool:
         return True
     except ValueError:
         return False
+
+
+# --- per-format probe registry (paper: multi-format targets) ------------------
+#
+# Probes are the human-authored part of the proxy signal and are declared as
+# such in the paper. Each format gets the same six ROLES (escape handling,
+# numeric extremes, deep nesting, duplicate keys, empty containers, near-valid
+# malformed) realised in that format's syntax, so the repair signal has the
+# same shape across targets.
+
+def _toml_probes() -> dict[str, st.SearchStrategy]:
+    hex4 = st.integers(min_value=0x20, max_value=0xFFFF).filter(
+        lambda n: not 0xD800 <= n <= 0xDFFF).map(lambda n: f"\\u{n:04X}")
+    p_unicode = st.lists(hex4, min_size=1, max_size=8).map(
+        lambda escs: 'k = "' + "".join(escs) + '"\n')
+    p_bignum = st.sampled_from([
+        "9223372036854775807", "-9223372036854775808", "1e308", "-1e308", "1.7976931348623157e308",
+        "0xFFFFFFFFFFFFFFF", "1_000_000", "6.02e23", "inf", "-inf", "nan",
+    ]).map(lambda n: f"k = {n}\n")
+    p_deepnest = st.integers(min_value=1500, max_value=2048).map(
+        lambda d: "k = " + "[" * d + "1" + "]" * d + "\n")
+    p_dupkeys = st.integers(min_value=2, max_value=20).map(
+        lambda n: "".join(f"k = {i}\n" for i in range(n)))
+    p_empty = st.sampled_from(["k = []\n", "k = {}\n", "[t]\n", "[[a]]\n", "k = [[]]\n", ""])
+    p_near_valid = st.sampled_from([
+        "k = \n", "k 1\n", "= 1\n", 'k = "unterminated\n', "k = [1 2]\n", "k = {a = 1\n",
+        "[t\n", "k = 1 extra\n", "k.. = 1\n",
+    ])
+    return {
+        "unicode_escape": p_unicode, "big_number": p_bignum, "deep_nesting": p_deepnest,
+        "duplicate_keys": p_dupkeys, "empty_container": p_empty, "near_valid_malformed": p_near_valid,
+    }
+
+
+_PROBES_BY_FORMAT = {"JSON": PROBES}
+_EXPECT_BY_FORMAT = {
+    "JSON": PROBE_EXPECT_VALID,
+    "TOML": {"unicode_escape": True, "big_number": True, "deep_nesting": True,
+             # TOML forbids duplicate keys (tomllib rejects); tomlc99's behaviour is
+             # measured, so a low target rate here is a DEVIATION finding, not a repair
+             "duplicate_keys": True,
+             "empty_container": True, "near_valid_malformed": False},
+}
+
+
+def probes_for(fmt: str) -> tuple[dict[str, st.SearchStrategy], dict[str, bool]]:
+    """(probes, expect_valid) for a format. Unknown formats get no probes."""
+    if fmt == "TOML" and "TOML" not in _PROBES_BY_FORMAT:
+        _PROBES_BY_FORMAT["TOML"] = _toml_probes()
+    return _PROBES_BY_FORMAT.get(fmt, {}), _EXPECT_BY_FORMAT.get(fmt, {})

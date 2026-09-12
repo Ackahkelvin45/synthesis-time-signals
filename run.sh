@@ -35,6 +35,11 @@ build() {
   TARGET=parson MODE=control   bash harness/build.sh
   TARGET=parson MODE=roundtrip bash harness/build.sh
   TARGET=parson MODE=o2        bash harness/build.sh
+  # T4 tomlc99 (TOML; first non-JSON format) + its ground-truth bug build
+  TARGET=tomlc99                    bash harness/build.sh
+  TARGET=tomlc99 MODE=control       bash harness/build.sh
+  TARGET=tomlc99 MODE=o2            bash harness/build.sh
+  TARGET=tomlc99 MODE=bug-issue50   bash harness/build.sh
 }
 
 check() {

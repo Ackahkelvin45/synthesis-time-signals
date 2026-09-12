@@ -87,3 +87,39 @@ def classify_divergence(jsonparser_valid: bool, data: bytes) -> Divergence | Non
     if (not jsonparser_valid) and oracle:
         return Divergence("jsonparser-stricter", repr(data[:80]))
     return None
+
+
+# --- per-format oracle registry (paper: multi-format targets) ---------------
+#
+# The JSON oracle above is RFC-strict stdlib json. For TOML the strict
+# reference is Python's `tomllib` (TOML 1.0.0). A format without a reference
+# parser gets no oracle: divergences are simply not collected (the oracle is a
+# findings channel, never a steering term, so its absence changes no decision).
+
+def _toml_accepts(data: bytes) -> bool:
+    import tomllib
+    try:
+        tomllib.loads(data.decode("utf-8"))
+        return True
+    except (ValueError, RecursionError, UnicodeDecodeError):
+        return False
+
+
+_ORACLES = {"JSON": oracle_accepts, "TOML": _toml_accepts}
+
+
+def oracle_for(fmt: str):
+    """The strict reference-parser predicate for `fmt`, or None."""
+    return _ORACLES.get(fmt)
+
+
+def classify_divergence_for(fmt: str, target_valid: bool, data: bytes) -> Divergence | None:
+    acc = oracle_for(fmt)
+    if acc is None:
+        return None
+    oracle = acc(data)
+    if target_valid and not oracle:
+        return Divergence("target-lenient", repr(data[:80]))
+    if (not target_valid) and oracle:
+        return Divergence("target-stricter", repr(data[:80]))
+    return None

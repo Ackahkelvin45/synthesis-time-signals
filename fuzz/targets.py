@@ -44,6 +44,31 @@ TARGETS: dict[str, dict] = {
         "cap_band": (1500, 2048),   # parson rejects deeper than ~2048
         "pinned": "1.5.3 @ ba29f4e",
     },
+    # T4 — TOML: the first non-JSON format. Grammar = two files (lexer +
+    # parser); the seed prompt concatenates every file in `grammars`.
+    "tomlc99": {
+        "format": "TOML",
+        "src": "vendor/tomlc99/toml.c",
+        "inc": "vendor/tomlc99",
+        "harness": "targets/tomlc99/harness.c",
+        "grammar": "grammar/TomlParser.g4",
+        "grammars": ("grammar/TomlLexer.g4", "grammar/TomlParser.g4"),
+        "notes": "targets/tomlc99/adaptation-notes.md",
+        "binary": "harness_tomlc99",
+        "modes": ("default", "control", "o2", "bug-issue50"),
+        "pinned": "29076df",
+        # depth steer band: tomlc99 recurses per nesting level (arrays / inline
+        # tables); the band stays well below its stack-overflow depth
+        "cap_band": (1500, 2048),
+        # Ground-truth bugs (paper RQ4). `mode` names the build; `poc` is the
+        # hand-written positive control that MUST trigger through the harness.
+        "bugs": {
+            "issue50": {"mode": "bug-issue50", "class": "null-deref",
+                        "fix": "fd82018", "poc": "[0]\n0.0=[]\n+.\n"},
+            "recursion": {"mode": "default", "class": "stack-overflow",
+                          "fix": None, "poc": "a = " + "[" * 100000 + "1" + "]" * 100000},
+        },
+    },
 }
 
 
