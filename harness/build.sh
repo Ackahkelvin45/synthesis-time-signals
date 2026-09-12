@@ -59,7 +59,7 @@ case "$TARGET" in
   json-parser)
     SRC="$ROOT/vendor/json-parser/json.c"; INC="$ROOT/vendor/json-parser"
     HSRC="$HERE/harness.c";                BASE="harness"
-    VALID_MODES="default control hunt unmask o2" ;;
+    VALID_MODES="default control hunt unmask o2 bug-issue68 bug-issue78" ;;
   parson)
     SRC="$ROOT/vendor/parson/parson.c";    INC="$ROOT/vendor/parson"
     HSRC="$ROOT/targets/parson/harness.c"; BASE="harness_parson"
@@ -96,7 +96,8 @@ case "$MODE" in
   roundtrip) EXTRA=(-DROUNDTRIP -DHARNESS_MODE='"roundtrip"') ;;
   hunt)      EXTRA=(-fno-sanitize=pointer-overflow -DHARNESS_MODE='"hunt"') ;;
   o2)        EXTRA=(-DHARNESS_MODE='"o2"') ;;
-  bug-*)     EXTRA=(-DHARNESS_MODE="\"$MODE\"") ;;
+  bug-*)     EXTRA=(-DHARNESS_MODE="\"$MODE\"")
+             if [ "$TARGET" = "json-parser" ]; then EXTRA+=(-fno-sanitize=pointer-overflow); fi ;;
   unmask)    "${PYTHON:-python3}" "$HERE/apply_unmask.py"
              EXTRA=(-DHARNESS_MODE='"unmask"')
              SRC="$OUT/_patched/json.c"; INC="$OUT/_patched" ;;

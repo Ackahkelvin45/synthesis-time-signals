@@ -198,6 +198,34 @@ def main() -> int:
     else:
         print("  SKIP  JVM feature server not built (harness/build_java.sh)")
 
+    # --- ground-truth bug campaigns (RQ4) -------------------------------------
+    import campaign  # noqa: E402
+    from targets import TARGETS as _TT  # noqa: E402
+    if (ROOT / "build" / "harness_bug-issue78").exists():
+        for tgt, bug in (("json-parser", "issue68"), ("json-parser", "issue78"), ("tomlc99", "issue50")):
+            if (ROOT / "build" / cell.binary_name_for(tgt, _TT[tgt]["bugs"][bug]["mode"])).exists() \
+               if hasattr(cell, "binary_name_for") else True:
+                ok, sig = campaign.positive_control(tgt, bug)
+                check(f"positive control passes for {tgt}/{bug} (PoC crashes its pre-fix build)",
+                      ok and sig, sig)
+        # a full tiny campaign: the bug's own PoC as the generator triggers immediately
+        import types
+        poc = _TT["json-parser"]["bugs"]["issue78"]["poc"]
+        strat_path = ROOT / "build" / "_poc78.py"
+        strat_path.write_text("from hypothesis import strategies as st\nstrategy = st.just(%r)\n" % poc)
+        row = campaign.run_campaign("json-parser", "issue78", str(strat_path), seed=0,
+                                    minutes=1.0, max_inputs=50, batch=10)
+        check("campaign triggers issue78 when the generator emits its PoC",
+              row["triggered"] and row["trigger"]["inputs"] >= 1, str(row.get("trigger")))
+        check("campaign records inputs-to-trigger and time-to-trigger",
+              "inputs" in row["trigger"] and "seconds" in row["trigger"])
+        row_c = campaign.run_campaign("json-parser", "issue78", "builtin:text", seed=0,
+                                      minutes=0.02, max_inputs=200, batch=100)
+        check("campaign censors (triggered False) when the budget runs out without the bug",
+              row_c["triggered"] is False and row_c["positive_control"] is True)
+    else:
+        print("  SKIP  bug campaigns (bug builds not compiled; run ./run.sh build)")
+
     print(f"\n{_p} passed, {_f} failed")
     return 1 if _f else 0
 

@@ -838,3 +838,36 @@ need a JDK; noted for step 4's container.
 prompt anonymization and both grammar files present, probe/oracle
 registries, JVM/Python parity). A 200-input TOML replay runs the whole
 summarizer in 14 s.
+
+## D23 — Paper infrastructure, step 12: ground-truth bug campaigns (RQ4), and json-parser's two bugs
+
+**json-parser bugs.** Two one-byte heap over-reads at the end of the input,
+now usable as ground truth (vendor/json-parser-bugs/PROVENANCE.md):
+issue78 (`tru`, a truncated literal) and issue68 (`"\uDCB`, a `\u` escape
+truncated after three hex digits). The documented issue-68 reproducer did not
+crash; a search over truncated escapes found the working input. Both crash
+their pre-fix build and are clean REJECTs on the fixed HEAD. Because the
+over-read is one byte PAST the input, the json-parser harness now hands
+`json_parse_ex` a buffer of EXACTLY the input length (the driver's
+NUL-terminated buffer had masked them). The bug builds compile with
+`-fno-sanitize=pointer-overflow` only (finding #1's NULL-offset idiom
+predates these commits and would abort first).
+
+**Campaign runner** (`eval/campaign.py`, plan step 12). Per (target, bug,
+generator, seed): draw batches from the generator and feed the pre-fix build
+until the bug's OWN crash signature appears (Magma-style: triggered is decided
+by signature match, not "any crash"), the time budget expires, or the input
+budget is exhausted; record inputs/time-to-trigger or censoring, plus every
+other crash signature (candidate new findings). The oracle signature is
+established by running the bug's PoC first; a PoC that does not crash is a
+failed positive control and the bug is dropped with a note. Both the control
+and the campaign classify through BATCH mode (run_many), so the driver's
+entry-point frame is identical in both signatures (a stdin-vs-batch frame
+mismatch first made a real trigger look like a miss).
+
+**Verified.** Positive controls pass for json-parser issue68/issue78 and
+tomlc99 issue50; a campaign whose generator emits the PoC triggers on the
+first input and records inputs/time; a builtin-text campaign censors cleanly
+when the budget runs out. 164/164 tests (6 new). Deferred to the Docker
+step: a JDK in the image (the JVM feature server) and AFL++ for the reference
+row (neither is installed locally; the Docker daemon is currently down).

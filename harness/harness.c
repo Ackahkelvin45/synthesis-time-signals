@@ -57,7 +57,16 @@ static int harness_parse(const char *buf, size_t len, char *msg, size_t msgcap) 
     char error[json_error_max];
     error[0] = '\0';
 
-    json_value *v = json_parse_ex(&settings, buf, len, error);
+    /* Hand the LENGTH-taking API a buffer of exactly `len` bytes. The driver's
+     * buffer carries a trailing NUL, and that one extra readable byte would
+     * mask the library's historical one-byte over-reads at the end of the
+     * input (issues #68 and #78, the paper's ground-truth bugs). An exact
+     * heap allocation puts ASan's redzone right after the last input byte. */
+    char *exact = (char *)malloc(len ? len : 1);
+    if (!exact) return 3;
+    memcpy(exact, buf, len);
+    json_value *v = json_parse_ex(&settings, exact, len, error);
+    free(exact);
     if (v == NULL) {
         /* well-formed rejection: surface the parser's reason (parson gives none) */
         snprintf(msg, msgcap, "%s", error);

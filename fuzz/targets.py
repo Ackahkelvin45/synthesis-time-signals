@@ -26,9 +26,19 @@ TARGETS: dict[str, dict] = {
         "grammar": "grammar/JSON.g4",
         "notes": "grammar/adaptation-notes.md",
         "binary": "harness",
-        "modes": ("default", "control", "hunt", "unmask", "o2"),
+        "modes": ("default", "control", "hunt", "unmask", "o2", "bug-issue68", "bug-issue78"),
         # deep-nesting steer band (json-parser has no cap; 2048 is a target)
         "cap_band": (1500, 2048),
+        # Ground-truth bugs (paper RQ4): one-byte heap over-reads at the end of
+        # the input; the harness passes an exact-length buffer so ASan sees them.
+        # Bug builds disable only the pointer-overflow check (finding #1's
+        # NULL-offset idiom predates these commits and would fire first).
+        "bugs": {
+            "issue68": {"mode": "bug-issue68", "class": "heap-overread",
+                        "fix": "b42439a", "poc": '"\\uDCB'},
+            "issue78": {"mode": "bug-issue78", "class": "heap-overread",
+                        "fix": "cddc633", "poc": "tru"},
+        },
         "pinned": "8ac4477",
     },
     # T2 — same grammar, different parser: a within-format comparison.
