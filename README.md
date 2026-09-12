@@ -50,11 +50,20 @@ fuzz/
   probes.py        single-feature probes for unconfounded acceptance attribution
   oracle.py        differential check vs strict json (finds json-parser leniency)
   triage/          Step 5: signature.py (dedup) + triage.py (minimize/verify/save)
+  targets.py       target registry — json-parser (default) and parson; `--target`
+targets/parson/    second target (T2): harness + adaptation notes (same JSON grammar,
+                   different parser — a within-format comparison); runs -> runs/parson/
 runs/              per-iteration evidence from the committed live run (deepseek-chat)
 crashes/           FINDINGS.md (results) + one folder per unique crash signature
-eval/              coverage.py — MEASUREMENT-ONLY line coverage (random vs evolved)
+eval/              MEASUREMENT-ONLY (never steers the loop):
+  cell.py, _draw.py  one shared per-cell measurement (coverage + proxy metrics on the
+                   same inputs) with REPRODUCIBLE input sets: draws run in a
+                   history-fixed subprocess, cached + hashed; every result carries
+                   its input-set id
+  coverage.py      random vs evolved line coverage (`--target`)
   proxy_validation.py  post-hoc audit: does the blind proxy signal track coverage?
-  experiment.py    multi-seed A/B/C controlled experiment (mean±CI + permutation test)
+  experiment.py    multi-seed A/B/C controlled experiment (mean±CI + paired perm. test)
+paper/             paper plan: outline.md (RQs, sections) + experiment-matrix.md (build spec)
 docs/              report.md (the two-page write-up)
 DECISIONS.md       decision + critique log
 ```
@@ -125,10 +134,11 @@ build cannot be mistaken for the real target. `./run.sh test` runs four suites
 - [x] Two-page report (Step 6) — `docs/report.md`; findings in `crashes/FINDINGS.md`.
 - [x] **A confirmed finding** — UBSan UB on any object, minimized to `{""`.
 - [x] **Refinement shown to help, measured** — a 12-seed controlled experiment
-      (`eval/experiment.py`): grammar-seeding beats random by **+34.5 region-cov
-      pts** and refinement adds a further **+2.6** (paired p<0.02, 95% CIs exclude
+      (`eval/experiment.py`): grammar-seeding beats random by **+34.4 region-cov
+      pts** and refinement adds a further **+2.5** (paired p<0.02, 95% CIs exclude
       zero). The blind proxy signal is validated against coverage
-      (`eval/proxy_validation.py`: novelty↔branch-cov ρ≈+0.9). Both measurement-only.
+      (`eval/proxy_validation.py`: novelty↔branch-cov ρ≈+0.9). Both measurement-only,
+      on reproducible, hashed input sets (`eval/cell.py`).
 
 ## Known limitations
 

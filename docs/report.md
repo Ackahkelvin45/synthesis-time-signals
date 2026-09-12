@@ -116,15 +116,17 @@ noisy signal; §3) — the improvement is measured as a controlled experiment
 each run over **12 independent seeds**, reported as mean ± 95% CI with a paired
 sign-flip permutation test. Two findings:
 
-- **Grammar-seeding is the dominant win.** The seed reaches **+34.5 region- and
-  +37.8 branch-coverage points** over random text (23% → 61% branch; paired
+- **Grammar-seeding is the dominant win.** The seed reaches **+34.4 region- and
+  +37.9 branch-coverage points** over random text (23% → 61% branch; paired
   p<0.001) — the core premise (generating *in* the language reaches the
   value-construction code random bytes miss) holds decisively.
 - **Refinement adds a small but statistically significant increment beyond the
-  seed:** **+2.6 region, +2.5 branch, +3.4 novelty** (every 95% CI excludes zero;
+  seed:** **+2.5 region, +2.3 branch, +3.2 novelty** (every 95% CI excludes zero;
   paired p<0.02). The evolved generator also reaches deep nesting the seed never
-  did (cap-mass 0 → 0.19) and *trades* raw acceptance (0.75 → 0.61) for that
+  did (cap-mass 0 → 0.22) and *trades* raw acceptance (0.75 → 0.61) for that
   diversity — precisely the behaviour the novelty guardrail exists to protect.
+  Every cell's inputs are drawn in a history-fixed subprocess and identified by
+  a hash of (strategy source, n, seed), so these numbers reproduce exactly.
 
 So the defensible claim is: **seeding does most of the work, and the feedback loop
 measurably — if modestly — improves on it** once seed-noise is averaged out. What

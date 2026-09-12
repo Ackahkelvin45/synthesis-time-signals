@@ -1,130 +1,46 @@
 """experiment.py — EVALUATION ONLY. A controlled, multi-seed experiment:
 does grammar-seeding, and then feedback refinement, MEASURABLY beat the baseline?
 
-Motivation. The committed single run reads as a clean 51->72 "evolution", but a
-single unseeded run is max-of-noise (DECISIONS.md D9): its trajectory does not
-reproduce. Rather than claim per-iteration improvement from one lucky draw, this
-runs a proper experiment — three fixed generators, each measured over K
-independent PRNG seeds — and reports mean +/- 95% CI with a nonparametric
-significance test. The claim then rests on a distribution, not an anecdote.
+Motivation. A single unseeded run is max-of-noise (DECISIONS.md D9): its
+trajectory does not reproduce. Rather than claim per-iteration improvement from
+one lucky draw, this runs a proper experiment — three fixed generators, each
+measured over K independent PRNG seeds — and reports mean +/- 95% CI with a
+paired, exact permutation test. The claim then rests on a distribution.
 
 Conditions (all fixed strategies; nothing is re-run through the LLM here):
-  A. baseline   random `st.text()`                 (no grammar knowledge)
-  B. seed       iter-1's effective grammar-seeded strategy (NO refinement)
-  C. evolved    iter-5's strategy (AFTER 5 refinement iterations)
+  A. baseline   random `st.text()`                              (no grammar knowledge)
+  B. seed       iteration-1's effective grammar-seeded strategy (NO refinement)
+  C. evolved    iteration-5's strategy                          (AFTER refinement)
 
-Per (seed, condition) ONE pass over N seeded examples through the coverage build
-yields, together:
-  - region / line / branch coverage of json.c  (from the merged profile)
-  - acceptance rate, accepted-structure novelty, deep-nesting cap-mass
-    (from the harness exit codes captured on the same pass)
-so coverage and the proxy metrics describe exactly the same inputs.
-
-Then across the K seeds: mean +/- std, a 95% CI (t-interval), and a two-sided
-PERMUTATION test (assumption-free, no scipy) for the two comparisons that matter:
+Per (seed, condition) ONE pass over N reproducible examples (eval/cell.py:
+history-fixed subprocess draws, cached and hashed) through the target's
+coverage build yields region/line/branch coverage AND the proxy metrics on the
+same inputs. Then across the K seeds: mean +/- std, a 95% CI, and a PAIRED
+sign-flip permutation test — the correct analysis for this randomized block
+design (every seed runs under every condition) — for the two comparisons that
+matter:
   grammar-seed vs random baseline   (does grammar-seeding help?)
   evolved vs grammar-seed           (does REFINEMENT help, beyond seeding?)
 
-    .venv/bin/python eval/experiment.py [K] [N]     # writes eval/experiment.md
-    # defaults K=12 seeds, N=150 examples/seed
+    .venv/bin/python eval/experiment.py [--target T] [--k 12] [--n 150] [--out F]
+    # default: json-parser, K=12, N=150 -> eval/experiment.md
+    # other targets -> eval/experiment_<target>.md (needs a loop run under runs/<target>/)
 """
 from __future__ import annotations
 
-import importlib.util
+import argparse
 import random
-import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "fuzz"))
-sys.path.insert(0, str(ROOT / "fuzz" / "loop"))
+sys.path.insert(0, str(ROOT / "eval"))
 
-from coverage import _llvm, build_coverage_binary, COV_BIN  # noqa: E402
+from cell import (BUILTIN_TEXT, build_coverage_binary, effective_strategy_path,  # noqa: E402
+                  measure_ref, runs_dir, target_src)
 
-BUILD = ROOT / "build"
-JSON_C = ROOT / "vendor" / "json-parser" / "json.c"
 PERM_ITERS = 20000
 PERM_SEED = 12345
-
-
-def _load(path: Path):
-    spec = importlib.util.spec_from_file_location(f"strat_{path.parent.name}_{path.stem}", path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
-def effective_strategy(iter_dir: Path):
-    """iter-N's strategy that actually ran (strategy.py, else strategy_fix.py)."""
-    canonical = iter_dir / "strategy.py"
-    fix = iter_dir / "strategy_fix.py"
-    if not fix.exists():
-        return _load(canonical).strategy
-    try:
-        strat = _load(canonical).strategy
-        from hypothesis import given, settings, HealthCheck
-
-        @settings(max_examples=1, deadline=None, database=None,
-                  suppress_health_check=[HealthCheck.function_scoped_fixture])
-        @given(s=strat)
-        def _probe(s):
-            pass
-
-        _probe()
-        return strat
-    except Exception:  # noqa: BLE001
-        return _load(fix).strategy
-
-
-def draw(strategy, n: int, seed: int) -> list[str]:
-    from hypothesis import given, settings, seed as hyp_seed, HealthCheck
-    out: list[str] = []
-
-    @settings(max_examples=n, database=None, deadline=None,
-              suppress_health_check=[HealthCheck.function_scoped_fixture])
-    @given(s=strategy)
-    def collect(s):
-        out.append(s if isinstance(s, str) else str(s))
-
-    hyp_seed(seed)(collect)()
-    return out
-
-
-def measure(examples: list[str], tag: str) -> dict:
-    """One pass: coverage (region/line/branch) + acceptance/novelty/cap_mass from
-    the SAME inputs. The coverage build is non-sanitizer, so objects parse and its
-    exit code still means 0=valid, 2=reject, 11=skip."""
-    from agent import summarize  # noqa: E402
-    profdir = BUILD / f"_cov_exp_{tag}"
-    profdir.mkdir(exist_ok=True)
-    for old in profdir.glob("*.profraw"):
-        old.unlink()
-    samples = []
-    for i, ex in enumerate(examples):
-        data = ex.encode("utf-8", "surrogatepass")
-        env = {"LLVM_PROFILE_FILE": str(profdir / f"{i}.profraw")}
-        p = subprocess.run([str(COV_BIN)], input=data, env=env,
-                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        rc = p.returncode
-        outcome = ("valid" if rc == 0 else "reject" if rc == 2
-                   else "skip" if rc == 11 else "crash")
-        samples.append((ex, outcome))
-    raws = [str(p) for p in profdir.glob("*.profraw")]
-    merged = profdir / "merged.profdata"
-    subprocess.run([*_llvm("llvm-profdata"), "merge", "-sparse", *raws,
-                    "-o", str(merged)], check=True)
-    rep = subprocess.run(
-        [*_llvm("llvm-cov"), "report", str(COV_BIN),
-         f"-instr-profile={merged}", str(JSON_C)],
-        capture_output=True, text=True, check=True).stdout
-    total = [ln for ln in rep.splitlines() if ln.strip().startswith("TOTAL")][0]
-    pcts = [float(t.rstrip("%")) for t in total.split() if t.endswith("%")]
-    s = summarize(samples)
-    return {"region": pcts[0], "line": pcts[2], "branch": pcts[3],
-            "acceptance": s["acceptance_rate"], "novelty": s["novelty"],
-            "cap_mass": s["cap_distance_mass"],
-            "productions": len(s["productions_accepted"])}
 
 
 # --- statistics (no scipy) -------------------------------------------------
@@ -181,32 +97,48 @@ def paired_perm_test(lo: list[float], hi: list[float],
     return mean(diffs), half, (hits + 1) / (iters + 1)
 
 
-def main() -> int:
-    K = int(sys.argv[1]) if len(sys.argv) > 1 else 12
-    N = int(sys.argv[2]) if len(sys.argv) > 2 else 150
-    print(f"[exp] building coverage binary; K={K} seeds x N={N} examples x 3 conditions")
-    build_coverage_binary()
+# --- the experiment ---------------------------------------------------------
 
-    import baseline_strategy
+def main() -> int:
+    ap = argparse.ArgumentParser(description="multi-seed A/B/C coverage experiment")
+    ap.add_argument("--target", default="json-parser")
+    ap.add_argument("--k", type=int, default=12, help="seeds per cell")
+    ap.add_argument("--n", type=int, default=150, help="examples per seed")
+    ap.add_argument("--out", default=None, help="markdown output path")
+    args = ap.parse_args()
+    target, K, N = args.target, args.k, args.n
+    out_path = Path(args.out) if args.out else (
+        ROOT / "eval" / ("experiment.md" if target == "json-parser" else f"experiment_{target}.md"))
+
+    rd = runs_dir(target)
+    if not (rd / "iter-1").exists() or not (rd / "iter-5" / "strategy.py").exists():
+        print(f"[exp] {target}: no loop run under {rd.relative_to(ROOT)}/ (need iter-1 and "
+              f"iter-5). Run the loop with --target {target} first.")
+        return 1
+
+    print(f"[exp] {target}: building coverage binary; K={K} seeds x N={N} examples x 3 conditions")
+    build_coverage_binary(target)
+
+    # Strategies by REFERENCE so every cell's inputs are reproducible and hashed.
     conditions = {
-        "A. baseline (random)": baseline_strategy.naive_strategy,
-        "B. seed (iter-1, no refine)": effective_strategy(ROOT / "runs" / "iter-1"),
-        "C. evolved (iter-5)": _load(ROOT / "runs" / "iter-5" / "strategy.py").strategy,
+        "A. baseline (random)": BUILTIN_TEXT,
+        "B. seed (iter-1, no refine)": str(effective_strategy_path(rd / "iter-1")),
+        "C. evolved (iter-5)": str(rd / "iter-5" / "strategy.py"),
     }
     metrics = ["region", "line", "branch", "acceptance", "novelty", "cap_mass"]
     data = {c: {m: [] for m in metrics} for c in conditions}
+    input_sets = {c: [] for c in conditions}
 
     for si, seed in enumerate(range(K)):
-        for ci, (cname, strat) in enumerate(conditions.items()):
-            ex = draw(strat, N, seed)
-            r = measure(ex, f"{ci}_{si}")
+        for ci, (cname, ref) in enumerate(conditions.items()):
+            r = measure_ref(target, ref, N, seed, f"exp_{ci}_{si}")
             for m in metrics:
                 data[cname][m].append(r[m])
+            input_sets[cname].append(r["input_set"])
         print(f"[exp] seed {seed}: "
               + " | ".join(f"{c.split('.')[0]} reg={mean(data[c]['region']):.1f}"
                            for c in conditions))
 
-    # aggregate
     agg = {c: {m: ci95(data[c][m]) for m in metrics} for c in conditions}
     names = list(conditions)
 
@@ -215,17 +147,20 @@ def main() -> int:
         return f"{mu:.1f}±{h:.1f}" if m in ("region", "line", "branch", "novelty") \
             else f"{mu:.2f}±{h:.2f}"
 
+    src_rel = target_src(target).relative_to(ROOT)
     lines = [
-        "# Controlled experiment: does grammar-seeding, then refinement, help?",
+        f"# Controlled experiment ({target}): does grammar-seeding, then refinement, help?",
         "",
         f"**Design.** Three fixed generators, each measured over **K={K} independent",
-        f"PRNG seeds** at **N={N} examples/seed**. Per (seed, condition) one pass over",
-        "the coverage build yields both `json.c` coverage AND the acceptance / novelty /",
-        "cap-mass proxy metrics on the *same* inputs. Values are **mean ± 95% CI**",
-        "(t-interval) over the K seeds; comparisons use a two-sided **permutation test**",
-        f"({PERM_ITERS} relabelings, no scipy). This replaces the single committed run's",
-        "non-reproducible 51→72 trajectory (max-of-noise; DECISIONS.md D9) with a claim",
-        "that rests on a distribution.",
+        f"PRNG seeds** at **N={N} examples/seed**, against `{src_rel}`. Per (seed, condition)",
+        "one pass over the coverage build yields both coverage AND the acceptance /",
+        "novelty / cap-mass proxy metrics on the *same* inputs. Every input set is drawn",
+        "in a history-fixed subprocess and identified by a hash of (strategy source, n,",
+        "seed), so the cells reproduce exactly. Values are **mean ± 95% CI** (t-interval)",
+        "over the K seeds; comparisons use a two-sided **paired sign-flip permutation",
+        "test** (exact enumeration at this K). This replaces a single run's",
+        "non-reproducible trajectory (max-of-noise; DECISIONS.md D9) with a claim that",
+        "rests on a distribution.",
         "",
         "## Results (mean ± 95% CI over seeds)",
         "",
@@ -236,8 +171,6 @@ def main() -> int:
         lines.append("| " + c + " | " + " | ".join(
             fmt(c, m) for m in ["region", "line", "branch", "acceptance", "novelty", "cap_mass"]) + " |")
 
-    # the two comparisons that matter, on region + branch coverage and novelty.
-    # Paired sign-flip test on per-seed differences (randomized block design).
     def comp(lo, hi, label):
         out = [f"### {label}"]
         for m in ("region", "branch", "novelty"):
@@ -252,6 +185,13 @@ def main() -> int:
     lines += comp(names[1], names[2], "Evolved (C) vs grammar-seed (B) — does REFINEMENT help beyond seeding?")
     lines += [
         "",
+        "## Input sets (hash of strategy source + n + seed; seed index 0..K-1)",
+        "",
+    ]
+    for c in names:
+        lines.append(f"- {c}: " + ", ".join(f"`{s}`" for s in input_sets[c]))
+    lines += [
+        "",
         "## Reading it",
         "",
         "A comparison is meaningful only if its CIs separate AND the permutation p is",
@@ -264,9 +204,13 @@ def main() -> int:
         "plainly rather than hidden.",
         "",
     ]
-    (ROOT / "eval" / "experiment.md").write_text("\n".join(lines))
+    out_path.write_text("\n".join(lines))
     print("\n".join(lines[lines.index("## Results (mean ± 95% CI over seeds)"):]))
-    print("[exp] wrote eval/experiment.md")
+    try:
+        shown = out_path.relative_to(ROOT)
+    except ValueError:  # --out outside the repo (e.g. a scratch dir)
+        shown = out_path
+    print(f"[exp] wrote {shown}")
     return 0
 
 

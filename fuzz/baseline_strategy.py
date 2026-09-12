@@ -23,8 +23,21 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from runner import run_once, Outcome  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-HARNESS = sys.argv[1] if len(sys.argv) > 1 else str(ROOT / "build" / "harness")
-MAX_EXAMPLES = int(sys.argv[2]) if len(sys.argv) > 2 else 300
+
+
+def _cli_args() -> tuple[str, int]:
+    """Read the positional CLI args ONLY when run as a script. The evals import
+    this module for `naive_strategy`; parsing argv at import time made their
+    own flags (e.g. `--target parson`) get misread as this script's positional
+    <harness> <max_examples> and blow up on int('parson')."""
+    if __name__ != "__main__":
+        return str(ROOT / "build" / "harness"), 300
+    harness = sys.argv[1] if len(sys.argv) > 1 else str(ROOT / "build" / "harness")
+    n = int(sys.argv[2]) if len(sys.argv) > 2 else 300
+    return harness, n
+
+
+HARNESS, MAX_EXAMPLES = _cli_args()
 
 # The naive baseline: arbitrary text. No grammar knowledge at all.
 naive_strategy = st.text()

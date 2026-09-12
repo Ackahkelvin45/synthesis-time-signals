@@ -403,12 +403,12 @@ losing power and mis-estimating the null. Switched to the paired sign-flip test;
 it is both more correct and more powerful, and at K=12 it is exact, not sampled.
 
 **Result.**
-- **Seeding (B vs A):** +34.5 region / +37.8 branch / +14.0 novelty, paired
+- **Seeding (B vs A):** +34.4 region / +37.9 branch / +14.1 novelty, paired
   p≈0.0005 — the core premise holds decisively.
-- **Refinement beyond seeding (C vs B):** +2.6 region / +2.5 branch / +3.4
+- **Refinement beyond seeding (C vs B):** +2.5 region / +2.3 branch / +3.2
   novelty, **every 95% CI excludes zero**, paired p<0.02. Small but real. The
   evolved generator also reaches deep nesting the seed never did (cap-mass
-  0→0.19) and trades raw acceptance (0.75→0.61) for diversity — the guardrail's
+  0→0.22) and trades raw acceptance (0.75→0.61) for diversity — the guardrail's
   intended behaviour.
 
 **What is now claimed (vs D9).** D9 could claim only: gets off 0%, authors valid
@@ -454,3 +454,49 @@ cleanly — no abort, no timeout. json-parser's iterative two-pass design handle
 these without overflow. So finding #1 is, within this budget, the one
 sanitizer-detectable issue on the parse-only surface — now established without the
 `hunt` build's blind spot.
+
+## D13 — Seeded Hypothesis draws depend on process history: found, fixed, re-measured
+
+**Trigger.** Making the evals target-aware (paper Tier A) meant refactoring
+`coverage.py` / `experiment.py` / `proxy_validation.py` onto one shared
+measurement (`eval/cell.py`). The refactored `coverage.py` reported 42.6 / 81.5
+line% where the committed file said 42.2 / 83.1. A refactor is not supposed to
+change a measurement.
+
+**Investigation (each step by execution, each hypothesis tested before believed).**
+- Not the measurement: identical inputs on one binary, measured twice by the same
+  function -> bit-identical (42.17 twice; 0 crashes; 400 profraws each).
+- Not the compiler: `CC` unset, both build commands identical.
+- Not `PYTHONHASHSEED`: draws identical across processes for any hash seed.
+- Not "residual noise" (an earlier guess, wrong): the discrete levels 42.17 /
+  42.60 / 43.61 were each perfectly reproducible in their own context.
+- The cause: a seeded Hypothesis draw is reproducible across processes ONLY for
+  an identical process history. Merely `import baseline_strategy` (which
+  decorates a `@given` test at import), or launching via stdin vs a file,
+  changes the sequence `@seed(0)` yields (D-1..D-4: every context reproduced
+  3/3, but contexts differed from each other). Each eval script therefore drew a
+  different, deterministic input set. (Side finding: the sequence also depends
+  on the test function's qualname.)
+
+**Fix.** `eval/_draw.py` draws in a fresh interpreter with a fixed minimal
+history; `cell.draw_examples` takes strategy REFERENCES (never live objects),
+caches each set under `build/_inputs/` keyed by hash(strategy source, n, seed),
+and every measurement records its input-set id. Verified: six launch contexts
+that previously gave three hashes now give one; `coverage.py` run twice is
+byte-identical and reproduces the committed 42.2 / 83.1 exactly (the isolated
+history coincides with the original script's).
+
+**Re-measurement outcome (claims robust, numbers updated everywhere).** With
+reproducible draws: seeding +34.4 region / +37.9 branch / +14.1 novelty
+(p=0.0005); refinement beyond the seed +2.5 region (CI [+0.9,+4.1], p=0.0068),
++2.3 branch (p=0.012), +3.2 novelty (p=0.011) — every CI excludes zero. Proxy
+correlations unchanged in story (novelty↔branch +0.9, acceptance -0.9,
+cap-mass -0.5). The seed row was identical before/after; the drift lived in
+the random-baseline and evolved draws, exactly as the mechanism predicts.
+
+**What this does and does not mean.** The INTERNAL validity of any single
+experiment run was never affected (all its cells share one history and are
+paired by seed). What was affected is exact cross-script reproduction of the
+numbers — which is precisely what a reviewer re-running an artifact does. This
+is a trap any Hypothesis-based LLM-fuzzing evaluation can fall into; it goes in
+the paper's reproducibility section as a contribution, not a footnote.

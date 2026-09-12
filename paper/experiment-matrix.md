@@ -116,6 +116,32 @@ cell (as `experiment.py` already does), so they are comparable.
 - Aggregate across targets by reporting per-target results **and** a summary
   (e.g., mean of per-target deltas); do not pool seeds across targets as if
   they were one population.
+- **Absolute coverage is NOT comparable across targets.** A parse-only harness
+  can never reach a library's serializer / mutation / query APIs, and how much
+  of the file those occupy varies wildly: random text reaches ~42% of
+  json-parser's `json.c` (small, parse-centric) but only ~5% of parson's
+  `parson.c` (large API surface, mostly unreachable from parsing). So the
+  paper compares **conditions within a target** (deltas, ratios, paired tests)
+  and reports absolute % only as context. Consider also reporting coverage of
+  the parse-reachable region (e.g., functions reachable from the entry point)
+  as a normalized secondary metric.
+- **Seeded Hypothesis draws depend on process history — inputs must be
+  materialized and hashed.** Found by re-measurement, not assumed: identical
+  inputs measured twice on one binary are bit-identical, and a seeded draw is
+  reproducible across processes — but ONLY for an identical process history.
+  Merely importing a module that decorates a `@given` test, or launching the
+  interpreter differently, changes the sequence `@seed(n)` yields, so two eval
+  scripts drawing "the same" seeded examples reported different coverage
+  (42.2 / 42.6 / 43.6 line% on one binary — discrete levels, not noise). The
+  fix (`eval/cell.py` + `eval/_draw.py`): every draw runs in a fresh
+  interpreter with a fixed minimal history, is cached keyed by a hash of
+  exactly (strategy source, n, seed), and every reported measurement carries
+  that input-set id. A reviewer can then verify identical inputs by hash. Note
+  this never affected the *internal* validity of a single experiment run (all
+  its cells share one history and are paired by seed); it affected exact
+  cross-script reproduction of the numbers. This belongs in the paper's
+  reproducibility section — it is a trap other LLM-fuzzing papers using
+  Hypothesis likely fall into.
 - RQ4: Spearman rho per proxy component vs branch/region coverage, per target
   (`eval/proxy_validation.py`); with 5 targets x 20 seeds the per-target n is
   20, far better than the current n=5.
@@ -150,19 +176,33 @@ Automate all of it with a matrix runner (below); never run cells by hand.
 
 ## Infrastructure to build (in order)
 
-1. **Target scaffold**: a per-target directory convention
-   (`targets/<name>/{harness.c, build.sh, PROVENANCE.md, grammar.g4,
-   adaptation-notes.md}`) so `agent.py`, `runner.py`, and the evals take a
-   `--target` instead of assuming json-parser. Prove it on T2 (parson) first.
+1. **Target scaffold — DONE.** `fuzz/targets.py` (registry + binary naming
+   rule), `targets/<name>/{harness.c, adaptation-notes.md}`, `build.sh
+   TARGET=`, `agent.py --target` (per-target realities in the seed prompt,
+   `runs/<target>/`), `runner.py` SKIP 10 + `roundtrip`. Proven on T2 (parson):
+   classification matches every documented behavior; json-parser is
+   byte-identical (85/85 tests, prompt text verified equal).
+   **Also DONE — target-aware evals via ONE shared measurement:** `eval/cell.py`
+   (coverage build per target, one-pass coverage + proxy metrics per cell);
+   `coverage.py` / `experiment.py` / `proxy_validation.py` take `--target` and
+   `--out`.
+   **Also DONE — reproducible, hashed input sets:** strategies are passed by
+   reference; every draw runs in a history-fixed subprocess (`eval/_draw.py`),
+   is cached under `build/_inputs/` keyed by hash(strategy source, n, seed),
+   and every measurement records its input-set id. Verified: six launch
+   contexts that previously produced three different "seeded" input sets now
+   produce one identical hash; `coverage.py` run twice is byte-identical and
+   reproduces the committed 42.2% / 83.1% exactly. The random baseline's
+   input-set id is identical across targets (true apples-to-apples).
 2. **Ablation flags** in `agent.py` (`--ablate ...`) incl. the A5 naive-refine
    prompt.
 3. **Matrix runner** (`eval/matrix.py`): iterates targets x conditions x seeds
-   x models, calls the existing pieces, writes one row per cell to a single
+   x models, calls `cell.measure_cell`, writes one row per cell to a single
    CSV/JSONL, resumable (skip cells already done).
 4. **Aggregator + figures** (`eval/report.py`): reads the matrix output, runs
    the statistical plan, emits the per-RQ tables and figures for the paper.
-5. **Generalize** `proxy_validation.py` to run per target from the matrix
-   output.
+5. **Generalize `proxy_validation.py` — DONE** (`--target`, per-target output);
+   the matrix runner will supersede its n=5 per-iteration view with n=K seeds.
 
 ---
 
