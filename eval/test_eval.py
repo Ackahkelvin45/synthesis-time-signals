@@ -100,6 +100,59 @@ def main() -> int:
     else:
         print("  SKIP  coverage curve (no coverage binary; run ./run.sh build + eval/coverage.py)")
 
+    # --- replicate-level statistics on synthetic data with KNOWN effects -----
+    import random
+    import report
+    check("A12 = 1 when every a beats every b", report.a12([1, 2, 3], [0, 0, 0]) == 1.0)
+    check("A12 = 0.5 for identical groups", report.a12([1, 2, 3], [1, 2, 3]) == 0.5)
+    check("permutation p ~ 1 for identical groups",
+          report.perm_two_sample([1, 2, 3, 4], [1, 2, 3, 4], iters=2000) > 0.5)
+    check("permutation p small for separated groups",
+          report.perm_two_sample([10, 11, 12, 13, 14], [0, 1, 2, 3, 4], iters=2000) < 0.01)
+    check("parse_run_cond", report.parse_run_cond("run:C3n-rep7:last") == ("C3n", 7, "last")
+          and report.parse_run_cond("run:ablate-x:final") is None)
+    rng = random.Random(1)
+    data: dict = {"synth": {}}
+    base = {"region": 50.0, "line": 60.0, "branch": 40.0, "acceptance": 0.5, "novelty": 5, "cap_mass": 0.0}
+
+    def rows(level):
+        return {sd: {**base, "auc_branch_reach": level + rng.gauss(0, 0.5)} for sd in range(20)}
+    data["synth"]["random"] = rows(20.0)
+    data["synth"]["seed"] = rows(40.0)
+    data["synth"]["evolved"] = rows(43.0)
+    for k in range(1, 11):
+        seed_lvl = 40.0 + rng.gauss(0, 1.0)
+        data["synth"][f"run:C2-rep{k}:seed"] = rows(seed_lvl)
+        data["synth"][f"run:C2-rep{k}:final"] = rows(seed_lvl + 3.0)
+        data["synth"][f"run:C2-rep{k}:last"] = rows(seed_lvl + 2.5)
+        data["synth"][f"run:A5-rep{k}:seed"] = rows(seed_lvl)
+        data["synth"][f"run:A5-rep{k}:final"] = rows(seed_lvl + 0.2)
+        data["synth"][f"run:C3s-rep{k}:seed"] = rows(seed_lvl)
+        data["synth"][f"run:C3s-rep{k}:final"] = rows(seed_lvl + 5.0)
+    text = report.render(data, Path("synthetic"))
+    check("report: replicate section uses the pre-registered primary outcome",
+          "primary outcome `auc_branch_reach`" in text)
+    h1 = next((ln for ln in text.splitlines() if "H1: proxy (C2) vs no-steering (A5)" in ln), "")
+    import re as _re
+
+    def _a12_of(line):
+        m = _re.search(r"A12=([0-9.]+)", line)
+        return float(m.group(1)) if m else -1.0
+
+    def _p_of(line):
+        m = _re.search(r"permutation p=([0-9.]+)", line)
+        return float(m.group(1)) if m else 1.0
+    check("report: H1 detects C2 > A5 (A12 >= 0.9, p < 0.01)",
+          _a12_of(h1) >= 0.9 and _p_of(h1) < 0.01, h1)
+    h2 = next((ln for ln in text.splitlines() if "H2: coverage-scalar (C3s) vs proxy (C2)" in ln), "")
+    check("report: H2 detects C3s > C2 (A12 >= 0.9, p < 0.01)",
+          _a12_of(h2) >= 0.9 and _p_of(h2) < 0.01, h2)
+    c2row = next((ln for ln in text.splitlines() if ln.startswith("| C2 | 10 |")), "")
+    check("report: C2 has 10 replicates, a last-iteration column, and Δ≈+3 with sign-flip p",
+          c2row.count("|") == 7 and "+3." in c2row, c2row)
+    check("report: replicate runs are NOT in the Holm ablation family",
+          "run:C2-rep1:final: Δ=" not in text)
+
     print(f"\n{_p} passed, {_f} failed")
     return 1 if _f else 0
 

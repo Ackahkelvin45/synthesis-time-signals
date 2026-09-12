@@ -32,8 +32,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "eval"))
 
-from cell import (BUILTIN_TEXT, build_coverage_binary, effective_strategy_path,  # noqa: E402
-                  final_strategy_path, input_set_id, measure_cell, draw_examples,
+from cell import (BUILTIN_TEXT, DEFAULT_CHECKPOINTS, build_coverage_binary,  # noqa: E402
+                  effective_strategy_path, final_strategy_path, last_strategy_path,
+                  input_set_id, measure_curve_cell, draw_examples,
                   runs_dir, seed_strategy_path)
 
 METRICS = ("region", "line", "branch", "acceptance", "novelty", "cap_mass",
@@ -70,6 +71,8 @@ def resolve_condition(target: str, cond: str) -> str | None:
         sd = rd / sub
         if it == "seed":
             p = seed_strategy_path(sd)
+        elif it == "last":
+            p = last_strategy_path(sd)
         elif it == "final":
             p = final_strategy_path(sd)
         else:
@@ -109,7 +112,9 @@ def main() -> int:
     ap.add_argument("--targets", default="json-parser")
     ap.add_argument("--conditions", default="random,seed,evolved")
     ap.add_argument("--k", type=int, default=20, help="seeds per cell (0..k-1)")
-    ap.add_argument("--n", type=int, default=150, help="examples per seed")
+    ap.add_argument("--n", type=int, default=10000, help="examples per seed (paper: 10^4)")
+    ap.add_argument("--checkpoints", default=",".join(str(c) for c in DEFAULT_CHECKPOINTS),
+                    help="coverage-curve checkpoints (inputs); the AUC is their mean")
     ap.add_argument("--out", default="eval/matrix/main.jsonl")
     args = ap.parse_args()
 
@@ -117,6 +122,7 @@ def main() -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     targets = [t.strip() for t in args.targets.split(",") if t.strip()]
     conds = [c.strip() for c in args.conditions.split(",") if c.strip()]
+    cps = [int(c) for c in args.checkpoints.split(",") if c.strip()]
     done = load_done(out)
     print(f"[matrix] {len(done)} cells already in {_rel(out)}; "
           f"sweeping {len(targets)} target(s) x {len(conds)} condition(s) x K={args.k} at N={args.n}")
@@ -138,13 +144,17 @@ def main() -> int:
                         continue
                     t0 = time.time()
                     ex = draw_examples(ref, args.n, seed)
-                    r = measure_cell(target, ex, f"mx_{_slug(target)}_{_slug(cond)}_{seed}")
+                    t1 = time.time()
+                    r = measure_curve_cell(target, ex, cps,
+                                           f"mx_{_slug(target)}_{_slug(cond)}_{seed}")
                     row = {
                         "target": target, "condition": cond, "seed": seed, "n": args.n,
                         "strategy_ref": ref if ref.startswith("builtin:")
                         else str(Path(ref).relative_to(ROOT)),
                         "input_set": input_set_id(ref, args.n, seed),
-                        **{m: r[m] for m in METRICS},
+                        **{k: v for k, v in r.items()},
+                        "draw_s": round(t1 - t0, 2),
+                        "run_s": round(time.time() - t1, 2),
                         "wall_s": round(time.time() - t0, 2),
                     }
                     fh.write(json.dumps(row) + "\n")

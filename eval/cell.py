@@ -167,6 +167,18 @@ def seed_strategy_path(rd: Path) -> Path | None:
 _REVERT_MARKERS = ("REGRESSION->rollback", "next: revert_last_edit")
 
 
+def last_strategy_path(rd: Path) -> Path | None:
+    """The LAST iteration whose effective strategy draws, regardless of any
+    revert. Reported next to `final` so a condition cannot win merely by
+    selecting the max of its own noisy in-loop metric (plan E1)."""
+    cand = None
+    for d in _iter_dirs(rd):
+        c = effective_strategy_path(d)
+        if c.exists() and _draws_ok(c):
+            cand = c
+    return cand
+
+
 def final_strategy_path(rd: Path) -> Path | None:
     """The loop's OUTPUT strategy — what it hands back at stop.
 
@@ -416,6 +428,42 @@ def measure_cell(target: str, examples: list[str], label: str) -> dict:
         "distinct_inputs": len(set(ex for ex, _ in samples)),
         "skips": sum(1 for _, o in samples if o == "skip"),
     }
+
+
+DEFAULT_CHECKPOINTS = (10, 30, 100, 150, 300, 1000, 3000, 10000)
+
+
+def measure_curve_cell(target: str, examples: list[str], checkpoints: list[int],
+                       label: str) -> dict:
+    """One cell of the paper matrix: the coverage-vs-inputs curve at log-spaced
+    checkpoints, its area (mean over the checkpoints that are <= n, i.e. the
+    area under the curve on a log-n axis), the final-n coverage, and the
+    proxy metrics on the same inputs."""
+    from agent import summarize  # noqa: E402
+    cc = coverage_curve(target, examples, list(checkpoints), label)
+    samples = cc["samples"]
+    n = len(examples)
+    cps = sorted(cc["curve"])
+    curve = {str(k): {kk: v for kk, v in cc["curve"][k].items() if kk != "profdata"} for k in cps}
+    cov = cc["curve"][n]
+    s = summarize(samples)
+    out = {
+        "region": cov["region"], "line": cov["line"], "branch": cov["branch"],
+        "branch_reach": cov.get("branch_reach"), "region_reach": cov.get("region_reach"),
+        "line_reach": cov.get("line_reach"),
+        "acceptance": s["acceptance_rate"], "novelty": s["novelty"],
+        "cap_mass": s["cap_distance_mass"], "productions": len(s["productions_accepted"]),
+        "crashes": sum(1 for _, o in samples if o == "crash"),
+        "distinct_inputs": len(set(ex for ex, _ in samples)),
+        "skips": sum(1 for _, o in samples if o == "skip"),
+        "curve": curve, "segments": cc["segments"], "lost_segments": cc["lost_segments"],
+    }
+    grid = [k for k in cps if k in set(checkpoints)] or cps
+    for m in ("branch", "region", "branch_reach", "region_reach"):
+        vals = [cc["curve"][k].get(m) for k in grid]
+        out[f"auc_{m}"] = (round(sum(vals) / len(vals), 3)
+                           if vals and all(v is not None for v in vals) else None)
+    return out
 
 
 def measure_ref(target: str, ref: str, n: int, seed: int, label: str) -> dict:

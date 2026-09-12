@@ -709,3 +709,35 @@ the reachable-region branch coverage when the list exists.
 (reachable region); json-parser: 40.9% vs 40.9% (the excluded wrapper has no
 branches). `eval/test_eval.py` (15 checks) is now the fifth suite in
 `./run.sh test`; 126/126.
+
+## D20 — Paper infrastructure, steps 8-9: replicate driver, curve/AUC cells, replicate-level statistics
+
+**Driver** (`eval/replicates.py`): interleaved order (rep 1 of every condition
+x target before rep 2; conditions alternate within a rep) so provider drift
+is orthogonal to treatment; resumable (final.json = done; a run directory
+without it is deleted and rerun, never reconstructed); a lock file that
+`eval/matrix.py` refuses to run against (load-induced timeouts would be
+misread as crashes and change the loop's decisions); a manifest with argv,
+exit code, wall time and served models per run; a one-line STATUS file,
+which is the only thing the assistant session reads during a batch.
+
+**Cells** (`cell.measure_curve_cell`, `matrix.py`): each (target, condition,
+seed) cell now draws n=10^4 inputs (default) and records the coverage curve
+at log-spaced checkpoints 10..10^4, its area (mean over the checkpoints,
+i.e. the area on a log-n axis; `auc_branch_reach` is the pre-registered
+primary outcome), final-n coverage whole-file and reachable-region, proxy
+metrics, distinct inputs, skips, and draw vs run wall time (for the
+equal-time views). Condition `run:<sub>:last` (last working iteration) is
+reported next to `final` so an oracle condition cannot win by selecting the
+max of its own noisy metric.
+
+**Statistics** (`report.py`): the replicate is the unit. Per loop condition
+(C2, A5, C3s, C3n): draw seeds are averaged within a replicate, then
+final-level mean ± CI over replicates, the last-iteration mean, per-replicate
+Δ(final − seed) with an exact sign-flip test, and H1/H2 as difference of
+replicate means with a two-sample permutation test and Vargha-Delaney A12
+with a percentile-bootstrap CI. Replicate runs are excluded from the Holm
+ablation family. Verified on synthetic data with known effects (C2 = seed+3,
+A5 = seed+0.2, C3s = seed+5, replicate noise 1): H1 A12 0.98, p 1e-4; H2
+A12 0.92, p 5e-4; the C2 row shows 10 replicates and Δ≈+3. A tiny real
+matrix pass (both pilots, n=60) produces curves, AUCs and timings; 127/127.
