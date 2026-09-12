@@ -245,8 +245,9 @@ def grammarinator_generator(fmt: str) -> Path:
     gen = ROOT / pin["generator"]
     if not gen.exists():
         gen.parent.mkdir(parents=True, exist_ok=True)
+        grams = pin.get("grammars") or [pin["grammar"]]
         subprocess.run([str(ROOT / ".venv" / "bin" / "grammarinator-process"),
-                        str(ROOT / pin["grammar"]), "-o", str(gen.parent), *pin["options"]],
+                        *[str(ROOT / g) for g in grams], "-o", str(gen.parent), *pin["options"]],
                        check=True, capture_output=True)
     got = _h.sha256(gen.read_bytes()).hexdigest()
     if got != pin["sha256"]:

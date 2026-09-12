@@ -37,8 +37,8 @@ def _draw_grammarinator(ref: str, n: int, sd: int) -> list[str]:
     sys.path.insert(0, str(gen.parent))
     import importlib
     from grammarinator.runtime import DefaultModel, WeightedModel, RuleSize
-    mod = importlib.import_module(gen.stem)
-    cls = getattr(mod, gen.stem)
+    mod = importlib.import_module(pin.get("module", gen.stem))
+    cls = getattr(mod, pin.get("class", gen.stem))
     model = DefaultModel()
     if variant == "deep":
         w = float(pin["deep_weight"])

@@ -21,6 +21,26 @@
         3
       ]
     ],
-    "calibration": "deep_weight multiplies the obj/arr alternatives of rule 'value'; w=5 gives mean grammar depth 0.71 over 1000 draws (seed 0) vs 0.73 for the json-parser pilot's C1 seed generator (300 draws, seed 0); w=1 (defaults) gives 0.19"
+    "calibration": "deep_weight multiplies the obj/arr alternatives of rule 'value'; w=5 gives mean grammar depth 0.71 over 1000 draws (seed 0) vs 0.73 for the json-parser pilot's C1 seed generator (300 draws, seed 0); w=1 (defaults) gives 0.19",
+    "module": "JSONGenerator",
+    "class": "JSONGenerator"
+  },
+  "TOML": {
+    "grammars": [
+      "grammar/TomlLexer.g4",
+      "grammar/TomlParser.g4"
+    ],
+    "grammarinator": "26.1",
+    "options": [
+      "-Ddot=any_unicode_char"
+    ],
+    "generator": "build/grammarinator/toml/TomlGenerator.py",
+    "module": "TomlGenerator",
+    "class": "TomlGenerator",
+    "sha256": "28678cc832ae4a8f44650067715b5f47380d0df702c9b40e791dbd81756a7788",
+    "start_rule": "document",
+    "deep_weight": 1.0,
+    "deep_alternatives": [],
+    "calibration": "TOML's lexer is mode-based; the array/inline-table depth alternatives are not a single value rule, so the deep variant is not calibrated here (deep_weight 1.0 == defaults). Depth matching for TOML is left to the defaults; noted as a limitation."
   }
 }
