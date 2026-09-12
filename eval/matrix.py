@@ -37,6 +37,7 @@ sys.path.insert(0, str(ROOT / "eval"))
 from cell import (BUILTIN_TEXT, DEFAULT_CHECKPOINTS, build_coverage_binary,  # noqa: E402
                   effective_strategy_path, final_strategy_path, last_strategy_path,
                   input_set_id, measure_curve_cell, draw_examples, grammarinator_ref,
+                  draw_seconds,
                   runs_dir, seed_strategy_path)
 
 METRICS = ("region", "line", "branch", "acceptance", "novelty", "cap_mass",
@@ -102,6 +103,20 @@ def load_done(out: Path) -> set[tuple]:
     return done
 
 
+def _reach_sha(target: str) -> str | None:
+    import hashlib
+    p = ROOT / "eval" / "reachable" / f"{target}.json"
+    return hashlib.sha256(p.read_bytes()).hexdigest()[:16] if p.exists() else None
+
+
+def _features_backend() -> str:
+    try:
+        import formats  # noqa: E402
+        return "jvm" if formats.get("JSON")._java_server() is not None else "python"
+    except Exception:  # noqa: BLE001
+        return "unknown"
+
+
 def _refuse_during_live_runs() -> None:
     """Never measure while a replicate batch runs (eval/replicates.py holds
     build/.runs.lock): load-induced timeouts would be misread as crashes and
@@ -159,7 +174,9 @@ def main() -> int:
                         else str(Path(ref).relative_to(ROOT)),
                         "input_set": input_set_id(ref, args.n, seed),
                         **{k: v for k, v in r.items()},
-                        "draw_s": round(t1 - t0, 2),
+                        "draw_s": draw_seconds(ref, args.n, seed) or round(t1 - t0, 2),
+                        "reachable_region_sha": _reach_sha(target),
+                        "features_backend": _features_backend(),
                         "run_s": round(time.time() - t1, 2),
                         "wall_s": round(time.time() - t0, 2),
                     }

@@ -690,12 +690,32 @@ def _for_model(summary: dict) -> dict:
     return out
 
 
+_REQUIREMENTS_HEAD_GENERIC = """\
+Requirements for the `strategy`:
+- Generate strings in the {fmt} grammar below. Use st.recursive (or @st.composite)
+  for the grammar's recursive productions — do NOT flatten to a big random string.
+- Deliberately cover edge cases of THIS format: empty containers, deep nesting,
+  duplicate keys, extreme numeric magnitudes/exponents, escape sequences and
+  non-ASCII text, embedded control bytes, and near-valid-but-malformed inputs
+  (one missing or doubled delimiter, an unterminated string, a stray token).
+"""
+
+
+def _requirements_head(fmt: str) -> str:
+    """JSON keeps the original text (byte-identical to the pilots); every other
+    format gets a neutral head so the prompt carries no JSON-isms (obj/arr, {} [],
+    missing colons) into a TOML or XML task."""
+    if fmt == "JSON":
+        return _REQUIREMENTS_HEAD
+    return _REQUIREMENTS_HEAD_GENERIC.format(fmt=fmt)
+
+
 def _requirements(target: str | None = None) -> str:
     """Seed-prompt requirements for the current (or given) target. The two
     `.replace` calls are no-ops for JSON targets, so json-parser is unchanged."""
     name = target or _TARGET_NAME
     fmt = _TARGET_FORMAT
-    return (_REQUIREMENTS_HEAD.replace("JSON grammar", f"{fmt} grammar")
+    return (_requirements_head(fmt)
             + _anonymize(_TARGET_REALITIES[name], name)
             + _REQUIREMENTS_TAIL.replace("JSON text", f"{fmt} text"))
 
@@ -954,6 +974,20 @@ def _cpu_seconds() -> float:
     return t.user + t.system + t.children_user + t.children_system
 
 
+def _features_backend() -> str:
+    """Which runtime computes the grammar features this run: 'jvm' or 'python'."""
+    try:
+        return "jvm" if _format()._java_server() is not None else "python"
+    except Exception:  # noqa: BLE001
+        return "unknown"
+
+
+def _reachable_sha() -> str | None:
+    import hashlib  # noqa: E402
+    p = ROOT / "eval" / "reachable" / f"{_TARGET_NAME}.json"
+    return hashlib.sha256(p.read_bytes()).hexdigest()[:16] if p.exists() else None
+
+
 def _run_provenance(config, max_examples: int, harness: Path) -> dict:
     import platform  # noqa: E402
     try:
@@ -967,6 +1001,7 @@ def _run_provenance(config, max_examples: int, harness: Path) -> dict:
         "provider_base_url": config.base_url, "mock": config.mock,
         "prompt_mode": _PROMPT_MODE, "max_examples": max_examples,
         "harness": str(harness), "git_commit": _git_commit(),
+        "features_backend": _features_backend(), "reachable_region_sha": _reachable_sha(),
         "python": platform.python_version(), "hypothesis": hyp,
         "platform": platform.platform(), "hostname": platform.node(),
         "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -1009,6 +1044,7 @@ def run_live(harness: Path, max_examples: int) -> int:
             "cpu_s": round(_cpu_seconds() - d["cpu0"], 3),
             "llm_calls": stop.calls[d["calls0"]:],
             "backstop_hits": _BACKSTOP_EVENTS[d["bs0"]:],
+            "features_backend": _features_backend(),   # flags a mid-run JVM->Python fallback
         }, indent=2))
         iter_open = None
     print(f"[live] model: {config.describe()}  (max_iters={stop.max_iters}, "

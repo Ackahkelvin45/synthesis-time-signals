@@ -185,6 +185,8 @@ def main() -> int:
               "lexer grammar TomlLexer" in body_t and "parser grammar TomlParser" in body_t)
         check("tomlc99 prompt asks for TOML, not JSON",
               "TOML grammar" in body_t and "JSON grammar" not in body_t)
+        check("tomlc99 prompt head carries no JSON-isms (obj/arr, {} [], missing colons)",
+              not any(k in body_t for k in ("obj/arr", "{} and []", "missing colons")))
         from probes import probes_for  # noqa: E402
         from oracle import oracle_for  # noqa: E402
         pt, et = probes_for("TOML")
@@ -195,6 +197,8 @@ def main() -> int:
         check("no oracle for an unregistered format", oracle_for("XML") is None)
     finally:
         A.select_target("json-parser")
+    check("json-parser keeps the legacy requirements head byte-identical",
+          A._requirements("json-parser").startswith(A._REQUIREMENTS_HEAD))
     A._PROMPT_MODE = "legacy"
     try:
         check("legacy prompt text is byte-identical to the pilot's",

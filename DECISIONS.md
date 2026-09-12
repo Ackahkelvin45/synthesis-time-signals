@@ -871,3 +871,34 @@ first input and records inputs/time; a builtin-text campaign censors cleanly
 when the budget runs out. 164/164 tests (6 new). Deferred to the Docker
 step: a JDK in the image (the JVM feature server) and AFL++ for the reference
 row (neither is installed locally; the Docker daemon is currently down).
+
+## D24 — Pre-spend review: 20 questions answered by execution; four gaps fixed
+
+A second reviewer pass (before any live run) asked 20 verifiable questions.
+Answers with evidence are in the session record; the four that exposed real
+gaps and their fixes:
+
+- **The generic requirements head was JSON-flavoured for every format**
+  ("obj/arr productions", "empty {} and []", "missing colons") and reached
+  the TOML prompt. Now `_requirements_head(fmt)`: JSON keeps the pilots'
+  byte-identical text; every other format gets a neutral head. A test scans
+  the rendered tomlc99 prompt for those JSON-isms.
+- **Cached input sets reported zero draw time**, which would have corrupted
+  the equal-time views. The first draw's wall time is now persisted next to
+  the cached set (`<id>.meta.json`); `cell.draw_seconds` returns it and the
+  matrix row uses it.
+- **The feature backend (JVM vs Python) was not recorded.** `config.json`
+  and every `iter-N/provenance.json` now carry `features_backend`, so a
+  mid-run fallback is visible per iteration; matrix rows carry it too.
+- **The parse-reachable region was committed but not pinned per run.**
+  `reachable_region_sha` (sha256 prefix of eval/reachable/<target>.json) is
+  in `config.json` and in every matrix row, so any post-hoc change to the
+  region definition is detectable in the data.
+
+Also: `paper/preregistration.md` drafted (hypotheses, single primary
+outcome, conditions, budgets, loop-output definition, exclusion rules,
+analysis with A12 thresholds, predictions under every outcome, bug
+reachability expectations, the compute-matched argument, cost ceiling,
+disclosures). A git bundle of `main` + `paper/multi-target` was written to
+~/agentic_fuzzing-backup-2026-09-12.bundle as an off-repo backup (the branch
+stays unpushed per the grading-period rule). 167/167 tests.

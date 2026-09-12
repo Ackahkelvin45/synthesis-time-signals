@@ -305,9 +305,16 @@ def draw_examples(ref: str, n: int, seed: int) -> list[str]:
     cache = INPUTS / f"{input_set_id(ref, n, seed)}.json"
     if cache.exists():
         return json.loads(cache.read_text())
+    import time as _time
+    t0 = _time.monotonic()
     proc = subprocess.run([sys.executable, str(_DRAW), ref, str(n), str(seed)],
                           capture_output=True, text=True, check=True)
+    draw_s = round(_time.monotonic() - t0, 3)
     xs = json.loads(proc.stdout)
+    # Generation cost is a measurement in its own right (the equal-time views):
+    # persist it with the set so a cache hit does not report zero draw time.
+    (INPUTS / f"{input_set_id(ref, n, seed)}.meta.json").write_text(
+        json.dumps({"draw_s": draw_s, "n": n, "ref": ref}))
     # Atomic publish: parallel matrix cells may race on the same key, and a
     # reader must see either no file or a complete one — never a torn write.
     tmp = cache.with_suffix(f".{os.getpid()}.tmp")
@@ -515,6 +522,12 @@ def measure_curve_cell(target: str, examples: list[str], checkpoints: list[int],
         out[f"auc_{m}"] = (round(sum(vals) / len(vals), 3)
                            if vals and all(v is not None for v in vals) else None)
     return out
+
+
+def draw_seconds(ref: str, n: int, seed: int) -> float | None:
+    """Wall time of the FIRST draw of this input set (persisted; None if unknown)."""
+    p = INPUTS / f"{input_set_id(ref, n, seed)}.meta.json"
+    return json.loads(p.read_text())["draw_s"] if p.exists() else None
 
 
 def measure_ref(target: str, ref: str, n: int, seed: int, label: str) -> dict:

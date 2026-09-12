@@ -164,6 +164,13 @@ def main() -> int:
                            capture_output=True, text=True, check=True).stdout)
     check("grammarinator: draws are identical across two fresh processes", a == b)
     check("grammarinator: every draw is a str", all(isinstance(x, str) for x in a))
+    fresh_id = cell.input_set_id(ref_d, 40, 424242)
+    for f in (cell.INPUTS / f"{fresh_id}.json", cell.INPUTS / f"{fresh_id}.meta.json"):
+        if f.exists():
+            f.unlink()
+    cell.draw_examples(ref_d, 40, 424242)
+    check("draw time of an input set is persisted for the equal-time views",
+          cell.draw_seconds(ref_d, 40, 424242) is not None and cell.draw_seconds(ref_d, 40, 424242) >= 0)
     check("grammarinator: a different seed gives a different set",
           cell.draw_examples(ref_d, 200, 1) != a)
     check("grammarinator: input-set id differs between defaults and deep",
