@@ -93,7 +93,18 @@ def load_done(out: Path) -> set[tuple]:
     return done
 
 
+def _refuse_during_live_runs() -> None:
+    """Never measure while a replicate batch runs (eval/replicates.py holds
+    build/.runs.lock): load-induced timeouts would be misread as crashes and
+    change the loop's decisions."""
+    lock = ROOT / "build" / ".runs.lock"
+    if lock.exists():
+        raise SystemExit(f"a live-run batch holds {lock} ({lock.read_text().strip()}); "
+                         "wait for it to finish before measuring")
+
+
 def main() -> int:
+    _refuse_during_live_runs()
     ap = argparse.ArgumentParser(description="experiment matrix runner")
     ap.add_argument("--targets", default="json-parser")
     ap.add_argument("--conditions", default="random,seed,evolved")

@@ -39,8 +39,11 @@ _big_numbers = st.sampled_from([
 probe_bignum = _big_numbers.map(lambda n: "[" + n + "]")
 
 # 3. deep nesting (json-parser has no cap; deep nesting stresses the first pass).
+# The innermost element is a value, so the grammar-derived depth (re-entries of
+# the recursive rule, fuzz/formats.py) equals the bracket depth d exactly; a
+# nest ending in an empty container would read d-1.
 probe_deepnest = st.integers(min_value=1500, max_value=2100).map(
-    lambda d: "[" * d + "]" * d
+    lambda d: "[" * d + "1" + "]" * d
 )
 
 # 4. duplicate keys in one object (legal per grammar; a known edge for hashers).
