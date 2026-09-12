@@ -115,6 +115,15 @@ _TARGET_NOTES = ADAPT_FILE
 #               with no run summary and no score rollback — the key control (A5).
 _ABLATABLE = {"production", "capmass", "novelty", "probes", "signal"}
 _ABLATE: set = set()
+# Provenance: every per-iteration wall-clock backstop hit (seconds). Budgets are
+# by examples/iterations; a backstop truncating one arm must be REPORTED.
+_BACKSTOP_EVENTS: list[float] = []
+# Prompt mode. "anon": the model never sees the library's name, its API
+# function names, its source file names or its error messages (the paper's
+# blackbox observable set: exit-code class + own inputs + validity feedback).
+# "legacy": the original prompt text (reproduces the committed pilot runs
+# byte-for-byte). The paper's runs use "anon".
+_PROMPT_MODE = "anon"
 
 
 def select_target(name: str) -> Path:
@@ -173,6 +182,7 @@ class StopController:
         self.iters = 0
         self.tokens_in = 0
         self.tokens_out = 0
+        self.calls: list[dict] = []   # per-call provenance (served model, fingerprint, latency)
 
     @property
     def usd(self) -> float:
@@ -519,6 +529,7 @@ def run_strategy(harness: Path, strategy, max_examples: int,
                              localized=_localize_tb(e)) from e
     if truncated[0]:
         print(f"[loop] run hit {run_deadline_s/60:.0f}-min backstop; truncated")
+        _BACKSTOP_EVENTS.append(round(run_deadline_s, 1))
     if log_path is not None and log_records is not None:
         with log_path.open("w") as fh:
             for rec in log_records:
@@ -639,24 +650,67 @@ _REQUIREMENTS_TAIL = """\
   to a joined string before combining; never pass tuples into `",".join(...)`."""
 
 
+# Identifiers that would reveal the target to the model. Applied to the prompt
+# text (realities, notes, section header) and to summary strings that originate
+# in the target (crash signatures carry source file names).
+_ANON_PATTERNS: dict[str, list[tuple[str, str]]] = {
+    "json-parser": [(r"json[-_ ]parser(?:'s)?", "the parser"),
+                    (r"\bjson_parse_ex\b", "the parse function"),
+                    (r"\bjson_parse\b", "the parse function"),
+                    (r"\bjson\.c\b", "target.c")],
+    "parson": [(r"\b[Pp]arson(?:'s)?", "the parser"),
+               (r"\bjson_parse_(?:string|file)(?:_with_comments)?\b", "the parse function"),
+               (r"\bparson\.c\b", "target.c")],
+}
+
+
+def _anonymize(text: str, target: str | None = None) -> str:
+    """Strip target-identifying names from text destined for the model."""
+    if _PROMPT_MODE != "anon":
+        return text
+    name = target or _TARGET_NAME
+    for pat, sub in _ANON_PATTERNS.get(name, []):
+        text = re.sub(pat, sub, text)
+    # "the parser realities" reads oddly; keep the phrase neutral.
+    return text.replace("Respect the the parser", "Respect the parser")
+
+
+def _for_model(summary: dict) -> dict:
+    """The summary as the MODEL sees it. In anon mode the parser's error
+    strings are withheld (they differ per target and would confound the
+    cross-target comparison) and crash signatures are anonymized. The full
+    summary is still written to stats.json for analysis."""
+    if _PROMPT_MODE != "anon" or not summary:
+        return summary
+    out = dict(summary)
+    if "reject_reasons_sample" in out:
+        out["reject_reasons_sample"] = []
+    if out.get("unique_crash_signatures"):
+        out["unique_crash_signatures"] = [_anonymize(x) for x in out["unique_crash_signatures"]]
+    return out
+
+
 def _requirements(target: str | None = None) -> str:
     """Seed-prompt requirements for the current (or given) target. The two
     `.replace` calls are no-ops for JSON targets, so json-parser is unchanged."""
     name = target or _TARGET_NAME
     fmt = _TARGET_FORMAT
     return (_REQUIREMENTS_HEAD.replace("JSON grammar", f"{fmt} grammar")
-            + _TARGET_REALITIES[name]
+            + _anonymize(_TARGET_REALITIES[name], name)
             + _REQUIREMENTS_TAIL.replace("JSON text", f"{fmt} text"))
 
 
-# Backward-compatible constant: the json-parser requirements, byte-identical to
-# the original single literal this replaced.
+# Backward-compatible constant: the json-parser requirements in LEGACY mode,
+# byte-identical to the original single literal this replaced.
+_PROMPT_MODE = "legacy"
 _REQUIREMENTS = _requirements("json-parser")
+_PROMPT_MODE = "anon"
 
 
 def seed_prompt(prev_error: str | None = None) -> list[dict]:
     grammar = _TARGET_GRAMMAR.read_text()
-    notes = _TARGET_NOTES.read_text()
+    notes = _anonymize(_TARGET_NOTES.read_text())
+    header = "parser" if _PROMPT_MODE == "anon" else _TARGET_NAME
     # Path-A fix: a build-rejected attempt with no working baseline still
     # re-seeds from the grammar, but must NOT re-seed blind — feed the previous
     # failure back so the model stops repeating it (e.g. a hallucinated
@@ -668,7 +722,7 @@ def seed_prompt(prev_error: str | None = None) -> list[dict]:
                  "Do not repeat this failure. Use only real Hypothesis APIs and "
                  "keep the module internally consistent.")
     user = (f"{_requirements()}\n\n=== {_TARGET_FORMAT} grammar (ANTLR) ===\n{grammar}\n\n"
-            f"=== {_TARGET_NAME} adaptation notes ===\n{notes}{retry}\n\n"
+            f"=== {header} adaptation notes ===\n{notes}{retry}\n\n"
             f"Return the full module as one ```python code block.")
     return [{"role": "system", "content": SYSTEM_MSG},
             {"role": "user", "content": user}]
@@ -676,9 +730,14 @@ def seed_prompt(prev_error: str | None = None) -> list[dict]:
 
 def refine_prompt(current_code: str, summary: dict, action: tuple[str, str]) -> list[dict]:
     act, detail = action
+    if summary:
+        feedback = (f"Here is the summary of its last run against the parser "
+                    f"(no coverage data is available):\n{json.dumps(summary, indent=2)}\n\n")
+    else:
+        # A5 (no steering signal): the model gets no run summary at all.
+        feedback = "No run feedback is provided.\n\n"
     user = (f"Here is the current Hypothesis strategy:\n\n```python\n{current_code}\n```\n\n"
-            f"Here is the summary of its last run against the parser "
-            f"(no coverage data is available):\n{json.dumps(summary, indent=2)}\n\n"
+            f"{feedback}"
             f"Make EXACTLY ONE change to the strategy: **{act}** — {detail}.\n"
             f"Change nothing else. Keep it a valid Hypothesis strategy producing "
             f"`str`. Return the full revised module as one ```python code block.")
@@ -688,8 +747,10 @@ def refine_prompt(current_code: str, summary: dict, action: tuple[str, str]) -> 
 
 def call_llm(messages: list[dict], stop: StopController, config) -> str:
     from llm import chat  # noqa: E402
-    text, tin, tout = chat(messages, config)
+    meta: dict = {}
+    text, tin, tout = chat(messages, config, meta=meta)
     stop.record_tokens(tin, tout)
+    stop.calls.append(meta)
     return text
 
 
@@ -844,6 +905,41 @@ def safe_validate(strategy, harness: Path, n: int = 40):
     return sum(rates) / len(rates), None
 
 
+def _git_commit() -> str | None:
+    try:
+        import subprocess  # noqa: E402
+        return subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True,
+                              text=True, timeout=5).stdout.strip() or None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _cpu_seconds() -> float:
+    """User+system CPU of this process AND its finished children (the harness
+    subprocesses), so per-iteration CPU cost is the real cost."""
+    t = os.times()
+    return t.user + t.system + t.children_user + t.children_system
+
+
+def _run_provenance(config, max_examples: int, harness: Path) -> dict:
+    import platform  # noqa: E402
+    try:
+        import hypothesis  # noqa: E402
+        hyp = hypothesis.__version__
+    except Exception:  # noqa: BLE001
+        hyp = None
+    return {
+        "target": _TARGET_NAME, "ablate": sorted(_ABLATE),
+        "model": config.describe(), "requested_model": config.model,
+        "provider_base_url": config.base_url, "mock": config.mock,
+        "prompt_mode": _PROMPT_MODE, "max_examples": max_examples,
+        "harness": str(harness), "git_commit": _git_commit(),
+        "python": platform.python_version(), "hypothesis": hyp,
+        "platform": platform.platform(), "hostname": platform.node(),
+        "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }
+
+
 def run_live(harness: Path, max_examples: int) -> int:
     """The real agentic loop. Commits every iteration's prompt/response/strategy/
     stats to runs/iter-N/, and writes runs/evolution.md + runs/cost.md.
@@ -860,10 +956,28 @@ def run_live(harness: Path, max_examples: int) -> int:
     stop = StopController(price_in=config.price_in, price_out=config.price_out)
     RUNS.mkdir(parents=True, exist_ok=True)
     # Provenance for the experiment matrix: what produced this run directory.
-    (RUNS / "config.json").write_text(json.dumps({
-        "target": _TARGET_NAME, "ablate": sorted(_ABLATE),
-        "model": config.describe(), "max_examples": max_examples,
-    }, indent=2))
+    (RUNS / "config.json").write_text(json.dumps(
+        _run_provenance(config, max_examples, harness), indent=2))
+    _BACKSTOP_EVENTS.clear()
+    run_wall0, run_cpu0 = time.monotonic(), _cpu_seconds()
+    # Per-iteration provenance (wall, CPU, the LLM calls it made, backstop hits)
+    # is closed out at the START of the next iteration and after the loop, so
+    # every `continue` path below is covered without touching each one.
+    iter_open: dict | None = None
+
+    def _close_iter() -> None:
+        nonlocal iter_open
+        if iter_open is None:
+            return
+        d = iter_open
+        (d["dir"] / "provenance.json").write_text(json.dumps({
+            "iter": d["iter"],
+            "wall_s": round(time.monotonic() - d["wall0"], 3),
+            "cpu_s": round(_cpu_seconds() - d["cpu0"], 3),
+            "llm_calls": stop.calls[d["calls0"]:],
+            "backstop_hits": _BACKSTOP_EVENTS[d["bs0"]:],
+        }, indent=2))
+        iter_open = None
     print(f"[live] model: {config.describe()}  (max_iters={stop.max_iters}, "
           f"budget=${stop.max_usd}, wall={stop.max_seconds/60:.0f}min)")
 
@@ -880,9 +994,20 @@ def run_live(harness: Path, max_examples: int) -> int:
     last_build_error: str | None = None  # Path-A: carried into the next re-seed
 
     while stop.start_iteration():
+        _close_iter()
         it = stop.iters
         idir = RUNS / f"iter-{it}"
         idir.mkdir(parents=True, exist_ok=True)
+        iter_open = {"iter": it, "dir": idir, "wall0": time.monotonic(),
+                     "cpu0": _cpu_seconds(), "calls0": len(stop.calls),
+                     "bs0": len(_BACKSTOP_EVENTS)}
+        # A5 (no steering signal) must be free of proxy-based SELECTION too:
+        # on a rejected build or a mid-run error it falls back to the last
+        # WORKING generator, never to the score-best one.
+        if "signal" in _ABLATE:
+            fb_code, fb_iter = current_code, current_iter
+        else:
+            fb_code, fb_iter = best_code, best_iter
 
         # Re-seed whenever we have no usable strategy yet. Keying on `it == 1`
         # alone meant a failed first iteration sent the model the literal text
@@ -894,7 +1019,8 @@ def run_live(harness: Path, max_examples: int) -> int:
             messages = seed_prompt(last_build_error)
         else:
             messages = refine_prompt(
-                current_code, {} if "signal" in _ABLATE else (prev_summary or {}), action)
+                current_code,
+                {} if "signal" in _ABLATE else _for_model(prev_summary or {}), action)
         (idir / "prompt.md").write_text(messages[-1]["content"])
 
         # --- obtain a usable strategy (F1/F2: never let a bad one kill/burn) ---
@@ -905,8 +1031,8 @@ def run_live(harness: Path, max_examples: int) -> int:
             print(f"[live] iter {it}: strategy rejected ({detail}); rolling back")
             action = ("fix_generator_error", detail)
             last_build_error = detail            # so the next re-seed isn't blind
-            current_code = best_code or current_code  # don't advance on garbage
-            current_iter = best_iter if best_code else current_iter
+            current_code = fb_code or current_code  # don't advance on garbage
+            current_iter = fb_iter if fb_code else current_iter
             evolution.append(f"iter {it}: build rejected ({detail}) -> rollback")
             continue
         last_build_error = None  # a clean build clears the carried error
@@ -976,8 +1102,8 @@ def run_live(harness: Path, max_examples: int) -> int:
             detail = _fmt_gen_error(e)
             print(f"[live] iter {it}: generator errored mid-run ({detail}); rolling back")
             action = ("fix_generator_error", detail)
-            current_code = best_code or code
-            current_iter = best_iter if best_code else it
+            current_code = fb_code or code
+            current_iter = fb_iter if fb_code else it
             evolution.append(f"iter {it}: mid-run error ({detail}) -> rollback")
             continue
 
@@ -999,6 +1125,7 @@ def run_live(harness: Path, max_examples: int) -> int:
             "mode": "MOCK" if config.mock else config.model,
             "validate_acceptance": acc0,
             "summary": summary,
+            "summary_shown_to_model": (None if "signal" in _ABLATE else _for_model(summary)),
             "probes": probe_rates,
             "target_deviations": deviations,
             "new_crash": new_crash,
@@ -1080,12 +1207,29 @@ def run_live(harness: Path, max_examples: int) -> int:
     # revert). Written explicitly so evaluations never have to guess whether
     # "iter-5" or "the best" is the result — on a run whose last iteration
     # regressed and rolled back, iter-5 is NOT the output.
+    _close_iter()
     if current_code is not None:
         (RUNS / "final_strategy.py").write_text(current_code)
-        (RUNS / "final.json").write_text(json.dumps({
-            "source_iter": current_iter, "best_iter": best_iter,
-            "best_score": None if best_score == float("-inf") else best_score,
-        }, indent=2))
+    served = sorted({str(c.get("served_model")) for c in stop.calls})
+    fps = sorted({str(c.get("system_fingerprint")) for c in stop.calls
+                  if c.get("system_fingerprint")})
+    # final.json is written for EVERY completed run (a missing file means the
+    # run died): the replicate driver keys on it.
+    (RUNS / "final.json").write_text(json.dumps({
+        "source_iter": current_iter, "best_iter": best_iter,
+        "best_score": None if best_score == float("-inf") else best_score,
+        "has_strategy": current_code is not None,
+        "selection": ("last_working" if "signal" in _ABLATE
+                      else "score_best_with_revert"),
+        "iterations": stop.iters, "stop_reason": stop.reason(),
+        "tokens_in": stop.tokens_in, "tokens_out": stop.tokens_out,
+        "est_usd": round(stop.usd, 6), "llm_calls": len(stop.calls),
+        "served_models": served, "system_fingerprints": fps,
+        "wall_s": round(time.monotonic() - run_wall0, 3),
+        "cpu_s": round(_cpu_seconds() - run_cpu0, 3),
+        "backstop_hits": list(_BACKSTOP_EVENTS),
+        "finished_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }, indent=2))
 
     banner = ("> **MOCK RUN — NOT A REAL LLM RUN.** Produced with `LLM_MOCK=1`: the "
               "strategy is a fixed canned generator, identical every iteration, so "
@@ -1186,7 +1330,7 @@ def _to_jsonish(obj) -> str:
 
 
 def main() -> int:
-    global RUNS, _ABLATE
+    global RUNS, _ABLATE, _PROMPT_MODE
     ap = argparse.ArgumentParser(description="agentic fuzzing loop (json-parser/JSON)")
     ap.add_argument("--replay", metavar="ITER_DIR",
                     help="re-run a committed runs/iter-N strategy offline (no API)")
@@ -1203,7 +1347,11 @@ def main() -> int:
                     help="comma list of signal components to switch OFF: "
                          + ",".join(sorted(_ABLATABLE)))
     ap.add_argument("--max-examples", type=int, default=EXAMPLES_PER_RUN)
+    ap.add_argument("--legacy-prompts", action="store_true",
+                    help="original (non-anonymized) prompt text; reproduces the "
+                         "committed pilot runs. Paper runs use the anonymized default")
     args = ap.parse_args()
+    _PROMPT_MODE = "legacy" if args.legacy_prompts else "anon"
     # Select the target FIRST: it fixes the grammar/notes/prompt realities and the
     # runs/ location, and supplies the default harness when --harness is absent.
     default_harness = select_target(args.target)

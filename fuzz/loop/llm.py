@@ -100,13 +100,29 @@ class LLMConfig:
 
 
 def chat(messages: list[dict], config: LLMConfig,
-         temperature: float = 0.7, timeout: int = 120) -> tuple[str, int, int]:
+         temperature: float = 0.7, timeout: int = 120,
+         meta: dict | None = None) -> tuple[str, int, int]:
     """Return (content, prompt_tokens, completion_tokens).
 
     In MOCK mode returns the canned strategy and zero token cost, so callers
     (the loop) run unchanged with or without a key.
+
+    `meta` (optional dict) is filled with call provenance: the model id the
+    provider actually SERVED (aliases like `deepseek-chat` float), the
+    provider's `system_fingerprint` when present, the request id header,
+    wall-clock latency and a UTC timestamp. The experiment needs this to
+    detect provider-side model drift between replicate batches.
     """
+    t0 = time.monotonic()
+    if meta is not None:
+        meta.update({"ts_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                     "requested_model": config.model, "temperature": temperature,
+                     "mock": config.mock})
     if config.mock:
+        if meta is not None:
+            meta.update({"served_model": "MOCK", "system_fingerprint": None,
+                         "request_id": None, "latency_s": 0.0,
+                         "prompt_tokens": 0, "completion_tokens": 0})
         return f"```python\n{MOCK_STRATEGY}```", 0, 0
 
     body = json.dumps({
@@ -129,10 +145,13 @@ def chat(messages: list[dict], config: LLMConfig,
     # run — a real run died mid-way on a bare ConnectionResetError before this.
     # A 4xx (other than 429) is a real client error and is NOT retried.
     last_err: Exception | None = None
+    request_id = None
     for attempt in range(4):
         try:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 payload = json.loads(resp.read().decode("utf-8"))
+                request_id = (resp.headers.get("x-request-id")
+                              or resp.headers.get("request-id"))
             break
         except urllib.error.HTTPError as e:
             detail = e.read().decode("utf-8", "replace")[:400]
@@ -153,4 +172,11 @@ def chat(messages: list[dict], config: LLMConfig,
 
     content = payload["choices"][0]["message"]["content"]
     usage = payload.get("usage", {})
-    return content, int(usage.get("prompt_tokens", 0)), int(usage.get("completion_tokens", 0))
+    tin, tout = int(usage.get("prompt_tokens", 0)), int(usage.get("completion_tokens", 0))
+    if meta is not None:
+        meta.update({"served_model": payload.get("model"),
+                     "system_fingerprint": payload.get("system_fingerprint"),
+                     "request_id": request_id,
+                     "latency_s": round(time.monotonic() - t0, 3),
+                     "prompt_tokens": tin, "completion_tokens": tout})
+    return content, tin, tout

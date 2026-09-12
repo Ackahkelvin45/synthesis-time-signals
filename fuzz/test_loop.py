@@ -158,6 +158,50 @@ def main() -> int:
           summ["acceptance_rate"] == 0.5, str(summ["acceptance_rate"]))
     check("summarize reports productions", "object" in summ["productions_accepted"])
 
+    # --- paper-branch provenance / anonymization / A5 control ---------------
+    import agent as A  # noqa: E402
+    leak = ("json-parser", "json_parser", "json_parse", "json.c")
+    body = A.seed_prompt()[-1]["content"]
+    check("anon seed prompt (json-parser) leaks no identifier",
+          not any(k in body for k in leak), [k for k in leak if k in body])
+    check("anon seed prompt header is neutral", "=== parser adaptation notes ===" in body)
+    A.select_target("parson")
+    try:
+        body_p = A.seed_prompt()[-1]["content"]
+        check("anon seed prompt (parson) leaks no identifier",
+              "parson" not in body_p.lower())
+    finally:
+        A.select_target("json-parser")
+    A._PROMPT_MODE = "legacy"
+    try:
+        check("legacy prompt text is byte-identical to the pilot's",
+              A._requirements("json-parser") == A._REQUIREMENTS)
+        check("legacy seed prompt keeps the target name",
+              "=== json-parser adaptation notes ===" in A.seed_prompt()[-1]["content"])
+    finally:
+        A._PROMPT_MODE = "anon"
+    shown = A._for_model({"reject_reasons_sample": [("Unexpected `}`", 3)],
+                          "unique_crash_signatures": ["ubsan:json.c:437:pointer-overflow"],
+                          "novelty": 3})
+    check("model-facing summary withholds parser error strings",
+          shown["reject_reasons_sample"] == [])
+    check("model-facing summary anonymizes crash signatures",
+          "json.c" not in shown["unique_crash_signatures"][0]
+          and shown["unique_crash_signatures"][0].startswith("ubsan:target.c"))
+    check("model-facing summary keeps steering fields", shown["novelty"] == 3)
+    nosig = refine_prompt("strategy=1", {}, ("improve_strategy", "x"))[-1]["content"]
+    check("A5 refine prompt has no empty summary block",
+          "No run feedback is provided" in nosig and "summary of its last run" not in nosig)
+    withsig = refine_prompt("strategy=1", {"novelty": 1}, ("a", "b"))[-1]["content"]
+    check("steered refine prompt still carries the summary", '"novelty": 1' in withsig)
+    from llm import chat, LLMConfig  # noqa: E402
+    meta = {}
+    cfg = LLMConfig(api_key=None, base_url="x", model="m", price_in=0, price_out=0, mock=True)
+    chat([{"role": "user", "content": "hi"}], cfg, meta=meta)
+    check("chat() fills call provenance in mock mode",
+          meta.get("served_model") == "MOCK" and "ts_utc" in meta and meta["requested_model"] == "m")
+    check("StopController records calls", hasattr(StopController(), "calls"))
+
     print(f"\n{_p} passed, {_f} failed")
     return 1 if _f else 0
 

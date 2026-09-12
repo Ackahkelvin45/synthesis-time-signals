@@ -539,3 +539,50 @@ last being the "no signal at all" control) with budgets held constant across
 conditions; the matrix runner (`eval/matrix.py`, resumable, input-set ids per
 row) and aggregator (`eval/report.py`, paired tests, Holm-corrected ablation
 family, cross-target summary).
+
+## D15 — Paper infrastructure, step 1-3: provenance, a clean A5 control, anonymized prompts
+
+**Context.** The master plan (paper/plan.md v5) forbids launching replicate
+runs until three fixes land, because runs made before them would have to be
+discarded. All three are in; no live run has been made yet.
+
+**Provenance.** `llm.chat()` now fills a per-call record: the model id the
+provider actually SERVED (aliases such as `deepseek-chat` float),
+`system_fingerprint`, request id, latency, UTC timestamp, tokens.
+`StopController.calls` keeps them; every iteration writes
+`iter-N/provenance.json` (wall s, CPU s including harness children, the calls
+it made, any 10-min backstop hits); `config.json` records provider URL,
+requested model, prompt mode, git commit, Python and Hypothesis versions,
+platform, host, start time; `final.json` is written for EVERY completed run
+(a missing file means the run died; the replicate driver keys on that) and
+carries totals: iterations, stop reason, tokens, cost, served models,
+fingerprints, wall/CPU seconds, backstop hits, and the selection rule.
+
+**A5 was not signal-free.** On a rejected build or a mid-run generator error
+the loop fell back to `best_code`, which is chosen by the proxy score, so the
+"no steering" control still used proxy-based SELECTION on exactly the
+iterations where it matters. Under `--ablate signal` the fallback is now the
+last WORKING generator (`selection: last_working` in final.json). The refine
+prompt under A5 no longer carries an empty `{}` summary block; it says "No
+run feedback is provided." Name the condition "no steering signal", not "no
+feedback": the validity machinery (build screen, acceptance gate, repair)
+stays, by design.
+
+**Anonymized prompts (default), legacy mode kept.** The model used to see the
+library's name, its API function names and its error strings, which differ
+per target (parson returns no message) and are a memorization risk. In the
+default `anon` mode the realities block, the adaptation notes, the section
+header, and crash signatures shown to the model are scrubbed (library name
+-> "the parser", parse API -> "the parse function", source file ->
+"target.c"), and the parser's reject-reason strings are withheld from the
+model while still logged in stats.json (`summary` = full, and
+`summary_shown_to_model` = what the prompt carried). `--legacy-prompts`
+reproduces the pilot runs' text byte-for-byte (tested). Consequence: the two
+committed pilot runs (json-parser, parson) are legacy-mode and are reported
+as pilots, never as replicates.
+
+**Verified by execution.** 97/97 tests (12 new); mock runs of both a
+no-steering and a steered loop produce final.json, per-iteration
+provenance.json, and prompt files containing no identifier. Not exercised:
+the A5 fallback path itself needs a failing generator, which the mock cannot
+produce; reviewed by reading, to be confirmed on the first live gated run.
