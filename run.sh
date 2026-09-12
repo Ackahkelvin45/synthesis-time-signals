@@ -24,10 +24,15 @@ setup() {
 }
 
 build() {
+  # T1 json-parser (default target; outputs unchanged)
   bash harness/build.sh
   MODE=control bash harness/build.sh
   MODE=hunt    bash harness/build.sh
   MODE=unmask  bash harness/build.sh
+  # T2 parson (same grammar, different parser; adds the roundtrip/serializer surface)
+  TARGET=parson                bash harness/build.sh
+  TARGET=parson MODE=control   bash harness/build.sh
+  TARGET=parson MODE=roundtrip bash harness/build.sh
 }
 
 check() {

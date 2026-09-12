@@ -92,6 +92,34 @@ GRAMMAR_FILE = ROOT / "grammar" / "JSON.g4"
 ADAPT_FILE = ROOT / "grammar" / "adaptation-notes.md"
 DEFAULT_HARNESS = ROOT / "build" / "harness"
 MAX_ITERS = 5
+
+# --- multi-target support (ADDITIVE: json-parser stays the untouched default) --
+# The loop is parameterized by a registered target (fuzz/targets.py). The
+# module-level defaults above ARE the json-parser entry, so with no --target the
+# behaviour (prompt text, paths, runs/ location) is byte-identical to before.
+# Other targets get their own grammar/notes/harness and write under
+# runs/<target>/ so the committed json-parser run is never clobbered.
+_TARGET_NAME = "json-parser"
+_TARGET_FORMAT = "JSON"
+_TARGET_GRAMMAR = GRAMMAR_FILE
+_TARGET_NOTES = ADAPT_FILE
+
+
+def select_target(name: str) -> Path:
+    """Switch the loop to registered target `name`; return its default-mode
+    harness path. Idempotent for json-parser (restores the defaults)."""
+    global _TARGET_NAME, _TARGET_FORMAT, _TARGET_GRAMMAR, _TARGET_NOTES, RUNS
+    _ensure_fuzz_on_path()
+    from targets import TARGETS, binary_name  # noqa: E402
+    if name not in TARGETS:
+        raise SystemExit(f"unknown target '{name}' (known: {', '.join(TARGETS)})")
+    t = TARGETS[name]
+    _TARGET_NAME = name
+    _TARGET_FORMAT = t["format"]
+    _TARGET_GRAMMAR = ROOT / t["grammar"]
+    _TARGET_NOTES = ROOT / t["notes"]
+    RUNS = ROOT / "runs" if name == "json-parser" else ROOT / "runs" / name
+    return ROOT / "build" / binary_name(name)
 MAX_USD = 5.0
 # Assignment constraint: at most 500 Hypothesis examples per ITERATION. That
 # budget must cover everything we push through the harness in one iteration —
@@ -555,7 +583,11 @@ SYSTEM_MSG = (
     "other imports, no file/network/OS access."
 )
 
-_REQUIREMENTS = """\
+# The seed-prompt requirements are assembled from a generic HEAD, a per-target
+# "realities" block, and a generic TAIL. For json-parser the three concatenate
+# to EXACTLY the original single literal, so the committed run's prompt text is
+# reproduced byte-for-byte; other targets swap in their own realities.
+_REQUIREMENTS_HEAD = """\
 Requirements for the `strategy`:
 - Generate strings in the JSON grammar below. Use st.recursive (or @st.composite)
   for the recursive obj/arr productions — do NOT flatten to a big random string.
@@ -563,6 +595,10 @@ Requirements for the `strategy`:
   extreme numeric magnitudes/exponents (including overflow like 1e309), \\uXXXX
   and surrogate escapes, embedded NUL/control bytes, and near-valid-but-malformed
   inputs (double commas, missing colons, unterminated strings, leading +/.5/01).
+"""
+
+_TARGET_REALITIES = {
+    "json-parser": """\
 - Respect the json-parser realities in the adaptation notes: there is NO nesting
   cap (vary depth freely), and bias toward OBJECTS WITH MEMBERS (the stressed
   first-pass path). Emitting a raw NUL byte is allowed and encouraged — the
@@ -570,14 +606,43 @@ Requirements for the `strategy`:
 - NOTE: json-parser ACCEPTS duplicate keys, a single trailing comma, non-finite
   numbers, and a lone `-`. These are still valuable edge inputs; expect them to
   be accepted rather than treating acceptance as a defect.
+""",
+    "parson": """\
+- Respect the parson realities in the adaptation notes: nesting deeper than
+  ~2048 is cleanly REJECTED, so concentrate interesting depth NEAR that limit
+  rather than far beyond it. NEVER emit a raw NUL byte: parson's parse API is
+  NUL-terminated, so the harness cannot test such input and skips it (the
+  six-character escape \\u0000 inside a string is fine).
+- NOTE: parson REJECTS duplicate keys and non-finite numbers (stricter than the
+  grammar) but ACCEPTS trailing content after a complete value and a lone `-`
+  (more lenient). Expect those outcomes; they are deviations, not defects.
+""",
+}
+
+_REQUIREMENTS_TAIL = """\
 - The output must be `str` (the candidate JSON text; NUL/control chars are ok).
 - API pitfall: `st.tuples(a, b)` DRAWS TUPLES, not strings. Always `.map` a tuple
   to a joined string before combining; never pass tuples into `",".join(...)`."""
 
 
+def _requirements(target: str | None = None) -> str:
+    """Seed-prompt requirements for the current (or given) target. The two
+    `.replace` calls are no-ops for JSON targets, so json-parser is unchanged."""
+    name = target or _TARGET_NAME
+    fmt = _TARGET_FORMAT
+    return (_REQUIREMENTS_HEAD.replace("JSON grammar", f"{fmt} grammar")
+            + _TARGET_REALITIES[name]
+            + _REQUIREMENTS_TAIL.replace("JSON text", f"{fmt} text"))
+
+
+# Backward-compatible constant: the json-parser requirements, byte-identical to
+# the original single literal this replaced.
+_REQUIREMENTS = _requirements("json-parser")
+
+
 def seed_prompt(prev_error: str | None = None) -> list[dict]:
-    grammar = GRAMMAR_FILE.read_text()
-    notes = ADAPT_FILE.read_text()
+    grammar = _TARGET_GRAMMAR.read_text()
+    notes = _TARGET_NOTES.read_text()
     # Path-A fix: a build-rejected attempt with no working baseline still
     # re-seeds from the grammar, but must NOT re-seed blind — feed the previous
     # failure back so the model stops repeating it (e.g. a hallucinated
@@ -588,8 +653,8 @@ def seed_prompt(prev_error: str | None = None) -> list[dict]:
                  f"{prev_error}\n"
                  "Do not repeat this failure. Use only real Hypothesis APIs and "
                  "keep the module internally consistent.")
-    user = (f"{_REQUIREMENTS}\n\n=== JSON grammar (ANTLR) ===\n{grammar}\n\n"
-            f"=== json-parser adaptation notes ===\n{notes}{retry}\n\n"
+    user = (f"{_requirements()}\n\n=== {_TARGET_FORMAT} grammar (ANTLR) ===\n{grammar}\n\n"
+            f"=== {_TARGET_NAME} adaptation notes ===\n{notes}{retry}\n\n"
             f"Return the full module as one ```python code block.")
     return [{"role": "system", "content": SYSTEM_MSG},
             {"role": "user", "content": user}]
@@ -1073,9 +1138,16 @@ def main() -> int:
                     help="re-run a committed runs/iter-N strategy offline (no API)")
     ap.add_argument("--dry-run", action="store_true",
                     help="run the full loop shape on canned data (no API)")
-    ap.add_argument("--harness", default=str(DEFAULT_HARNESS))
+    ap.add_argument("--target", default="json-parser",
+                    help="registered target (fuzz/targets.py); default json-parser")
+    ap.add_argument("--harness", default=None,
+                    help="harness binary (default: the target's default-mode build)")
     ap.add_argument("--max-examples", type=int, default=EXAMPLES_PER_RUN)
     args = ap.parse_args()
+    # Select the target FIRST: it fixes the grammar/notes/prompt realities and the
+    # runs/ location, and supplies the default harness when --harness is absent.
+    default_harness = select_target(args.target)
+    args.harness = args.harness or str(default_harness)
 
     if args.replay:
         return run_replay(Path(args.harness), Path(args.replay), args.max_examples)

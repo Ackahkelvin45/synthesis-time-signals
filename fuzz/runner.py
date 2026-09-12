@@ -50,7 +50,10 @@ class Outcome(str, Enum):
 
 # Exit codes the harness uses for non-crash outcomes. Anything NOT in this map
 # (and not exit 0/2) is treated as a crash.
-_SKIP_CODES = {11: "oversized"}
+# 10 = embedded NUL (parson: no length-taking API, so a raw NUL would silently
+# truncate the input — a harness limitation, not a parser rejection). json-parser
+# never emits 10 because its length API tests NUL faithfully.
+_SKIP_CODES = {10: "embedded-nul", 11: "oversized"}
 _ENVFAIL_CODE = 3
 
 
@@ -125,7 +128,9 @@ def harness_mode(binary: str | Path) -> str:
     return out.stdout.decode().strip()
 
 
-_REAL_TARGET_MODES = {"default", "hunt", "unmask"}
+# 'roundtrip' (parson) is the real parser plus its real serializer — genuine
+# surface, not synthetic — so it is a legitimate source of findings.
+_REAL_TARGET_MODES = {"default", "hunt", "unmask", "roundtrip"}
 
 
 def assert_real_target(binary: str | Path) -> None:
