@@ -150,6 +150,14 @@ conditions alternating within a rep). Within each phase the interleaving
 keeps provider drift orthogonal to condition; the phase boundary is a
 target/condition block that is disclosed here.
 
+H1-null contingency: if phase 1a shows no C2-vs-A5 difference on
+json-parser (A12 within the negligible band, CI including 0.5), phase 1b
+still proceeds as registered — the multi-target replication is itself the
+test of whether the json-parser null generalizes — but the result is
+reported as the primary finding and the paper's framing shifts to the
+signal-characterization questions (RQ3/RQ4) before any Stage 2 spend is
+committed.
+
 ## 12. Disclosures
 
 The json-parser pilot (legacy prompts, pre-oracle-fix) and the parson pilot
