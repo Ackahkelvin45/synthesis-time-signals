@@ -92,6 +92,22 @@ Practical-difference thresholds (Vargha-Delaney conventions): A12 >= 0.64
 No outcome leads to abandoning the paper; the stop rule is that the design
 is not changed after data collection begins.
 
+A5 feedback disclosure. A5 does receive one kind of feedback: when a
+generator fails the acceptance gate (fewer than 5% of a fixed 90-example
+draw accepted, or the generator raises), the loop sends one repair re-prompt
+carrying either the generator's exception text or its acceptance rate. This
+is validity machinery, present identically in every loop condition: it
+tells the model only whether its code runs and produces inputs the parser
+accepts at all, never which productions, depths, structures or coverage the
+inputs reached, so it cannot steer toward any target behaviour. The paper
+names A5 "no steering signal", not "no feedback".
+
+Exploratory-results guard. Any component ablation (A1-A4), any secondary
+metric, and any per-target pattern outside the confirmatory family is
+reported as exploratory, serves to generate hypotheses for future work, and
+cannot be promoted to a headline claim regardless of how striking it looks.
+The confirmatory family is fixed at registration and does not grow.
+
 ## 9. Ground-truth bugs and expectations
 
 json-parser issue78 (`tru`) and issue68 (`"\uDCB`): expected reachable by
@@ -113,12 +129,26 @@ input and 17 000 output tokens, about $0.025) is reported next to every
 effect; the equal-time views (5 and 30 minutes, generation time included)
 use the persisted draw time of each input set.
 
-## 11. Cost ceiling
+## 11. Cost ceiling and run order (registered)
 
-DeepSeek: 120 runs x about $0.025 = $3.00 for Stage 1; $2.00 for Stage 2;
-hard cap $10. Second model on the user's OpenAI balance (30 runs on
+Stage 1 cells: 3 targets x 4 loop conditions x 10 replicates = 120 live
+runs (fixed generators C0a, C0b and each replicate's seed cost no API
+calls). Per-run cost from the two pilots: $0.024 and $0.023 (about 17k input
++ 17k output tokens at deepseek-chat prices), so 120 runs = $3.00. Failed
+runs are rerun once; the driver logs every rerun. Registered Stage 1 ceiling:
+$4.00 (planned runs plus up to about 40 reruns), inside a hard total cap of
+$10.00 for all DeepSeek spend (Stage 2 adds 2 targets x 4 x 10 = 80 runs,
+$2.00). Second model on the user's separate OpenAI balance (30 runs on
 tomlc99). Compute: local for development; the official runs in the Docker
 image.
+
+Run order: the first dollar tests the riskiest claim. Phase 1a runs C2 and
+A5 on json-parser, alternating C2/A5 for replicates 1..10 (20 runs, $0.50),
+so H1 on the development target is answered first. Phase 1b runs everything
+else interleaved (rep 1 of every remaining condition x target before rep 2,
+conditions alternating within a rep). Within each phase the interleaving
+keeps provider drift orthogonal to condition; the phase boundary is a
+target/condition block that is disclosed here.
 
 ## 12. Disclosures
 
