@@ -114,6 +114,16 @@ _TARGET_NOTES = ADAPT_FILE
 #   signal      NO signal at all: the model is just asked to "improve" the strategy
 #               with no run summary and no score rollback — the key control (A5).
 _ABLATABLE = {"production", "capmass", "novelty", "probes", "signal"}
+# Coverage-oracle conditions (paper C3s / C3n). When set, the proxy score is
+# REPLACED, at every place it is used (regression check, best-selection, the
+# next action), by branch coverage of the target source measured on the
+# iteration's own inputs with the coverage build. The full proxy summary is
+# still recorded in stats.json (it is the RQ3 validity data). Variants:
+#   coverage_scalar  the model sees only the coverage number     (C3s)
+#   coverage_named   plus the least-covered functions, by name  (C3n; white-box
+#                    lite, the Gentoo-S analogue; names are NOT anonymized)
+_ORACLE: str | None = None
+_ORACLES = {"coverage_scalar", "coverage_named"}
 _ABLATE: set = set()
 # Provenance: every per-iteration wall-clock backstop hit (seconds). Budgets are
 # by examples/iterations; a backstop truncating one arm must be REPORTED.
@@ -694,7 +704,10 @@ def seed_prompt(prev_error: str | None = None) -> list[dict]:
 
 def refine_prompt(current_code: str, summary: dict, action: tuple[str, str]) -> list[dict]:
     act, detail = action
-    if summary:
+    if summary and "branch_coverage_pct" in summary:
+        feedback = (f"Here is the code coverage its last run achieved on the parser "
+                    f"(measured with instrumentation):\n{json.dumps(summary, indent=2)}\n\n")
+    elif summary:
         feedback = (f"Here is the summary of its last run against the parser "
                     f"(no coverage data is available):\n{json.dumps(summary, indent=2)}\n\n")
     else:
@@ -707,6 +720,36 @@ def refine_prompt(current_code: str, summary: dict, action: tuple[str, str]) -> 
             f"`str`. Return the full revised module as one ```python code block.")
     return [{"role": "system", "content": SYSTEM_MSG},
             {"role": "user", "content": user}]
+
+
+def oracle_signal(samples: list[tuple[str, str]], label: str) -> dict:
+    """Coverage of the iteration's inputs on the coverage build (C3 conditions)."""
+    sys.path.insert(0, str(ROOT / "eval"))
+    from cell import measure_for_loop  # noqa: E402
+    return measure_for_loop(_TARGET_NAME, [s for s, _ in samples], label)
+
+
+def oracle_summary(cov: dict, variant: str) -> dict:
+    """What the MODEL sees under a coverage-oracle condition."""
+    out = {"branch_coverage_pct": cov["branch_pct"],
+           "region_coverage_pct": cov["region_pct"]}
+    if variant == "coverage_named":
+        out["least_covered_functions"] = [
+            f"{f['name']} ({f['branch_pct']:.0f}% of branches)"
+            for f in cov["least_covered_functions"]]
+    return out
+
+
+def oracle_action(cov: dict, variant: str) -> tuple[str, str]:
+    """The single next edit under a coverage-oracle condition."""
+    if variant == "coverage_named" and cov["least_covered_functions"]:
+        f = cov["least_covered_functions"][0]
+        return ("cover_function",
+                f"{f['name']} has {f['branch_pct']:.0f}% branch coverage; generate "
+                f"inputs that exercise it")
+    return ("increase_branch_coverage",
+            f"branch coverage is {cov['branch_pct']:.1f}%; reach parser code the "
+            f"current inputs never execute")
 
 
 def call_llm(messages: list[dict], stop: StopController, config) -> str:
@@ -893,7 +936,7 @@ def _run_provenance(config, max_examples: int, harness: Path) -> dict:
     except Exception:  # noqa: BLE001
         hyp = None
     return {
-        "target": _TARGET_NAME, "ablate": sorted(_ABLATE),
+        "target": _TARGET_NAME, "ablate": sorted(_ABLATE), "oracle": _ORACLE,
         "model": config.describe(), "requested_model": config.model,
         "provider_base_url": config.base_url, "mock": config.mock,
         "prompt_mode": _PROMPT_MODE, "max_examples": max_examples,
@@ -1081,7 +1124,12 @@ def run_live(harness: Path, max_examples: int) -> int:
             probe_rates = run_probes(harness, per_probe=PROBE_EXAMPLES_EACH)
             broken, deviations = classify_probes(probe_rates)
         new_crash = "crash" in summary["outcomes"]
-        sc = _score(summary)
+        cov_in_loop: dict | None = None
+        if _ORACLE:
+            cov_in_loop = oracle_signal(samples, f"loop_{_TARGET_NAME}_{RUNS.name}_{it}")
+            sc = cov_in_loop["branch_pct"]
+        else:
+            sc = _score(summary)
 
         (idir / "stats.json").write_text(json.dumps({
             # Recorded FIRST and in every iteration file: a MOCK run must never
@@ -1089,7 +1137,11 @@ def run_live(harness: Path, max_examples: int) -> int:
             "mode": "MOCK" if config.mock else config.model,
             "validate_acceptance": acc0,
             "summary": summary,
-            "summary_shown_to_model": (None if "signal" in _ABLATE else _for_model(summary)),
+            "summary_shown_to_model": (None if "signal" in _ABLATE else
+                                       oracle_summary(cov_in_loop, _ORACLE) if _ORACLE
+                                       else _for_model(summary)),
+            "coverage_in_loop": cov_in_loop,
+            "proxy_score": _score(summary),
             "probes": probe_rates,
             "target_deviations": deviations,
             "new_crash": new_crash,
@@ -1126,22 +1178,28 @@ def run_live(harness: Path, max_examples: int) -> int:
                       "make it a better fuzzer for this grammar (no run feedback is provided)")
         elif regressed:
             action = ("revert_last_edit", f"score {sc:.1f} < best {best_score:.1f}")
+        elif _ORACLE:
+            action = (("intensify_near_crash", "mutate structurally around the crashing input")
+                      if new_crash else oracle_action(cov_in_loop, _ORACLE))
         else:
             action = decide_refinement(summary, prev_summary, broken, new_crash,
                                        ablate=_ABLATE)
 
+        # What the next refine prompt carries: the proxy summary, or under an
+        # oracle condition only the coverage view of this iteration.
+        shown = oracle_summary(cov_in_loop, _ORACLE) if _ORACLE else summary
         if action[0] == "revert_last_edit" and best_code is not None:
             current_code, prev_summary = best_code, best_summary
             current_iter = best_iter
         else:
-            current_code, prev_summary = code, summary
+            current_code, prev_summary = code, shown
             current_iter = it
 
         # `best` must only ever improve. Previously it was overwritten every
         # non-regressed iteration, so the score ratcheted DOWN (57->54->51...)
         # while each individual drop stayed inside the tolerance band.
         if new_crash or sc > best_score:
-            best_code, best_summary, best_score = code, summary, sc
+            best_code, best_summary, best_score = code, shown, sc
             best_iter = it
 
         line = (f"iter {it}: acc={summary['acceptance_rate']} "
@@ -1184,6 +1242,7 @@ def run_live(harness: Path, max_examples: int) -> int:
         "best_score": None if best_score == float("-inf") else best_score,
         "has_strategy": current_code is not None,
         "selection": ("last_working" if "signal" in _ABLATE
+                      else "coverage_best_with_revert" if _ORACLE
                       else "score_best_with_revert"),
         "iterations": stop.iters, "stop_reason": stop.reason(),
         "tokens_in": stop.tokens_in, "tokens_out": stop.tokens_out,
@@ -1294,7 +1353,7 @@ def _to_jsonish(obj) -> str:
 
 
 def main() -> int:
-    global RUNS, _ABLATE, _PROMPT_MODE
+    global RUNS, _ABLATE, _PROMPT_MODE, _ORACLE
     ap = argparse.ArgumentParser(description="agentic fuzzing loop (json-parser/JSON)")
     ap.add_argument("--replay", metavar="ITER_DIR",
                     help="re-run a committed runs/iter-N strategy offline (no API)")
@@ -1311,11 +1370,17 @@ def main() -> int:
                     help="comma list of signal components to switch OFF: "
                          + ",".join(sorted(_ABLATABLE)))
     ap.add_argument("--max-examples", type=int, default=EXAMPLES_PER_RUN)
+    ap.add_argument("--oracle", default=None, choices=sorted(_ORACLES),
+                    help="coverage-oracle condition (paper C3s/C3n): replace the "
+                         "proxy score with measured branch coverage")
     ap.add_argument("--legacy-prompts", action="store_true",
                     help="original (non-anonymized) prompt text; reproduces the "
                          "committed pilot runs. Paper runs use the anonymized default")
     args = ap.parse_args()
     _PROMPT_MODE = "legacy" if args.legacy_prompts else "anon"
+    _ORACLE = args.oracle
+    if _ORACLE and args.ablate:
+        raise SystemExit("--oracle replaces the proxy signal; it cannot be combined with --ablate")
     # Select the target FIRST: it fixes the grammar/notes/prompt realities and the
     # runs/ location, and supplies the default harness when --harness is absent.
     default_harness = select_target(args.target)

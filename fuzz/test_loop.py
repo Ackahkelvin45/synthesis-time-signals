@@ -205,6 +205,34 @@ def main() -> int:
           meta.get("served_model") == "MOCK" and "ts_utc" in meta and meta["requested_model"] == "m")
     check("StopController records calls", hasattr(StopController(), "calls"))
 
+    # --- coverage-oracle conditions (C3s / C3n) -------------------------------
+    cov = {"branch_pct": 31.5, "region_pct": 40.0, "line_pct": 44.0,
+           "least_covered_functions": [{"name": "hex_value", "branch_pct": 0.0,
+                                        "region_pct": 0.0, "regions": 17}]}
+    check("C3s: model sees only the coverage numbers",
+          set(A.oracle_summary(cov, "coverage_scalar")) == {"branch_coverage_pct", "region_coverage_pct"})
+    check("C3n: model additionally sees least-covered function names",
+          "hex_value" in A.oracle_summary(cov, "coverage_named")["least_covered_functions"][0])
+    check("C3s action names the coverage number",
+          A.oracle_action(cov, "coverage_scalar")[0] == "increase_branch_coverage")
+    check("C3n action names the function",
+          A.oracle_action(cov, "coverage_named") == ("cover_function", A.oracle_action(cov, "coverage_named")[1])
+          and "hex_value" in A.oracle_action(cov, "coverage_named")[1])
+    body_c3 = refine_prompt("strategy=1", A.oracle_summary(cov, "coverage_scalar"), ("a", "b"))[-1]["content"]
+    check("C3 refine prompt says coverage was measured, not 'no coverage data'",
+          "measured with instrumentation" in body_c3 and "no coverage data" not in body_c3)
+    sys.path.insert(0, str(ROOT / "eval"))
+    from cell import parse_function_report  # noqa: E402
+    rows = parse_function_report(
+        "Name  Regions Miss Cover Lines Miss Cover Branches Miss Cover\n"
+        "------\n"
+        "json_parse_ex 619 387 37.48% 570 334 41.40% 394 272 30.96%\n"
+        "json.c:hex_value 17 17 0.00% 13 13 0.00% 28 28 0.00%\n"
+        "TOTAL 700 400 40.00% 600 350 41.00% 420 300 28.00%\n")
+    check("llvm-cov function report parses (file prefix stripped, TOTAL skipped)",
+          [r["name"] for r in rows] == ["json_parse_ex", "hex_value"]
+          and rows[1]["branch_pct"] == 0.0 and rows[0]["branches_missed"] == 272)
+
     print(f"\n{_p} passed, {_f} failed")
     return 1 if _f else 0
 

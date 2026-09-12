@@ -649,3 +649,31 @@ measured with the old features and are superseded by the matrix pass.
 **Verified.** 2000-deep arrays and 1800-deep objects parse in 30-50 ms; 500
 ordinary inputs in 90 ms; trailing-comma and truncated literals yield no
 productions as before; 105/105 tests; a mock parson loop steers on `obj`.
+
+## D18 — Paper infrastructure, step 6: the coverage-oracle conditions C3s and C3n
+
+**Why.** The reviewers rejected "hand the model a coverage number and call it
+the oracle": with the proxy still choosing the action, doing the rollback
+and picking the best iteration, that is proxy steering with a comment, and
+it would read C3 ~ C2 as "the proxy recovers coverage". The oracle must
+replace the proxy at every place the proxy acts.
+
+**What.** `agent.py --oracle coverage_scalar|coverage_named`. After each
+full run the iteration's own inputs are measured on the coverage build
+(`eval/cell.measure_for_loop`: one batch pass, branch/region/line % plus the
+least-covered functions from `llvm-cov -show-functions`). Branch coverage
+then IS the score: it drives the regression check, the best-selection and
+the rollback exactly as the proxy score did (same tolerance band), and the
+next action is `increase_branch_coverage` (scalar) or `cover_function <name>`
+(named). The refine prompt carries only the coverage view: the two numbers
+under C3s, plus the least-covered function names under C3n. C3n is
+white-box lite (the Gentoo-S analogue) and its function names are NOT
+anonymized; say so in the paper. `--oracle` cannot be combined with
+`--ablate`. Every iteration's stats.json records BOTH `coverage_in_loop` and
+`proxy_score`, so every oracle run also yields RQ3 validity data (proxy
+score vs coverage over the same generator) at no extra cost. final.json's
+selection rule reads `coverage_best_with_revert`.
+
+**Verified.** Mock C3n run on json-parser: score = 16.67 (branch %), action
+`cover_function (hex_value ...)`, iteration-2 prompt says "measured with
+instrumentation" and carries `branch_coverage_pct`; 111/111 tests (6 new).

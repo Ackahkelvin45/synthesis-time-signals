@@ -313,8 +313,61 @@ def coverage_curve(target: str, examples: list[str], checkpoints: list[int],
         subprocess.run([*_llvm("llvm-profdata"), "merge", "-sparse", *files,
                         "-o", str(merged)], check=True)
         curve[n] = _cov_totals(binary, merged, src)
+        curve[n]["profdata"] = str(merged)
     return {"curve": curve, "samples": samples, "segments": len(segs),
             "lost_segments": lost_segments}
+
+
+def parse_function_report(text: str) -> list[dict]:
+    """Rows of `llvm-cov report -show-functions` -> [{name, regions, regions_missed,
+    region_pct, branches, branches_missed, branch_pct}], file-qualified names
+    stripped to the bare function name."""
+    rows: list[dict] = []
+    for ln in text.splitlines():
+        parts = ln.split()
+        if len(parts) < 10 or parts[0] in ("Name", "TOTAL", "File", "Filename") or ln.startswith("-"):
+            continue
+        try:
+            regions, r_miss = int(parts[1]), int(parts[2])
+            branches, b_miss = int(parts[7]), int(parts[8])
+        except ValueError:
+            continue
+        name = parts[0].split(":")[-1]
+        rows.append({"name": name, "regions": regions, "regions_missed": r_miss,
+                     "region_pct": float(parts[3].rstrip("%")),
+                     "branches": branches, "branches_missed": b_miss,
+                     "branch_pct": float(parts[9].rstrip("%"))})
+    return rows
+
+
+def function_coverage(target: str, profdata: str | Path) -> list[dict]:
+    """Per-function coverage of the target source for one merged profile."""
+    rep_txt = subprocess.run(
+        [*_llvm("llvm-cov"), "report", str(cov_binary(target)),
+         f"-instr-profile={profdata}", str(target_src(target)), "-show-functions"],
+        capture_output=True, text=True, check=True).stdout
+    return parse_function_report(rep_txt)
+
+
+def measure_for_loop(target: str, inputs: list[str], label: str) -> dict:
+    """The coverage-oracle signal for ONE loop iteration (paper conditions C3s /
+    C3n): coverage of the target source over the iteration's own inputs, plus
+    the least-covered functions. Uses the coverage build; the loop's sanitizer
+    harness is untouched."""
+    if not cov_binary(target).exists():
+        build_coverage_binary(target)
+    cc = coverage_curve(target, inputs, [len(inputs)], label)
+    last = cc["curve"][len(inputs)]
+    fns = function_coverage(target, last["profdata"])
+    least = sorted([f for f in fns if f["branches"] > 0 or f["regions"] > 0],
+                   key=lambda f: (f["branch_pct"] if f["branches"] else f["region_pct"], -f["regions"]))
+    return {
+        "branch_pct": last["branch"], "region_pct": last["region"], "line_pct": last["line"],
+        "least_covered_functions": [
+            {"name": f["name"], "branch_pct": f["branch_pct"], "region_pct": f["region_pct"],
+             "regions": f["regions"]} for f in least[:5]],
+        "functions_total": len(fns),
+    }
 
 
 def measure_cell(target: str, examples: list[str], label: str) -> dict:
