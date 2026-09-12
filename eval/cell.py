@@ -90,7 +90,8 @@ def build_coverage_binary(target: str = "json-parser") -> Path:
     cmd = [
         os.environ.get("CC", "clang"),
         "-fprofile-instr-generate", "-fcoverage-mapping", "-g", "-O0",
-        "-I", str(ROOT / t["inc"]),
+        "-DCOVERAGE_BUILD",
+        "-I", str(ROOT / t["inc"]), "-I", str(ROOT / "harness"),
         str(ROOT / t["src"]), str(ROOT / t["harness"]), "-o", str(out),
     ]
     subprocess.run(cmd, check=True)
@@ -257,41 +258,82 @@ def draw_examples(ref: str, n: int, seed: int) -> list[str]:
 _OUTCOME = {0: "valid", 2: "reject", 10: "skip", 11: "skip"}
 
 
-def measure_cell(target: str, examples: list[str], label: str) -> dict:
-    """Run `examples` through the target's coverage build once; return coverage
-    (region/line/branch %) and the proxy metrics computed on the same inputs."""
-    from agent import summarize  # noqa: E402  (loop's own summarizer)
-    binary = cov_binary(target)
-    profdir = BUILD / f"_cov_{target}_{label}"
-    profdir.mkdir(exist_ok=True)
-    for old in profdir.glob("*.profraw"):
-        old.unlink()
-    samples = []
-    for i, ex in enumerate(examples):
-        data = ex.encode("utf-8", "surrogatepass")
-        env = {"LLVM_PROFILE_FILE": str(profdir / f"{i}.profraw")}
-        p = subprocess.run([str(binary)], input=data, env=env,
-                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        samples.append((ex, _OUTCOME.get(p.returncode, "crash")))
-    raws = [str(p) for p in profdir.glob("*.profraw")]
-    merged = profdir / "merged.profdata"
-    subprocess.run([*_llvm("llvm-profdata"), "merge", "-sparse", *raws,
-                    "-o", str(merged)], check=True)
+def _cov_totals(binary: Path, profdata: Path, src: Path) -> dict:
+    """region/line/branch % of `src` from one merged profile."""
     rep = subprocess.run(
         [*_llvm("llvm-cov"), "report", str(binary),
-         f"-instr-profile={merged}", str(target_src(target))],
+         f"-instr-profile={profdata}", str(src)],
         capture_output=True, text=True, check=True).stdout
     total = [ln for ln in rep.splitlines() if ln.strip().startswith("TOTAL")][0]
     pcts = [float(t.rstrip("%")) for t in total.split() if t.endswith("%")]
     # llvm-cov report columns: region%, function%, line%, branch%
+    return {"region": pcts[0], "line": pcts[2], "branch": pcts[3]}
+
+
+def coverage_curve(target: str, examples: list[str], checkpoints: list[int],
+                   label: str) -> dict:
+    """Run `examples` (in order) through the target's coverage build in ONE
+    batch process (fuzz/runner.run_many) and return cumulative coverage at
+    each checkpoint n (inputs 1..n), plus the per-input outcomes.
+
+    Coverage counters are flushed from inside the harness at each checkpoint
+    (harness/driver.h, -DCOVERAGE_BUILD), so the whole curve costs one pass.
+    A crash restarts the harness in a new segment; coverage at a checkpoint
+    is the merge of every earlier segment's final flush and the current
+    segment's checkpoint flush. (Only a runner-side kill after a missed
+    in-harness alarm loses a segment's counters; that case is logged.)
+    """
+    from runner import run_many, TIMEOUT_S  # noqa: E402
+    binary = cov_binary(target)
+    profdir = BUILD / f"_cov_{target}_{label}"
+    profdir.mkdir(exist_ok=True)
+    for old in profdir.glob("*.prof*"):
+        old.unlink()
+    data = [ex.encode("utf-8", "surrogatepass") for ex in examples]
+    cps = sorted({c for c in checkpoints if 0 < c <= len(data)} | {len(data)})
+    results, segs = run_many(binary, data, timeout_s=TIMEOUT_S, checkpoints=cps,
+                             profile_prefix=str(profdir / "p"))
+    samples = [(ex, r.outcome.value) for ex, r in zip(examples, results)]
+    src = target_src(target)
+    curve: dict[int, dict] = {}
+    lost_segments = 0
+    for n in cps:
+        files: list[str] = []
+        for seg in segs:
+            cp = Path(f"{seg}.{n}.profraw")
+            if cp.exists():
+                files.append(str(cp))
+                break
+            fin = Path(f"{seg}.final.profraw")
+            if fin.exists():
+                files.append(str(fin))
+            else:
+                lost_segments += 1
+        merged = profdir / f"merged.{n}.profdata"
+        subprocess.run([*_llvm("llvm-profdata"), "merge", "-sparse", *files,
+                        "-o", str(merged)], check=True)
+        curve[n] = _cov_totals(binary, merged, src)
+    return {"curve": curve, "samples": samples, "segments": len(segs),
+            "lost_segments": lost_segments}
+
+
+def measure_cell(target: str, examples: list[str], label: str) -> dict:
+    """Run `examples` through the target's coverage build once; return coverage
+    (region/line/branch %) and the proxy metrics computed on the same inputs."""
+    from agent import summarize  # noqa: E402  (loop's own summarizer)
+    cc = coverage_curve(target, examples, [len(examples)], label)
+    samples = cc["samples"]
+    cov = cc["curve"][len(examples)]
     s = summarize(samples)
     return {
-        "region": pcts[0], "line": pcts[2], "branch": pcts[3],
+        "region": cov["region"], "line": cov["line"], "branch": cov["branch"],
         "acceptance": s["acceptance_rate"],
         "novelty": s["novelty"],
         "cap_mass": s["cap_distance_mass"],
         "productions": len(s["productions_accepted"]),
         "crashes": sum(1 for _, o in samples if o == "crash"),
+        "distinct_inputs": len(set(ex for ex, _ in samples)),
+        "skips": sum(1 for _, o in samples if o == "skip"),
     }
 
 

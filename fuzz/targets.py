@@ -26,7 +26,7 @@ TARGETS: dict[str, dict] = {
         "grammar": "grammar/JSON.g4",
         "notes": "grammar/adaptation-notes.md",
         "binary": "harness",
-        "modes": ("default", "control", "hunt", "unmask"),
+        "modes": ("default", "control", "hunt", "unmask", "o2"),
         "pinned": "8ac4477",
     },
     # T2 — same grammar, different parser: a within-format comparison.
@@ -38,7 +38,7 @@ TARGETS: dict[str, dict] = {
         "grammar": "grammar/JSON.g4",
         "notes": "targets/parson/adaptation-notes.md",
         "binary": "harness_parson",
-        "modes": ("default", "control", "roundtrip"),
+        "modes": ("default", "control", "roundtrip", "o2"),
         "pinned": "1.5.3 @ ba29f4e",
     },
 }

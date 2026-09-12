@@ -29,10 +29,12 @@ build() {
   MODE=control bash harness/build.sh
   MODE=hunt    bash harness/build.sh
   MODE=unmask  bash harness/build.sh
+  MODE=o2      bash harness/build.sh
   # T2 parson (same grammar, different parser; adds the roundtrip/serializer surface)
   TARGET=parson                bash harness/build.sh
   TARGET=parson MODE=control   bash harness/build.sh
   TARGET=parson MODE=roundtrip bash harness/build.sh
+  TARGET=parson MODE=o2        bash harness/build.sh
 }
 
 check() {

@@ -18,10 +18,10 @@
  *   crash            : sanitizer abort or fatal signal. The runner treats ANY
  *                      outcome not in {0,2,10,11,3} — plus timeouts — as a crash.
  *
- * Build modes (see harness/build.sh, TARGET=parson) are compiled in and
- * reportable at runtime via `--mode`, so the runner can VERIFY (not assume)
- * which binary it is talking to and refuse to treat a positive-control crash
- * as a real finding:
+ * The stdin/exit-code mode, the batch mode and the libFuzzer entry point come
+ * from harness/driver.h; this file only defines harness_parse(). Build modes
+ * (see harness/build.sh, TARGET=parson) are compiled in and reportable via
+ * `--mode`:
  *   default    parse -> free
  *   roundtrip  parse -> serialize -> free   (parson HAS a serializer, unlike
  *              json-parser; its historical overflow bugs lived there, so this
@@ -32,50 +32,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "parson.h"
+#include "driver.h"
 
-#ifndef HARNESS_MODE
-#define HARNESS_MODE "default"
-#endif
-
-/* Reject anything larger than this as SKIP (exit 11). */
-#define MAX_INPUT_BYTES (64u * 1024u * 1024u)
-
-int main(int argc, char **argv) {
-    /* Machine-checkable build identity: `harness --mode` prints its mode and
-     * exits 0. Lets the runner enforce that real findings only come from a
-     * real-parser build, never the positive-control build. */
-    if (argc > 1 && strcmp(argv[1], "--mode") == 0) {
-        puts(HARNESS_MODE);
-        return 0;
-    }
-
-    size_t cap = 1u << 16;
-    size_t len = 0;
-    char *buf = (char *)malloc(cap);
-    if (!buf) return 3;
-
-    int ch;
-    int saw_nul = 0;
-    while ((ch = getchar()) != EOF) {
-        if (ch == 0) saw_nul = 1;
-        if (len + 1 >= cap) {
-            if (cap >= MAX_INPUT_BYTES) { free(buf); return 11; } /* oversized -> SKIP */
-            cap *= 2;
-            char *nbuf = (char *)realloc(buf, cap);
-            if (!nbuf) { free(buf); return 3; }
-            buf = nbuf;
-        }
-        buf[len++] = (char)ch;
-    }
-    buf[len] = '\0';
-
-    if (saw_nul) { free(buf); return 10; } /* embedded NUL -> SKIP (harness limit) */
+static int harness_parse(const char *buf, size_t len, char *msg, size_t msgcap) {
+    (void)msg; (void)msgcap;
+    if (memchr(buf, 0, len) != NULL) return 10; /* embedded NUL -> SKIP (harness limit) */
 
 #ifdef POSITIVE_CONTROL
-    /* Synthetic bug, compiled in ONLY under -DPOSITIVE_CONTROL. The default
-     * build physically cannot execute this. Triggered by a marker input so the
-     * full pipeline (build -> run -> detect -> capture) can be proven to catch
-     * a crash on this exact target binary. Not a parson bug. */
+    /* Synthetic bugs, compiled in ONLY under -DPOSITIVE_CONTROL. The default
+     * build physically cannot execute this. Not parson bugs. */
     if (strstr(buf, "__CRASH__") != NULL) {
         char *small = (char *)malloc(4);
         memset(small, 'A', 64); /* 64 bytes into a 4-byte buffer */
@@ -83,11 +48,12 @@ int main(int argc, char **argv) {
         (void)sink;
         free(small);
     }
+    if (strstr(buf, "__HANG__") != NULL) {
+        for (;;) { }
+    }
 #endif
 
     JSON_Value *v = json_parse_string(buf);
-    free(buf);
-
     if (v == NULL) {
         return 2; /* clean, well-formed rejection (parson gives no reason) */
     }

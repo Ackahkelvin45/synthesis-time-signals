@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "fuzz"))
 from runner import (  # noqa: E402
-    run_once, Outcome, harness_mode, assert_real_target, SANITIZER_ENV,
+    run_once, run_many, Outcome, harness_mode, assert_real_target, SANITIZER_ENV,
 )
 
 BUILD = ROOT / "build"
@@ -95,6 +95,25 @@ def main() -> int:
     r = run_once(hang, b"", timeout_s=2)
     check("CRASH  on timeout (hang), same rule not special verdict",
           r.outcome is Outcome.CRASH and r.timed_out, r.signature_source())
+
+    print("== batch mode (one process, restart on crash; harness/driver.h) ==")
+    batch_in = [b'[1,2,3,null]', b'[1,2', b'"__CRASH__"', b'[true]', b'"__HANG__"',
+                b'[false]', b'{', b'"__CRASH__"', b'"a\x00b"']
+    many, segs = run_many(CONTROL, batch_in, timeout_s=1)
+    ref = [run_once(CONTROL, d, timeout_s=1).outcome for d in batch_in]
+    check("batch outcomes == run_once outcomes (crash, hang, reject, valid)",
+          [r.outcome for r in many] == ref, str([r.outcome.value for r in many]))
+    check("batch survives a mid-batch ASan crash and keeps going",
+          many[2].outcome is Outcome.CRASH and many[3].outcome is Outcome.VALID)
+    check("batch crash carries the sanitizer report", b"AddressSanitizer" in many[2].stderr)
+    check("batch hang is a timeout crash via the in-harness alarm",
+          many[4].outcome is Outcome.CRASH and many[4].timed_out)
+    check("batch reject carries the parser's reason like stdin mode",
+          many[1].outcome is Outcome.REJECT and many[1].stderr.startswith(b"reject: "))
+    check("batch never uses profile segments without a prefix", segs == [])
+    o2 = BUILD / "harness_o2"
+    check("o2 (uninstrumented) build exists and reports its mode",
+          o2.exists() and harness_mode(o2) == "o2")
 
     print("== both sanitizers active + symbolized (real build flags) ==")
     env = {**__import__("os").environ, **SANITIZER_ENV}

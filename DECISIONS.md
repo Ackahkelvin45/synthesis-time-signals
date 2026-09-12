@@ -586,3 +586,33 @@ no-steering and a steered loop produce final.json, per-iteration
 provenance.json, and prompt files containing no identifier. Not exercised:
 the A5 fallback path itself needs a failing generator, which the mock cannot
 produce; reviewed by reading, to be confirmed on the first live gated run.
+
+## D16 — Paper infrastructure, step 4: in-process harness (batch mode, coverage curves, o2 build)
+
+**Why.** A fuzzing reviewer will not accept per-process stdin runs with a
+fixed-n coverage snapshot as a measurement; the paper's primary outcome is a
+coverage-vs-inputs curve to 10^4 inputs, and the reference row is AFL++.
+Process-per-input made both impractical (800 spawns for one coverage.py run).
+
+**What.** `harness/driver.h` is now the shared driver: each target's
+harness.c defines only `harness_parse(buf, len, msg, msgcap)`. The driver
+provides (1) the unchanged stdin/exit-code mode (the loop and triage use it;
+contract verified: `{""` aborts under UBSan, `[1,2]` exits 0, `{` exits 2
+with its reason), (2) `--batch`: length-prefixed inputs on stdin, one
+`R <index> <code> [<msg>]` line per input, an in-process `alarm()` timeout
+(exit 124), and under `-DCOVERAGE_BUILD` cumulative profile flushes at
+`--checkpoints` plus a final flush at exit or on a fatal signal, (3)
+`LLVMFuzzerTestOneInput` for libFuzzer/AFL++ (untested on this macOS
+toolchain; exercised in Docker later). `fuzz/runner.run_many` drives batch
+mode with the SAME classification rule as run_once, restarts the harness
+after a death (sanitizer report read from stderr, the dead input classified,
+next index resumes in a new profile segment), and keeps a runner-side
+timeout as a backstop. `eval/cell.coverage_curve` merges segment profiles
+per checkpoint. `MODE=o2` builds the uninstrumented -O2 binary on which a
+timeout must reproduce before it is called a hang. The positive-control
+build gains a `__HANG__` marker so the timeout path is testable.
+
+**Verified.** Batch outcomes equal run_once outcomes on a mixed list with two
+mid-batch crashes and a hang; `coverage.py` reproduces the committed 42.2 /
+83.1 line% byte-for-byte through the new path (1.8 s instead of 800
+spawns); a 300-input parson curve is monotone; 104/104 tests (7 new).

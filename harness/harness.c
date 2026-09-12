@@ -21,60 +21,34 @@
  *
  * json-parser is parse-only (no serializer), so there is no roundtrip mode.
  *
- * Build modes (see build.sh) are compiled in and reportable at runtime via
- * `--mode`, so the runner can VERIFY (not assume) which binary it is talking to
- * and refuse to treat a positive-control crash as a real finding.
+ * The stdin/exit-code mode, the batch mode (many inputs, one process, coverage
+ * checkpoints) and the libFuzzer entry point all come from harness/driver.h;
+ * this file only defines harness_parse(). Build modes (see build.sh) are
+ * compiled in and reportable via `--mode`, so the runner can VERIFY (not
+ * assume) which binary it is talking to and refuse to treat a positive-control
+ * crash as a real finding.
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "json.h"
+#include "driver.h"
 
-#ifndef HARNESS_MODE
-#define HARNESS_MODE "default"
-#endif
-
-/* Reject anything larger than this as SKIP (exit 11). */
-#define MAX_INPUT_BYTES (64u * 1024u * 1024u)
-
-int main(int argc, char **argv) {
-    /* Machine-checkable build identity: `harness --mode` prints its mode and
-     * exits 0. Lets the runner enforce that real findings only come from the
-     * default build, never the positive-control build. */
-    if (argc > 1 && strcmp(argv[1], "--mode") == 0) {
-        puts(HARNESS_MODE);
-        return 0;
-    }
-
-    size_t cap = 1u << 16;
-    size_t len = 0;
-    char *buf = (char *)malloc(cap);
-    if (!buf) return 3;
-
-    int ch;
-    while ((ch = getchar()) != EOF) {
-        if (len + 1 >= cap) {
-            if (cap >= MAX_INPUT_BYTES) { free(buf); return 11; } /* oversized -> SKIP */
-            cap *= 2;
-            char *nbuf = (char *)realloc(buf, cap);
-            if (!nbuf) { free(buf); return 3; }
-            buf = nbuf;
-        }
-        buf[len++] = (char)ch;
-    }
-    buf[len] = '\0';  /* harmless; json_parse_ex uses `len`, not NUL-termination */
-
+static int harness_parse(const char *buf, size_t len, char *msg, size_t msgcap) {
 #ifdef POSITIVE_CONTROL
-    /* Synthetic bug, compiled in ONLY under -DPOSITIVE_CONTROL. The default
-     * build physically cannot execute this. Triggered by a marker input so the
+    /* Synthetic bugs, compiled in ONLY under -DPOSITIVE_CONTROL. The default
+     * build physically cannot execute this. Triggered by marker inputs so the
      * full pipeline (build -> run -> detect -> capture) can be proven to catch
-     * a crash on this exact target binary. Not a json-parser bug. */
-    if (strstr(buf, "__CRASH__") != NULL) {
+     * a crash and a hang on this exact target binary. Not json-parser bugs. */
+    if (memmem(buf, len, "__CRASH__", 9) != NULL) {
         char *small = (char *)malloc(4);
         memset(small, 'A', 64); /* 64 bytes into a 4-byte buffer */
         volatile char sink = small[0];
         (void)sink;
         free(small);
+    }
+    if (memmem(buf, len, "__HANG__", 8) != NULL) {
+        for (;;) { }
     }
 #endif
 
@@ -84,14 +58,11 @@ int main(int argc, char **argv) {
     error[0] = '\0';
 
     json_value *v = json_parse_ex(&settings, buf, len, error);
-    free(buf);
-
     if (v == NULL) {
-        /* well-formed rejection: surface the parser's reason (parson gave none) */
-        fprintf(stderr, "reject: %s\n", error);
+        /* well-formed rejection: surface the parser's reason (parson gives none) */
+        snprintf(msg, msgcap, "%s", error);
         return 2;
     }
-
     json_value_free(v);
     return 0; /* accepted */
 }

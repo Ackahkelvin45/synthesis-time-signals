@@ -25,6 +25,7 @@ from __future__ import annotations
 import os
 import signal
 import subprocess
+import time
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -166,3 +167,168 @@ if __name__ == "__main__":
     print(f"{r.outcome.value:6}  {r.signature_source()}")
     if r.is_crash and r.stderr:
         sys.stderr.buffer.write(r.stderr)
+
+
+# --- batch mode: many inputs, one process (paper plan, step 4) ---------------
+#
+# The harness's `--batch` mode (harness/driver.h) reads length-prefixed inputs
+# on stdin and answers one "R <index> <code> [<msg>]" line per input. The
+# classification rule is the SAME as run_once: the code maps exactly like an
+# exit code, a process death is a crash for the input whose line never came
+# (sanitizer report read from stderr), and a hang is cut by the harness's own
+# alarm (exit 124) or, as a backstop, by the runner. After a death the runner
+# restarts the harness at the next index, so one crash never costs the rest of
+# the batch. `profile_prefix` (coverage builds only) makes the harness flush
+# cumulative profile counters at `checkpoints`; each restart is a new SEGMENT
+# ("<prefix>.seg<k>"), and the caller merges segments (eval/cell.py).
+
+import selectors
+import struct
+import threading
+
+HARNESS_TIMEOUT_EXIT = 124
+
+
+def _classify_code(rc: int, stderr: bytes) -> Result:
+    if rc == 0:
+        return Result(Outcome.VALID, 0, None, False, stderr)
+    if rc == 2:
+        return Result(Outcome.REJECT, 2, None, False, stderr)
+    if rc in _SKIP_CODES:
+        return Result(Outcome.SKIP, rc, None, False, stderr, _SKIP_CODES[rc])
+    if rc == _ENVFAIL_CODE:
+        return Result(Outcome.SKIP, rc, None, False, stderr, "harness-envfail")
+    return Result(Outcome.CRASH, rc, None, False, stderr)
+
+
+class _Harness:
+    """One live harness process in --batch mode."""
+
+    def __init__(self, binary: str | Path, start_index: int, timeout_s: int,
+                 checkpoints: list[int] | None, profile_prefix: str | None):
+        env = {k: os.environ[k] for k in _ENV_PASSTHROUGH if k in os.environ}
+        env.update(SANITIZER_ENV)
+        argv = [str(binary), "--batch", "--timeout", str(timeout_s),
+                "--start-index", str(start_index)]
+        if checkpoints:
+            argv += ["--checkpoints", ",".join(str(c) for c in checkpoints)]
+        if profile_prefix:
+            argv += ["--profile-prefix", profile_prefix]
+        self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE, env=env)
+        self._err = bytearray()
+        self._err_thread = threading.Thread(target=self._drain_stderr, daemon=True)
+        self._err_thread.start()
+        self._buf = bytearray()
+        self._sel = selectors.DefaultSelector()
+        self._sel.register(self.proc.stdout, selectors.EVENT_READ)
+
+    def _drain_stderr(self) -> None:
+        for chunk in iter(lambda: self.proc.stderr.read1(65536), b""):
+            self._err += chunk
+
+    def send(self, data: bytes) -> None:
+        self.proc.stdin.write(struct.pack("<I", len(data)) + data)
+        self.proc.stdin.flush()
+
+    def read_line(self, timeout_s: float) -> bytes | None:
+        """Next stdout line, or None on EOF/timeout (caller checks .proc)."""
+        deadline = time.monotonic() + timeout_s
+        while b"\n" not in self._buf:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return None
+            if not self._sel.select(remaining):
+                return None
+            chunk = os.read(self.proc.stdout.fileno(), 65536)
+            if not chunk:
+                return None
+            self._buf += chunk
+        line, _, rest = bytes(self._buf).partition(b"\n")
+        self._buf = bytearray(rest)
+        return line
+
+    def kill(self) -> None:
+        try:
+            self.proc.kill()
+        except ProcessLookupError:
+            pass
+        self.close()
+
+    def close(self) -> bytes:
+        try:
+            self.proc.stdin.close()
+        except (BrokenPipeError, OSError):
+            pass
+        self.proc.wait()
+        self._err_thread.join(timeout=5)
+        self._sel.close()
+        return bytes(self._err)
+
+
+def run_many(binary: str | Path, inputs: list[bytes], timeout_s: int = TIMEOUT_S,
+             checkpoints: list[int] | None = None,
+             profile_prefix: str | None = None) -> tuple[list[Result], list[str]]:
+    """Classify every input in one (restarted-on-crash) harness process.
+
+    Returns (results, segment_prefixes). results[i] corresponds to inputs[i]
+    with the same Outcome rule as run_once. segment_prefixes lists the
+    "<profile_prefix>.seg<k>" used by each process segment (empty when no
+    profile_prefix), so the caller can merge coverage across restarts.
+    """
+    results: list[Result] = []
+    segments: list[str] = []
+    i = 0
+    n = len(inputs)
+    while i < n:
+        seg_prefix = f"{profile_prefix}.seg{len(segments)}" if profile_prefix else None
+        if seg_prefix:
+            segments.append(seg_prefix)
+        h = _Harness(binary, i, timeout_s, checkpoints, seg_prefix)
+        died = False
+        while i < n and not died:
+            data = inputs[i]
+            try:
+                h.send(data)
+            except (BrokenPipeError, OSError):
+                died = True
+                break
+            line = h.read_line(timeout_s + 2.0)
+            if line is None:
+                if h.proc.poll() is None:
+                    # runner-side backstop: the harness alarm did not fire
+                    h.kill()
+                    results.append(Result(Outcome.CRASH, None, None, True, b"", "timeout"))
+                    i += 1
+                    died = True
+                    break
+                died = True
+                break
+            parts = line.decode("utf-8", "replace").split(" ", 3)
+            if len(parts) < 3 or parts[0] != "R":
+                died = True
+                break
+            idx, code = int(parts[1]), int(parts[2])
+            if idx != i:
+                died = True
+                break
+            msg = parts[3] if len(parts) > 3 else ""
+            r = _classify_code(code, (b"reject: " + msg.encode()) if code == 2 and msg else b"")
+            results.append(r)
+            i += 1
+        if died:
+            err = h.close()
+            rc = h.proc.returncode
+            if len(results) < i:
+                pass  # already classified (runner-side timeout)
+            elif i < n:
+                if rc is not None and rc < 0:
+                    results.append(Result(Outcome.CRASH, None, -rc, False, err))
+                elif rc == HARNESS_TIMEOUT_EXIT:
+                    results.append(Result(Outcome.CRASH, None, None, True, err, "timeout"))
+                else:
+                    results.append(Result(Outcome.CRASH, rc, None, False, err))
+                i += 1
+            continue
+        h.close()
+    return results, segments

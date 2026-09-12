@@ -31,6 +31,8 @@
 #              (json.c:437/447, finding #1) so the loop can parse objects and
 #              reach DEEPER bugs. Documented trade-off: hides any *other*
 #              pointer-overflow, so real findings are re-confirmed on `default`.
+#   o2         no sanitizers, -O2: the uninstrumented build on which a timeout
+#              must reproduce before it is called a hang (paper plan, step 4).
 #   unmask     (json-parser only) STRICTLY BETTER hunt: a line-precise,
 #              value-preserving patch (harness/apply_unmask.py) rewrites ONLY
 #              finding #1's two NULL+n sites to integer arithmetic, then compiles
@@ -57,11 +59,11 @@ case "$TARGET" in
   json-parser)
     SRC="$ROOT/vendor/json-parser/json.c"; INC="$ROOT/vendor/json-parser"
     HSRC="$HERE/harness.c";                BASE="harness"
-    VALID_MODES="default control hunt unmask" ;;
+    VALID_MODES="default control hunt unmask o2" ;;
   parson)
     SRC="$ROOT/vendor/parson/parson.c";    INC="$ROOT/vendor/parson"
     HSRC="$ROOT/targets/parson/harness.c"; BASE="harness_parson"
-    VALID_MODES="default control roundtrip" ;;
+    VALID_MODES="default control roundtrip o2" ;;
   *) echo "unknown TARGET '$TARGET' (use: json-parser|parson)" >&2; exit 1 ;;
 esac
 
@@ -78,18 +80,23 @@ case "$MODE" in
   control)   EXTRA=(-DPOSITIVE_CONTROL -DHARNESS_MODE='"control"') ;;
   roundtrip) EXTRA=(-DROUNDTRIP -DHARNESS_MODE='"roundtrip"') ;;
   hunt)      EXTRA=(-fno-sanitize=pointer-overflow -DHARNESS_MODE='"hunt"') ;;
+  o2)        EXTRA=(-DHARNESS_MODE='"o2"') ;;
   unmask)    "${PYTHON:-python3}" "$HERE/apply_unmask.py"
              EXTRA=(-DHARNESS_MODE='"unmask"')
              SRC="$OUT/_patched/json.c"; INC="$OUT/_patched" ;;
 esac
 
-COMMON_FLAGS=(
-  -fsanitize=address,undefined
-  -fno-sanitize-recover=all
-  -fno-omit-frame-pointer
-  -g -O0
-  -I "$INC"
-)
+if [ "$MODE" = "o2" ]; then
+  COMMON_FLAGS=(-O2 -g -Wno-deprecated-declarations -I "$INC" -I "$HERE")
+else
+  COMMON_FLAGS=(
+    -fsanitize=address,undefined
+    -fno-sanitize-recover=all
+    -fno-omit-frame-pointer
+    -g -O0
+    -I "$INC" -I "$HERE"
+  )
+fi
 
 echo "[build.sh] TARGET=$TARGET MODE=$MODE  ->  $BIN"
 # ${EXTRA[@]+...} guard: expands to nothing when EXTRA is empty, which is
