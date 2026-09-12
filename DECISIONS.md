@@ -616,3 +616,36 @@ build gains a `__HANG__` marker so the timeout path is testable.
 mid-batch crashes and a hang; `coverage.py` reproduces the committed 42.2 /
 83.1 line% byte-for-byte through the new path (1.8 s instead of 800
 spawns); a 300-input parson curve is monotone; 104/104 tests (7 new).
+
+## D17 — Paper infrastructure, step 5: the proxy is now grammar-derived and format-generic
+
+**Why.** The reviewers' sharpest methodological objection: the proxy was
+JSON-specific in code (a `json.loads` walk for productions, bracket counting
+for depth), so "the same method, held out on TOML/XML" would have been a new
+signal per format. That is not a held-out evaluation.
+
+**What.** `fuzz/formats.py` derives the three structural features from the
+SAME ANTLR grammar the model is given: an ANTLR 4.13.2 Python parser is
+generated from `grammar/<FMT>.g4` into `grammar/gen/<fmt>/` (committed, so
+reviewers need no Java; `grammar/gen.sh` regenerates). A STRICT parse (bail
+on any lexer or parser error; the default ANTLR behaviour recovers and would
+count garbage as parsed) yields productions = parser rules + named
+non-skipped tokens + word-like literals visited, depth = recursion depth of
+the most-recursive rule minus one (equals bracket depth for JSON), and the
+novelty fingerprint = (productions, depth band). `PRODS`, the universe the
+production-gap steer closes, is read from the generated parser. Deep inputs
+parse in a worker thread with a 512 MB stack. The per-target deep-nesting
+band moved into `fuzz/targets.py` (`cap_band`). Probes and the differential
+oracle remain per-format and are declared as the human-authored part.
+
+**Consequences, stated.** Production names are now the grammar's own
+(`obj`, `arr`, `STRING`, `NUMBER`, `true`, ...; `json`/`value`/`pair` are
+always present when anything parses). Depth is measured only on
+grammar-valid inputs: a target-accepted input the grammar rejects (a
+deviation such as a trailing comma) now has depth 0 where bracket counting
+gave its real depth. The committed pilot numbers in docs/ and eval/*.md were
+measured with the old features and are superseded by the matrix pass.
+
+**Verified.** 2000-deep arrays and 1800-deep objects parse in 30-50 ms; 500
+ordinary inputs in 90 ms; trailing-comma and truncated literals yield no
+productions as before; 105/105 tests; a mock parson loop steers on `obj`.

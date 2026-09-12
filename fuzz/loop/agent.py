@@ -129,7 +129,7 @@ _PROMPT_MODE = "anon"
 def select_target(name: str) -> Path:
     """Switch the loop to registered target `name`; return its default-mode
     harness path. Idempotent for json-parser (restores the defaults)."""
-    global _TARGET_NAME, _TARGET_FORMAT, _TARGET_GRAMMAR, _TARGET_NOTES, RUNS
+    global _TARGET_NAME, _TARGET_FORMAT, _TARGET_GRAMMAR, _TARGET_NOTES, RUNS, CAP_BAND, CAP_DEPTH
     _ensure_fuzz_on_path()
     from targets import TARGETS, binary_name  # noqa: E402
     if name not in TARGETS:
@@ -139,6 +139,8 @@ def select_target(name: str) -> Path:
     _TARGET_FORMAT = t["format"]
     _TARGET_GRAMMAR = ROOT / t["grammar"]
     _TARGET_NOTES = ROOT / t["notes"]
+    CAP_BAND = tuple(t.get("cap_band", (1500, 2048)))
+    CAP_DEPTH = CAP_BAND[1]
     RUNS = ROOT / "runs" if name == "json-parser" else ROOT / "runs" / name
     return ROOT / "build" / binary_name(name)
 MAX_USD = 5.0
@@ -217,86 +219,45 @@ class StopController:
 
 # --- proxy-signal summary (REAL) ------------------------------------------
 
+# The proxy's structural features are GRAMMAR-DERIVED and format-generic
+# (fuzz/formats.py): productions = parser rules + named tokens visited by a
+# strict ANTLR parse of the input with the SAME grammar the model was given;
+# depth = recursion depth of the most-recursive rule. Nothing below knows what
+# JSON is; the JSON pilot behaviour is reproduced by the JSON grammar.
+def _format():
+    _ensure_fuzz_on_path()
+    import formats  # noqa: E402
+    return formats.get(_TARGET_FORMAT)
+
+
 def _nesting_depth(s: str) -> int:
-    depth = mx = 0
-    for c in s:
-        if c in "[{":
-            depth += 1
-            mx = max(mx, depth)
-        elif c in "]}":
-            depth = max(0, depth - 1)
-    return mx
-
-
-_PRODS = ("object", "array", "string", "number", "true", "false", "null")
-
-# json-parser has NO nesting cap (iterative parser), but deep OBJECT nesting
-# stresses the first-pass memory measurement, so we still steer generation mass
-# toward a deep band. 2048 is a convenient depth target, not a library limit.
-CAP_DEPTH = 2048
-CAP_BAND = (1500, CAP_DEPTH)
-
-
-def _walk_types(o, acc: set[str]) -> set[str]:
-    """Collect the JSON productions present in a decoded value.
-
-    ITERATIVE on purpose: a recursive walk blew Python's stack on exactly the
-    deeply-nested inputs the cap-distance signal steers toward, so those inputs
-    silently contributed ZERO productions and collapsed into one novelty bucket
-    — the steering signal was fighting itself.
-    """
-    stack = [o]
-    while stack:
-        cur = stack.pop()
-        # bool is a subclass of int, so it must be checked first.
-        if isinstance(cur, bool):
-            acc.add("true" if cur else "false")
-        elif cur is None:
-            acc.add("null")
-        elif isinstance(cur, str):
-            acc.add("string")
-        elif isinstance(cur, (int, float)):
-            acc.add("number")
-        elif isinstance(cur, dict):
-            acc.add("object")
-            stack.extend(cur.values())
-        elif isinstance(cur, list):
-            acc.add("array")
-            stack.extend(cur)
-    return acc
-
-
-def _loads_deep(s: str):
-    """json.loads that survives deeply-nested input.
-
-    CPython's decoder recurses, so a 2000-deep array raises RecursionError. We
-    raise the limit for the duration of the parse (and restore it), because the
-    deep inputs are precisely what we must be able to measure.
-    """
-    old = sys.getrecursionlimit()
-    try:
-        sys.setrecursionlimit(max(old, 3 * CAP_DEPTH + 1000))
-        return json.loads(s)
-    finally:
-        sys.setrecursionlimit(old)
+    return _format().depth(s)
 
 
 def _productions_structural(s: str) -> set[str]:
-    """Which grammar productions actually occur in a VALID JSON string, decided
-    by parsing it — NOT substring matching (which counts 'null' inside any text
-    and confounds the coverage signal)."""
-    try:
-        return _walk_types(_loads_deep(s), set())
-    except (ValueError, RecursionError):
-        return set()
+    """Which grammar productions occur in an input that the GRAMMAR accepts,
+    decided by parsing it — never by substring matching. A target-accepted
+    input the grammar rejects (a deviation, e.g. a trailing comma) yields no
+    productions, exactly as the previous json.loads walk did."""
+    return _format().productions(s)
 
 
 def _structure_fingerprint(s: str) -> tuple:
     """A coarse structural identity of an ACCEPTED input, for novelty counting:
     (which productions present, depth band). Distinct fingerprints = diversity."""
-    d = _nesting_depth(s)
-    band = min(d // 4, 8)  # coarse depth bands so trivial jitter isn't 'novel'
-    return (tuple(sorted(_productions_structural(s))), band)
+    return _format().fingerprint(s)
+
+
+def _prods() -> tuple[str, ...]:
+    """The universe of productions a generator could cover, from the grammar."""
+    return _format().PRODS
+
+
+# Deep-nesting steer: mass of accepted inputs whose depth lies in a per-target
+# band (fuzz/targets.py `cap_band`). For json-parser, which has no cap, 2048 is
+# a convenient depth target, not a library limit; for parson it is the real cap.
+CAP_DEPTH = 2048
+CAP_BAND = (1500, CAP_DEPTH)
 
 
 def summarize(samples: list[tuple[str, str]], divergences: list | None = None,
@@ -317,12 +278,15 @@ def summarize(samples: list[tuple[str, str]], divergences: list | None = None,
     accept = outcomes.get("valid", 0)
 
     accepted = [s for s, o in samples if o == "valid"]
-    depths_all = [_nesting_depth(s) for s, _ in samples]
-    accepted_depths = [_nesting_depth(s) for s in accepted]
+    fmt = _format()
+    feats_all = [fmt.features(s) for s, _ in samples]        # one parse per input
+    depths_all = [d for _, d in feats_all]
+    acc_feats = [f for f, (_, o) in zip(feats_all, samples) if o == "valid"]
+    accepted_depths = [d for _, d in acc_feats]
 
-    prod_accepted = set().union(*[_productions_structural(s) for s in accepted]) if accepted else set()
+    prod_accepted = set().union(*[p for p, _ in acc_feats]) if acc_feats else set()
     in_band = sum(1 for d in accepted_depths if CAP_BAND[0] <= d <= CAP_BAND[1])
-    novelty = len({_structure_fingerprint(s) for s in accepted})
+    novelty = len({(tuple(sorted(p)), min(d // 4, 8)) for p, d in acc_feats})
 
     div = divergences or []
     return {
@@ -332,7 +296,7 @@ def summarize(samples: list[tuple[str, str]], divergences: list | None = None,
         "productions_accepted": sorted(prod_accepted),
         # steer on productions that were GENERATED but never ACCEPTED, plus any
         # never generated at all — both are coverage gaps to close.
-        "productions_gap": [p for p in _PRODS if p not in prod_accepted],
+        "productions_gap": [p for p in _prods() if p not in prod_accepted],
         "cap_distance_mass": round(in_band / len(accepted), 3) if accepted else 0.0,
         "novelty": novelty,
         "divergences": len(div),

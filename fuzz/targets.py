@@ -27,6 +27,8 @@ TARGETS: dict[str, dict] = {
         "notes": "grammar/adaptation-notes.md",
         "binary": "harness",
         "modes": ("default", "control", "hunt", "unmask", "o2"),
+        # deep-nesting steer band (json-parser has no cap; 2048 is a target)
+        "cap_band": (1500, 2048),
         "pinned": "8ac4477",
     },
     # T2 — same grammar, different parser: a within-format comparison.
@@ -39,6 +41,7 @@ TARGETS: dict[str, dict] = {
         "notes": "targets/parson/adaptation-notes.md",
         "binary": "harness_parson",
         "modes": ("default", "control", "roundtrip", "o2"),
+        "cap_band": (1500, 2048),   # parson rejects deeper than ~2048
         "pinned": "1.5.3 @ ba29f4e",
     },
 }

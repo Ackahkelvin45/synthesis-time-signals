@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "fuzz"))
 sys.path.insert(0, str(ROOT / "fuzz" / "loop"))
 from agent import (  # noqa: E402
     decide_refinement, extract_strategy, screen_code, summarize, _score,
-    _productions_structural, _nesting_depth, StopController, refine_prompt,
+    _productions_structural, _nesting_depth, _prods, StopController, refine_prompt,
     seed_prompt, EXAMPLES_PER_RUN, VALIDATE_EXAMPLES, PROBE_EXAMPLES_EACH,
     GATE_COST, GATE_SEEDS, NOVELTY_REVERT_MARGIN, ACC_REVERT_MARGIN,
 )
@@ -38,9 +38,9 @@ def main() -> int:
     deep = "[" * 1600 + "1" + "]" * 1600
     prods = _productions_structural(deep)
     check("deep input yields productions (not silently empty)",
-          prods == {"array", "number"}, str(prods))
+          prods == {"json", "value", "arr", "NUMBER"}, str(prods))
     check("deep input depth measured", _nesting_depth(deep) == 1600)
-    shallow_s = {"productions_accepted": ["array", "number"], "novelty": 10,
+    shallow_s = {"productions_accepted": ["arr", "NUMBER"], "novelty": 10,
                  "cap_distance_mass": 0.0}
     deep_s = dict(shallow_s, cap_distance_mass=0.5)
     check("near-cap depth scores HIGHER, not lower", _score(deep_s) > _score(shallow_s))
@@ -57,7 +57,7 @@ def main() -> int:
             check(f"decide_refinement survives {label}", False, f"KeyError {e}")
 
     # --- crash must not freeze the loop via a giant score -------------------
-    crash_s = dict(s, productions_accepted=["array"], outcomes={"crash": 1})
+    crash_s = dict(s, productions_accepted=["arr"], outcomes={"crash": 1})
     check("_score stays bounded on crash (no 1e6 freeze)", _score(crash_s) < 1000)
 
     # --- prompts never receive a None strategy ------------------------------
@@ -156,7 +156,10 @@ def main() -> int:
     summ = summarize([('{"a":[1]}', "valid"), ('{', "reject"), ('x', "skip")])
     check("summarize excludes skip from acceptance",
           summ["acceptance_rate"] == 0.5, str(summ["acceptance_rate"]))
-    check("summarize reports productions", "object" in summ["productions_accepted"])
+    check("summarize reports productions", "obj" in summ["productions_accepted"])
+    check("summarize's gap + accepted == the grammar's production universe",
+          set(summ["productions_gap"]).isdisjoint(summ["productions_accepted"])
+          and set(summ["productions_gap"]) | set(summ["productions_accepted"]) == set(_prods()))
 
     # --- paper-branch provenance / anonymization / A5 control ---------------
     import agent as A  # noqa: E402

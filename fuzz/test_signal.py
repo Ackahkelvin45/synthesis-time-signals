@@ -16,7 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "fuzz"))
 sys.path.insert(0, str(ROOT / "fuzz" / "loop"))
-from agent import decide_refinement, _PRODS  # noqa: E402
+from agent import decide_refinement, _prods  # noqa: E402
 
 _p = _f = 0
 
@@ -36,7 +36,7 @@ def healthy() -> dict:
         "acceptance_rate": 0.6,
         "novelty": 40,
         "max_nesting_depth": 2000,
-        "productions_accepted": list(_PRODS),
+        "productions_accepted": list(_prods()),
         "productions_gap": [],
         "cap_distance_mass": 0.2,
         "divergences": 0,
