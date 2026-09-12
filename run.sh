@@ -57,6 +57,7 @@ test_all() {
   "$PY" fuzz/test_signal.py      # proxy-signal actionability
   "$PY" fuzz/test_triage.py      # crash dedup / minimize / verify
   "$PY" fuzz/test_loop.py        # loop/regression tests from adversarial review
+  "$PY" eval/test_eval.py        # evaluation plumbing: reachable region, coverage curves
 }
 
 baseline() { require_venv; "$PY" fuzz/baseline_strategy.py build/harness 300; }

@@ -677,3 +677,35 @@ selection rule reads `coverage_best_with_revert`.
 **Verified.** Mock C3n run on json-parser: score = 16.67 (branch %), action
 `cover_function (hex_value ...)`, iteration-2 prompt says "measured with
 instrumentation" and carries `branch_coverage_pct`; 111/111 tests (6 new).
+
+## D19 — Paper infrastructure, step 7: the parse-reachable region is the primary metric's denominator
+
+**Why.** Whole-file coverage is not comparable across targets: random text
+reaches ~42% of json-parser's json.c but ~13% of parson's parson.c, because a
+parse-only harness can never touch parson's serializer, query and mutation
+APIs. The matrix doc admitted this; now it is operational.
+
+**Definition.** `eval/reach.py`: reachable = STATIC (functions of the target
+source reachable from `harness_parse` in the direct call graph extracted
+from clang's LLVM IR of library + harness) UNION OBSERVED (functions with a
+covered region in any profile handed in; this closes the function-pointer
+gap, which is real: json-parser's allocator hooks are only reached through
+`settings.mem_alloc`). The list, with its provenance and the unreachable
+complement, is committed under `eval/reachable/<target>.json`. json-parser:
+9/10 functions (only the unused `json_parse` wrapper is outside). parson:
+40/144. The evaluation's sanity check (plan E9) must fail if any cell ever
+covers a function outside the list; that forces regeneration and a note.
+
+**Measurement.** `cell.coverage_curve` reports `*_reach` totals alongside
+whole-file totals via llvm-cov's `-name-regex` (honoured only with
+`-show-functions`). Found by checking numbers, not by reading docs: llvm-cov
+lists static functions as `file.c:name`, so an anchored name regex silently
+dropped every static function from the restricted totals. The regex now
+admits the prefix, and a test asserts that restricting to ALL functions
+reproduces the whole-file totals exactly. The coverage oracle (C3) steers on
+the reachable-region branch coverage when the list exists.
+
+**Effect on identical inputs.** parson: 13.4% branch (file) vs 43.5%
+(reachable region); json-parser: 40.9% vs 40.9% (the excluded wrapper has no
+branches). `eval/test_eval.py` (15 checks) is now the fifth suite in
+`./run.sh test`; 126/126.

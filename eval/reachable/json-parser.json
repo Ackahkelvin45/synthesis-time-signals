@@ -1,0 +1,39 @@
+{
+  "target": "json-parser",
+  "entry": "harness_parse",
+  "source": "vendor/json-parser/json.c",
+  "harness": "harness/harness.c",
+  "static": [
+    "hex_value",
+    "json_alloc",
+    "json_parse_ex",
+    "json_value_free",
+    "json_value_free_ex",
+    "new_value",
+    "would_overflow"
+  ],
+  "observed_extra": [
+    "default_alloc",
+    "default_free"
+  ],
+  "reachable": [
+    "default_alloc",
+    "default_free",
+    "hex_value",
+    "json_alloc",
+    "json_parse_ex",
+    "json_value_free",
+    "json_value_free_ex",
+    "new_value",
+    "would_overflow"
+  ],
+  "unreachable": [
+    "json_parse"
+  ],
+  "functions_total": 10,
+  "profiles_used": [
+    "build/_cov_json-parser_baseline/merged.400.profdata",
+    "build/_cov_json-parser_evolved/merged.400.profdata"
+  ],
+  "generated_utc": "2026-09-12T10:57:58Z"
+}

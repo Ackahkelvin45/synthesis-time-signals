@@ -258,8 +258,23 @@ def draw_examples(ref: str, n: int, seed: int) -> list[str]:
 _OUTCOME = {0: "valid", 2: "reject", 10: "skip", 11: "skip"}
 
 
-def _cov_totals(binary: Path, profdata: Path, src: Path) -> dict:
-    """region/line/branch % of `src` from one merged profile."""
+def _cov_totals(binary: Path, profdata: Path, src: Path,
+                names: list[str] | None = None) -> dict:
+    """region/line/branch % of `src` from one merged profile. With `names`,
+    totals are restricted to those functions (llvm-cov honours the name filter
+    only together with -show-functions, whose TOTAL row is then over the
+    matched functions)."""
+    if names:
+        from reach import name_regex  # noqa: E402
+        rep = subprocess.run(
+            [*_llvm("llvm-cov"), "report", str(binary), f"-instr-profile={profdata}",
+             str(src), "-show-functions", f"-name-regex={name_regex(names)}"],
+            capture_output=True, text=True, check=True).stdout
+        total = [ln for ln in rep.splitlines() if ln.strip().startswith("TOTAL")][0]
+        parts = total.split()
+        # -show-functions columns: Regions Miss Cover Lines Miss Cover Branches Miss Cover
+        return {"region": float(parts[3].rstrip("%")), "line": float(parts[6].rstrip("%")),
+                "branch": float(parts[9].rstrip("%"))}
     rep = subprocess.run(
         [*_llvm("llvm-cov"), "report", str(binary),
          f"-instr-profile={profdata}", str(src)],
@@ -295,6 +310,8 @@ def coverage_curve(target: str, examples: list[str], checkpoints: list[int],
                              profile_prefix=str(profdir / "p"))
     samples = [(ex, r.outcome.value) for ex, r in zip(examples, results)]
     src = target_src(target)
+    from reach import reachable  # noqa: E402
+    reach_names = reachable(target)   # None until eval/reach.py has run for the target
     curve: dict[int, dict] = {}
     lost_segments = 0
     for n in cps:
@@ -313,6 +330,10 @@ def coverage_curve(target: str, examples: list[str], checkpoints: list[int],
         subprocess.run([*_llvm("llvm-profdata"), "merge", "-sparse", *files,
                         "-o", str(merged)], check=True)
         curve[n] = _cov_totals(binary, merged, src)
+        if reach_names:
+            r = _cov_totals(binary, merged, src, reach_names)
+            curve[n].update({"region_reach": r["region"], "line_reach": r["line"],
+                             "branch_reach": r["branch"]})
         curve[n]["profdata"] = str(merged)
     return {"curve": curve, "samples": samples, "segments": len(segs),
             "lost_segments": lost_segments}
@@ -362,7 +383,12 @@ def measure_for_loop(target: str, inputs: list[str], label: str) -> dict:
     least = sorted([f for f in fns if f["branches"] > 0 or f["regions"] > 0],
                    key=lambda f: (f["branch_pct"] if f["branches"] else f["region_pct"], -f["regions"]))
     return {
-        "branch_pct": last["branch"], "region_pct": last["region"], "line_pct": last["line"],
+        # the oracle steers on the parse-reachable region when the target's list
+        # exists (plan step 7); whole-file numbers are kept alongside
+        "branch_pct": last.get("branch_reach", last["branch"]),
+        "region_pct": last.get("region_reach", last["region"]),
+        "line_pct": last.get("line_reach", last["line"]),
+        "branch_pct_file": last["branch"], "region_pct_file": last["region"],
         "least_covered_functions": [
             {"name": f["name"], "branch_pct": f["branch_pct"], "region_pct": f["region_pct"],
              "regions": f["regions"]} for f in least[:5]],
@@ -380,6 +406,8 @@ def measure_cell(target: str, examples: list[str], label: str) -> dict:
     s = summarize(samples)
     return {
         "region": cov["region"], "line": cov["line"], "branch": cov["branch"],
+        "branch_reach": cov.get("branch_reach"), "region_reach": cov.get("region_reach"),
+        "line_reach": cov.get("line_reach"),
         "acceptance": s["acceptance_rate"],
         "novelty": s["novelty"],
         "cap_mass": s["cap_distance_mass"],
