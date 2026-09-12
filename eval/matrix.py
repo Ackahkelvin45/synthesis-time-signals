@@ -9,6 +9,8 @@ eval/cell.py), so a reader can verify identical inputs by hash.
 Conditions (a condition names a fixed generator; nothing is re-run through the
 LLM here — loop runs are produced separately by fuzz/loop/agent.py):
   random             builtin st.text() baseline (no grammar knowledge)
+  grammarinator      Grammarinator on the SAME .g4, defaults (C0b; eval/grammarinator.json)
+  grammarinator-deep same, recursive alternatives up-weighted to the LLM seed's depth
   seed               the run's first WORKING iteration (normally iter-1; when the
                      model's first attempts were gated, the first that draws)
   evolved            the loop's OUTPUT (final_strategy.py, or reconstructed from
@@ -34,7 +36,7 @@ sys.path.insert(0, str(ROOT / "eval"))
 
 from cell import (BUILTIN_TEXT, DEFAULT_CHECKPOINTS, build_coverage_binary,  # noqa: E402
                   effective_strategy_path, final_strategy_path, last_strategy_path,
-                  input_set_id, measure_curve_cell, draw_examples,
+                  input_set_id, measure_curve_cell, draw_examples, grammarinator_ref,
                   runs_dir, seed_strategy_path)
 
 METRICS = ("region", "line", "branch", "acceptance", "novelty", "cap_mass",
@@ -53,6 +55,10 @@ def resolve_condition(target: str, cond: str) -> str | None:
     """Map a condition name to a strategy reference for `target`, or None (with
     a printed reason) when the loop run it needs does not exist yet."""
     rd = runs_dir(target)
+    if cond in ("grammarinator", "grammarinator-deep"):
+        from targets import TARGETS as _T  # noqa: E402
+        return grammarinator_ref(_T[target]["format"],
+                                 "deep" if cond.endswith("-deep") else "defaults")
     if cond == "random":
         return BUILTIN_TEXT
     # `seed` / `evolved` replay the loop's own bookkeeping (cell.py): the first
@@ -149,7 +155,7 @@ def main() -> int:
                                            f"mx_{_slug(target)}_{_slug(cond)}_{seed}")
                     row = {
                         "target": target, "condition": cond, "seed": seed, "n": args.n,
-                        "strategy_ref": ref if ref.startswith("builtin:")
+                        "strategy_ref": ref if (ref.startswith("builtin:") or ref.startswith("grammarinator:"))
                         else str(Path(ref).relative_to(ROOT)),
                         "input_set": input_set_id(ref, args.n, seed),
                         **{k: v for k, v in r.items()},

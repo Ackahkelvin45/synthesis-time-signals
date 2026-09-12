@@ -228,10 +228,59 @@ def final_strategy_path(rd: Path) -> Path | None:
 
 # --- reproducible input sets -------------------------------------------------------
 
+GRAMMARINATOR_PIN = ROOT / "eval" / "grammarinator.json"
+
+
+def grammarinator_pin(fmt: str) -> dict:
+    return json.loads(GRAMMARINATOR_PIN.read_text())[fmt]
+
+
+def grammarinator_generator(fmt: str) -> Path:
+    """The Grammarinator generator module for a format: regenerated from the
+    grammar with the PINNED options if missing, and its sha256 verified against
+    eval/grammarinator.json so a silent processor/version change cannot alter
+    the baseline's inputs unnoticed (plan: C0b)."""
+    import hashlib as _h
+    pin = grammarinator_pin(fmt)
+    gen = ROOT / pin["generator"]
+    if not gen.exists():
+        gen.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run([str(ROOT / ".venv" / "bin" / "grammarinator-process"),
+                        str(ROOT / pin["grammar"]), "-o", str(gen.parent), *pin["options"]],
+                       check=True, capture_output=True)
+    got = _h.sha256(gen.read_bytes()).hexdigest()
+    if got != pin["sha256"]:
+        raise RuntimeError(f"{gen} sha256 {got[:12]} != pinned {pin['sha256'][:12]}: the "
+                           f"Grammarinator baseline changed; regenerate deliberately and re-pin")
+    return gen
+
+
+def grammarinator_ref(fmt: str, variant: str = "defaults") -> str:
+    """Strategy reference for the Grammarinator baseline: `grammarinator:<FMT>:defaults`
+    (uniform model, unlimited depth) or `grammarinator:<FMT>:deep` (recursive
+    alternatives up-weighted to match the LLM seed's depth; see the pin file)."""
+    assert variant in ("defaults", "deep")
+    grammarinator_generator(fmt)
+    return f"grammarinator:{fmt}:{variant}"
+
+
 def _ref_bytes(ref: str) -> bytes:
-    """The content that defines the strategy: the literal builtin name, or the
-    strategy file's bytes (so editing the file invalidates cached draws)."""
-    return ref.encode() if ref.startswith("builtin:") else Path(ref).read_bytes()
+    """The content that defines the strategy: the literal builtin name, the
+    strategy file's bytes (so editing the file invalidates cached draws), or
+    for a Grammarinator ref the generator file + versions + the pinned
+    parameters (so the input-set id is a pure function of everything that
+    determines the draw)."""
+    if ref.startswith("builtin:"):
+        return ref.encode()
+    if ref.startswith("grammarinator:"):
+        _, fmt, _variant = ref.split(":")
+        import grammarinator as _g
+        pin = grammarinator_pin(fmt)
+        return b"|".join([ref.encode(), grammarinator_generator(fmt).read_bytes(),
+                          _g.__version__.encode() if hasattr(_g, "__version__") else b"?",
+                          f"py{sys.version_info[0]}.{sys.version_info[1]}".encode(),
+                          json.dumps(pin, sort_keys=True).encode()])
+    return Path(ref).read_bytes()
 
 
 def input_set_id(ref: str, n: int, seed: int) -> str:
@@ -245,7 +294,8 @@ def input_set_id(ref: str, n: int, seed: int) -> str:
 def draw_examples(ref: str, n: int, seed: int) -> list[str]:
     """Reproducible input set for (strategy ref, n, seed): drawn in a fresh,
     history-fixed interpreter (eval/_draw.py) and cached under build/_inputs/.
-    `ref` is BUILTIN_TEXT or a strategy .py path — never a live object."""
+    `ref` is BUILTIN_TEXT, a `grammarinator:<FMT>:<variant>` ref, or a strategy
+    .py path — never a live object."""
     if not isinstance(ref, str):
         raise TypeError("draw_examples takes a strategy REFERENCE ('builtin:text' or a "
                         ".py path), not a live strategy object — live-object draws are "

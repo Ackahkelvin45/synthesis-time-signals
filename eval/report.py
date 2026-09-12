@@ -250,7 +250,11 @@ def render(data: dict, inp: Path) -> str:
 
         # core comparisons
         L += ["", "### Core comparisons (paired by seed)", ""]
-        for lo, hi, rq in (("random", "seed", "RQ1 seeding"), ("seed", "evolved", "RQ2 refinement")):
+        for lo, hi, rq in (("random", "seed", "RQ1 seeding"),
+                           ("grammarinator", "seed", "RQ1 authorship: seed vs Grammarinator (defaults)"),
+                           ("grammarinator-deep", "seed", "RQ1 authorship: seed vs Grammarinator (depth-matched)"),
+                           ("random", "grammarinator", "RQ1 grammar alone: Grammarinator vs random"),
+                           ("seed", "evolved", "RQ2 refinement (pilot run)")):
             if lo in conds and hi in conds:
                 L.append(f"**{rq}: {hi} vs {lo}**")
                 for m in CMP_METRICS:

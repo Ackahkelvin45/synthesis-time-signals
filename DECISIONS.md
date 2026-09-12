@@ -741,3 +741,40 @@ ablation family. Verified on synthetic data with known effects (C2 = seed+3,
 A5 = seed+0.2, C3s = seed+5, replicate noise 1): H1 A12 0.98, p 1e-4; H2
 A12 0.92, p 5e-4; the C2 row shows 10 replicates and Δ≈+3. A tiny real
 matrix pass (both pilots, n=60) produces curves, AUCs and timings; 127/127.
+
+## D21 — Paper infrastructure, step 10: the Grammarinator baseline (C0b), and a first glimpse
+
+**Why.** ELFuzz and G2Fuzz benchmark against Grammarinator on the same ANTLR
+grammar; without it, "LLM seed vs random text" conflates having a grammar
+with LLM authorship.
+
+**What.** `grammarinator==26.1` (pinned). The generator is produced by
+`grammarinator-process grammar/JSON.g4 -Ddot=any_unicode_char` (the default
+charset for negated classes is printable ASCII, which would have made the
+baseline weaker than the LLM seed on string handling by construction). It
+lives under build/ (regenerable) but its sha256 and every generation
+parameter are pinned in `eval/grammarinator.json`; `cell.grammarinator_generator`
+regenerates it when missing and REFUSES to run on a hash mismatch. Draws
+(`eval/_draw.py`) drive the generator class directly with `DefaultModel`
+and a seeded `random` in a fresh process (not GeneratorTool, which adds
+unseeded choices and mutators); no Hypothesis is involved. The input-set id
+hashes the generator bytes, the grammarinator and Python versions and the
+pin. Two variants: `grammarinator` (defaults: uniform alternatives,
+unlimited depth; terminates because the recursion is subcritical, mean
+grammar depth 0.19) and `grammarinator-deep` (the obj/arr alternatives of
+`value` up-weighted x5 via `WeightedModel`, calibrated so the mean depth,
+0.71, matches the json-parser pilot's C1 seed generator, 0.73). A pitfall
+found by execution: `RuleSize(depth=D)` leaves `tokens=0`, which collapses
+output to four trivial values; the token limit must be set to infinity.
+
+**Glimpse (K=3 seeds, n=300, json-parser, NOT a result).** Grammarinator on
+the same grammar reaches about the same branch coverage as the LLM seed
+(65.6-66.5% vs 62.5-65.4%) with higher novelty (30-35 vs 17-18), while the
+seed leads on region coverage (66-68% vs 61%). If the full matrix (n=10^4,
+20 seeds, reachable-region AUC) confirms it, RQ1's "LLM authorship" claim
+narrows to region coverage or disappears on this target, and the paper says
+so. This is why the baseline exists.
+
+**Verified.** Draws identical across two fresh processes; different seeds
+differ; every draw is grammar-valid; deep > defaults in mean depth; sha256
+matches the pin; 134/134 tests.

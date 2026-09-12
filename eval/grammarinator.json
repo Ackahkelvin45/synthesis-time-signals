@@ -1,0 +1,26 @@
+{
+  "JSON": {
+    "grammar": "grammar/JSON.g4",
+    "grammarinator": "26.1",
+    "options": [
+      "-Ddot=any_unicode_char"
+    ],
+    "generator": "build/grammarinator/json/JSONGenerator.py",
+    "sha256": "a99dbc50435b2868e9ab8dad4b907fd7b0ac8998b4ff265b199af0084818be55",
+    "start_rule": "json",
+    "deep_weight": 5.0,
+    "deep_alternatives": [
+      [
+        "value",
+        0,
+        2
+      ],
+      [
+        "value",
+        0,
+        3
+      ]
+    ],
+    "calibration": "deep_weight multiplies the obj/arr alternatives of rule 'value'; w=5 gives mean grammar depth 0.71 over 1000 draws (seed 0) vs 0.73 for the json-parser pilot's C1 seed generator (300 draws, seed 0); w=1 (defaults) gives 0.19"
+  }
+}

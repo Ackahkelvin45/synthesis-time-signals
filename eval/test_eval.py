@@ -4,6 +4,7 @@ Run:  .venv/bin/python eval/test_eval.py   (needs ./run.sh build for the curve)
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -152,6 +153,32 @@ def main() -> int:
           c2row.count("|") == 7 and "+3." in c2row, c2row)
     check("report: replicate runs are NOT in the Holm ablation family",
           "run:C2-rep1:final: Δ=" not in text)
+
+    # --- Grammarinator baseline (C0b): pinned generator, seeded, no Hypothesis ---
+    import subprocess as _sp
+    ref_d = cell.grammarinator_ref("JSON", "defaults")
+    ref_deep = cell.grammarinator_ref("JSON", "deep")
+    a = cell.draw_examples(ref_d, 200, 0)
+    b = json.loads(_sp.run([sys.executable, str(ROOT / "eval" / "_draw.py"), ref_d, "200", "0"],
+                           capture_output=True, text=True, check=True).stdout)
+    check("grammarinator: draws are identical across two fresh processes", a == b)
+    check("grammarinator: every draw is a str", all(isinstance(x, str) for x in a))
+    check("grammarinator: a different seed gives a different set",
+          cell.draw_examples(ref_d, 200, 1) != a)
+    check("grammarinator: input-set id differs between defaults and deep",
+          cell.input_set_id(ref_d, 200, 0) != cell.input_set_id(ref_deep, 200, 0))
+    import formats as _fm
+    F = _fm.get("JSON")
+    check("grammarinator: every draw is grammar-valid (strict ANTLR parse)",
+          all(F.parse(x) is not None for x in a))
+    md = sum(F.depth(x) for x in cell.draw_examples(ref_deep, 500, 0)) / 500
+    mdef = sum(F.depth(x) for x in cell.draw_examples(ref_d, 500, 0)) / 500
+    check("grammarinator: deep variant is deeper than defaults (calibrated to the seed)",
+          md > mdef and 0.4 < md < 1.2, f"{mdef:.2f} -> {md:.2f}")
+    pin = cell.grammarinator_pin("JSON")
+    import hashlib as _hh
+    check("grammarinator: generator sha256 matches the pin",
+          _hh.sha256((ROOT / pin["generator"]).read_bytes()).hexdigest() == pin["sha256"])
 
     print(f"\n{_p} passed, {_f} failed")
     return 1 if _f else 0
