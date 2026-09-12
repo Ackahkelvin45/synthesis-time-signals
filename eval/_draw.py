@@ -19,7 +19,20 @@ import importlib.util
 import json
 import sys
 
-from hypothesis import HealthCheck, given, seed as hyp_seed, settings, strategies as st
+from hypothesis import HealthCheck, Phase, given, seed as hyp_seed, settings, strategies as st
+
+# Draw protocol v2 (paper): an LLM-authored generator may raise on a rare
+# branch (a strategy object added to a str, an IndexError on an empty list).
+# A fuzzing harness skips such an example and continues; Hypothesis instead
+# aborts the whole draw. So the n examples are drawn in CHUNKS under derived
+# seeds (seed*1000 + chunk_index); a chunk whose generator raises is dropped
+# and the next derived seed is tried, up to MAX_ATTEMPTS chunks. The number of
+# failed chunks is reported alongside the set ("draw_failures"): generator
+# fragility becomes a measured quantity instead of a lost replicate. The set
+# remains a pure function of (strategy source, n, seed). Shrinking is off:
+# only the generate phase runs, so a failure costs one chunk, not a minimisation.
+CHUNK = 100               # a raise costs 100 examples; tolerates ~1 failure in 300 examples
+MAX_ATTEMPTS_FACTOR = 3   # give up after 3x the chunks needed (then the cell scores 0)
 
 
 def _draw_grammarinator(ref: str, n: int, sd: int) -> list[str]:
@@ -52,7 +65,8 @@ def _draw_grammarinator(ref: str, n: int, sd: int) -> list[str]:
 def main() -> int:
     ref, n, sd = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
     if ref.startswith("grammarinator:"):
-        sys.stdout.write(json.dumps(_draw_grammarinator(ref, n, sd)))
+        sys.stdout.write(json.dumps({"examples": _draw_grammarinator(ref, n, sd),
+                                     "draw_failures": 0, "chunks": 1, "complete": True}))
         return 0
     if ref == "builtin:text":
         strat = st.text()
@@ -62,15 +76,36 @@ def main() -> int:
         spec.loader.exec_module(mod)
         strat = mod.strategy
     out: list[str] = []
+    failures = 0
+    need_chunks = (n + CHUNK - 1) // CHUNK
+    attempts = 0
+    chunk_idx = 0
+    while len(out) < n and attempts < need_chunks * MAX_ATTEMPTS_FACTOR:
+        want = min(CHUNK, n - len(out))
+        got: list[str] = []
 
-    @settings(max_examples=n, database=None, deadline=None,
-              suppress_health_check=[HealthCheck.function_scoped_fixture])
-    @given(s=strat)
-    def draw(s) -> None:
-        out.append(s if isinstance(s, str) else str(s))
+        @settings(max_examples=want, database=None, deadline=None, phases=(Phase.generate,),
+                  suppress_health_check=list(HealthCheck))
+        @given(s=strat)
+        def draw(s) -> None:
+            got.append(s if isinstance(s, str) else str(s))
 
-    hyp_seed(sd)(draw)()
-    sys.stdout.write(json.dumps(out))
+        exhausted = False
+        try:
+            hyp_seed(sd * 1000 + chunk_idx)(draw)()
+            out.extend(got)
+            # Hypothesis returns FEWER examples, without raising, when the
+            # strategy's space is exhausted (e.g. st.just): that is a complete
+            # draw of a small generator, not a failure.
+            exhausted = len(got) < want
+        except Exception:  # noqa: BLE001 - the generator raised on this chunk
+            failures += 1
+        attempts += 1
+        chunk_idx += 1
+        if exhausted:
+            break
+    sys.stdout.write(json.dumps({"examples": out[:n], "draw_failures": failures,
+                                 "chunks": attempts, "complete": len(out) >= n or exhausted}))
     return 0
 
 

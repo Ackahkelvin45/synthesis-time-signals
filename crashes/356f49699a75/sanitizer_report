@@ -1,0 +1,8 @@
+/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/json-parser/json.c:437:34: runtime error: applying non-zero offset 1 to null pointer
+    #0 0x0001023e41f0 in json_parse_ex json.c:437
+    #1 0x0001023eeffc in harness_parse harness.c:68
+    #2 0x0001023f0f74 in run_stdin_mode driver.h:119
+    #3 0x0001023f00d0 in main driver.h:239
+    #4 0x000188c03da0 in start+0x1b4c (dyld:arm64e+0x1fda0)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior /Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/json-parser/json.c:437:34 

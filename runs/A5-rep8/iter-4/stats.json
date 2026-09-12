@@ -1,0 +1,98 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.15566666666666665,
+  "summary": {
+    "outcomes": {
+      "valid": 153,
+      "reject": 63,
+      "crash": 633
+    },
+    "acceptance_rate": 0.18,
+    "max_nesting_depth": 1325,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "pair"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 8,
+    "divergences": 13,
+    "divergence_examples": [
+      "b'\\t \\n-2e400'",
+      "b'{\"\\xf3\\xaa\\xa5\\x99\\\\uEDFc\\xc2\\x81\\\\b\\\\uDAfe\\\\t\\\\n\\\\f\"\\n\\n\\t:\\t \\t \\r\\ntrue\\t\\r\\r,\"\\\\udaEC\\\\n\"\\t\\n :\\t \\t null\\r\\t ,\"\\\\/\": \\r'",
+      "b'{\"\\\\udbac\\\\uda6c\\\\b\\\\udad9\\xc8\\xbe\\\\\"\\xf0\\x9f\\x98\\x8d\\\\f\"\\r:\\t\\t\\tfalse,\"%\\\\n\\\\ud816\\\\n\\\\uDb90\\\\uda95\\\\t\\\\b\"\\n\\n\\t:\\n\\t\\t'"
+    ],
+    "unique_crash_signatures": [
+      "ubsan:applying-non-zero-offset-to-null-pointer|json_parse_ex>harness_parse>run_stdin_mode"
+    ],
+    "reject_reasons_sample": [
+      [
+        "1:0: Invalid character value `u`",
+        22
+      ],
+      [
+        "1:0: Unexpected `",
+        12
+      ],
+      [
+        "1:0: Unexpected `{` in object",
+        8
+      ],
+      [
+        "1:0: Trailing garbage: `\ufffd`",
+        7
+      ],
+      [
+        "1:0: Expected digit after `e`",
+        4
+      ]
+    ]
+  },
+  "probes": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": true,
+  "score": 53.0
+}

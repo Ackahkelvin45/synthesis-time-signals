@@ -902,3 +902,51 @@ reachability expectations, the compute-matched argument, cost ceiling,
 disclosures). A git bundle of `main` + `paper/multi-target` was written to
 ~/agentic_fuzzing-backup-2026-09-12.bundle as an off-repo backup (the branch
 stays unpushed per the grading-period rule). 167/167 tests.
+
+## D25 — Phase 1a ran; the draw protocol had to become failure-tolerant
+
+**Phase 1a (live, 2026-09-12 12:37-15:40 UTC).** 20 runs (C2 and A5 alternating on
+json-parser, replicates 1-10), all five iterations each, total $0.515 against
+the $0.50 estimate, zero backstop hits. Every one of the ~110 API calls was
+SERVED as `deepseek-flash` although `deepseek-chat` was requested; the
+provenance fields caught it, it was constant across the batch, and the paper
+reports the served id. A ~15-minute DNS outage at 14:15 failed eight runs at
+the first API call (no spend); the driver was resumed at 14:31 and reran
+them; the manifest keeps both the failure rows and the reruns.
+
+**What the first measurement exposed.** One replicate's output generator
+(C2-rep7) raises on every draw: the model repeated the same broken construct
+(`strategy + str`) in all five iterations, every iteration was gated at
+acceptance 0.00, and by the registered rule (gated iterations count as they
+happened) the loop's output is that unusable generator. Hypothesis aborts a
+whole draw at the first exception, so under the original draw path this
+replicate, and any generator with a rare raising branch, would have KILLED a
+matrix shard instead of being measured.
+
+**Draw protocol v3** (`eval/_draw.py`; input-set ids carry `draw=v3`, so
+every set is re-drawn and no pre-v3 cache is reused): the n examples are
+drawn in chunks of 100 under derived seeds (seed*1000 + chunk); a chunk whose
+generator raises is dropped and counted (`draw_failures`, persisted with the
+set and carried in every matrix row); a successful chunk that returns fewer
+than requested means the strategy space is exhausted and the draw is
+complete (small generators, e.g. a single-value strategy); a generator that
+cannot fill the set within 3x the needed chunks raises `DrawError`. The
+matrix records such a cell with its error and continues; the report scores a
+failed cell as the MINIMUM on every metric and shows failed-cell counts per
+condition. Tolerance is about one raising example in 300; generator
+fragility is thereby a measured secondary quantity (RQ5), not a lost
+replicate. Shrinking is off (generate phase only). Hypothesis favours
+boundary values, which the fragile-generator test had to respect.
+
+**Two of my own mistakes, recorded because they cost time.** (1) A wait loop
+passed a pid list as one unsplit zsh variable, so `kill -0` failed and the
+loop reported four healthy shards as dead; their logs looked empty only
+because stdout was block-buffered. Matrix progress now flushes, and shards
+run under `eval/run_shards.sh` (one detached supervisor, automatic resume,
+one-line STATUS). (2) A zsh `for spec in ...; set -- $spec` loop did not split
+either, so three generators were "diagnosed" with an IndexError that was
+`_draw.py` missing its seed argument; re-checked with correct arguments, all
+three draw cleanly. Only C2-rep7 is broken.
+
+**Also.** `build_coverage_binary` is idempotent (parallel shards no longer
+race on the compile); macOS has no `timeout` binary (use a perl alarm).

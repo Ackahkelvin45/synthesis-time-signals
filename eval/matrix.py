@@ -37,7 +37,7 @@ sys.path.insert(0, str(ROOT / "eval"))
 from cell import (BUILTIN_TEXT, DEFAULT_CHECKPOINTS, build_coverage_binary,  # noqa: E402
                   effective_strategy_path, final_strategy_path, last_strategy_path,
                   input_set_id, measure_curve_cell, draw_examples, grammarinator_ref,
-                  draw_seconds,
+                  draw_seconds, draw_meta, DrawError,
                   runs_dir, seed_strategy_path)
 
 METRICS = ("region", "line", "branch", "acceptance", "novelty", "cap_mass",
@@ -164,7 +164,18 @@ def main() -> int:
                         skipped += 1
                         continue
                     t0 = time.time()
-                    ex = draw_examples(ref, args.n, seed)
+                    try:
+                        ex = draw_examples(ref, args.n, seed)
+                    except DrawError as e:
+                        # Recorded, not fatal: the report counts failed cells per condition.
+                        row = {"target": target, "condition": cond, "seed": seed, "n": args.n,
+                               "strategy_ref": ref if ref.startswith(("builtin:", "grammarinator:"))
+                               else str(Path(ref).relative_to(ROOT)),
+                               "error": str(e), "wall_s": round(time.time() - t0, 2)}
+                        fh.write(json.dumps(row) + "\n"); fh.flush()
+                        done.add(key); todo += 1
+                        print(f"[matrix] {target:12} {cond:22} seed={seed:2d} FAILED: {e}", flush=True)
+                        continue
                     t1 = time.time()
                     r = measure_curve_cell(target, ex, cps,
                                            f"mx_{_slug(target)}_{_slug(cond)}_{seed}")
@@ -175,6 +186,7 @@ def main() -> int:
                         "input_set": input_set_id(ref, args.n, seed),
                         **{k: v for k, v in r.items()},
                         "draw_s": draw_seconds(ref, args.n, seed) or round(t1 - t0, 2),
+                        "draw_failures": draw_meta(ref, args.n, seed).get("draw_failures", 0),
                         "reachable_region_sha": _reach_sha(target),
                         "features_backend": _features_backend(),
                         "run_s": round(time.time() - t1, 2),
@@ -187,7 +199,7 @@ def main() -> int:
                     print(f"[matrix] {target:12} {cond:22} seed={seed:2d} "
                           f"region={r['region']:.1f} branch={r['branch']:.1f} "
                           f"nov={r['novelty']:2d} acc={r['acceptance']:.2f} "
-                          f"({row['wall_s']}s)")
+                          f"({row['wall_s']}s)", flush=True)
     print(f"[matrix] done: {todo} new cells, {skipped} skipped (already present) -> "
           f"{_rel(out)}")
     return 0

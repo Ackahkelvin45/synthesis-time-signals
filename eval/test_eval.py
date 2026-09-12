@@ -150,8 +150,8 @@ def main() -> int:
     check("report: H2 detects C3s > C2 (A12 >= 0.9, p < 0.01)",
           _a12_of(h2) >= 0.9 and _p_of(h2) < 0.01, h2)
     c2row = next((ln for ln in text.splitlines() if ln.startswith("| C2 | 10 |")), "")
-    check("report: C2 has 10 replicates, a last-iteration column, and Δ≈+3 with sign-flip p",
-          c2row.count("|") == 7 and "+3." in c2row, c2row)
+    check("report: C2 has 10 replicates, a failed-cells column, and Δ≈+3 with sign-flip p",
+          c2row.count("|") == 8 and "| 0 |" in c2row and "+3." in c2row, c2row)
     check("report: replicate runs are NOT in the Holm ablation family",
           "run:C2-rep1:final: Δ=" not in text)
 
@@ -161,7 +161,7 @@ def main() -> int:
     ref_deep = cell.grammarinator_ref("JSON", "deep")
     a = cell.draw_examples(ref_d, 200, 0)
     b = json.loads(_sp.run([sys.executable, str(ROOT / "eval" / "_draw.py"), ref_d, "200", "0"],
-                           capture_output=True, text=True, check=True).stdout)
+                           capture_output=True, text=True, check=True).stdout)["examples"]
     check("grammarinator: draws are identical across two fresh processes", a == b)
     check("grammarinator: every draw is a str", all(isinstance(x, str) for x in a))
     fresh_id = cell.input_set_id(ref_d, 40, 424242)
@@ -204,6 +204,37 @@ def main() -> int:
               py == jv, f"{py} vs {jv}")
     else:
         print("  SKIP  JVM feature server not built (harness/build_java.sh)")
+
+    # --- draw protocol v2: generator exceptions are skipped and COUNTED ---------
+    fragile = ROOT / "build" / "_fragile.py"
+    fragile.write_text(
+        "from hypothesis import strategies as st\n"
+        "def _bad(x):\n"
+        "    if x % 1000 == 777:\n"
+        "        raise IndexError('rare branch')\n"
+        "    return str(x)\n"
+        "strategy = st.integers(min_value=0, max_value=10**6).map(_bad)\n")
+    fid = cell.input_set_id(str(fragile), 3000, 3)
+    for f in (cell.INPUTS / f"{fid}.json", cell.INPUTS / f"{fid}.meta.json"):
+        if f.exists():
+            f.unlink()
+    xs = cell.draw_examples(str(fragile), 3000, 3)
+    meta = cell.draw_meta(str(fragile), 3000, 3)
+    check("v2 draw: a generator raising on a rare branch still yields the full set",
+          len(xs) == 3000 and all(isinstance(x, str) for x in xs), f"{len(xs)}")
+    check("v2 draw: the number of failed chunks is recorded as data",
+          meta.get("draw_failures", 0) >= 1 and meta.get("chunks", 0) > 30, str(meta))
+    xs2 = json.loads(_sp.run([sys.executable, str(ROOT / "eval" / "_draw.py"), str(fragile), "3000", "3"],
+                             capture_output=True, text=True, check=True).stdout)["examples"]
+    check("v2 draw: identical across two fresh processes (pure function of source, n, seed)", xs == xs2)
+    always_bad = ROOT / "build" / "_alwaysbad.py"
+    always_bad.write_text("from hypothesis import strategies as st\n"
+                          "strategy = st.integers().map(lambda x: 1/0)\n")
+    try:
+        cell.draw_examples(str(always_bad), 100, 0)
+        check("v2 draw: a generator that always raises is a DrawError, not a hang", False)
+    except cell.DrawError as e:
+        check("v2 draw: a generator that always raises is a DrawError, not a hang", "0/100" in str(e), str(e))
 
     # --- ground-truth bug campaigns (RQ4) -------------------------------------
     import campaign  # noqa: E402

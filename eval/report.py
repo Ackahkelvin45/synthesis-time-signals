@@ -119,10 +119,14 @@ def replicate_section(target: str, conds: dict) -> list[str]:
     if any_rows is None:
         return []
     metric = primary_metric(any_rows)
+    def _failed_cells(cname: str) -> int:
+        return sum(1 for c, rows in conds.items()
+                   if (pr := parse_run_cond(c)) and pr[0] == cname and pr[2] == "final"
+                   for r in rows.values() if r.get("failed"))
     L = [f"### Replicate level (unit = loop run; primary outcome `{metric}`)", "",
-         "| condition | replicates | final: mean ± 95% CI | last-iteration mean | "
+         "| condition | replicates | failed cells (scored 0) | final: mean ± 95% CI | last-iteration mean | "
          "Δ final−seed per replicate: mean ± 95% CI | sign-flip p |",
-         "|---|---|---|---|---|---|"]
+         "|---|---|---|---|---|---|---|"]
     levels: dict[str, dict[int, float]] = {}
     for cname in LOOP_CONDS:
         fin = replicate_levels(conds, cname, "final", metric)
@@ -141,7 +145,7 @@ def replicate_section(target: str, conds: dict) -> list[str]:
             p_txt = f"{pv:.4f}"
         else:
             delta_txt, p_txt = "—", "—"
-        L.append(f"| {cname} | {len(reps)} | {mu:.1f} ± {h:.1f} | {last_txt} | {delta_txt} | {p_txt} |")
+        L.append(f"| {cname} | {len(reps)} | {_failed_cells(cname)} | {mu:.1f} ± {h:.1f} | {last_txt} | {delta_txt} | {p_txt} |")
     L.append("")
     for hi, lo, label in H1H2:
         if hi in levels and lo in levels:
@@ -184,6 +188,15 @@ def load(path: Path) -> dict:
     for line in path.read_text().splitlines():
         if line.strip():
             r = json.loads(line)
+            if "error" in r:
+                # A cell whose generator could not produce its input set scores the
+                # MINIMUM on every metric (the loop handed back an unusable
+                # generator; pre-registered: gated iterations count as they
+                # happened). Flagged so the report counts failed cells per condition.
+                r = {**r, "failed": True, **{m: 0.0 for m in
+                     ("region", "line", "branch", "branch_reach", "region_reach", "line_reach",
+                      "auc_branch", "auc_region", "auc_branch_reach", "auc_region_reach",
+                      "acceptance", "novelty", "cap_mass", "productions", "crashes")}}
             data[r["target"]][r["condition"]][r["seed"]] = r
     return data
 

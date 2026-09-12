@@ -87,6 +87,11 @@ def build_coverage_binary(target: str = "json-parser") -> Path:
     t = TARGETS[target]
     BUILD.mkdir(exist_ok=True)
     out = cov_binary(target)
+    # Idempotent: skip when the binary is newer than every input, so parallel
+    # matrix shards never race on the compile (one shard builds, the rest skip).
+    deps = [ROOT / t["src"], ROOT / t["harness"], ROOT / "harness" / "driver.h"]
+    if out.exists() and all(out.stat().st_mtime > d.stat().st_mtime for d in deps):
+        return out
     cmd = [
         os.environ.get("CC", "clang"),
         "-fprofile-instr-generate", "-fcoverage-mapping", "-g", "-O0",
@@ -288,8 +293,15 @@ def input_set_id(ref: str, n: int, seed: int) -> str:
     """Stable id of an input set = hash of exactly (strategy source, n, seed)."""
     h = hashlib.sha256()
     h.update(_ref_bytes(ref))
-    h.update(f"|n={n}|seed={seed}".encode())
+    h.update(f"|n={n}|seed={seed}|draw=v3".encode())   # v3 = chunked (100), failure-tolerant draw
     return h.hexdigest()[:16]
+
+
+DRAW_TIMEOUT_S = 900
+
+
+class DrawError(RuntimeError):
+    """The generator could not produce this input set (raised, timed out, died)."""
 
 
 def draw_examples(ref: str, n: int, seed: int) -> list[str]:
@@ -307,14 +319,29 @@ def draw_examples(ref: str, n: int, seed: int) -> list[str]:
         return json.loads(cache.read_text())
     import time as _time
     t0 = _time.monotonic()
-    proc = subprocess.run([sys.executable, str(_DRAW), ref, str(n), str(seed)],
-                          capture_output=True, text=True, check=True)
+    # A generator that raises, hangs, or eats memory on some seed is a DATA
+    # POINT about that generator, never a reason to kill a matrix shard:
+    # bounded by DRAW_TIMEOUT_S; failures surface as DrawError to the caller.
+    try:
+        proc = subprocess.run([sys.executable, str(_DRAW), ref, str(n), str(seed)],
+                              capture_output=True, text=True, check=True, timeout=DRAW_TIMEOUT_S)
+    except subprocess.TimeoutExpired as e:
+        raise DrawError(f"draw timed out after {DRAW_TIMEOUT_S}s") from e
+    except subprocess.CalledProcessError as e:
+        tail = (e.stderr or "").strip().splitlines()[-3:]
+        raise DrawError("draw failed: " + " | ".join(tail)[:400]) from e
     draw_s = round(_time.monotonic() - t0, 3)
-    xs = json.loads(proc.stdout)
+    payload = json.loads(proc.stdout)
+    xs = payload["examples"]
+    if not payload.get("complete", True):
+        raise DrawError(f"generator produced only {len(xs)}/{n} inputs after "
+                        f"{payload.get('chunks')} chunks ({payload.get('draw_failures')} failed)")
     # Generation cost is a measurement in its own right (the equal-time views):
     # persist it with the set so a cache hit does not report zero draw time.
     (INPUTS / f"{input_set_id(ref, n, seed)}.meta.json").write_text(
-        json.dumps({"draw_s": draw_s, "n": n, "ref": ref}))
+        json.dumps({"draw_s": draw_s, "n": n, "ref": ref,
+                    "draw_failures": payload.get("draw_failures", 0),
+                    "chunks": payload.get("chunks", 1)}))
     # Atomic publish: parallel matrix cells may race on the same key, and a
     # reader must see either no file or a complete one — never a torn write.
     tmp = cache.with_suffix(f".{os.getpid()}.tmp")
@@ -524,10 +551,15 @@ def measure_curve_cell(target: str, examples: list[str], checkpoints: list[int],
     return out
 
 
+def draw_meta(ref: str, n: int, seed: int) -> dict:
+    """Persisted facts about the FIRST draw of this set: draw_s, draw_failures, chunks."""
+    p = INPUTS / f"{input_set_id(ref, n, seed)}.meta.json"
+    return json.loads(p.read_text()) if p.exists() else {}
+
+
 def draw_seconds(ref: str, n: int, seed: int) -> float | None:
     """Wall time of the FIRST draw of this input set (persisted; None if unknown)."""
-    p = INPUTS / f"{input_set_id(ref, n, seed)}.meta.json"
-    return json.loads(p.read_text())["draw_s"] if p.exists() else None
+    return draw_meta(ref, n, seed).get("draw_s")
 
 
 def measure_ref(target: str, ref: str, n: int, seed: int, label: str) -> dict:
