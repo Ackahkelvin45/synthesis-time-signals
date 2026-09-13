@@ -75,3 +75,24 @@ re-seed path.
 - For the primary analysis nothing changes: collapsed replicates score 0 as
   registered, and H1 is reported per target with and without them
   (the latter exploratory).
+
+## Correction (2026-09-13, DECISIONS D27)
+
+The two-path table above classified the path by the next edit instruction,
+so every `fix_generator_error` counted as in-place. Three of those 24 cases
+followed a build rejection or a mid-run error after which the loop fell back
+to its last WORKING generator: the model was shown working code, not the
+failed code. `eval/stage1c_report.py` now classifies by what the next prompt
+contains (a seed prompt; the failed iteration's own code; or neither).
+Corrected, same 60 replicates:
+
+| path after a gate event | cases | next iteration recovered | code similarity to the failed iteration |
+|---|---|---|---|
+| in-place (failed code shown) | 21 (C2 18, A5 3) | 2 of 21 | 0.98 (min 0.75) |
+| fallback refine (last working generator shown) | 3 (C2 3) | 2 of 3 | 0.95 (0.92-0.98) |
+| re-seed | 9 (C2 5, A5 4) | 7 of 9 | 0.07 (0.02-0.11) |
+
+The finding sharpens: shown its own failed code, the model recovers about one
+time in ten. In-iteration repairs (same iteration, repair re-prompt on the
+gated code) resubmit near-identical code in every arm (0.96-1.00). The
+follow-up condition C2' (repair by re-seed) was run; see D27.

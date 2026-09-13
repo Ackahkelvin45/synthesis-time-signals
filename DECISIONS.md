@@ -1000,3 +1000,97 @@ states this caveat for the pilots. Flash list prices ($0.15-0.30 in,
 $0.60-1.20 out per million tokens, off-peak vs peak) bracket the `.env`
 estimates (0.27 / 1.10), so reported costs are close to the peak rate;
 actual spend is reconciled against the provider dashboard by the user.
+
+## D27 — Stage 1 closed: at this budget the seed is everything; no synthesis-time feedback moves it
+
+**Summary.** Across three C parsers and four loop arms (proxy C2, no steering
+A5, coverage oracle C3s, proxy with repair by re-seed C2R), 10 replicates per
+cell, no loop improves on its own seed and no arm beats another on the
+registered primary outcome (`auc_branch_reach`). H1 (C2 vs A5) is null on
+json-parser, parson and tomlc99 (D26 and eval/matrix/h1_report.md). H2s (C3s
+vs C2) is null on tomlc99. What differs between arms is only whether a loop
+occasionally hands back an unusable generator, and that is a property of the
+repair path, not of the steering signal. The registered third prediction
+holds: C2 ~ A5 ~ C3, "refinement of any kind adds little at this budget".
+Served model on every call: `deepseek-flash`. All DeepSeek spend is now
+stopped permanently (user decision).
+
+Three closing cells were run in the order the user set after D26.
+
+**1. Grammarinator at full n (C0b, no API cost).** 10^4 inputs x 20 draw seeds
+on all three targets (defaults and depth-matched on the JSON targets; the
+pinned TOML deep variant equals defaults), 100 cells, 0 failed; report
+eval/matrix/rq1_report.md (eval/rq1_report.py). The generator is the unit of
+an authorship claim, so the leading statistic is A12 of the 20 LLM seed
+generators per target against Grammarinator's 20 draw values; the plan-E7
+pairing by draw seed carries draw noise only and overstates certainty (shown,
+caveated). Healthy seeds vs the stronger Grammarinator variant: json-parser
+A12 0.62 [0.43, 0.80] (ties depth-matched), parson 0.70 [0.51, 0.87] (LLM
+ahead), tomlc99 0.13 [0.02, 0.28] (Grammarinator decisively ahead: 2 of 17
+healthy seeds above it). On tomlc99 Grammarinator also beats every loop final
+(A12 0.14 vs A5, 0.13 vs C2). So "LLM authorship beats having the grammar" is
+target-dependent: it holds on parson, is a tie on json-parser, and reverses
+on the one non-JSON target. tomlc99 has THREE failed seed generators
+(A5-rep10, C2-rep3, C2-rep9); two (A5-rep10, C2-rep9) end with a working
+final and inflate that target's final-minus-seed deltas by the whole final
+level (the paper must flag this); C2-rep3 also collapses at the final.
+
+**2. C3s on tomlc99 (the decisive cell).** 10 replicates, 0 reruns, 0.414 USD
+(above the 0.25 USD estimate: more tokens per call and more repair calls than
+the Stage 1 tomlc99 runs; flagged to the user during the batch). H2s C3s vs
+C2: A12 0.60 [0.35, 0.86], permutation p 0.65, Holm over the family actually
+run on this target {H1, H2s} 0.65. C3s vs A5: A12 0.49. C3s per-replicate
+delta +0.22 (sign-flip p 0.44); 1 of 10 collapsed. The coverage oracle does
+not rescue refinement, so the proxy is not the specific failure: at this
+budget no synthesis-time feedback moves the seed. The last-working-iteration
+level is reported next to final (plan E1). Report eval/matrix/stage1c_report.md
+(eval/stage1c_report.py).
+
+**3. C2' repair by re-seed on json-parser.** `agent.py --repair reseed`
+(driver name C2R, commit cca50d8): the model is never shown failed code; the
+in-iteration repair and every prompt while the held generator is a failed one
+is the grammar seed prompt with the failure text. Default path unchanged
+(scripted-LLM tests). The ExceptionGroup formatter defect was left as is.
+Result: 0 of 10 collapsed (C2 2 of 10; Fisher p 0.47, not established);
+final 63.9 ± 1.3 vs C2 51.0 ± 19.3; A12 vs C2 0.58 [0.32, 0.83] (small, CI
+includes 0.5; the whole mean difference is C2's two zeros), healthy-only
+A12 0.47; vs A5 0.46. Per-replicate delta -1.32 (2 positive / 7 negative,
+p 0.07): like every other arm, it does not beat its seed. Fixation signature:
+in-iteration repair similarity to the gated code 0.04 (C2 0.96, A5 0.94);
+mean consecutive code similarity 0.72 (C2 0.89, A5 0.92). Re-seeding removes
+the anchoring and the collapse with it, and adds no coverage.
+
+**Mechanism, strengthened and corrected.** The mechanism note's two-path
+table classified the path by the next edit instruction, so three cases where
+the loop fell back to its last WORKING generator after a build rejection or
+mid-run error were counted as in-place. Classified by what the next prompt
+shows, pooled C2+A5 over 60 replicates: in-place (failed code shown) 21
+cases, 2 recovered, similarity 0.98; fallback refine 3, 2 recovered; re-seed
+9, 7 recovered, similarity 0.07 (0.02-0.11). Correction section appended to
+paper/mechanism-note.md. The pattern replicates under the oracle (tomlc99
+C3s: in-place 1 of 10 recovered at 1.00; re-seed 2 of 2). In-iteration
+repairs resubmit near-identical code (0.96-1.00) in every in-place arm.
+
+**Deviations from the registered design, disclosed.** C3n was not run; C3s
+was run on tomlc99 only (not on all three targets); both closing cells ran as
+blocks after phases 1a/1b rather than interleaved, so provider drift is not
+orthogonal to them (the served id was constant). C2R is a follow-up
+condition outside the confirmatory family. The Holm family on tomlc99 is
+{H1, H2s}. Docker, the AFL++ reference row, bug campaigns (RQ4), M2 and
+Stage 2 were not run.
+
+**Network outages during C2R.** This machine was on a phone hotspot (resolver
+172.20.10.1); two DNS outages (about 16:00-16:04 and 16:27-16:31 UTC) failed
+reps 5, 6 and 7. The driver's one retry also failed each time (DNS still
+down); following the D25 precedent the batch was resumed once DNS was stable
+and the three runs completed. The manifest keeps all 5 failed rows. Two
+failed attempts had spent tokens before the outage (rep 5, about 1 call; rep
+6's first rerun, about 4 calls) and were discarded as partial runs per the
+registered rule; their token records were deleted with the run directories,
+so their cost is estimated from the log at the batch's 0.0045 USD per call:
+about 0.03 USD. No outage touched a completed run.
+
+**Spend.** Recorded (per-run final.json at .env prices): phases 1a/1b 1.546,
+C3s 0.414, C2R 0.233; Stage 1 total 2.193 USD, plus about 0.03 USD in
+discarded partial attempts, of the 4.00 ceiling (10.00 hard cap). Actual
+spend is reconciled against the provider dashboard by the user.

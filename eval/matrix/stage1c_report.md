@@ -43,7 +43,8 @@ Path after each gate event (gated, build-rejected or mid-run error, followed by 
 |---|---|---|---|---|
 | C3s | in-place | 10 | 1 of 10 | 1.00 (min 0.96, max 1.00) |
 | C3s | re-seed | 2 | 2 of 2 | 0.02 (min 0.02, max 0.02) |
-| C2 | in-place | 8 | 3 of 8 | 0.99 (min 0.92, max 1.00) |
+| C2 | fallback refine (last working generator shown) | 2 | 1 of 2 | 0.95 (min 0.92, max 0.98) |
+| C2 | in-place | 6 | 2 of 6 | 1.00 (min 0.99, max 1.00) |
 | C2 | re-seed | 5 | 3 of 5 | 0.10 (min 0.08, max 0.11) |
 | A5 | re-seed | 2 | 2 of 2 | 0.03 (min 0.02, max 0.04) |
 
@@ -52,6 +53,48 @@ Path after each gate event (gated, build-rejected or mid-run error, followed by 
 - A5: collapsed 0 of 10; iteration-1 gate events 2 (collapsed after one: 0); mean consecutive code similarity 0.904 over replicates; in-iteration repair similarity to the gated code 0.99 over 2 repairs (min 0.99)
 - collapse C3s 1/10 vs C2 1/10: Fisher exact two-sided p = 1.0000
 
+## json-parser: C2R (C2 with repair by re-seed) vs C2
+
+### Per arm
+
+- C2R final: 63.9 ± 1.3 (median 64.4); replicate means 64.2, 64.7, 60.8, 65.2, 63.5, 66.0, 62.6, 61.2, 65.1, 66.0
+- C2R: per-replicate Δ(final − seed) = r1:-1.2, r2:+0.0, r3:-3.6, r4:-1.8, r5:-1.3, r6:+1.9, r7:-3.9, r8:-3.7, r9:-0.4, r10:+0.7; mean -1.32 ± 1.40; 2 positive / 7 negative / 1 zero of 10; sign-flip p = 0.0742
+- C2R unusable final generators (collapsed, scored 0): 0 of 10
+- C2 final: 51.0 ± 19.3 (median 63.9); replicate means 63.6, 64.7, 58.3, 61.7, 65.5, 65.2, 0.0, 64.2, 66.3, 0.0
+- C2: per-replicate Δ(final − seed) = r1:-1.2, r2:-2.1, r3:-2.8, r4:-1.8, r5:+0.3, r6:-1.0, r7:+0.0, r8:-2.1, r9:+0.3, r10:+0.0; mean -1.02 ± 0.81; 2 positive / 6 negative / 2 zero of 10; sign-flip p = 0.0312
+- C2 unusable final generators (collapsed, scored 0): 2 of 10 (rep7, rep10)
+
+### Between arms (follow-up condition, outside the registered confirmatory family)
+
+- C2R vs C2: difference of means (C2R − C2) = +12.98; A12 = 0.58 (bootstrap 95% CI [0.32, 0.83]) → small, favouring C2R; permutation p = 0.1936; n = 10 vs 10
+- C2R vs A5 (context): difference of means (C2R − A5) = +0.25; A12 = 0.46 (bootstrap 95% CI [0.20, 0.74]) → negligible; permutation p = 0.8688; n = 10 vs 10
+- healthy only (exploratory): C2R 63.9 (n 10) vs C2 63.7 (n 8); A12 = 0.47 [0.20, 0.76] → negligible; permutation p = 0.8237
+
+### Data integrity
+
+- C2R: matrix rows 400, failed cells 0
+- C2: matrix rows 400, failed cells 80
+- reachable_region_sha ['9939f23b25103648']; features_backend ['jvm']
+- batch stage1c-json-c2r: 10 ok, 5 failed after rerun (C2R-rep5, C2R-rep6, C2R-rep7, C2R-rep6, C2R-rep7); served ['deepseek-flash']; mean wall 4.9 min
+
+### Mechanism on json-parser (log-only, exploratory)
+
+Path after each gate event (gated, build-rejected or mid-run error, followed by another iteration), whether the next iteration recovered, and the code similarity between the failed iteration and the next (1.0 = resubmitted unchanged; the fixation signature).
+
+| arm | path after a gate event | cases | next iteration recovered | code similarity to the failed iteration |
+|---|---|---|---|---|
+| C2R | fallback refine (last working generator shown) | 2 | 2 of 2 | 0.80 (min 0.77, max 0.82) |
+| C2R | re-seed | 4 | 2 of 4 | 0.08 (min 0.03, max 0.14) |
+| C2 | fallback refine (last working generator shown) | 1 | 1 of 1 | n/a |
+| C2 | in-place | 8 | 0 of 8 | 0.97 (min 0.75, max 1.00) |
+| A5 | in-place | 3 | 0 of 3 | 0.95 (min 0.89, max 0.99) |
+| A5 | re-seed | 2 | 2 of 2 | 0.06 (min 0.06, max 0.06) |
+
+- C2R: collapsed 0 of 10; iteration-1 gate events 1 (collapsed after one: 0); mean consecutive code similarity 0.723 over replicates; in-iteration repair similarity to the gated code 0.04 over 4 repairs (min 0.03)
+- C2: collapsed 2 of 10; iteration-1 gate events 2 (collapsed after one: 2); mean consecutive code similarity 0.885 over replicates; in-iteration repair similarity to the gated code 0.96 over 14 repairs (min 0.75)
+- A5: collapsed 0 of 10; iteration-1 gate events 2 (collapsed after one: 0); mean consecutive code similarity 0.915 over replicates; in-iteration repair similarity to the gated code 0.94 over 5 repairs (min 0.89)
+- collapse C2R 0/10 vs C2 2/10: Fisher exact two-sided p = 0.4737
+
 ## Spend of the closing cells
 
-- C3s tomlc99: 0.414 USD; C2R json-parser: 0.000 USD (est. from per-run token counts at .env prices)
+- C3s tomlc99: 0.414 USD; C2R json-parser: 0.233 USD (est. from per-run token counts at .env prices)

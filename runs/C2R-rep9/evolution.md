@@ -1,0 +1,7 @@
+# Strategy evolution
+
+- iter 1: acc=0.435 novelty=5 cap_mass=0.0 score=35.0 crash=True deviations=['unicode_escape', 'duplicate_keys'] -> next: intensify_near_crash (mutate structurally around the crashing input)
+- iter 2: acc=0.269 novelty=5 cap_mass=0.0 score=35.0 crash=True deviations=['unicode_escape', 'duplicate_keys'] -> next: intensify_near_crash (mutate structurally around the crashing input)
+- iter 3: acc=0.474 novelty=4 cap_mass=0.0 score=29.0 crash=True deviations=['unicode_escape', 'duplicate_keys'] -> next: intensify_near_crash (mutate structurally around the crashing input)
+- iter 4: acc=0.042 novelty=4 cap_mass=0.0 score=29.0 crash=True deviations=['unicode_escape', 'duplicate_keys'] -> next: intensify_near_crash (mutate structurally around the crashing input)
+- iter 5: acc=0.346 novelty=4 cap_mass=0.0 score=29.0 crash=True deviations=['unicode_escape', 'duplicate_keys'] -> next: intensify_near_crash (mutate structurally around the crashing input)

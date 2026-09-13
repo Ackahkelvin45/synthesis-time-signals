@@ -142,13 +142,24 @@ def healthy_compare(d: dict, a: str, b: str) -> str:
 def gate_paths(target: str, cond: str, k: int) -> dict:
     r = analyse(target, cond, k)
     rd = runs_dir(target) / f"{cond}-rep{k}"
+    its = iter_dirs(rd)
     events = []
     for i, g in enumerate(r["gates"][:-1]):
         if g == "ok":
             continue
         nxt = r["edits"][i + 1].split(":")[0]
-        path = ("re-seed" if nxt in ("RESEED", "SEED") else
-                "in-place" if nxt in ("fix_generator_error", "raise_acceptance") else f"other ({nxt})")
+        # Classify by what the next prompt SHOWS: a seed prompt (re-seed); the failed
+        # iteration's own code (in-place); or neither, i.e. after a build rejection or
+        # mid-run error the loop fell back to its last working generator and refined that.
+        prompt = (its[i + 1] / "prompt.md").read_text() if (its[i + 1] / "prompt.md").exists() else ""
+        failed = [(its[i] / n).read_text().strip() for n in ("strategy.py", "strategy_fix.py", "strategy_orig.py")
+                  if (its[i] / n).exists()]
+        if nxt in ("RESEED", "SEED"):
+            path = "re-seed"
+        elif any(c and c in prompt for c in failed):
+            path = "in-place"
+        else:
+            path = "fallback refine (last working generator shown)"
         events.append({"iter": i + 1, "gate": g, "path": path, "recovered": r["gates"][i + 1] == "ok",
                        "sim_next": r["code_similarity"][i]})
     # in-iteration repair similarity (gated iterations that attempted a repair)
