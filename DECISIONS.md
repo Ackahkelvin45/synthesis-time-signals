@@ -983,3 +983,20 @@ phase 1b. Caveats: one target, the in-sample development target, whose
 default build aborts on every object (finding #1); the held-out targets are
 where the question is properly answered. Served model for every call:
 deepseek-flash. Cost of phase 1a: $0.515.
+
+**Addendum to D26 (2026-09-13): the served model.** On every call in phase
+1a where `deepseek-chat` was requested, the provider's response reported
+`model: deepseek-flash`. DeepSeek's public pricing page (api-docs.deepseek.com,
+read 2026-09-13, no API calls spent) lists only `deepseek-flash`
+(DeepSeek-V4.1-Flash) and `deepseek-v4-pro`, does not list `deepseek-chat`
+at all, and says of other retired names that their "requests are served by
+the DeepSeek-V4.1-Flash model and billed at the Flash price"; the legacy
+`deepseek-chat` alias is evidently handled the same way. This applies
+RETROACTIVELY: the two pilots (2026-08-24, 2026-09-12) recorded only the
+requested alias, so the model behind every previously reported effect number
+is unknown but was in all likelihood the same routed Flash model; the paper
+reports the served id (`deepseek-flash`, DeepSeek-V4.1-Flash) throughout and
+states this caveat for the pilots. Flash list prices ($0.15-0.30 in,
+$0.60-1.20 out per million tokens, off-peak vs peak) bracket the `.env`
+estimates (0.27 / 1.10), so reported costs are close to the peak rate;
+actual spend is reconciled against the provider dashboard by the user.
