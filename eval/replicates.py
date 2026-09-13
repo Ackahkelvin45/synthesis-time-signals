@@ -28,6 +28,7 @@ Conditions map to agent.py flags:
     A5   no-steering control           --ablate signal
     C3s  coverage-scalar oracle        --oracle coverage_scalar
     C3n  coverage-named oracle         --oracle coverage_named
+    C2R  C2 with repair-by-re-seed     --repair reseed   (follow-up C2', DECISIONS D27)
 A run lands in runs/<target>/<cond>-rep<k>/ (json-parser: runs/<cond>-rep<k>/).
 """
 from __future__ import annotations
@@ -50,6 +51,7 @@ CONDITIONS: dict[str, list[str]] = {
     "A5": ["--ablate", "signal"],
     "C3s": ["--oracle", "coverage_scalar"],
     "C3n": ["--oracle", "coverage_named"],
+    "C2R": ["--repair", "reseed"],
 }
 LOCK = ROOT / "build" / ".runs.lock"
 BATCHES = ROOT / "runs" / "_batches"

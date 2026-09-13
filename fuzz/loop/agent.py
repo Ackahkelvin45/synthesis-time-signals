@@ -125,6 +125,15 @@ _ABLATABLE = {"production", "capmass", "novelty", "probes", "signal"}
 #                    lite, the Gentoo-S analogue; names are NOT anonymized)
 _ORACLE: str | None = None
 _ORACLES = {"coverage_scalar", "coverage_named"}
+# Repair path for a generator that fails the acceptance gate (DECISIONS D27,
+# paper C2'). "inplace" (every pre-registered condition): the failed code is
+# re-prompted with "Make EXACTLY ONE change". "reseed": the model is never
+# shown failed code; the in-iteration repair, and every prompt while the
+# generator the loop holds is a failed one, is the grammar seed prompt carrying
+# the failure text (the prompt a build rejection already uses). What the loop
+# holds, rollback, selection and budgets are unchanged.
+_REPAIR = "inplace"
+_REPAIRS = {"inplace", "reseed"}
 _ABLATE: set = set()
 # Provenance: every per-iteration wall-clock backstop hit (seconds). Budgets are
 # by examples/iterations; a backstop truncating one arm must be REPORTED.
@@ -997,6 +1006,7 @@ def _run_provenance(config, max_examples: int, harness: Path) -> dict:
         hyp = None
     return {
         "target": _TARGET_NAME, "ablate": sorted(_ABLATE), "oracle": _ORACLE,
+        "repair": _REPAIR,
         "model": config.describe(), "requested_model": config.model,
         "provider_base_url": config.base_url, "mock": config.mock,
         "prompt_mode": _PROMPT_MODE, "max_examples": max_examples,
@@ -1061,6 +1071,7 @@ def run_live(harness: Path, max_examples: int) -> int:
     best_iter: int | None = None
     action: tuple[str, str] = ("seed", "initial seed from grammar")
     last_build_error: str | None = None  # Path-A: carried into the next re-seed
+    failed_detail: str | None = None     # reseed repair: set while the held generator is a failed one
 
     while stop.start_iteration():
         _close_iter()
@@ -1086,6 +1097,8 @@ def run_live(harness: Path, max_examples: int) -> int:
         # used to discard the error and re-send a byte-identical blind prompt.
         if current_code is None:
             messages = seed_prompt(last_build_error)
+        elif failed_detail is not None:   # reseed repair: never refine failed code
+            messages = seed_prompt(failed_detail)
         else:
             messages = refine_prompt(
                 current_code,
@@ -1102,6 +1115,8 @@ def run_live(harness: Path, max_examples: int) -> int:
             last_build_error = detail            # so the next re-seed isn't blind
             current_code = fb_code or current_code  # don't advance on garbage
             current_iter = fb_iter if fb_code else current_iter
+            if failed_detail is not None:  # reseed: still holding failed code unless we fell back
+                failed_detail = None if fb_code else detail
             evolution.append(f"iter {it}: build rejected ({detail}) -> rollback")
             continue
         last_build_error = None  # a clean build clears the carried error
@@ -1130,7 +1145,8 @@ def run_live(harness: Path, max_examples: int) -> int:
                 fix_summary = {"validate_acceptance": acc0}
                 fix_action = ("raise_acceptance",
                               f"only {acc0:.0%} accepted — emit mostly VALID JSON")
-            fix_msgs = refine_prompt(code, fix_summary, fix_action)
+            fix_msgs = (seed_prompt(f"{fix_action[0]}: {fix_action[1]}") if _REPAIR == "reseed"
+                        else refine_prompt(code, fix_summary, fix_action))
             try:
                 code2, strat2 = build_strategy(fix_msgs, idir, "_fix", stop, config)
                 acc2, gen_err2 = safe_validate(strat2, harness, n=VALIDATE_EXAMPLES)
@@ -1149,6 +1165,8 @@ def run_live(harness: Path, max_examples: int) -> int:
                 # KeyError, killing the run before cost.md was ever written.
                 current_code = code
                 current_iter = it
+                if _REPAIR == "reseed":
+                    failed_detail = f"{action[0]}: {action[1]}"
                 evolution.append(f"iter {it}: gated at acc={acc0:.2f}; full run skipped")
                 continue
 
@@ -1173,6 +1191,8 @@ def run_live(harness: Path, max_examples: int) -> int:
             action = ("fix_generator_error", detail)
             current_code = fb_code or code
             current_iter = fb_iter if fb_code else it
+            if _REPAIR == "reseed":
+                failed_detail = None if fb_code else f"{action[0]}: {detail}"
             evolution.append(f"iter {it}: mid-run error ({detail}) -> rollback")
             continue
 
@@ -1250,6 +1270,7 @@ def run_live(harness: Path, max_examples: int) -> int:
         # What the next refine prompt carries: the proxy summary, or under an
         # oracle condition only the coverage view of this iteration.
         shown = oracle_summary(cov_in_loop, _ORACLE) if _ORACLE else summary
+        failed_detail = None  # a full run completed: the held generator works
         if action[0] == "revert_last_edit" and best_code is not None:
             current_code, prev_summary = best_code, best_summary
             current_iter = best_iter
@@ -1415,7 +1436,7 @@ def _to_jsonish(obj) -> str:
 
 
 def main() -> int:
-    global RUNS, _ABLATE, _PROMPT_MODE, _ORACLE
+    global RUNS, _ABLATE, _PROMPT_MODE, _ORACLE, _REPAIR
     ap = argparse.ArgumentParser(description="agentic fuzzing loop (json-parser/JSON)")
     ap.add_argument("--replay", metavar="ITER_DIR",
                     help="re-run a committed runs/iter-N strategy offline (no API)")
@@ -1438,9 +1459,13 @@ def main() -> int:
     ap.add_argument("--legacy-prompts", action="store_true",
                     help="original (non-anonymized) prompt text; reproduces the "
                          "committed pilot runs. Paper runs use the anonymized default")
+    ap.add_argument("--repair", default="inplace", choices=sorted(_REPAIRS),
+                    help="repair path for a generator that fails the gate: 'inplace' "
+                         "(registered conditions) or 'reseed' (paper C2', D27)")
     args = ap.parse_args()
     _PROMPT_MODE = "legacy" if args.legacy_prompts else "anon"
     _ORACLE = args.oracle
+    _REPAIR = args.repair
     if _ORACLE and args.ablate:
         raise SystemExit("--oracle replaces the proxy signal; it cannot be combined with --ablate")
     # Select the target FIRST: it fixes the grammar/notes/prompt realities and the

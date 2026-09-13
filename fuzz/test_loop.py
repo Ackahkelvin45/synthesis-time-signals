@@ -257,6 +257,60 @@ def main() -> int:
           [r["name"] for r in rows] == ["json_parse_ex", "hex_value"]
           and rows[1]["branch_pct"] == 0.0 and rows[0]["branches_missed"] == 272)
 
+    # --- repair path: in-place (registered) vs re-seed (C2', D27) -------------
+    # Scripted LLM, no network. parson, because json-parser's default build
+    # crashes on every object (finding #1) and a crash would trigger triage.
+    import os
+    import tempfile
+    from llm import MOCK_STRATEGY  # noqa: E402
+    BAD = ("from hypothesis import strategies as st\n\n"
+           "strategy = st.just(1).map(lambda x: x + 'a')\n")
+
+    def scripted_run(repair: str, replies: list[str], iters: int = 2):
+        prompts: list[str] = []
+
+        def fake_llm(messages, stop, config):
+            prompts.append(messages[-1]["content"])
+            return f"```python\n{replies[min(len(prompts), len(replies)) - 1]}```"
+        saved = (A.call_llm, A.StopController, A._REPAIR, os.environ.get("LLM_MOCK"))
+        orig_stop = A.StopController
+        tmp = Path(tempfile.mkdtemp(prefix="repair_"))
+        try:
+            harness = A.select_target("parson")
+            A.RUNS, A.call_llm, A._REPAIR = tmp, fake_llm, repair
+            A.StopController = lambda **kw: orig_stop(max_iters=iters, **kw)
+            os.environ["LLM_MOCK"] = "1"
+            A.run_live(harness, 60)
+        finally:
+            A.call_llm, A.StopController, A._REPAIR = saved[:3]
+            if saved[3] is None:
+                os.environ.pop("LLM_MOCK", None)
+            else:
+                os.environ["LLM_MOCK"] = saved[3]
+            A.select_target("json-parser")
+        return prompts, tmp
+
+    marker_bad, reseed_hdr, inplace_hdr = "x + 'a'", "previous attempt was REJECTED", "Make EXACTLY ONE change"
+    p_in, d_in = scripted_run("inplace", [BAD])
+    check("inplace: 4 prompts (seed, repair, iter-2, repair)", len(p_in) == 4, str(len(p_in)))
+    check("inplace (registered): repairs re-prompt the failed code with 'EXACTLY ONE change'",
+          all(inplace_hdr in p and marker_bad in p for p in p_in[1:]))
+    p_rs, d_rs = scripted_run("reseed", [BAD])
+    check("reseed: 4 prompts (seed, repair, iter-2, repair)", len(p_rs) == 4, str(len(p_rs)))
+    check("reseed: every repair is a grammar re-seed that never shows the failed code",
+          all(reseed_hdr in p and marker_bad not in p and inplace_hdr not in p for p in p_rs[1:]))
+    check("reseed: the failure text is carried into the re-seed",
+          "fix_generator_error" in p_rs[2])
+    check("output rule unchanged: both hold the gated generator as final",
+          (d_in / "final_strategy.py").read_text().strip() == BAD.strip()
+          == (d_rs / "final_strategy.py").read_text().strip())
+    check("config.json records the repair path",
+          json.loads((d_rs / "config.json").read_text())["repair"] == "reseed"
+          and json.loads((d_in / "config.json").read_text())["repair"] == "inplace")
+    p_ok, d_ok = scripted_run("reseed", [BAD, MOCK_STRATEGY])
+    check("reseed: once a generator works, refinement is in place as in C2",
+          reseed_hdr in p_ok[1] and inplace_hdr in p_ok[2] and "st.recursive" in p_ok[2], str(len(p_ok)))
+
     print(f"\n{_p} passed, {_f} failed")
     return 1 if _f else 0
 
