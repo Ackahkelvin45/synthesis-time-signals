@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.2886666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 75,
+      "reject": 275
+    },
+    "acceptance_rate": 0.214,
+    "max_nesting_depth": 4,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_table",
+      "comment",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "date_time",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "BOOLEAN",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 18,
+    "divergences": 21,
+    "divergence_examples": [
+      "b'\\n[\"\\\\u7fFD\\\\uF0ABJ\\\\u7fFDX\"]\\n[[\\'M:i^Z\\']]\\n#\\n\\n'",
+      "b'\\n[\"\\\\u7fFD\\\\uF0AB:\\\\u7fFDX\"]\\n[[\\'M:i^Z\\']]\\n#\\n\\n'",
+      "b\"# decoder\\r\\n['P'.''.'G}2/zn\\x01B=O']\\r\\n'x\\tCn\\x02\\xc4\\x80)\\xe6\\x96\\x8781\\xf0\\x9f\\x98\\x806' = {iZW.d.'d{h@MSD.:/' = 1\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        121
+      ],
+      [
+        "line 3: key exists",
+        27
+      ],
+      [
+        "line 1: syntax error",
+        22
+      ],
+      [
+        "line 1: invalid or missing key",
+        18
+      ],
+      [
+        "line 1: unterminated quote",
+        17
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 158.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 158.0
+}

@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.289,
+  "summary": {
+    "outcomes": {
+      "valid": 130,
+      "reject": 220
+    },
+    "acceptance_rate": 0.371,
+    "max_nesting_depth": 27,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "INF",
+      "NAN",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 31,
+    "divergences": 84,
+    "divergence_examples": [
+      "b'[wjD.GIRTwc]\\r\\nUAb9 = 40:46:17\\r\\nF.J = true'",
+      "b'[wjD.GIRTwc]\\r\\nUAb9 = 40:46:17\\r\\nF.J = 40:46:17'",
+      "b'[wjD.GIRTwc]\\r\\nGIRTwc = 40:46:17\\r\\nF.J = 40:46:17'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        49
+      ],
+      [
+        "line 1: invalid or missing key",
+        38
+      ],
+      [
+        "line 1: syntax error",
+        27
+      ],
+      [
+        "line 3: key exists",
+        19
+      ],
+      [
+        "line 2: expect hex char",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 231.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 231.0
+}

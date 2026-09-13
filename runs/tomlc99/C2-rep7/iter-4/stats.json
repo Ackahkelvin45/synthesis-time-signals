@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.7553333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 243,
+      "reject": 107
+    },
+    "acceptance_rate": 0.694,
+    "max_nesting_depth": 6,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "FLOAT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 62,
+    "divergences": 64,
+    "divergence_examples": [
+      "b'[[2z.IQqVS.zCr]]\\n[\"k\\\\u3890\"]\\n[\\'\\xe2\\xae\\x9b\\t\\'.Cy]\\n\\'\\xc3\\x95\\xc3\\x99\\x1fav\\xc4\\x9f\\t\\x1f\\'._.\\'\\xc2\\x8e*\\x01~`\\x01\\xc2\\xb7\\t\\' = \\'\\'\\'\\'\\'\\''",
+      "b'[[2z.IQqVS.zCr]]\\n[\"k\\\\u3890\"]\\n[\\'\\xe2\\xae\\x9b\\t\\'.Cy]\\n\\'\\xc3\\x95\\xc3\\x99\\x1fav\\xc4\\x9f\\t\\x1f\\'.Cy.\\'\\xc2\\x8e*\\x01~`\\x01\\xc2\\xb7\\t\\' = \\'\\'\\'\\'\\'\\''",
+      "b'[[2z.IQqVS.zCr]]\\n[\"k\\\\u3890\"]\\n[\\'\\xe2\\xae\\x9b\\t\\'.Cy]\\n\\'\\xc2\\xb7\\xc3\\x99\\x1fav\\xc4\\x9f\\t\\x1f\\'.Cy.\\'\\xc2\\x8e*\\x01~`\\x01\\xc2\\xb7\\t\\' = \\'\\'\\'\\'\\'\\''"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: invalid char U+007f",
+        15
+      ],
+      [
+        "line 1: syntax error",
+        10
+      ],
+      [
+        "line 1: invalid char U+0001",
+        10
+      ],
+      [
+        "line 2: invalid char U+001f",
+        7
+      ],
+      [
+        "line 1: invalid char U+001f",
+        6
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 243,
+      "reject": 107
+    },
+    "acceptance_rate": 0.694,
+    "max_nesting_depth": 6,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "FLOAT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 62,
+    "divergences": 64,
+    "divergence_examples": [
+      "b'[[2z.IQqVS.zCr]]\\n[\"k\\\\u3890\"]\\n[\\'\\xe2\\xae\\x9b\\t\\'.Cy]\\n\\'\\xc3\\x95\\xc3\\x99\\x1fav\\xc4\\x9f\\t\\x1f\\'._.\\'\\xc2\\x8e*\\x01~`\\x01\\xc2\\xb7\\t\\' = \\'\\'\\'\\'\\'\\''",
+      "b'[[2z.IQqVS.zCr]]\\n[\"k\\\\u3890\"]\\n[\\'\\xe2\\xae\\x9b\\t\\'.Cy]\\n\\'\\xc3\\x95\\xc3\\x99\\x1fav\\xc4\\x9f\\t\\x1f\\'.Cy.\\'\\xc2\\x8e*\\x01~`\\x01\\xc2\\xb7\\t\\' = \\'\\'\\'\\'\\'\\''",
+      "b'[[2z.IQqVS.zCr]]\\n[\"k\\\\u3890\"]\\n[\\'\\xe2\\xae\\x9b\\t\\'.Cy]\\n\\'\\xc2\\xb7\\xc3\\x99\\x1fav\\xc4\\x9f\\t\\x1f\\'.Cy.\\'\\xc2\\x8e*\\x01~`\\x01\\xc2\\xb7\\t\\' = \\'\\'\\'\\'\\'\\''"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 257.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 257.0
+}

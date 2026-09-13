@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.45566666666666666,
+  "summary": {
+    "outcomes": {
+      "valid": 194,
+      "reject": 156
+    },
+    "acceptance_rate": 0.554,
+    "max_nesting_depth": 1858,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "array_values",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 78,
+    "divergences": 130,
+    "divergence_examples": [
+      "b'a = 1.\\n'",
+      "b'a = \"x\\x01y\"\\n'",
+      "b'a = 007\\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 2: key exists",
+        14
+      ],
+      [
+        "line 3: invalid char U+0002",
+        11
+      ],
+      [
+        "line 2: invalid char U+001f",
+        8
+      ],
+      [
+        "line 7: invalid char U+000d",
+        8
+      ],
+      [
+        "line 1: invalid char U+000d",
+        7
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 194,
+      "reject": 156
+    },
+    "acceptance_rate": 0.554,
+    "max_nesting_depth": 1858,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "array_values",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 78,
+    "divergences": 130,
+    "divergence_examples": [
+      "b'a = 1.\\n'",
+      "b'a = \"x\\x01y\"\\n'",
+      "b'a = 007\\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 263.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 263.0
+}

@@ -1,0 +1,186 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.3446666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 80,
+      "reject": 270
+    },
+    "acceptance_rate": 0.229,
+    "max_nesting_depth": 1678,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.163,
+    "novelty": 41,
+    "divergences": 33,
+    "divergence_examples": [
+      "b\"eJCYv = { Z4 = true, 'R\\x0c}\\xc3\\xa1' = [\\n4214-08-34 63:35:33.98,\\n] }\\nqrZ = [[[[[[[[[[[[[\"",
+      "b'# \\xc2\\xb8\\xc3\\x96K\\n\\nF2alysPN = [\\n5.9940E-197, # c\\nfalse,\\nfalse, # c\\n # trailing\\n]\\nti = [{ f'",
+      "b'a = \"x\\x01y\"\\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        44
+      ],
+      [
+        "line 2: bad escape char",
+        27
+      ],
+      [
+        "line 2: syntax error",
+        23
+      ],
+      [
+        "line 1: syntax error",
+        22
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        18
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 80,
+      "reject": 270
+    },
+    "acceptance_rate": 0.229,
+    "max_nesting_depth": 1678,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.163,
+    "novelty": 41,
+    "divergences": 33,
+    "divergence_examples": [
+      "b\"eJCYv = { Z4 = true, 'R\\x0c}\\xc3\\xa1' = [\\n4214-08-34 63:35:33.98,\\n] }\\nqrZ = [[[[[[[[[[[[[\"",
+      "b'# \\xc2\\xb8\\xc3\\x96K\\n\\nF2alysPN = [\\n5.9940E-197, # c\\nfalse,\\nfalse, # c\\n # trailing\\n]\\nti = [{ f'",
+      "b'a = \"x\\x01y\"\\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 264.26,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 264.26
+}

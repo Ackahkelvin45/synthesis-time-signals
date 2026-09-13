@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.8113333333333334,
+  "summary": {
+    "outcomes": {
+      "valid": 235,
+      "reject": 115
+    },
+    "acceptance_rate": 0.671,
+    "max_nesting_depth": 2047,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "ML_BASIC_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "BOOLEAN",
+      "ML_LITERAL_STRING",
+      "INF",
+      "HEX_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.009,
+    "novelty": 66,
+    "divergences": 75,
+    "divergence_examples": [
+      "b'a = 1979-02-30'",
+      "b'a = \"x\\x01y\"'",
+      "b'\\n\\n[\"\"] #\\xc2\\xb3 \\xf3\\xb5\\xba\\x9d\\xc3\\x9f\\xf1\\x94\\x8f\\x8bB\\xf1\\xa2\\xa5\\x93\"\\n#8\\xc3\\x89\\xf2\\x9f\\x91\\x8c\\xc3\\xbb$\\xc2\\x90\\x11\\n#8\\xc3\\x89\\xf2\\x9f\\x91\\x8c\\xc3\\xbb$\\xc2\\x90\\x11\\n#w\\xc2\\x94[\\xf2\\x85\\xb6\\x92\\x05\\xc3\\x8f\\xc3\\xab$#\\xc2\\x92\\'\\xc2\\xab\\xc2'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 5: key exists",
+        14
+      ],
+      [
+        "line 7: key exists",
+        11
+      ],
+      [
+        "line 2: key exists",
+        9
+      ],
+      [
+        "line 4: key exists",
+        9
+      ],
+      [
+        "line 6: key exists",
+        8
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 246.18,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 246.18
+}
