@@ -24,7 +24,7 @@ def main():
     out = ROOT / a.out
     out.mkdir(parents=True, exist_ok=True)
     md = (ROOT / a.md).read_text()
-    title = re.search(r"^# (.+?)\n", md, re.M).group(1).strip()
+    title = " ".join(re.search(r"^# (.+?)\n\n", md, re.M | re.S).group(1).split())   # the heading may wrap
     abstract = md[md.index("## Abstract"):md.index("**Keywords.**")].split("\n", 1)[1].strip()
     keywords = re.search(r"\*\*Keywords\.\*\* (.+)", md).group(1).strip().rstrip(".")
     body = md[md.index("## 1. Introduction"):]
