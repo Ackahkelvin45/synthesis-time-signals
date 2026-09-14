@@ -154,7 +154,23 @@ is "no detectable effect at this budget".
 v1.7.17 turned out to be the vulnerable release, found by the positive
 control crashing the default build; pinned to v1.7.18 with v1.7.17 as the
 CVE-2023-53154 bug build; 27 probes against Python json; 8 contract
-tests). [cJSON runs and result.] AFL++ reference row via the official
+tests). cJSON live batch (day2-cjson): 40 runs, all served deepseek-flash,
+0 backstop hits, 0.835 USD, mean 4.1 min. The manifest keeps 93 failed
+attempts, none of which spent tokens: 35 were HTTP 401s after the user
+added an OpenAI key to .env under the name LLM_API_KEY, which the loop
+prefers over DEEPSEEK_API_KEY (renamed to OPENAI_API_KEY; the loop never
+saw the OpenAI key again); the rest were two DNS outages on the phone
+hotspot, after which the batch was resumed under a driver stage that now
+waits for name resolution and resumes up to eight times. One cJSON
+generator (the C3n-rep2 final) draws its 10^4 inputs in 785 to 890 s, at
+the edge of the protocol's 900 s draw limit: of its first eleven draw seeds
+five succeeded and six timed out, and the remaining seeds took the same
+two hours to measure. For about fifteen minutes nine of its cells had been
+written by hand as timed out on the assumption that every seed would fail;
+the per-seed outcomes showed a mixture, the rows were deleted and the
+cells measured under the protocol. No hand-written cell remains in the
+cJSON data. [cJSON result.]
+AFL++ reference row via the official
 Docker image (no Homebrew on this Mac): afl-clang-fast -O2 -lm, no
 sanitizers, afl-fuzz defaults, one seed per format; the final queue is
 replayed through the study's coverage build with a raw-bytes path added to
@@ -165,6 +181,18 @@ deferred to the revision. One-minute AFL smoke ran while the RQ4 campaigns
 were in progress (load already about 58 on 11 cores from nine workers);
 campaigns are time-budgeted, so machine load is a shared confound across
 arms and is disclosed in threats.
+
+**M2, the second model.** gpt-5-mini via the OpenAI API (served id
+gpt-5-mini-2025-08-07 on the smoke call), arms C2, A5 and C3s on tomlc99,
+ten replicates each, run names M2C2/M2A5/M2C3s so they sit beside the
+DeepSeek runs. Deviation from the registered loop settings: the gpt-5
+family accepts only its default temperature (a 0.7 request is rejected
+with HTTP 400), so M2 runs at the model's default of 1.0; the client omits
+the field under LLM_TEMPERATURE=default and records "default" per call.
+Prices for the cost table: 0.25 USD per million input tokens and 2.00 per
+million output tokens, standard tier, OpenAI developer docs read
+2026-09-14; reasoning tokens are billed as output and are included in the
+recorded completion counts. [M2 result.]
 
 **Prereg amendment (dated 2026-09-14).** C3s on json-parser and parson,
 and all C3n, ran as blocks after phases 1a and 1b rather than interleaved;
