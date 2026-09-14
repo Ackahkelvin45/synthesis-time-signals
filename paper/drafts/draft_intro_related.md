@@ -37,6 +37,8 @@ replication exposed. At three cents a run, the grammar-seeded first draft
 is most of the result; we release every run, prompt, input-set hash and
 script.
 
+**Keywords.** fuzzing; grammar-based test generation; large language models; property-based testing; pre-registered study; replication.
+
 ## 1. Introduction
 
 Grammar-based generation reaches parser code that random bytes never do:
@@ -187,17 +189,28 @@ extensions are pre-specified and costed: two more parsers (cJSON,
 libexpat), a second model family, and an oracle that shows the model the
 function it is asked to cover.
 
-**Use of AI tools.** Large language models were used in two distinct
-roles. As the object of study, the generators evaluated in Sections 3 to 6
-were written by the DeepSeek model named in Section 4.3, under the prompts
-released in the artifact. As an assistant during the research, an AI coding
-assistant (Claude, Anthropic) was used for writing and refactoring the
-evaluation and analysis code, for running and monitoring the experiment
-batches, for drafting text that the authors then revised, and for checking
-numbers against the generated reports. The experimental design, the
-pre-registration, the interpretation of results and the final text are the
-authors' own, the authors have verified every number in the paper against
-the committed data, and no AI tool is an author of this work.
+The use of large language models in this work is declared in Section 4.7.
+
+## Statements and Declarations
+
+**Competing interests.** The authors have no financial or non-financial
+interests directly or indirectly related to this work.
+
+**Funding.** No external funding was received. API usage was paid by the
+authors (about 5 USD of DeepSeek credit and the OpenAI credit stated in
+Section 5.10).
+
+**Data availability.** Every run (prompts, responses, generators,
+per-iteration statistics, provenance), every measured cell with its
+input-set hash, the campaign rows, the analysis scripts that produce every
+table and figure, the pre-registration and its amendment history, and the
+vendored parser sources at their pinned commits are in the artifact
+repository named in Section 10; the git history is the timestamp of the
+pre-registration.
+
+**Ethics.** The study involved no human participants and no animals.
+
+**Use of large language models.** Declared in Section 4.7.
 
 ## References
 
@@ -207,23 +220,23 @@ last three are standard method and tool references added from memory and
 MUST be checked against their sources before submission.
 
 - Ackerman, J., and Cybenko, G. (2023). Large language models for fuzzing
-  parsers (registered report). FUZZING 2023. ACM, doi 10.1145/3605157.3605173.
+  parsers (registered report). FUZZING 2023. ACM. https://doi.org/10.1145/3605157.3605173
 - Chen, C., Dolan-Gavitt, B., and Lin, Z. (2025). ELFuzz: Efficient input
   generation via LLM-driven synthesis over fuzzer space. USENIX Security
-  2025. arXiv 2506.10323.
+  2025. https://doi.org/10.48550/arXiv.2506.10323
 - Klees, G., Ruef, A., Cooper, B., Wei, S., and Hicks, M. (2018). Evaluating
   fuzz testing. ACM CCS 2018.
 - Padhye, R., Lemieux, C., Sen, K., Papadakis, M., and Le Traon, Y. (2019).
   Semantic fuzzing with Zest. ISSTA 2019.
 - Park, S., and Yun, I. (2026). Agentic fuzzing: opportunities and
-  challenges. arXiv 2605.10074.
+  challenges. https://doi.org/10.48550/arXiv.2605.10074
 - Vikram, V., and Padhye, R. (2026). Fuzzing with agents? Generators are all
-  you need. arXiv 2604.01442.
+  you need. https://doi.org/10.48550/arXiv.2604.01442
 - Xia, C. S., Paltenghi, M., Le Tian, J., Pradel, M., and Zhang, L. (2024).
   Fuzz4All: Universal fuzzing with large language models. ICSE 2024.
-- Zhang, et al. (2025). G2Fuzz. USENIX Security 2025. arXiv 2501.19282.
+- Zhang, et al. (2025). G2Fuzz. USENIX Security 2025. https://doi.org/10.48550/arXiv.2501.19282
 - Hodovan, R., and Kiss, A. (2018). Grammarinator: a grammar-based open
   source fuzzer. A-TEST 2018. (Tool used at version 26.1; the pinned
   generator and every parameter are in the artifact.)
 - MacIver, D. R., Hatfield-Dodds, Z., et al. (2019). Hypothesis: a new
-  approach to property-based testing. Journal of Open Source Software 4(43).
+  approach to property-based testing. Journal of Open Source Software 4(43). https://doi.org/10.21105/joss.01891

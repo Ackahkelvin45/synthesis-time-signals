@@ -36,7 +36,9 @@ def main():
         "## 7. Discussion\n\n" + body,
         part(methods, "## 7. Threats to validity").replace("## 7. Threats to validity", "## 8. Threats to validity", 1),
         part(intro, "## 8. Related work", "## 9. Conclusion").replace("## 8. Related work", "## 9. Related work", 1),
-        part(intro, "## 9. Conclusion").replace("## 9. Conclusion", "## 10. Conclusion", 1),
+        part(intro, "## 9. Conclusion", "## Statements and Declarations").replace("## 9. Conclusion", "## 10. Conclusion", 1),
+        part(intro, "## Statements and Declarations", "## References"),
+        part(intro, "## References"),
     ]
     text = "".join(out)
     Path(a.out).write_text(text)

@@ -184,6 +184,21 @@ not run for this submission. The registered Stage 1 budget was 4.00 USD;
 3.80 USD was spent on 140 runs, plus about 0.03 USD on attempts discarded
 after network failures.
 
+### 4.7 Use of large language models
+
+Large language models were used in two distinct roles. As the object of
+study, the generators evaluated in this paper were written by the DeepSeek
+model named in Section 4.3 (and, for Section 5.10, by gpt-5-mini), under
+the prompts released in the artifact; that use is the experiment. As an
+assistant during the research, an AI coding assistant (Claude, Anthropic)
+was used for writing and refactoring the evaluation and analysis code, for
+running and monitoring the experiment batches, for drafting text that the
+authors then revised, and for checking numbers against the generated
+reports. The experimental design, the pre-registration, the interpretation
+of the results and the final text are the authors' own; the authors have
+verified every number in the paper against the committed data; no AI tool
+is an author of this work.
+
 ## 7. Threats to validity
 
 **Construct.** Coverage of the parse-reachable region stands in for
