@@ -1,0 +1,22 @@
+# T6: synthesis cost per run (mean over replicates; every completed run)
+
+| target | arm | runs | LLM calls | tokens in | tokens out | USD | wall min | CPU s | served |
+|---|---|---|---|---|---|---|---|---|---|
+| json-parser | C2 | 10 | 6.4 | 21347 | 22503 | 0.031 | 6.5 | 155 | deepseek-flash |
+| json-parser | A5 | 10 | 5.6 | 14898 | 15446 | 0.021 | 9.4 | 220 | deepseek-flash |
+| json-parser | C3s | 10 | 6.2 | 19158 | 20572 | 0.028 | 3.2 | 63 | deepseek-flash |
+| json-parser | C3n | 10 | 5.1 | 15696 | 17113 | 0.023 | 3.7 | 88 | deepseek-flash |
+| json-parser | C2R | 10 | 5.4 | 16156 | 17246 | 0.023 | 4.9 | 111 | deepseek-flash |
+| parson | C2 | 10 | 5.6 | 15811 | 15586 | 0.021 | 3.8 | 165 | deepseek-flash |
+| parson | A5 | 10 | 5.2 | 14174 | 14163 | 0.019 | 4.1 | 184 | deepseek-flash |
+| parson | C3s | 10 | 5.3 | 17145 | 19670 | 0.026 | 4.2 | 146 | deepseek-flash |
+| parson | C3n | 10 | 5.0 | 14854 | 16132 | 0.022 | 3.7 | 158 | deepseek-flash |
+| tomlc99 | C2 | 10 | 5.6 | 24579 | 23166 | 0.032 | 4.0 | 160 | deepseek-flash |
+| tomlc99 | A5 | 10 | 5.2 | 21670 | 22097 | 0.030 | 4.3 | 174 | deepseek-flash |
+| tomlc99 | C3s | 10 | 6.4 | 29060 | 30540 | 0.041 | 3.6 | 108 | deepseek-flash |
+| tomlc99 | C3n | 10 | 5.3 | 23036 | 23978 | 0.033 | 4.0 | 147 | deepseek-flash |
+| tomlc99 | C2R | 10 | 5.3 | 22553 | 20732 | 0.029 | 3.7 | 135 | deepseek-flash |
+| cjson | C2 | 1 | 10.0 | 27840 | 27200 | 0.037 | 1.6 | 9 | deepseek-flash |
+
+All runs: 141; total 3.835 USD; mean 0.027 USD, 4.5 min per run; backstop hits 0; served ['deepseek-flash'].
+Prices: .env estimates (0.27 USD/M input, 1.10 USD/M output); provider list prices for the served model bracket these (D26 addendum).

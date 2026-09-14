@@ -42,7 +42,7 @@ def build(targets):
     for t in targets:
         v = TARGETS[t]
         out = f"build/afl/afl_{v['binary']}"
-        cmd = (f"afl-clang-fast -O2 -DHARNESS_MODE='\"afl\"' -I {v['inc']} -I harness {v['src']} {v['harness']} -o {out}")
+        cmd = (f"afl-clang-fast -O2 -DHARNESS_MODE='\"afl\"' -I {v['inc']} -I harness {v['src']} {v['harness']} -o {out} -lm")
         r = docker(cmd, capture_output=True, text=True)
         print(f"[afl] build {t}: exit {r.returncode} {r.stderr.strip()[-200:]}")
         if r.returncode:
@@ -93,7 +93,7 @@ def replay(targets, out: Path):
                     continue
                 files = queue_files(rd)
                 raw = [f.read_bytes() for f in files]
-                stats = dict(l.split(":", 1) for l in (rd / "default" / "fuzzer_stats").read_text().splitlines() if ":" in l)
+                stats = {k.strip(): v.strip() for k, v in (l.split(":", 1) for l in (rd / "default" / "fuzzer_stats").read_text().splitlines() if ":" in l)}
                 cps = [c for c in DEFAULT_CHECKPOINTS if c <= len(raw)]
                 cc = coverage_curve(t, [""] * len(raw), cps, f"afl_{t}_{k}", raw=raw)
                 curve = {n: {kk: vv for kk, vv in d.items() if kk != "profdata"} for n, d in cc["curve"].items()}

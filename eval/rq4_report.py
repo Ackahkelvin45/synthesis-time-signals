@@ -20,18 +20,23 @@ from collections import defaultdict, Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "eval"))
+sys.path[:0] = [str(ROOT / "eval"), str(ROOT / "fuzz")]
 from mechanism import fisher_exact  # noqa: E402
+from targets import TARGETS  # noqa: E402
 
 ARMS = ("C2", "A5", "C3s", "C3n")
 _ARM = re.compile(r"/(C2|A5|C3s|C3n|C2R)-rep(\d+)/")
+
+
+NICE = {"builtin:text": "random text (C0a)", "grammarinator:JSON:defaults": "Grammarinator defaults (C0b)",
+        "grammarinator:JSON:deep": "Grammarinator depth-matched (C0b)", "grammarinator:TOML:defaults": "Grammarinator defaults (C0b)"}
 
 
 def arm_of(row):
     m = _ARM.search(row["ref"])
     if m:
         return m.group(1)
-    return row.get("name") or row["ref"]
+    return NICE.get(row["ref"], row.get("name") or row["ref"])
 
 
 def main():
@@ -50,8 +55,11 @@ def main():
         by[(r["target"], r["bug"])].append(r)
     others = Counter()
     for (t, b), rs in sorted(by.items()):
-        pc = {r.get("positive_control") for r in rs}
-        L += [f"## {t} / {b}", "", f"positive control: {pc}", "",
+        pc = {r.get("positive_control") for r in rs if "error" not in r}
+        build = "pinned HEAD (bug unfixed upstream)" if TARGETS[t]["bugs"][b]["mode"] == "default" else f"pre-fix build {TARGETS[t]['bugs'][b]['mode']}"
+        label = f"{t} / {b}" + (" (this pre-fix build also contains issue 78, which shares the signature: the row measures either end-of-buffer over-read)" if (t, b) == ("json-parser", "issue68") else "")
+        L += [f"## {label}", "", f"positive control passed: {pc == {True}}; build: {build}; "
+              f"campaigns recorded as error (final generator could not draw, censored at 0): {sum(1 for r in rs if 'error' in r)}", "",
               "| generator | campaigns | triggered | median inputs to trigger | median seconds | inputs run (median) |",
               "|---|---|---|---|---|---|"]
         groups = defaultdict(list)

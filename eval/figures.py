@@ -271,11 +271,61 @@ def f5(rq3_path, outdir):
     fig.savefig(outdir / "f5_rq3.png", dpi=200, bbox_inches="tight")
 
 
+def f6(rq4_path, outdir):
+    """RQ4: fraction of a bug's campaigns that had triggered it by n inputs, per arm; a
+    campaign that never triggers is censored at the inputs it consumed. Baselines dashed."""
+    import re
+    rows = [json.loads(l) for l in Path(rq4_path).read_text().splitlines() if l.strip()]
+    rx = re.compile(r"/(C2|A5|C3s|C3n|C2R)-rep(\d+)/")
+    bugs = sorted({(r["target"], r["bug"]) for r in rows})
+    fig, axes = plt.subplots(1, len(bugs), figsize=(2.4 * len(bugs), 2.3), squeeze=False)
+    axes = axes[0]
+    for ax, (t, b) in zip(axes, bugs):
+        NICE = {"builtin:text": "random text", "grammarinator:JSON:defaults": "Grammarinator defaults",
+                "grammarinator:JSON:deep": "Grammarinator depth-matched", "grammarinator:TOML:defaults": "Grammarinator defaults"}
+        groups = defaultdict(list)
+        for r in rows:
+            if (r["target"], r["bug"]) != (t, b):
+                continue
+            m = rx.search(r["ref"])
+            groups[m.group(1) if m else NICE.get(r["ref"], r["ref"])].append(r)
+        xmax = 10
+        for g, rs in groups.items():
+            hits = sorted(r["trigger"]["inputs"] for r in rs if r.get("triggered"))
+            cens = max([r.get("inputs_total", 0) for r in rs] + [1])
+            xmax = max(xmax, cens)
+            xs, ys = [1], [0.0]
+            for i, h in enumerate(hits, 1):
+                xs += [h, h]; ys += [ys[-1], i / len(rs)]
+            xs.append(cens); ys.append(ys[-1])
+            if g in COLOR:
+                style = dict(color=COLOR[g], linewidth=1.6, label=LABEL[g])
+            else:
+                style = dict(color="#999" if g == "random text" else "#111", linewidth=1.1,
+                             linestyle=":" if g == "random text" else "--", label=g)
+            ax.step(xs, ys, where="post", **style)
+        ax.set_xscale("log")
+        ax.set_ylim(-0.03, 1.03)
+        ax.set_title(f"{t} / {b}", fontsize=9, loc="left")
+        ax.set_xlabel("inputs (log)")
+        ax.grid(True, axis="y")
+    axes[0].set_ylabel("fraction of campaigns triggered")
+    seen = {}
+    for ax in axes:
+        for hh, ll in zip(*ax.get_legend_handles_labels()):
+            seen.setdefault(ll, hh)
+    fig.legend(seen.values(), seen.keys(), loc="lower center", ncol=min(6, len(seen)), frameon=False, fontsize=7, bbox_to_anchor=(0.5, -0.08))
+    fig.tight_layout()
+    fig.savefig(outdir / "f6_rq4.pdf", bbox_inches="tight")
+    fig.savefig(outdir / "f6_rq4.png", dpi=200, bbox_inches="tight")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--inputs", nargs="+", required=True)
     ap.add_argument("--outdir", required=True)
     ap.add_argument("--rq3", default=None, help="eval/matrix/rq3.jsonl (adds F5)")
+    ap.add_argument("--rq4", default=None, help="eval/campaigns/rq4.jsonl (adds F6)")
     a = ap.parse_args()
     outdir = Path(a.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -286,6 +336,8 @@ def main():
     f4(loop, fixed, outdir)
     if a.rq3:
         f5(a.rq3, outdir)
+    if a.rq4:
+        f6(a.rq4, outdir)
     print("wrote", sorted(p.name for p in outdir.iterdir()))
 
 

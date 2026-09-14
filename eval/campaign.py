@@ -57,7 +57,13 @@ def positive_control(target: str, bug: str) -> tuple[bool, str]:
     r = results[0]
     if r.outcome is not Outcome.CRASH:
         return False, ""
-    return True, crash_signature(r.stderr, r.timed_out)
+    sig = crash_signature(r.stderr, r.timed_out)
+    if r.timed_out or sig == "timeout":
+        # A control that TIMES OUT (machine load) is not a crash oracle: accepting
+        # "timeout" as the bug's signature would let any slow input count as a
+        # trigger. Found in the day-2 campaigns (D28); the control is failed instead.
+        return False, ""
+    return True, sig
 
 
 def run_campaign(target: str, bug: str, ref: str, seed: int, minutes: float,
