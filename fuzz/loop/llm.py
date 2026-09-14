@@ -125,12 +125,15 @@ def chat(messages: list[dict], config: LLMConfig,
                          "prompt_tokens": 0, "completion_tokens": 0})
         return f"```python\n{MOCK_STRATEGY}```", 0, 0
 
-    body = json.dumps({
-        "model": config.model,
-        "messages": messages,
-        "temperature": temperature,
-        "stream": False,
-    }).encode("utf-8")
+    payload_req = {"model": config.model, "messages": messages, "stream": False}
+    # LLM_TEMPERATURE=default omits the field for providers whose models accept only
+    # their default (OpenAI's gpt-5 family rejects any other value); the study's
+    # DeepSeek runs always sent 0.7. Recorded per call in meta["temperature"].
+    if os.environ.get("LLM_TEMPERATURE", "").lower() != "default":
+        payload_req["temperature"] = temperature
+    if meta is not None:
+        meta["temperature"] = payload_req.get("temperature", "default")
+    body = json.dumps(payload_req).encode("utf-8")
     req = urllib.request.Request(
         f"{config.base_url}/chat/completions",
         data=body,

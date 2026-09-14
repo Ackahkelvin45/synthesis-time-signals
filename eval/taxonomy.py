@@ -24,7 +24,7 @@ sys.path[:0] = [str(ROOT / "eval"), str(ROOT / "fuzz")]
 from cell import runs_dir  # noqa: E402
 
 TARGETS = ("json-parser", "parson", "tomlc99", "cjson")
-ARMS = ("C2", "A5", "C3s", "C3n", "C2R")
+ARMS = ("C2", "A5", "C3s", "C3n", "C2R", "M2C2", "M2A5", "M2C3s")
 
 # (class, regex) in priority order. Classes follow the take-home's Appendix C
 # where they existed; new ones were added when the text matched nothing.

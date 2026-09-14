@@ -42,7 +42,7 @@ def proxy_and_cov(d: dict, arm: str):
     return ps, cov
 
 TARGETS = ("json-parser", "parson", "tomlc99", "cjson")
-ARMS = ("C2", "A5", "C3s", "C3n", "C2R")
+ARMS = ("C2", "A5", "C3s", "C3n", "C2R", "M2C2", "M2A5", "M2C3s")
 _RX = re.compile(r"^run:([A-Za-z0-9]+)-rep(\d+):(\d+)$")
 
 

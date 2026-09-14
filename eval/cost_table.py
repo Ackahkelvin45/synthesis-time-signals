@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / "eval"))
 from cell import runs_dir  # noqa: E402
 
 TARGETS = ("json-parser", "parson", "tomlc99", "cjson")
-ARMS = ("C2", "A5", "C3s", "C3n", "C2R")
+ARMS = ("C2", "A5", "C3s", "C3n", "C2R", "M2C2", "M2A5", "M2C3s")
 
 
 def main():

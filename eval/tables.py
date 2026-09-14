@@ -19,8 +19,9 @@ from cell import measure_for_loop  # noqa: E402
 from experiment import ci95, paired_perm_test  # noqa: E402
 from full_report import load, level, collapsed  # noqa: E402
 
-ARMS = ("C2", "A5", "C3s", "C3n", "C2R")
-LABEL = {"C2": "proxy", "A5": "no steering", "C3s": "coverage", "C3n": "coverage + names", "C2R": "C2' re-seed repair"}
+ARMS = ("C2", "A5", "C3s", "C3n", "C2R", "M2C2", "M2A5", "M2C3s")
+LABEL = {"C2": "proxy", "A5": "no steering", "C3s": "coverage", "C3n": "coverage + names", "C2R": "C2' re-seed repair",
+         "M2C2": "proxy (gpt-5-mini)", "M2A5": "no steering (gpt-5-mini)", "M2C3s": "coverage (gpt-5-mini)"}
 
 
 def t1():

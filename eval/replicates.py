@@ -52,6 +52,12 @@ CONDITIONS: dict[str, list[str]] = {
     "C3s": ["--oracle", "coverage_scalar"],
     "C3n": ["--oracle", "coverage_named"],
     "C2R": ["--repair", "reseed"],
+    # M2: the same three arms under a second model (LLM_API_KEY / LLM_BASE_URL /
+    # LLM_MODEL / LLM_PRICE_* in the environment); distinct names so the runs
+    # land beside, not over, the DeepSeek runs (runs/<target>/M2C2-rep<k>/).
+    "M2C2": [],
+    "M2A5": ["--ablate", "signal"],
+    "M2C3s": ["--oracle", "coverage_scalar"],
 }
 LOCK = ROOT / "build" / ".runs.lock"
 BATCHES = ROOT / "runs" / "_batches"

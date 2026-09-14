@@ -31,7 +31,7 @@ from stage1c_report import gate_paths, path_table  # noqa: E402
 
 METRIC = "auc_branch_reach"
 TARGETS = ("json-parser", "parson", "tomlc99", "cjson")
-ARMS = ("C2", "A5", "C3s", "C3n", "C2R")
+ARMS = ("C2", "A5", "C3s", "C3n", "C2R", "M2C2", "M2A5", "M2C3s")
 FAMILY = (("C2", "A5", "H1: C2 vs A5"), ("C3s", "C2", "H2s: C3s vs C2"), ("C3n", "C2", "H2n: C3n vs C2"))
 BANDS = "A12 >= 0.64 (or <= 0.36) practical; 0.56-0.64 (0.36-0.44) small; otherwise negligible"
 
@@ -165,6 +165,14 @@ def main():
             L += ["", "### Follow-up: C2R (repair by re-seed)", "",
                   f"- C2R vs C2: {compare(d, 'C2R', 'C2')[0]}",
                   f"- C2R vs A5: {compare(d, 'C2R', 'A5')[0]}"]
+        if "M2C2" in arms:
+            L += ["", "### RQ5: the three-way under the second model (gpt-5-mini; exploratory, outside the family)", "",
+                  f"- M2 H1, M2C2 vs M2A5: {compare(d, 'M2C2', 'M2A5')[0]}",
+                  f"- M2 H2s, M2C3s vs M2C2: {compare(d, 'M2C3s', 'M2C2')[0]}",
+                  f"- M2C3s vs M2A5 (context): {compare(d, 'M2C3s', 'M2A5')[0]}",
+                  f"- cross-model, same arm: C2 vs M2C2: {compare(d, 'C2', 'M2C2')[0]}",
+                  f"- cross-model, same arm: A5 vs M2A5: {compare(d, 'A5', 'M2A5')[0]}",
+                  f"- cross-model, same arm: C3s vs M2C3s: {compare(d, 'C3s', 'M2C3s')[0]}"]
         L += ["", "### Exploratory contrasts", ""]
         for x, y, _ in fam:
             L.append(f"- {healthy(d, x, y)}")
