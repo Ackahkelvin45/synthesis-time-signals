@@ -6,6 +6,8 @@ import argparse
 import re
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parent.parent
+
 
 def part(text, start, end=None):
     i = text.index(start)
@@ -41,9 +43,18 @@ def main():
         part(intro, "## References"),
     ]
     text = "".join(out)
+    tables = (ROOT / "eval" / "matrix" / "tables.md").read_text() if (ROOT / "eval" / "matrix" / "tables.md").exists() else ""
+    def table(name):
+        i = tables.find(f"## {name}.")
+        if i < 0:
+            return f"[{name} not generated yet]"
+        j = tables.find("\n## ", i + 3)
+        block = tables[i:j if j > 0 else None].strip()
+        return "**Table " + block[len("## T"):].replace(". ", ". ", 1).replace("T1.", "1.").replace("T2.", "2.") + "\n"
+    text = text.replace("<!-- TABLE:T1 -->", table("T1")).replace("<!-- TABLE:T2 -->", table("T2"))
     Path(a.out).write_text(text)
     words = len(re.findall(r"\b\w+\b", text))
-    ph = re.findall(r"\[(?![−+0-9])[^\]]*\]", text)
+    ph = re.findall(r"(?<!!)\[(?![−+0-9])[^\]]*\]", text)   # image captions are not placeholders
     print(f"{a.out}: {words} words, {text.count(chr(10) + '## ')} sections, em-dashes {text.count('—')}, placeholders {len(ph)}: {ph}")
     for m in re.finditer(r"^## .*", text, re.M):
         print("  ", m.group(0)[:72])

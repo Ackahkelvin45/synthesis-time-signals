@@ -31,6 +31,10 @@ def main():
     body = re.sub(r"^## (\d+)\. ", "## ", body, flags=re.M)          # svjour3 numbers sections itself
     body = re.sub(r"^### (\d+\.\d+) ", "### ", body, flags=re.M)
     (out / "body.md").write_text(body)
+    figs = out / "figures"
+    figs.mkdir(exist_ok=True)
+    for f in (ROOT / "paper" / "figures").glob("*.pdf"):
+        shutil.copy(f, figs / f.name)
     subprocess.run(["docker", "run", "--rm", "-v", f"{out}:/data", "pandoc/core:latest", "body.md",
                     "-f", "markdown", "-t", "latex", "-o", "body.tex"], check=True)
     body_tex = (out / "body.tex").read_text()
@@ -50,6 +54,8 @@ def main():
 \usepackage{amsmath}
 \usepackage{hyperref}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+\setkeys{Gin}{width=\linewidth,keepaspectratio}
 \smartqed
 \journalname{Empirical Software Engineering}
 \begin{document}

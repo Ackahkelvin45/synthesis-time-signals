@@ -11,6 +11,12 @@ per-replicate delta against the seed, and the last working iteration's
 level where it differs from the final. Figure 1 shows the coverage curves,
 Figure 2 the between-arm effect sizes, Figure 3 the deltas.
 
+<!-- TABLE:T1 -->
+
+<!-- TABLE:T2 -->
+
+![Branch coverage of the parse-reachable region against inputs drawn, per target and arm: median over replicates with the interquartile band; the seed mean and the stronger Grammarinator variant as dashed and dotted lines.](figures/f1_curves.pdf)
+
 ### 5.1 A note on the development target, read first
 
 json-parser's default build aborts on every object input (a
@@ -43,6 +49,8 @@ Vargha-Delaney A12 of the final level, ten replicates per arm, bootstrap
 | parson | 0.59 [0.32, 0.84], p 0.90 | 0.76 [0.52, 0.96], p 0.044, Holm 0.13 | 0.33 [0.09, 0.59], p 0.96 |
 | tomlc99 | 0.39 [0.14, 0.66], p 0.29 | 0.60 [0.35, 0.86], p 0.65 | 0.47 [0.21, 0.74], p 0.71 |
 
+![Vargha-Delaney A12 with bootstrap 95% CI for every between-arm contrast run, per target; the shaded bands are the registered negligible and small ranges.](figures/f2_forest.pdf)
+
 H1 is null on all three targets, with the point estimate favouring no
 steering on two of them; the mean differences there are driven by the
 proxy arm's collapsed replicates (two, one and one), which score zero as
@@ -68,6 +76,8 @@ functions were least covered did worse than telling it the number.
 
 ### 5.3 Refinement moves the seed by one to two points, in either direction
 
+![Per-replicate change of the primary outcome from seed to final, per target and arm; bar = arm mean, dotted = mean without the off-scale replicates (triangles: a failed seed generator above, a collapsed final below).](figures/f3_deltas.pdf)
+
 Figure 3 and Table 2. On parson the coverage-scalar oracle improves on its
 seed by +1.59 ± 0.86 points (8 of 10 up, sign-flip p 0.008) and the proxy
 by +0.89 ± 0.50 (7 up, p 0.016); no steering is within noise (+0.54, p
@@ -83,6 +93,8 @@ rounds of feedback change the seed's coverage by one to two points on the
 held-out targets, upward only under measured coverage on parson.
 
 ### 5.4 RQ1: whether LLM authorship beats the grammar alone depends on the target
+
+![The twenty LLM seed generators per target against random text and Grammarinator on the identical grammar, each over 20 draw seeds.](figures/f4_rq1.pdf)
 
 Figure 4 and Table 3. The registered lower bound first: random text
 (Hypothesis's st.text(), no grammar) reaches 26.4, 21.7 and 17.1 AUC
@@ -102,6 +114,8 @@ generators could not draw at all. The TOML Grammarinator was not
 depth-calibrated (Section 7).
 
 ### 5.5 RQ3: the proxy tracks coverage across generators, not across a run's own iterations
+
+![Proxy score recorded by the loop against the measured primary outcome of the same iteration's generator, one point per loop-internal strategy, coloured by arm.](figures/f5_rq3.pdf)
 
 Figure 5 and eval/matrix/rq3_report.md. Every loop-internal strategy that
 ran (604 across the five arms) was measured on three fresh draw seeds at
@@ -123,6 +137,8 @@ was given. The correlation is strongest inside the no-steering arm (+0.55,
 the steered arms, whose iterations the steer keeps within a narrow band.
 
 ### 5.6 RQ4: ground-truth bugs
+
+![Fraction of an arm's campaigns that had triggered the bug after n inputs, per ground-truth bug; baselines dashed and dotted.](figures/f6_rq4.pdf)
 
 Figure 6 and eval/matrix/rq4_report.md. Each arm's ten final generators
 ran a 30-minute campaign against each pre-fix build; a campaign counts as

@@ -328,6 +328,39 @@ per-replicate delta against the seed, and the last working iteration's
 level where it differs from the final. Figure 1 shows the coverage curves,
 Figure 2 the between-arm effect sizes, Figure 3 the deltas.
 
+**Table 1. Targets
+
+| target | source | lines | functions | parse-reachable functions | grammar (grammars-v4) | ground-truth bug builds | role |
+|---|---|---|---|---|---|---|---|
+| json-parser | json.c | 1057 | 10 | 9 | JSON.g4 | issue68, issue78 | development (in-sample) |
+| parson | parson.c | 2486 | 144 | 40 | JSON.g4 | none | held out |
+| tomlc99 | toml.c | 2392 | 82 | 53 | TomlLexer.g4, TomlParser.g4 | issue50, recursion | held out |
+
+
+**Table 2. Final-generator level and refinement delta per target and arm
+
+Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; failed cells and collapsed finals score 0). Mean ± 95% CI over ten replicates (median). Δ = final − seed per replicate, exact sign-flip test; replicates whose seed generator failed but whose final works are excluded from Δ and counted in the last column.
+
+| target | arm | final | collapsed | Δ final − seed | up / down | sign-flip p | seed failed, final works | last working where it differs |
+|---|---|---|---|---|---|---|---|---|
+| json-parser | C2 proxy | 51.0 ± 19.3 (63.9) | 2 | -1.02 ± 0.81 | 2 / 6 | 0.031 | 0 | - |
+| json-parser | A5 no steering | 63.7 ± 2.8 (64.6) | 0 | +0.15 ± 1.16 | 6 / 4 | 0.768 | 0 | - |
+| json-parser | C3s coverage | 48.8 ± 18.7 (59.4) | 2 | -1.60 ± 1.70 | 2 / 6 | 0.062 | 0 | - |
+| json-parser | C3n coverage + names | 54.9 ± 14.0 (61.5) | 1 | -9.20 ± 13.62 | 0 / 10 | 0.002 | 0 | - |
+| json-parser | C2R C2' re-seed repair | 63.9 ± 1.3 (64.4) | 0 | -1.32 ± 1.40 | 2 / 7 | 0.074 | 0 | - |
+| parson | C2 proxy | 60.9 ± 15.4 (67.1) | 1 | +0.89 ± 0.50 | 7 / 1 | 0.016 | 0 | - |
+| parson | A5 no steering | 66.3 ± 1.6 (66.7) | 0 | +0.54 ± 0.75 | 7 / 2 | 0.160 | 0 | - |
+| parson | C3s coverage | 69.1 ± 1.1 (69.4) | 0 | +1.59 ± 0.86 | 8 / 2 | 0.008 | 0 | 68.6 (n 1) |
+| parson | C3n coverage + names | 66.0 ± 1.3 (65.8) | 0 | -0.16 ± 1.48 | 5 / 5 | 0.797 | 0 | - |
+| tomlc99 | C2 proxy | 52.9 ± 13.9 (57.4) | 1 | -0.01 ± 1.10 | 2 / 4 | 1.000 | 1 | - |
+| tomlc99 | A5 no steering | 60.2 ± 3.4 (59.8) | 0 | +1.80 ± 2.33 | 6 / 3 | 0.121 | 1 | - |
+| tomlc99 | C3s coverage | 55.1 ± 14.1 (60.6) | 1 | +0.22 ± 0.61 | 5 / 1 | 0.438 | 0 | 50.7 (n 6) |
+| tomlc99 | C3n coverage + names | 57.4 ± 3.7 (58.5) | 0 | -0.70 ± 0.96 | 0 / 3 | 0.250 | 1 | 51.2 (n 4) |
+| tomlc99 | C2R C2' re-seed repair | 59.3 ± 2.4 (60.3) | 0 | -1.41 ± 1.64 | 1 / 7 | 0.086 | 0 | 60.2 (n 3) |
+
+
+![Branch coverage of the parse-reachable region against inputs drawn, per target and arm: median over replicates with the interquartile band; the seed mean and the stronger Grammarinator variant as dashed and dotted lines.](figures/f1_curves.pdf)
+
 ### 5.1 A note on the development target, read first
 
 json-parser's default build aborts on every object input (a
@@ -360,6 +393,8 @@ Vargha-Delaney A12 of the final level, ten replicates per arm, bootstrap
 | parson | 0.59 [0.32, 0.84], p 0.90 | 0.76 [0.52, 0.96], p 0.044, Holm 0.13 | 0.33 [0.09, 0.59], p 0.96 |
 | tomlc99 | 0.39 [0.14, 0.66], p 0.29 | 0.60 [0.35, 0.86], p 0.65 | 0.47 [0.21, 0.74], p 0.71 |
 
+![Vargha-Delaney A12 with bootstrap 95% CI for every between-arm contrast run, per target; the shaded bands are the registered negligible and small ranges.](figures/f2_forest.pdf)
+
 H1 is null on all three targets, with the point estimate favouring no
 steering on two of them; the mean differences there are driven by the
 proxy arm's collapsed replicates (two, one and one), which score zero as
@@ -385,6 +420,8 @@ functions were least covered did worse than telling it the number.
 
 ### 5.3 Refinement moves the seed by one to two points, in either direction
 
+![Per-replicate change of the primary outcome from seed to final, per target and arm; bar = arm mean, dotted = mean without the off-scale replicates (triangles: a failed seed generator above, a collapsed final below).](figures/f3_deltas.pdf)
+
 Figure 3 and Table 2. On parson the coverage-scalar oracle improves on its
 seed by +1.59 ± 0.86 points (8 of 10 up, sign-flip p 0.008) and the proxy
 by +0.89 ± 0.50 (7 up, p 0.016); no steering is within noise (+0.54, p
@@ -400,6 +437,8 @@ rounds of feedback change the seed's coverage by one to two points on the
 held-out targets, upward only under measured coverage on parson.
 
 ### 5.4 RQ1: whether LLM authorship beats the grammar alone depends on the target
+
+![The twenty LLM seed generators per target against random text and Grammarinator on the identical grammar, each over 20 draw seeds.](figures/f4_rq1.pdf)
 
 Figure 4 and Table 3. The registered lower bound first: random text
 (Hypothesis's st.text(), no grammar) reaches 26.4, 21.7 and 17.1 AUC
@@ -419,6 +458,8 @@ generators could not draw at all. The TOML Grammarinator was not
 depth-calibrated (Section 7).
 
 ### 5.5 RQ3: the proxy tracks coverage across generators, not across a run's own iterations
+
+![Proxy score recorded by the loop against the measured primary outcome of the same iteration's generator, one point per loop-internal strategy, coloured by arm.](figures/f5_rq3.pdf)
 
 Figure 5 and eval/matrix/rq3_report.md. Every loop-internal strategy that
 ran (604 across the five arms) was measured on three fresh draw seeds at
@@ -440,6 +481,8 @@ was given. The correlation is strongest inside the no-steering arm (+0.55,
 the steered arms, whose iterations the steer keeps within a narrow band.
 
 ### 5.6 RQ4: ground-truth bugs
+
+![Fraction of an arm's campaigns that had triggered the bug after n inputs, per ground-truth bug; baselines dashed and dotted.](figures/f6_rq4.pdf)
 
 Figure 6 and eval/matrix/rq4_report.md. Each arm's ten final generators
 ran a 30-minute campaign against each pre-fix build; a campaign counts as
