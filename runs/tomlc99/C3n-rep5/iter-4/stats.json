@@ -1,0 +1,172 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.5223333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 156,
+      "reject": 194
+    },
+    "acceptance_rate": 0.446,
+    "max_nesting_depth": 1911,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "date_time",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.019,
+    "novelty": 28,
+    "divergences": 98,
+    "divergence_examples": [
+      "b'#\\xf0\\xb7\\x81\\xa3\\x1f\\xc2\\xaa<\\xc3\\xa0\\xc2\\xb0X'",
+      "b'#\\xf0\\xb7\\x81\\xa3\\x1f0'",
+      "b'#\\xc3\\x99\\xc2\\xb2\\xc4\\x88\\x1e\\x11\\r\\xc4\\x80\\x1b\\xc5\\xa0H\\x02\\xc5\\x9dE\\x13\\xc5\\xa5*\\xc8\\xbe\\x17\\xc2\\x8b\\xc4\\x81'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: invalid or missing key",
+        33
+      ],
+      [
+        "line 1: syntax error",
+        30
+      ],
+      [
+        "line 1: invalid key",
+        17
+      ],
+      [
+        "line 2: key exists",
+        16
+      ],
+      [
+        "line 1: expect hex char",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 51.41,
+    "region_coverage_pct": 56.68,
+    "least_covered_functions": [
+      "toml_utf8_to_ucs (0% of branches)",
+      "toml_rtots (0% of branches)",
+      "toml_rtod_ex (0% of branches)",
+      "toml_parse_file (0% of branches)",
+      "norm_lit_str (0% of branches)"
+    ]
+  },
+  "coverage_in_loop": {
+    "branch_pct": 51.41,
+    "region_pct": 56.68,
+    "line_pct": 60.21,
+    "branch_pct_file": 41.06,
+    "region_pct_file": 45.01,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_rtots",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_rtod_ex",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 153.38,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 51.41
+}

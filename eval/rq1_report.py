@@ -36,9 +36,10 @@ sys.path.insert(0, str(ROOT / "eval"))
 from experiment import ci95, paired_perm_test  # noqa: E402
 from report import a12, bootstrap_a12, parse_run_cond  # noqa: E402
 
-TARGETS = ("json-parser", "parson", "tomlc99")
+TARGETS = ("json-parser", "parson", "tomlc99", "cjson")
 GRAM = (("grammarinator", "Grammarinator defaults"),
-        ("grammarinator-deep", "Grammarinator depth-matched"))
+        ("grammarinator-deep", "Grammarinator depth-matched"),
+        ("random", "random text"))
 
 
 def band(v: float, a: str, b: str) -> str:
@@ -69,7 +70,10 @@ def fmt(vals: list[float]) -> str:
     return f"{mu:.1f} ± {h:.1f} (median {st.median(vals):.1f}, range {min(vals):.1f}-{max(vals):.1f})"
 
 
-def compare(gens: dict, gram: dict[int, float], label: str) -> list[str]:
+CODE = {"grammarinator": "C0b", "grammarinator-deep": "C0b", "random": "C0a"}
+
+
+def compare(gens: dict, gram: dict[int, float], label: str, code: str = "C0b") -> list[str]:
     """gens: {(cond, rep): {seed: v}}; gram: {seed: v}."""
     seeds = sorted(gram)
     c1_by_seed = [st.mean(g[s] for g in gens.values()) for s in seeds]
@@ -79,9 +83,9 @@ def compare(gens: dict, gram: dict[int, float], label: str) -> list[str]:
     above = sum(1 for x in gmeans if x > gram_mu)
     eff = a12(gmeans, list(gram.values()))
     lo, hi = bootstrap_a12(gmeans, list(gram.values()))
-    return [f"  - {label}: A12(C1 generators, C0b draws) = {eff:.2f} [{lo:.2f}, {hi:.2f}] → "
-            f"{band(eff, 'C1', 'C0b')}; {above} of {len(gmeans)} seed generators above the Grammarinator "
-            f"mean ({gram_mu:.1f}); plan-E7 form (paired by draw seed): C1 − C0b = {d:+.2f} ± {half:.2f}, "
+    return [f"  - {label}: A12(C1 generators, {code} draws) = {eff:.2f} [{lo:.2f}, {hi:.2f}] → "
+            f"{band(eff, 'C1', code)}; {above} of {len(gmeans)} seed generators above the {code} "
+            f"mean ({gram_mu:.1f}); plan-E7 form (paired by draw seed): C1 − {code} = {d:+.2f} ± {half:.2f}, "
             f"sign-flip p = {p:.4f}"]
 
 
@@ -126,10 +130,12 @@ def main() -> int:
         L += [f"## {t}", ""]
         for cond, name in GRAM:
             if cond in fixed[t]:
-                L.append(f"- {name} (C0b): {fmt(list(fixed[t][cond].values()))} over 20 draw seeds")
+                L.append(f"- {name} ({CODE[cond]}): {fmt(list(fixed[t][cond].values()))} over 20 draw seeds")
             elif cond == "grammarinator-deep":
                 L.append(f"- {name}: not measured; the pinned TOML variant is identical to defaults "
                          "(deep_weight 1.0, no single recursive value rule; eval/grammarinator.json)")
+            elif cond == "random":
+                L.append(f"- {name}: not measured")
         fin_ok = {f"{c}-rep{k}" for (c, k, w), v in loop[t].items()
                   if w == "final" and not all(x == 0.0 for x in v.values())}
         inflating = [f for f in failed if f in fin_ok]
@@ -139,7 +145,7 @@ def main() -> int:
                        "final-minus-seed delta is inflated by the whole final level; the rest also "
                        "collapsed at the final, delta 0)" if inflating else " (all also collapsed at the final)")
                     if failed else "; no failed seed generators"))
-        best = max((c for c, _ in GRAM if c in fixed[t]), key=lambda c: st.mean(fixed[t][c].values()))
+        best = max((c for c, _ in GRAM if c in fixed[t] and c != "random"), key=lambda c: st.mean(fixed[t][c].values()))
         for key in ("C2", "A5"):
             fin = [st.mean(v.values()) for (c, k, w), v in loop[t].items() if c == key and w == "final"]
             if fin:
@@ -149,9 +155,9 @@ def main() -> int:
         for cond, name in GRAM:
             if cond not in fixed[t]:
                 continue
-            L += compare(gens, fixed[t][cond], f"C1 vs {name}")
+            L += compare(gens, fixed[t][cond], f"C1 vs {name}", CODE[cond])
             if failed:
-                L += compare(healthy, fixed[t][cond], f"C1 vs {name}, failed seeds excluded (n = {len(healthy)})")
+                L += compare(healthy, fixed[t][cond], f"C1 vs {name}, failed seeds excluded (n = {len(healthy)})", CODE[cond])
         rl, rf = data["auc_region_reach"]
         rgens = [st.mean(v.values()) for (c, k, w), v in rl[t].items() if w == "seed"]
         rg = {cond: st.mean(rf[t][cond].values()) for cond, _ in GRAM if cond in rf[t]}

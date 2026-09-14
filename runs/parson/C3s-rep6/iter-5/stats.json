@@ -1,0 +1,114 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.48899999999999993,
+  "summary": {
+    "outcomes": {
+      "valid": 212,
+      "reject": 138
+    },
+    "acceptance_rate": 0.606,
+    "max_nesting_depth": 2100,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.005,
+    "novelty": 25,
+    "divergences": 30,
+    "divergence_examples": [
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'{\"\":[{\"\":[true,\"\\\\u73ae \\xf3\\xb1\\x92\\xaf\\\\uD83D\\\\uDE00\\\\t\\\\/\",0e0],\"e\\xc3\\x8c\\xf1\\xa7\\x85\\xba\\xc3\\xab\":false}]}'",
+      "b'{\"\":[{\"\":[true,\"\\\\u73ae \\xf3\\xb1\\x92\\xaf\\\\uD83D\\\\uDE00\\\\/\\\\/\",0e0],\"e\\xc3\\x8c\\xf1\\xa7\\x85\\xba\\xc3\\xab\":false}]}'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 76.63,
+    "region_coverage_pct": 85.95
+  },
+  "coverage_in_loop": {
+    "branch_pct": 76.63,
+    "region_pct": 85.95,
+    "line_pct": 84.22,
+    "branch_pct_file": 23.58,
+    "region_pct_file": 24.15,
+    "least_covered_functions": [
+      {
+        "name": "json_serialize_string",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 427
+      },
+      {
+        "name": "json_serialize_to_buffer_r",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 317
+      },
+      {
+        "name": "json_value_deep_copy",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 71
+      },
+      {
+        "name": "json_value_equals",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 58
+      },
+      {
+        "name": "json_validate",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 54
+      }
+    ],
+    "functions_total": 144
+  },
+  "proxy_score": 75.1,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 76.63
+}

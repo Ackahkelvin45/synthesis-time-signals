@@ -383,7 +383,7 @@ def _cov_totals(binary: Path, profdata: Path, src: Path,
 
 
 def coverage_curve(target: str, examples: list[str], checkpoints: list[int],
-                   label: str) -> dict:
+                   label: str, raw: list[bytes] | None = None) -> dict:
     """Run `examples` (in order) through the target's coverage build in ONE
     batch process (fuzz/runner.run_many) and return cumulative coverage at
     each checkpoint n (inputs 1..n), plus the per-input outcomes.
@@ -401,7 +401,9 @@ def coverage_curve(target: str, examples: list[str], checkpoints: list[int],
     profdir.mkdir(exist_ok=True)
     for old in profdir.glob("*.prof*"):
         old.unlink()
-    data = [ex.encode("utf-8", "surrogatepass") for ex in examples]
+    # `raw` feeds arbitrary bytes unchanged (AFL++ queue files); the string path
+    # is byte-identical to before for every study measurement.
+    data = raw if raw is not None else [ex.encode("utf-8", "surrogatepass") for ex in examples]
     cps = sorted({c for c in checkpoints if 0 < c <= len(data)} | {len(data)})
     results, segs = run_many(binary, data, timeout_s=TIMEOUT_S, checkpoints=cps,
                              profile_prefix=str(profdir / "p"))

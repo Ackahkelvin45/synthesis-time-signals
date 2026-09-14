@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.26633333333333337,
+  "summary": {
+    "outcomes": {
+      "valid": 94,
+      "reject": 256
+    },
+    "acceptance_rate": 0.269,
+    "max_nesting_depth": 2,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "date_time",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 20,
+    "divergences": 37,
+    "divergence_examples": [
+      "b'a = {b = 1,}'",
+      "b\"['\\xf1\\xac\\x8c\\xae\\xc3\\xb3\\x16\\x16\\x13\\x0b']\\n'\\xf1\\xac\\x8c\\xae\\xc3\\xb3\\x16\\x16\\x13\\x0b'.x = 1\"",
+      "b\"['\\xf1\\xac\\x8c\\xae\\xf1\\xac\\x8c\\xae\\x16\\x16\\x13\\x0b']\\n'\\xf1\\xac\\x8c\\xae\\xf1\\xac\\x8c\\xae\\x16\\x16\\x13\\x0b'.x = 1\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 2: key exists",
+        67
+      ],
+      [
+        "line 1: missing =",
+        46
+      ],
+      [
+        "line 1: bad escape char",
+        20
+      ],
+      [
+        "line 1: invalid char U+007f",
+        17
+      ],
+      [
+        "line 1: unterminated s-quote",
+        15
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 94,
+      "reject": 256
+    },
+    "acceptance_rate": 0.269,
+    "max_nesting_depth": 2,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "date_time",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 20,
+    "divergences": 37,
+    "divergence_examples": [
+      "b'a = {b = 1,}'",
+      "b\"['\\xf1\\xac\\x8c\\xae\\xc3\\xb3\\x16\\x16\\x13\\x0b']\\n'\\xf1\\xac\\x8c\\xae\\xc3\\xb3\\x16\\x16\\x13\\x0b'.x = 1\"",
+      "b\"['\\xf1\\xac\\x8c\\xae\\xf1\\xac\\x8c\\xae\\x16\\x16\\x13\\x0b']\\n'\\xf1\\xac\\x8c\\xae\\xf1\\xac\\x8c\\xae\\x16\\x16\\x13\\x0b'.x = 1\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 185.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 185.0
+}

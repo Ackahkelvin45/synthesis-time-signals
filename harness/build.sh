@@ -68,7 +68,11 @@ case "$TARGET" in
     SRC="$ROOT/vendor/tomlc99/toml.c";     INC="$ROOT/vendor/tomlc99"
     HSRC="$ROOT/targets/tomlc99/harness.c"; BASE="harness_tomlc99"
     VALID_MODES="default control o2 bug-issue50" ;;
-  *) echo "unknown TARGET '$TARGET' (use: json-parser|parson|tomlc99)" >&2; exit 1 ;;
+  cjson)
+    SRC="$ROOT/vendor/cjson/cJSON.c";      INC="$ROOT/vendor/cjson"
+    HSRC="$ROOT/targets/cjson/harness.c";  BASE="harness_cjson"
+    VALID_MODES="default control o2 bug-cve-2023-53154" ;;
+  *) echo "unknown TARGET '$TARGET' (use: json-parser|parson|tomlc99|cjson)" >&2; exit 1 ;;
 esac
 
 # Ground-truth bug builds (paper RQ4): MODE=bug-<name> compiles the SAME

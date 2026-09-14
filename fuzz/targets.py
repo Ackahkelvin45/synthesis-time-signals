@@ -54,6 +54,26 @@ TARGETS: dict[str, dict] = {
         "cap_band": (1500, 2048),   # parson rejects deeper than ~2048
         "pinned": "1.5.3 @ ba29f4e",
     },
+    # T5 — cJSON (Stage 2): a third JSON parser, length-taking API, with a
+    # CVE-class ground-truth over-read reachable only through that API.
+    "cjson": {
+        "format": "JSON",
+        "src": "vendor/cjson/cJSON.c",
+        "inc": "vendor/cjson",
+        "harness": "targets/cjson/harness.c",
+        "grammar": "grammar/JSON.g4",
+        "notes": "targets/cjson/adaptation-notes.md",
+        "binary": "harness_cjson",
+        "modes": ("default", "control", "o2", "bug-cve-2023-53154"),
+        # CJSON_NESTING_LIMIT is 1000: depth >= 1000 is a clean REJECT, so the
+        # steer band sits just below it
+        "cap_band": (700, 950),
+        "pinned": "v1.7.18 @ acc7623",
+        "bugs": {
+            "cve-2023-53154": {"mode": "bug-cve-2023-53154", "class": "heap-over-read",
+                               "fix": "3ef4e4e", "poc": '{"a":1,'},
+        },
+    },
     # T4 — TOML: the first non-JSON format. Grammar = two files (lexer +
     # parser); the seed prompt concatenates every file in `grammars`.
     "tomlc99": {

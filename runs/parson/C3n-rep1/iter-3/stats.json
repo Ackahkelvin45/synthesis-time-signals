@@ -1,0 +1,122 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.7113333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 252,
+      "reject": 98
+    },
+    "acceptance_rate": 0.72,
+    "max_nesting_depth": 3000,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "null"
+    ],
+    "cap_distance_mass": 0.103,
+    "novelty": 20,
+    "divergences": 80,
+    "divergence_examples": [
+      "b'  {\"a\":{\"a\":{\"a\":{\"a\":{\"a\":0}}}}}[]xyz'",
+      "b'{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":0}}}}}[]xyz'",
+      "b'{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":0}}}}}[]xyz  '"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 70.92,
+    "region_coverage_pct": 81.37,
+    "least_covered_functions": [
+      "json_serialize_string (0% of branches)",
+      "json_serialize_to_buffer_r (0% of branches)",
+      "json_value_deep_copy (0% of branches)",
+      "json_value_equals (0% of branches)",
+      "json_validate (0% of branches)"
+    ]
+  },
+  "coverage_in_loop": {
+    "branch_pct": 70.92,
+    "region_pct": 81.37,
+    "line_pct": 80.34,
+    "branch_pct_file": 21.82,
+    "region_pct_file": 22.87,
+    "least_covered_functions": [
+      {
+        "name": "json_serialize_string",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 427
+      },
+      {
+        "name": "json_serialize_to_buffer_r",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 317
+      },
+      {
+        "name": "json_value_deep_copy",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 71
+      },
+      {
+        "name": "json_value_equals",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 58
+      },
+      {
+        "name": "json_validate",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 54
+      }
+    ],
+    "functions_total": 144
+  },
+  "proxy_score": 67.06,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 70.92
+}

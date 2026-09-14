@@ -1,0 +1,97 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.15633333333333332,
+  "summary": {
+    "outcomes": {
+      "valid": 2,
+      "reject": 23,
+      "crash": 15
+    },
+    "acceptance_rate": 0.05,
+    "max_nesting_depth": 221,
+    "productions_accepted": [
+      "STRING",
+      "arr",
+      "json",
+      "value"
+    ],
+    "productions_gap": [
+      "obj",
+      "pair",
+      "NUMBER",
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 2,
+    "divergences": 2,
+    "divergence_examples": [
+      "b'[\"\\\\ud800\"]'",
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['"
+    ],
+    "unique_crash_signatures": [
+      "ubsan:applying-non-zero-offset-to-null-pointer|json_parse_ex>harness_parse>run_stdin_mode"
+    ],
+    "reject_reasons_sample": [
+      [
+        "1:0: Unexpected EOF in string",
+        5
+      ],
+      [
+        "1:0: Invalid character value `u`",
+        2
+      ],
+      [
+        "1:0: Expected `,` before `",
+        2
+      ],
+      [
+        "1:0: Unexpected `]`",
+        2
+      ],
+      [
+        "1:0: Trailing garbage: `]`",
+        2
+      ]
+    ]
+  },
+  "probes": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": true,
+  "score": 56.54
+}

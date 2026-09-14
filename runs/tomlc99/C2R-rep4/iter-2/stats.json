@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.2333333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 65,
+      "reject": 285
+    },
+    "acceptance_rate": 0.186,
+    "max_nesting_depth": 3,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "date_time",
+      "array_values",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 19,
+    "divergences": 12,
+    "divergence_examples": [
+      "b'[\\'\\x04\\x03\\xc2\\x9c\\x156\\xc3\\x8cRk\\'.\"\"]\\n\\'\\x04\\x03\\xc2\\x9c\\x156\\xc3\\x8cRk\\'.\"\".x = 1'",
+      "b'[\\'0\\x03\\xc2\\x9c\\x156\\xc3\\x8cRk\\'.\"\"]\\n\\'0\\x03\\xc2\\x9c\\x156\\xc3\\x8cRk\\'.\"\".x = 1'",
+      "b'[\\'0\\x03\\xc2\\x9c\\x156\\xc3\\x8c\\xc2\\x9ck\\'.\"\"]\\n\\'0\\x03\\xc2\\x9c\\x156\\xc3\\x8c\\xc2\\x9ck\\'.\"\".x = 1'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 2: key exists",
+        94
+      ],
+      [
+        "line 1: missing =",
+        38
+      ],
+      [
+        "line 1: expect hex char",
+        20
+      ],
+      [
+        "line 1: invalid or missing key",
+        19
+      ],
+      [
+        "line 1: invalid char U+007f",
+        17
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 65,
+      "reject": 285
+    },
+    "acceptance_rate": 0.186,
+    "max_nesting_depth": 3,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "date_time",
+      "array_values",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 19,
+    "divergences": 12,
+    "divergence_examples": [
+      "b'[\\'\\x04\\x03\\xc2\\x9c\\x156\\xc3\\x8cRk\\'.\"\"]\\n\\'\\x04\\x03\\xc2\\x9c\\x156\\xc3\\x8cRk\\'.\"\".x = 1'",
+      "b'[\\'0\\x03\\xc2\\x9c\\x156\\xc3\\x8cRk\\'.\"\"]\\n\\'0\\x03\\xc2\\x9c\\x156\\xc3\\x8cRk\\'.\"\".x = 1'",
+      "b'[\\'0\\x03\\xc2\\x9c\\x156\\xc3\\x8c\\xc2\\x9ck\\'.\"\"]\\n\\'0\\x03\\xc2\\x9c\\x156\\xc3\\x8c\\xc2\\x9ck\\'.\"\".x = 1'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 149.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 149.0
+}

@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.2776666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 65,
+      "reject": 285
+    },
+    "acceptance_rate": 0.186,
+    "max_nesting_depth": 3,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "NAN",
+      "NL",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "bool_",
+      "comment",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "string",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 21,
+    "divergences": 21,
+    "divergence_examples": [
+      "b'0 = 0000-00-00'",
+      "b'zB = 1797-00-04 01:59:27-07:00'",
+      "b'zB = 1797-00-04 01:00:27-07:00'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: missing =",
+        88
+      ],
+      [
+        "line 2: key exists",
+        58
+      ],
+      [
+        "line 1: bad key",
+        16
+      ],
+      [
+        "line 1: invalid or missing key",
+        11
+      ],
+      [
+        "line 1: invalid char U+007f",
+        11
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 65,
+      "reject": 285
+    },
+    "acceptance_rate": 0.186,
+    "max_nesting_depth": 3,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "NAN",
+      "NL",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "bool_",
+      "comment",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "string",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 21,
+    "divergences": 21,
+    "divergence_examples": [
+      "b'0 = 0000-00-00'",
+      "b'zB = 1797-00-04 01:59:27-07:00'",
+      "b'zB = 1797-00-04 01:00:27-07:00'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 171.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 171.0
+}

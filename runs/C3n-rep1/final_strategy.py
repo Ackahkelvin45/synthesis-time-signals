@@ -1,0 +1,413 @@
+from hypothesis import strategies as st
+import json
+
+# ---------- leaf pieces ----------
+
+# Safe string body characters (no quote, no backslash, no raw control).
+_safe = st.characters(
+    blacklist_categories=("Cs",),
+    blacklist_characters='"\\',
+)
+
+# Raw control / NUL bytes that are allowed to appear (parser uses explicit length).
+_raw_ctrl = st.sampled_from(
+    ["\x00", "\x01", "\x1f", "\x0b", "\x0c", "\x7f"]
+)
+
+_hex = st.sampled_from("0123456789abcdefABCDEF")
+
+_unicode_escape = st.tuples(_hex, _hex, _hex, _hex).map(lambda t: "u" + "".join(t))
+_surrogate_escape = st.tuples(
+    st.just("d"), st.sampled_from("89abAB"), _hex, _hex
+).map(lambda t: "u" + "".join(t))
+
+_escapes = st.one_of(
+    st.sampled_from(['\\"', "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"]),
+    _unicode_escape,
+    _surrogate_escape,
+    st.just("\\u0000"),
+    st.just("\\uD800"),
+    st.just("\\uDBFF"),
+    st.just("\\uDC00"),
+    st.just("\\uDFFF"),
+)
+
+_str_body = st.one_of(
+    _safe,
+    _raw_ctrl,
+    _escapes,
+)
+
+# A string literal (well-formed).
+_string = st.lists(_str_body, max_size=12).map(lambda cs: '"' + "".join(cs) + '"')
+
+# Unterminated string (malformed).
+_unterminated_string = st.lists(_str_body, min_size=1, max_size=8).map(
+    lambda cs: '"' + "".join(cs)
+)
+
+# ---------- numbers ----------
+
+_int_part = st.one_of(
+    st.just("0"),
+    st.integers(min_value=1, max_value=10**18).map(str),
+)
+
+_frac = st.one_of(
+    st.just(""),
+    st.integers(min_value=0, max_value=10**6).map(lambda n: "." + str(n)),
+)
+
+_exp = st.one_of(
+    st.just(""),
+    st.tuples(
+        st.sampled_from("eE"),
+        st.sampled_from(["", "+", "-"]),
+        st.integers(min_value=0, max_value=400).map(str),
+    ).map(lambda t: "".join(t)),
+)
+
+_sign = st.sampled_from(["", "-"])
+
+_number = st.tuples(_sign, _int_part, _frac, _exp).map(lambda t: "".join(t))
+
+# Extreme / special numeric forms (some accepted by this parser, some malformed).
+_extreme_number = st.one_of(
+    st.just("1e309"),
+    st.just("-1e309"),
+    st.just("1e-400"),
+    st.just("1E308"),
+    st.just("-"),
+    st.just("+1"),
+    st.just(".5"),
+    st.just("1."),
+    st.just("01"),
+    st.just("0x1F"),
+    st.just("1e"),
+    st.just("1e+"),
+    st.just("--1"),
+    st.just("1e999999"),
+)
+
+_number_all = st.one_of(_number, _extreme_number)
+
+# ---------- malformed fragments ----------
+
+_malformed = st.one_of(
+    _unterminated_string,
+    st.just(","),
+    st.just(":"),
+    st.just("{"),
+    st.just("}"),
+    st.just("["),
+    st.just("]"),
+    st.just("'x'"),
+    st.just("//x"),
+    st.just("/* */1"),
+    st.just("true false"),
+    st.just("1abc"),
+    st.just("[]xyz"),
+)
+
+# ---------- recursive value ----------
+
+_value = st.deferred(lambda: _value_strategy)
+
+_key = st.one_of(_string, _unterminated_string)
+
+# pair: STRING ':' value
+_pair = st.tuples(_key, st.just(":"), _value).map(lambda t: "".join(t))
+
+# obj with members (biased) and empty obj
+_obj_members = st.lists(_pair, min_size=1, max_size=6).map(
+    lambda ps: "{" + ",".join(ps) + "}"
+)
+_obj_empty = st.just("{}")
+# trailing comma variant
+_obj_trailing = st.lists(_pair, min_size=1, max_size=4).map(
+    lambda ps: "{" + ",".join(ps) + ",}"
+)
+# malformed: double comma / missing colon
+_obj_malformed = st.one_of(
+    st.lists(_pair, min_size=1, max_size=3).map(
+        lambda ps: "{" + ",,".join(ps) + "}"
+    ),
+    st.tuples(_string, _value).map(lambda t: "{" + t[0] + t[1] + "}"),
+    st.just("{,}"),
+    st.just("{,1}"),
+)
+
+_obj = st.one_of(_obj_empty, _obj_members, _obj_trailing, _obj_malformed)
+
+# arr
+_arr_members = st.lists(_value, min_size=1, max_size=6).map(
+    lambda vs: "[" + ",".join(vs) + "]"
+)
+_arr_empty = st.just("[]")
+_arr_trailing = st.lists(_value, min_size=1, max_size=4).map(
+    lambda vs: "[" + ",".join(vs) + ",]"
+)
+_arr_malformed = st.one_of(
+    st.lists(_value, min_size=1, max_size=3).map(
+        lambda vs: "[" + ",,".join(vs) + "]"
+    ),
+    st.just("[,]"),
+    st.just("[,1]"),
+)
+
+_arr = st.one_of(_arr_empty, _arr_members, _arr_trailing, _arr_malformed)
+
+_literal = st.sampled_from(["true", "false", "null"])
+
+_value_strategy = st.one_of(
+    _string,
+    _unterminated_string,
+    _number_all,
+    _literal,
+    _obj,
+    _arr,
+    _malformed,
+)
+
+# ---------- deep nesting ----------
+
+_deep = st.integers(min_value=1, max_value=200)
+
+
+def _deep_obj(n):
+    return "{" + '"a":' * n + "1" + "}" * n
+
+
+def _deep_arr(n):
+    return "[" * n + "1" + "]" * n
+
+
+_deep_nested = st.one_of(
+    _deep.map(_deep_obj),
+    _deep.map(_deep_arr),
+)
+
+# ---------- near-crash structural mutations ----------
+# Take the known crashing input and mutate structurally around it: truncate,
+# duplicate, splice, and perturb delimiters / escapes to reach the deep
+# parser paths (json_parse, json_parse_ex, new_value, hex_value) that the
+# current strategy misses.
+
+_crash_seed = '{"a":' * 200 + "1" + "}" * 200
+
+_truncations = st.integers(min_value=1, max_value=len(_crash_seed)).map(
+    lambda n: _crash_seed[:n]
+)
+
+_duplications = st.integers(min_value=1, max_value=4).map(
+    lambda n: _crash_seed * n
+)
+
+_splices = st.integers(min_value=0, max_value=len(_crash_seed)).map(
+    lambda n: _crash_seed[:n] + _crash_seed[n:]
+)
+
+_delim_perturb = st.tuples(
+    st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+    st.sampled_from(['"', "\\", "{", "}", "[", "]", ",", ":", "\x00", "u"]),
+).map(lambda t: _crash_seed[: t[0]] + t[1] + _crash_seed[t[0] + 1 :])
+
+_deletions = st.integers(min_value=0, max_value=len(_crash_seed) - 1).map(
+    lambda n: _crash_seed[:n] + _crash_seed[n + 1 :]
+)
+
+_hex_mutation = st.tuples(
+    st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+    _hex,
+).map(lambda t: _crash_seed[: t[0]] + t[1] + _crash_seed[t[0] + 1 :])
+
+# Intensified structural mutations: chunk-level splices, block duplications,
+# deeper nesting edits, and stacked multi-edit perturbations around the seed.
+_chunk_size = st.integers(min_value=1, max_value=64)
+_chunk_splices = st.tuples(
+    st.integers(min_value=0, max_value=len(_crash_seed)),
+    st.integers(min_value=0, max_value=len(_crash_seed)),
+    _chunk_size,
+).map(
+    lambda t: _crash_seed[: t[0]]
+    + _crash_seed[t[1] : t[1] + t[2]]
+    + _crash_seed[t[0] :]
+)
+
+_block_duplications = st.tuples(
+    st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+    _chunk_size,
+    st.integers(min_value=1, max_value=8),
+).map(
+    lambda t: _crash_seed[: t[0]]
+    + _crash_seed[t[0] : t[0] + t[1]] * t[2]
+    + _crash_seed[t[0] :]
+)
+
+_nesting_edits = st.tuples(
+    st.integers(min_value=1, max_value=200),
+    st.sampled_from(['"a":', "{", "[", "}", "]", ",", ":"]),
+).map(lambda t: '{"a":' * t[0] + "1" + t[1] * t[0] + "}" * t[0])
+
+_multi_edit = st.lists(
+    st.tuples(
+        st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+        st.sampled_from(['"', "\\", "{", "}", "[", "]", ",", ":", "\x00", "u", "\\u"]),
+    ),
+    min_size=1,
+    max_size=8,
+).map(
+    lambda edits: "".join(
+        _crash_seed[: edits[0][0]]
+        + edits[0][1]
+        + "".join(
+            _crash_seed[edits[i - 1][0] + 1 : edits[i][0]] + edits[i][1]
+            for i in range(1, len(edits))
+        )
+        + _crash_seed[edits[-1][0] + 1 :]
+    )
+)
+
+_interior_block_swap = st.tuples(
+    st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+    st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+    _chunk_size,
+).map(
+    lambda t: _crash_seed[: t[0]]
+    + _crash_seed[t[1] : t[1] + t[2]]
+    + _crash_seed[t[0] : t[1]]
+    + _crash_seed[t[0] : t[0] + t[2]]
+    + _crash_seed[t[1] + t[2] :]
+)
+
+# Intensified near-crash generators: parametrized deep seeds with varying key
+# names, deeper nesting depths, and compound mutation chains applied to the
+# seed to drive json_parse / json_parse_ex / new_value / hex_value branches.
+
+# Parametrized deep nesting seeds: vary depth and key content so the parser
+# exercises new_value / json_alloc at many nesting levels.
+_deep_depth = st.integers(min_value=1, max_value=500)
+_deep_key = st.one_of(
+    st.just("a"),
+    st.just(""),
+    st.just("\\u0041"),
+    st.just("ab"),
+    st.just("\\n"),
+)
+_param_deep_seed = st.tuples(_deep_depth, _deep_key).map(
+    lambda t: "{" + ('"' + t[1] + '":') * t[0] + "1" + "}" * t[0]
+)
+_param_deep_arr = st.tuples(_deep_depth, st.sampled_from(["1", "0", "null", "true", '"x"'])).map(
+    lambda t: "[" * t[0] + t[1] + "]" * t[0]
+)
+
+# Compound mutation chains: apply a sequence of small edits (insert, delete,
+# replace, duplicate chunk) to the seed, producing highly varied malformed
+# inputs that stress the same deep paths.
+_edit_ops = st.one_of(
+    st.tuples(
+        st.just("ins"),
+        st.integers(min_value=0, max_value=len(_crash_seed)),
+        st.sampled_from(['"', "\\", "{", "}", "[", "]", ",", ":", "\x00", "u", "\\u", "\\uD800"]),
+    ),
+    st.tuples(
+        st.just("del"),
+        st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+        st.integers(min_value=1, max_value=16),
+    ),
+    st.tuples(
+        st.just("dup"),
+        st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+        st.integers(min_value=1, max_value=32),
+    ),
+    st.tuples(
+        st.just("rep"),
+        st.integers(min_value=0, max_value=len(_crash_seed) - 1),
+        st.sampled_from(['"', "\\", "{", "}", "[", "]", ",", ":", "\x00", "u"]),
+    ),
+)
+
+
+def _apply_edit(s, op):
+    kind, a, b = op
+    if kind == "ins":
+        a = min(a, len(s))
+        return s[:a] + b + s[a:]
+    if kind == "del":
+        a = min(a, len(s) - 1)
+        return s[:a] + s[a + b :]
+    if kind == "dup":
+        a = min(a, len(s) - 1)
+        return s[:a] + s[a : a + b] * 2 + s[a + b :]
+    # rep
+    a = min(a, len(s) - 1)
+    return s[:a] + b + s[a + 1 :]
+
+
+_compound_chain = st.lists(_edit_ops, min_size=1, max_size=12).map(
+    lambda ops: _fold_ops(_crash_seed, ops)
+) if False else st.lists(_edit_ops, min_size=1, max_size=12).map(
+    lambda ops: _apply_chain(_crash_seed, ops)
+)
+
+
+def _apply_chain(s, ops):
+    for op in ops:
+        s = _apply_edit(s, op)
+    return s
+
+
+# Truncation with suffix mutation: cut the seed at a random point and append
+# a mutated delimiter/escape fragment to hit partial-parse branches.
+_truncate_suffix = st.tuples(
+    st.integers(min_value=1, max_value=len(_crash_seed)),
+    st.sampled_from(
+        ['"', "\\", "\\u", "\\u0000", "\\uD800", "{", "[", ",", ":", "\x00", "u", "}", "]"]
+    ),
+).map(lambda t: _crash_seed[: t[0]] + t[1])
+
+# Prefix mutation: prepend structural fragments before the seed.
+_prefix_mutation = st.tuples(
+    st.sampled_from(['"', "\\", "{", "[", ",", ":", "\x00", "u", '{"a":']),
+    st.integers(min_value=0, max_value=len(_crash_seed)),
+).map(lambda t: t[0] + _crash_seed[t[1] :])
+
+_near_crash = st.one_of(
+    st.just(_crash_seed),
+    _truncations,
+    _duplications,
+    _splices,
+    _delim_perturb,
+    _deletions,
+    _hex_mutation,
+    _chunk_splices,
+    _block_duplications,
+    _nesting_edits,
+    _multi_edit,
+    _interior_block_swap,
+    st.tuples(
+        _truncations,
+        st.sampled_from(['"', "\\", "\\u", "\x00", "{", "[", ",", ":"]),
+    ).map(lambda t: t[0] + t[1]),
+    _param_deep_seed,
+    _param_deep_arr,
+    _compound_chain,
+    _truncate_suffix,
+    _prefix_mutation,
+)
+
+# ---------- top level ----------
+
+# whitespace padding occasionally
+_ws = st.sampled_from(["", " ", "\t", "\n", "\r", " \t\n\r"])
+
+_top = st.one_of(
+    _value_strategy,
+    _deep_nested,
+)
+
+strategy = st.one_of(
+    _top,
+    st.tuples(_ws, _top, _ws).map(lambda t: "".join(t)),
+    _near_crash,
+)

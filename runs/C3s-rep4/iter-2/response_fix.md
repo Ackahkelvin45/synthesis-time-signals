@@ -1,0 +1,287 @@
+```python
+from hypothesis import strategies as st
+import json
+
+# ---------------------------------------------------------------------------
+# Leaf / value strategies
+# ---------------------------------------------------------------------------
+
+_valid_escapes = st.sampled_from(
+    ['\\"', '\\\\', '\\/', '\\b', '\\f', '\\n', '\\r', '\\t']
+)
+
+_hex = st.integers(min_value=0, max_value=0xFFFF).map(lambda n: format(n, '04x'))
+_unicode_escape = _hex.map(lambda h: '\\u' + h)
+
+_control_byte = st.sampled_from(
+    ['\x00', '\x01', '\x1f', '\x0b', '\x0c', '\x7f']
+)
+
+_safe_char = st.characters(
+    blacklist_categories=('Cs',),
+    blacklist_characters='\\"',
+).filter(lambda c: ord(c) > 0x1F)
+
+_string_body_unit = st.one_of(
+    _safe_char,
+    _valid_escapes,
+    _unicode_escape,
+    _control_byte,
+)
+
+def _make_string(body):
+    return '"' + body
+
+_str_literal = st.lists(_string_body_unit, max_size=8).map(
+    lambda parts: '"' + ''.join(parts) + '"'
+)
+
+_unterminated_string = st.lists(_string_body_unit, min_size=1, max_size=6).map(
+    lambda parts: '"' + ''.join(parts)
+)
+
+# ---------------------------------------------------------------------------
+# Numbers
+# ---------------------------------------------------------------------------
+
+_int_digits = st.text(alphabet='0123456789', min_size=1, max_size=6)
+
+def _int_part():
+    return st.one_of(
+        st.just('0'),
+        st.tuples(st.sampled_from('123456789'),
+                  st.text(alphabet='0123456789', max_size=6)).map(
+                      lambda t: t[0] + t[1]),
+    )
+
+_int_part = _int_part()
+
+_exp_part = st.one_of(
+    st.just(''),
+    st.tuples(
+        st.sampled_from('eE'),
+        st.sampled_from(['', '+', '-']),
+        st.text(alphabet='0123456789', min_size=1, max_size=4),
+    ).map(lambda t: t[0] + t[1] + t[2]),
+)
+
+_frac_part = st.one_of(
+    st.just(''),
+    st.tuples(st.just('.'), st.text(alphabet='0123456789', min_size=1, max_size=6)).map(
+        lambda t: t[0] + t[1]),
+)
+
+_valid_number = st.tuples(
+    st.sampled_from(['', '-']),
+    _int_part,
+    _frac_part,
+    _exp_part,
+).map(lambda t: t[0] + t[1] + t[2] + t[3])
+
+_extreme_number = st.one_of(
+    st.sampled_from([
+        '1e309', '-1e309', '1e-309', '1e999999', '-1e999999',
+        '1E308', '1e400', '-0', '0.0', '1e+308', '1e-308',
+        '123456789012345678901234567890',
+        '0.0000000000000000000000000001',
+        '9' * 40,
+    ]),
+    st.tuples(
+        st.sampled_from(['', '-']),
+        st.text(alphabet='0123456789', min_size=1, max_size=3),
+        st.sampled_from(['e', 'E']),
+        st.sampled_from(['', '+', '-']),
+        st.text(alphabet='0123456789', min_size=1, max_size=4),
+    ).map(lambda t: t[0] + t[1] + t[2] + t[3] + t[4]),
+)
+
+_malformed_number = st.sampled_from([
+    '+1', '.5', '1.', '01', '0x1F', '-', '--1', '1..2',
+    '1e', '1e+', '00', '007', '-01', '.', '1.e5', '+.5',
+])
+
+_number = st.one_of(
+    _valid_number,
+    _extreme_number,
+    _malformed_number,
+)
+
+# ---------------------------------------------------------------------------
+# Recursive value strategy
+# ---------------------------------------------------------------------------
+
+def _value_strategy():
+    return st.recursive(
+        st.one_of(
+            _str_literal,
+            _unterminated_string,
+            _number,
+            st.sampled_from(['true', 'false', 'null']),
+            st.just('-'),
+        ),
+        lambda children: st.one_of(
+            _obj_strategy(children),
+            _arr_strategy(children),
+        ),
+        max_leaves=40,
+    )
+
+
+def _pair_strategy(value_st):
+    key = st.one_of(_str_literal, _unterminated_string)
+    return st.tuples(key, st.just(':'), value_st).map(
+        lambda t: t[0] + t[1] + t[2]
+    )
+
+
+def _obj_strategy(value_st):
+    pair = _pair_strategy(value_st)
+    members = st.lists(pair, min_size=1, max_size=5)
+
+    def build(members_list):
+        body = ','.join(members_list)
+        return '{' + body + '}'
+
+    def build_trailing(members_list):
+        body = ','.join(members_list)
+        return '{' + body + ',}'
+
+    dup_key = st.tuples(
+        _str_literal,
+        st.just(':'),
+        value_st,
+        st.just(','),
+        _str_literal,
+        st.just(':'),
+        value_st,
+    ).map(lambda t: t[0] + t[1] + t[2] + t[3] + t[4] + t[5] + t[6])
+
+    dup_duplicate = st.tuples(_str_literal, value_st).flatmap(
+        lambda kv: st.tuples(
+            st.just(kv[0]),
+            st.just(':'),
+            st.just(kv[1]),
+            st.just(','),
+            st.just(kv[0]),
+            st.just(':'),
+            value_st,
+        )
+    ).map(lambda t: ''.join(t))
+
+    return st.one_of(
+        st.just('{}'),
+        members.map(build),
+        members.map(build_trailing),
+        dup_key.map(lambda s: '{' + s + '}'),
+        dup_duplicate.map(lambda s: '{' + s + '}'),
+    )
+
+
+def _arr_strategy(value_st):
+    elems = st.lists(value_st, min_size=1, max_size=6)
+
+    def build(elems_list):
+        return '[' + ','.join(elems_list) + ']'
+
+    def build_trailing(elems_list):
+        return '[' + ','.join(elems_list) + ',]'
+
+    malformed = st.sampled_from([
+        '[,]', '[,1]', '[1,,2]', '[1,2,,]', '[,]',
+        '[1 2]', '[1;2]', '[1',
+    ])
+
+    return st.one_of(
+        st.just('[]'),
+        elems.map(build),
+        elems.map(build_trailing),
+        malformed,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Top-level strategy: bias toward VALID JSON.
+# ---------------------------------------------------------------------------
+
+# A strictly valid value: valid strings, valid numbers, valid literals, and
+# recursive valid objects/arrays.
+def _valid_value_strategy():
+    return st.recursive(
+        st.one_of(
+            _str_literal,
+            _valid_number,
+            st.sampled_from(['true', 'false', 'null']),
+        ),
+        lambda children: st.one_of(
+            _valid_obj_strategy(children),
+            _valid_arr_strategy(children),
+        ),
+        max_leaves=40,
+    )
+
+
+def _valid_pair_strategy(value_st):
+    return st.tuples(_str_literal, st.just(':'), value_st).map(
+        lambda t: t[0] + t[1] + t[2]
+    )
+
+
+def _valid_obj_strategy(value_st):
+    pair = _valid_pair_strategy(value_st)
+    members = st.lists(pair, min_size=0, max_size=5)
+
+    def build(members_list):
+        return '{' + ','.join(members_list) + '}'
+
+    return members.map(build)
+
+
+def _valid_arr_strategy(value_st):
+    elems = st.lists(value_st, min_size=0, max_size=6)
+
+    def build(elems_list):
+        return '[' + ','.join(elems_list) + ']'
+
+    return elems.map(build)
+
+
+_valid_value = _valid_value_strategy()
+
+
+def _valid_deep_nesting():
+    depth = st.integers(min_value=1, max_value=200)
+
+    def make(d):
+        return st.tuples(
+            st.just('{'),
+            st.just('"a":'),
+            st.just('[' * d),
+        ).map(lambda t: t[0] + t[1] + t[2] + '1' + ']' * d + '}')
+
+    return depth.flatmap(make)
+
+
+def _valid_whitespace_variant():
+    ws = st.text(alphabet=' \t\n\r', max_size=4)
+
+    def wrap(v):
+        return st.tuples(ws, st.just(v), ws).map(lambda t: t[0] + t[1] + t[2])
+
+    return _valid_value.flatmap(wrap)
+
+
+strategy = st.one_of(
+    # Overwhelmingly bias toward VALID JSON.
+    _valid_value,
+    _valid_obj_strategy(_valid_value),
+    _valid_arr_strategy(_valid_value),
+    _valid_deep_nesting(),
+    _valid_whitespace_variant(),
+    # A small fraction of near-valid / malformed inputs for coverage.
+    st.tuples(_valid_value, st.just(' '), st.just('garbage')).map(
+        lambda t: t[0] + t[1] + t[2]
+    ),
+    st.just(''),
+    st.just('   '),
+)
+```

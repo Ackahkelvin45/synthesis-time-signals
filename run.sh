@@ -42,6 +42,11 @@ build() {
   TARGET=tomlc99 MODE=control       bash harness/build.sh
   TARGET=tomlc99 MODE=o2            bash harness/build.sh
   TARGET=tomlc99 MODE=bug-issue50   bash harness/build.sh
+  # T5 cJSON (JSON; Stage 2) + its CVE ground-truth bug build
+  TARGET=cjson                          bash harness/build.sh
+  TARGET=cjson MODE=control             bash harness/build.sh
+  TARGET=cjson MODE=o2                  bash harness/build.sh
+  TARGET=cjson MODE=bug-cve-2023-53154  bash harness/build.sh
 }
 
 check() {

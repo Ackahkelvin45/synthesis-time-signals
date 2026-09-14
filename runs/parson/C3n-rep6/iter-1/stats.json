@@ -1,0 +1,121 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.5666666666666668,
+  "summary": {
+    "outcomes": {
+      "valid": 77,
+      "reject": 273
+    },
+    "acceptance_rate": 0.22,
+    "max_nesting_depth": 2055,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.247,
+    "novelty": 15,
+    "divergences": 38,
+    "divergence_examples": [
+      "b'\"\"abc'",
+      "b'[]abc'",
+      "b'[]1'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 73.37,
+    "region_coverage_pct": 84.43,
+    "least_covered_functions": [
+      "json_serialize_string (0% of branches)",
+      "json_serialize_to_buffer_r (0% of branches)",
+      "json_value_deep_copy (0% of branches)",
+      "json_value_equals (0% of branches)",
+      "json_validate (0% of branches)"
+    ]
+  },
+  "coverage_in_loop": {
+    "branch_pct": 73.37,
+    "region_pct": 84.43,
+    "line_pct": 84.36,
+    "branch_pct_file": 22.58,
+    "region_pct_file": 23.72,
+    "least_covered_functions": [
+      {
+        "name": "json_serialize_string",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 427
+      },
+      {
+        "name": "json_serialize_to_buffer_r",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 317
+      },
+      {
+        "name": "json_value_deep_copy",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 71
+      },
+      {
+        "name": "json_value_equals",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 58
+      },
+      {
+        "name": "json_validate",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 54
+      }
+    ],
+    "functions_total": 144
+  },
+  "proxy_score": 69.94,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 73.37
+}

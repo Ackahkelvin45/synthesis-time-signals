@@ -1,0 +1,90 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.16133333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 2,
+      "crash": 17,
+      "reject": 8
+    },
+    "acceptance_rate": 0.074,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "value"
+    ],
+    "productions_gap": [
+      "obj",
+      "pair",
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 2,
+    "divergences": 0,
+    "divergence_examples": [],
+    "unique_crash_signatures": [
+      "ubsan:applying-non-zero-offset-to-null-pointer|json_parse_ex>harness_parse>run_stdin_mode"
+    ],
+    "reject_reasons_sample": [
+      [
+        "1:0: Unexpected EOF in string",
+        4
+      ],
+      [
+        "1:0: Invalid character value `u`",
+        2
+      ],
+      [
+        "1:0: Unexpected `",
+        1
+      ],
+      [
+        "1:0: Unexpected `}` when seeking value",
+        1
+      ]
+    ]
+  },
+  "probes": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": true,
+  "score": 51.05
+}

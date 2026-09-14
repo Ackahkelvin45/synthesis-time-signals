@@ -1,0 +1,97 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.2346666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 8,
+      "reject": 7,
+      "crash": 10
+    },
+    "acceptance_rate": 0.32,
+    "max_nesting_depth": 54,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "json",
+      "obj",
+      "value"
+    ],
+    "productions_gap": [
+      "pair",
+      "arr",
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 4,
+    "divergences": 2,
+    "divergence_examples": [
+      "b'1\\x00'",
+      "b'\"\\x0c\\x08\\xc3\\x8c\\xc4\\x83\\xc4\\x8f\\xf3\\x82\\xa4\\x87N\\xf1\\x92\\xa3\\xbc\\xc4\\x9c\\xf1\\xa3\\x90\\xb4\\xc3\\xa4\\xc3\\xbc\\xc3\\xad\\xc2\\x98\\xc4\\x8c\\xc2\\x8cMu\"'"
+    ],
+    "unique_crash_signatures": [
+      "ubsan:applying-non-zero-offset-to-null-pointer|json_parse_ex>harness_parse>run_stdin_mode"
+    ],
+    "reject_reasons_sample": [
+      [
+        "1:0: Unexpected `,` when seeking value",
+        2
+      ],
+      [
+        "1:0: Unexpected `",
+        2
+      ],
+      [
+        "1:0: Unexpected `]`",
+        1
+      ],
+      [
+        "1:0: Expected `,` before `",
+        1
+      ],
+      [
+        "1:0: Unexpected `}` when seeking value",
+        1
+      ]
+    ]
+  },
+  "probes": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": true,
+  "score": 58.23
+}

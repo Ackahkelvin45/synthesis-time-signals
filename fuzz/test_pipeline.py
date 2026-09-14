@@ -115,6 +115,30 @@ def main() -> int:
     check("o2 (uninstrumented) build exists and reports its mode",
           o2.exists() and harness_mode(o2) == "o2")
 
+    print("== cjson (T5, JSON, Stage 2): contract + CVE positive control ==")
+    T5 = BUILD / "harness_cjson"
+    if T5.exists():
+        from targets import TARGETS  # noqa: E402
+        check("cjson VALID on a JSON document", run_once(T5, b'{"a":[1,2,null]}').outcome is Outcome.VALID)
+        r = run_once(T5, b"[1,2")
+        check("cjson REJECT with a byte-offset reason",
+              r.outcome is Outcome.REJECT and b"parse error at byte" in r.stderr)
+        check("cjson parses an embedded NUL faithfully (length-taking API)",
+              run_once(T5, b'["a\x00b"]').outcome is Outcome.VALID)
+        check("cjson control build crashes on the marker",
+              run_once(BUILD / "harness_cjson_control", b'"__CRASH__"').outcome is Outcome.CRASH)
+        poc = TARGETS["cjson"]["bugs"]["cve-2023-53154"]["poc"].encode()
+        check("CVE-2023-53154 PoC crashes the v1.7.17 bug build (heap over-read)",
+              run_once(BUILD / "harness_cjson_bug-cve-2023-53154", poc).outcome is Outcome.CRASH)
+        check("CVE-2023-53154 PoC is a clean REJECT on the pinned v1.7.18",
+              run_once(T5, poc).outcome is Outcome.REJECT)
+        check("depth 950 (the steer band) is VALID on cjson",
+              run_once(T5, b"[" * 950 + b"1" + b"]" * 950).outcome is Outcome.VALID)
+        check("depth 5000 is a clean REJECT on cjson (nesting limit 1000)",
+              run_once(T5, b"[" * 5000 + b"1" + b"]" * 5000).outcome is Outcome.REJECT)
+    else:
+        print("  SKIP  cjson binaries not built")
+
     print("== tomlc99 (T4, TOML): contract + ground-truth positive controls ==")
     sys.path.insert(0, str(ROOT / "fuzz"))
     from targets import TARGETS  # noqa: E402

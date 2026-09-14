@@ -1,0 +1,97 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.10799999999999998,
+  "summary": {
+    "outcomes": {
+      "valid": 5,
+      "reject": 14,
+      "crash": 15
+    },
+    "acceptance_rate": 0.147,
+    "max_nesting_depth": 1000,
+    "productions_accepted": [
+      "STRING",
+      "arr",
+      "json",
+      "value"
+    ],
+    "productions_gap": [
+      "obj",
+      "pair",
+      "NUMBER",
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 3,
+    "divergences": 2,
+    "divergence_examples": [
+      "b'\"\\\\x41\"\\x00'",
+      "b'\"\\\\x41\"\\x00'"
+    ],
+    "unique_crash_signatures": [
+      "ubsan:applying-non-zero-offset-to-null-pointer|json_parse_ex>harness_parse>run_stdin_mode"
+    ],
+    "reject_reasons_sample": [
+      [
+        "1:0: Unexpected `'` when seeking value",
+        3
+      ],
+      [
+        "1:0: Invalid character value `u`",
+        2
+      ],
+      [
+        "1:0: Unexpected `",
+        2
+      ],
+      [
+        "1:0: Expected `,` before `a`",
+        2
+      ],
+      [
+        "1:0: Expected `,` before `b`",
+        1
+      ]
+    ]
+  },
+  "probes": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "unicode_escape": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": true,
+  "score": 44.73
+}

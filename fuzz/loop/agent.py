@@ -649,6 +649,22 @@ _TARGET_REALITIES["tomlc99"] = """\
   outcomes; they are deviations, not defects.
 """
 
+_TARGET_REALITIES["cjson"] = """\
+- Respect the parser realities in the adaptation notes: nesting deeper than
+  ~1000 levels is cleanly REJECTED, so concentrate interesting depth NEAR that
+  limit rather than far beyond it. Emitting a raw NUL byte is allowed and
+  encouraged: the parse API takes an explicit length, so the harness tests it
+  faithfully. Trailing content after a complete value is ACCEPTED (the parser
+  stops at the end of the first value), so do not rely on it to produce
+  rejections.
+- NOTE: the parser ACCEPTS duplicate keys, trailing content, leading zeros
+  (`01`), a trailing dot (`1.`), hex numbers, non-finite magnitudes (1e309),
+  raw control and NUL bytes inside strings, and a leading byte-order mark; it
+  REJECTS trailing commas, a lone `-`, `+1`, `.5`, the `NaN` and `Infinity`
+  words, lone surrogate escapes, and nesting beyond 1000 levels. Expect those
+  outcomes; they are deviations, not defects.
+"""
+
 _REQUIREMENTS_TAIL = """\
 - The output must be `str` (the candidate JSON text; NUL/control chars are ok).
 - API pitfall: `st.tuples(a, b)` DRAWS TUPLES, not strings. Always `.map` a tuple
@@ -667,6 +683,10 @@ _ANON_PATTERNS: dict[str, list[tuple[str, str]]] = {
                 (r"\btoml_parse(?:_file)?\b", "the parse function"),
                 (r"\btoml\.c\b", "target.c"), (r"\bCVE-\d{4}-\d+\b", "a known issue"),
                 (r"#\d{2,3}\b", "a known issue")],
+    "cjson": [(r"\bcJSON_Parse\w*", "the parse function"), (r"(?i)\bcjson(?:'s)?\b", "the parser"),
+              (r"vendor/the parser/PROVENANCE\.md", "the provenance note"), (r"targets/the parser probe table", "the probe table"),
+              (r"\bcJSON\.c\b", "target.c"), (r"\bCVE-\d{4}-\d+\b", "a known issue"),
+              (r"#\d{3}\b", "a known issue")],
     "parson": [(r"\b[Pp]arson(?:'s)?", "the parser"),
                (r"\bjson_parse_(?:string|file)(?:_with_comments)?\b", "the parse function"),
                (r"\bparson\.c\b", "target.c")],
