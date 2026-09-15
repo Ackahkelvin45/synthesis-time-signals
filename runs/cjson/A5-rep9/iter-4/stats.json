@@ -1,0 +1,94 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.15533333333333335,
+  "summary": {
+    "outcomes": {
+      "valid": 59,
+      "reject": 291
+    },
+    "acceptance_rate": 0.169,
+    "max_nesting_depth": 992,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "false"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 7,
+    "divergences": 54,
+    "divergence_examples": [
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'\\xef\\xbb\\xbf\"\"'",
+      "b'\\xef\\xbb\\xbf{\"\\n\\\\ud800\\\\udc00\":1,\"\\n\\\\ud800\\\\udc00\":2,\"\\n\":null}garbage'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 0 of 4",
+        14
+      ],
+      [
+        "parse error at byte 0 of 6",
+        11
+      ],
+      [
+        "parse error at byte 0 of 9",
+        10
+      ],
+      [
+        "parse error at byte 4 of 5",
+        7
+      ],
+      [
+        "parse error at byte 0 of 3",
+        7
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 52.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 0.9,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 52.0
+}

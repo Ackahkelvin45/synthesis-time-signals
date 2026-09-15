@@ -1,0 +1,143 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.5223333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 162,
+      "reject": 188
+    },
+    "acceptance_rate": 0.463,
+    "max_nesting_depth": 1010,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "obj",
+      "pair",
+      "value"
+    ],
+    "productions_gap": [
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 9,
+    "divergences": 152,
+    "divergence_examples": [
+      "b'0x0'",
+      "b'0x2f2'",
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 1 of 8",
+        9
+      ],
+      [
+        "parse error at byte 0 of 1",
+        7
+      ],
+      [
+        "parse error at byte 3 of 26",
+        5
+      ],
+      [
+        "parse error at byte 0 of 3",
+        4
+      ],
+      [
+        "parse error at byte 1 of 4",
+        4
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 76.42,
+    "region_coverage_pct": 94.95,
+    "least_covered_functions": [
+      "cJSON_Compare (0% of branches)",
+      "print_value (0% of branches)",
+      "print_string_ptr (0% of branches)",
+      "print_number (0% of branches)",
+      "print_object (0% of branches)"
+    ]
+  },
+  "coverage_in_loop": {
+    "branch_pct": 76.42,
+    "region_pct": 94.95,
+    "line_pct": 88.63,
+    "branch_pct_file": 25.59,
+    "region_pct_file": 26.83,
+    "least_covered_functions": [
+      {
+        "name": "cJSON_Compare",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 128
+      },
+      {
+        "name": "print_value",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 81
+      },
+      {
+        "name": "print_string_ptr",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 79
+      },
+      {
+        "name": "print_number",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 78
+      },
+      {
+        "name": "print_object",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 78
+      }
+    ],
+    "functions_total": 112
+  },
+  "proxy_score": 44.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 0.9,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 76.42
+}

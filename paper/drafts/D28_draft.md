@@ -169,14 +169,24 @@ two hours to measure. For about fifteen minutes nine of its cells had been
 written by hand as timed out on the assumption that every seed would fail;
 the per-seed outcomes showed a mixture, the rows were deleted and the
 cells measured under the protocol. No hand-written cell remains in the
-cJSON data. [cJSON result.]
+cJSON data. Result (eval/matrix/full_report.md, cjson): H1 A12 0.25
+[0.06, 0.49], p 0.046, Holm 0.14, favouring no steering, 0.28 among usable
+generators; H2s A12 0.78 [0.52, 0.98], p 0.49 (one collapse each side),
+0.84 [0.60, 1.00], p 0.017 among usable; C3s vs A5 0.62 [0.35, 0.88], p
+0.83; H2n 0.54. Collapses C2 1, C3s 1, A5 0, C3n 0. Deltas C2 -0.51 (p
+0.039), A5 +1.35, C3s +1.15 (n 9), C3n -3.28 (n 8; rep2's final is the
+slow generator above, 6 of 20 cells timed out, mean 48.0). Repair paths on
+cJSON: C2 in place 0 of 4, re-seed 4 of 4; C3s in place 2 of 4, re-seed 1
+of 4; C3n in place 2 of 2. cJSON's fixed references, RQ3 cells and
+campaigns were not measured before the cutoff (below).
 AFL++ reference row via the official
 Docker image (no Homebrew on this Mac): afl-clang-fast -O2 -lm, no
 sanitizers, afl-fuzz defaults, one seed per format; the final queue is
 replayed through the study's coverage build with a raw-bytes path added to
 coverage_curve (string path unchanged). Pipeline check: 60 s on json-parser
 gave 174 queue entries at 1 122 exec/s and 65.4% reachable-region branch
-coverage. [Full row: 4 targets x 5 runs x 1 h, run overnight.] libexpat is
+coverage. The full row (4 targets x 5 runs x 1 h) did not run before the
+cutoff (below). libexpat is
 deferred to the revision. One-minute AFL smoke ran while the RQ4 campaigns
 were in progress (load already about 58 on 11 cores from nine workers);
 campaigns are time-budgeted, so machine load is a shared confound across
@@ -192,10 +202,27 @@ the field under LLM_TEMPERATURE=default and records "default" per call.
 Prices for the cost table: 0.25 USD per million input tokens and 2.00 per
 million output tokens, standard tier, OpenAI developer docs read
 2026-09-14; reasoning tokens are billed as output and are included in the
-recorded completion counts. [M2 result.]
+recorded completion counts. At the cutoff 18 of 30 M2 runs had completed
+(6 per arm; 6 more had failed at a DNS drop at 01:00 UTC and were queued
+for rerun) and none was measured. M2 is excluded from every table in the
+submission (the taxonomy and cost tables were regenerated with ARMS
+restricted to the five DeepSeek arms) and the runs stay in
+runs/tomlc99/M2*/ for the revision. Spend so far about 1.4 USD of OpenAI
+credit.
 
 **Prereg amendment (dated 2026-09-14).** C3s on json-parser and parson,
 and all C3n, ran as blocks after phases 1a and 1b rather than interleaved;
 C2' is a follow-up outside the family; the Holm family per target is now
 the full {H1, H2s, H2n}. Stage 2 targets, the AFL++ reference row and M2
 are deferred to revision.
+
+**Submission cutoff (2026-09-15, 01:05 UTC).** The deadline turned out to
+be 2026-09-15 10:00 UTC, not the 16th. At that point the cJSON measurement
+was complete (four arms, 1 680 rows, eval/matrix/day2.jsonl) and the M2
+batch stood at 18 of 30. The overnight chain (M2 measurement, cJSON RQ3
+cells, AFL++ row and replay, cJSON campaigns) could not finish in the nine
+hours left, so the paper was frozen on the complete data: Stage 1 (140
+runs) plus cJSON (40 runs), 180 runs and 4.63 USD. The chains were left
+running at the user's request; whatever they produce goes into the
+revision, not this submission. Excluded and disclosed in Section 4.6:
+cJSON RQ1 references, RQ3 cells and campaigns; libexpat; AFL++; M2.

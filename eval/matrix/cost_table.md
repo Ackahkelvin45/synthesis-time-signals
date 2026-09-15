@@ -16,7 +16,10 @@
 | tomlc99 | C3s | 10 | 6.4 | 29060 | 30540 | 0.041 | 3.6 | 108 | deepseek-flash |
 | tomlc99 | C3n | 10 | 5.3 | 23036 | 23978 | 0.033 | 4.0 | 147 | deepseek-flash |
 | tomlc99 | C2R | 10 | 5.3 | 22553 | 20732 | 0.029 | 3.7 | 135 | deepseek-flash |
-| cjson | C2 | 1 | 10.0 | 27840 | 27200 | 0.037 | 1.6 | 9 | deepseek-flash |
+| cjson | C2 | 10 | 5.6 | 14079 | 14176 | 0.019 | 3.8 | 168 | deepseek-flash |
+| cjson | A5 | 10 | 5.2 | 12285 | 13106 | 0.018 | 4.5 | 207 | deepseek-flash |
+| cjson | C3s | 10 | 5.9 | 15375 | 17311 | 0.023 | 3.7 | 152 | deepseek-flash |
+| cjson | C3n | 10 | 5.4 | 15959 | 17181 | 0.023 | 4.6 | 207 | deepseek-flash |
 
-All runs: 141; total 3.835 USD; mean 0.027 USD, 4.5 min per run; backstop hits 0; served ['deepseek-flash'].
+All runs: 180; total 4.633 USD; mean 0.026 USD, 4.4 min per run; backstop hits 0; served ['deepseek-flash'].
 Prices: .env estimates (0.27 USD/M input, 1.10 USD/M output); provider list prices for the served model bracket these (D26 addendum).

@@ -1,6 +1,6 @@
 # Stage 1 full report (registered structure, every arm)
 
-Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replicate; failed cells scored 0, so a collapsed replicate scores 0 and a seed generator that cannot draw scores 0). Unit = loop replicate. Bands: A12 >= 0.64 (or <= 0.36) practical; 0.56-0.64 (0.36-0.44) small; otherwise negligible. Confirmatory family per target: H1, H2s, H2n (Holm over the members run). C2R is a follow-up outside the family. Sources: eval/matrix/stage1.jsonl, eval/matrix/stage1c.jsonl, eval/matrix/day1.jsonl.
+Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replicate; failed cells scored 0, so a collapsed replicate scores 0 and a seed generator that cannot draw scores 0). Unit = loop replicate. Bands: A12 >= 0.64 (or <= 0.36) practical; 0.56-0.64 (0.36-0.44) small; otherwise negligible. Confirmatory family per target: H1, H2s, H2n (Holm over the members run). C2R is a follow-up outside the family. Sources: eval/matrix/stage1.jsonl, eval/matrix/stage1c.jsonl, eval/matrix/day1.jsonl, eval/matrix/day2.jsonl.
 
 ## json-parser
 
@@ -200,9 +200,71 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 | C2R | re-seed | 3 | 3 of 3 | 0.03 (min 0.03, max 0.03) |
 | C2R | (summary) | collapsed 0/10 | iteration-1 gate events 3 | in-iteration repair similarity 0.05 over 3 |
 
+## cjson
+
+### Per arm
+
+- C2 final: 61.8 ± 15.6 (median 68.3); replicate means 0.0, 66.9, 67.6, 71.4, 66.8, 69.7, 70.3, 67.0, 69.0, 69.1
+- C2: Δ(final − seed) = r1:+0.0, r2:+0.0, r3:-0.9, r4:-1.8, r5:-0.4, r6:-0.4, r7:-1.1, r8:-0.7, r9:+0.5, r10:-0.4; mean -0.51 ± 0.46; 2 up / 7 down / 1 zero of 10; sign-flip p = 0.0391
+- C2 last working iteration where it differs from final (1 replicates): 67.1 ± 0.0 (median 67.1)
+- C2 collapsed (final unusable, scored 0): 1 of 10 (rep1)
+- A5 final: 70.3 ± 1.6 (median 70.1); replicate means 73.1, 70.0, 72.5, 68.5, 65.8, 69.6, 72.0, 70.2, 69.0, 72.1
+- A5: Δ(final − seed) = r1:+6.4, r2:-0.4, r3:+4.3, r4:+0.1, r5:-0.7, r6:+0.4, r7:-0.3, r8:+0.0, r9:+2.6, r10:+1.0; mean +1.35 ± 1.69; 6 up / 3 down / 1 zero of 10; sign-flip p = 0.1133
+- A5 collapsed (final unusable, scored 0): 0 of 10
+- C3s final: 64.2 ± 16.2 (median 72.2); replicate means 72.2, 69.5, 71.4, 72.7, 72.6, 65.4, 72.2, 0.0, 73.7, 72.6
+- C3s: Δ(final − seed) = r1:+1.9, r2:-1.3, r3:+1.6, r4:+72.7, r5:+4.8, r6:-4.5, r7:+2.4, r8:+0.0, r9:+2.8, r10:+2.7; mean +8.30 ± 16.26; 7 up / 2 down / 1 zero of 10; sign-flip p = 0.1172
+- C3s: seed failed but final works for rep4 (delta inflated by the whole final level); without them mean +1.15 ± 2.10, p = 0.2344, n = 9
+- C3s last working iteration where it differs from final (2 replicates): 71.7 ± 9.1 (median 71.7)
+- C3s collapsed (final unusable, scored 0): 1 of 10 (rep8)
+- C3n final: 66.6 ± 5.1 (median 68.8); replicate means 72.9, 48.0, 69.1, 68.6, 70.4, 70.6, 68.2, 66.0, 62.7, 69.5
+- C3n: Δ(final − seed) = r1:+72.9, r2:-21.4, r3:+69.1, r4:+0.0, r5:-0.6, r6:-0.8, r7:+0.3, r8:+0.9, r9:-3.9, r10:-0.8; mean +11.57 ± 22.87; 4 up / 5 down / 1 zero of 10; sign-flip p = 0.4648
+- C3n: seed failed but final works for rep1, rep3 (delta inflated by the whole final level); without them mean -3.28 ± 6.23, p = 0.1562, n = 8
+- C3n last working iteration where it differs from final (1 replicates): 60.9 ± 0.0 (median 60.9)
+- C3n collapsed (final unusable, scored 0): 0 of 10
+
+### Confirmatory family
+
+- H1: C2 vs A5: Δmean (C2 − A5) = -8.49; A12 = 0.25 [0.06, 0.49] → practical, favouring A5; permutation p = 0.0455; n = 10 vs 10; Holm-adjusted p = 0.1366
+- H2s: C3s vs C2: Δmean (C3s − C2) = +2.44; A12 = 0.78 [0.52, 0.98] → practical, favouring C3s; permutation p = 0.4856; n = 10 vs 10; Holm-adjusted p = 0.9712
+- H2n: C3n vs C2: Δmean (C3n − C2) = +4.80; A12 = 0.54 [0.28, 0.80] → negligible; permutation p = 0.7358; n = 10 vs 10; Holm-adjusted p = 0.9712
+
+### Exploratory contrasts
+
+- C2 vs A5, healthy only (exploratory): 68.7 (n 9) vs 70.3 (n 10); A12 = 0.28 [0.07, 0.53] → practical, favouring A5; p = 0.0923
+- C3s vs C2, healthy only (exploratory): 71.4 (n 9) vs 68.7 (n 9); A12 = 0.84 [0.60, 1.00] → practical, favouring C3s; p = 0.0168
+- C3n vs C2, healthy only (exploratory): 66.6 (n 10) vs 68.7 (n 9); A12 = 0.49 [0.22, 0.77] → negligible; p = 0.5351
+- C3s vs A5 (context): Δmean (C3s − A5) = -6.05; A12 = 0.62 [0.35, 0.88] → small, favouring C3s; permutation p = 0.8314; n = 10 vs 10
+- C3n vs A5 (context): Δmean (C3n − A5) = -3.69; A12 = 0.31 [0.09, 0.58] → practical, favouring A5; permutation p = 0.1007; n = 10 vs 10
+- C3n vs C3s (context): Δmean (C3n − C3s) = +2.36; A12 = 0.28 [0.04, 0.54] → practical, favouring C3s; permutation p = 0.9866; n = 10 vs 10
+
+### Data integrity
+
+- C2: rows 420, failed cells 40, runs 10
+- A5: rows 400, failed cells 0, runs 10
+- C3s: rows 440, failed cells 60, runs 10
+- C3n: rows 420, failed cells 46, runs 10
+- reachable_region_sha ['fe1b1274d6b61daf']; features_backend ['jvm']
+
+### Mechanism: path after a gate event (log-only, exploratory)
+
+| arm | path | cases | next iteration recovered | code similarity to the failed iteration |
+|---|---|---|---|---|
+| C2 | in-place | 4 | 0 of 4 | 1.00 (min 1.00, max 1.00) |
+| C2 | re-seed | 4 | 4 of 4 | 0.06 (min 0.04, max 0.07) |
+| C2 | (summary) | collapsed 1/10 | iteration-1 gate events 5 | in-iteration repair similarity 1.00 over 6 |
+| A5 | fallback refine (last working generator shown) | 1 | 1 of 1 | n/a |
+| A5 | re-seed | 1 | 1 of 1 | 0.05 (min 0.05, max 0.05) |
+| A5 | (summary) | collapsed 0/10 | iteration-1 gate events 1 | in-iteration repair similarity 0.98 over 2 |
+| C3s | in-place | 4 | 2 of 4 | 0.99 (min 0.98, max 1.00) |
+| C3s | re-seed | 4 | 1 of 4 | 0.11 (min 0.11, max 0.11) |
+| C3s | (summary) | collapsed 0/10 | iteration-1 gate events 3 | in-iteration repair similarity 1.00 over 9 |
+| C3n | in-place | 2 | 2 of 2 | 0.96 (min 0.93, max 0.99) |
+| C3n | (summary) | collapsed 0/10 | iteration-1 gate events 2 | in-iteration repair similarity 0.98 over 4 |
+
 ## Spend (per-run final.json at .env prices)
 
 - json-parser: {'C2': 0.305, 'A5': 0.21, 'C3s': 0.278, 'C3n': 0.231, 'C2R': 0.233}
 - parson: {'C2': 0.214, 'A5': 0.194, 'C3s': 0.263, 'C3n': 0.218}
-- tomlc99: {'C2': 0.321, 'A5': 0.302, 'C3s': 0.414, 'C3n': 0.326, 'C2R': 0.289}
-- total 3.798 USD
+- tomlc99: {'C2': 0.321, 'A5': 0.302, 'C3s': 0.414, 'C3n': 0.326, 'C2R': 0.289, 'M2C2': 0.54, 'M2A5': 0.506, 'M2C3s': 0.409}
+- cjson: {'C2': 0.194, 'A5': 0.177, 'C3s': 0.232, 'C3n': 0.232}
+- total 6.088 USD

@@ -18,9 +18,12 @@ ARMS = ("C2", "A5", "C3s", "C3n", "C2R", "M2C2", "M2A5", "M2C3s")
 
 
 def main():
+    global ARMS
     ap = argparse.ArgumentParser()
+    ap.add_argument("--arms", default=",".join(ARMS), help="arms to include (default: all known)")
     ap.add_argument("--out", default="eval/matrix/cost_table.md")
     a = ap.parse_args()
+    ARMS = tuple(c for c in a.arms.split(",") if c)
     L = ["# T6: synthesis cost per run (mean over replicates; every completed run)", "",
          "| target | arm | runs | LLM calls | tokens in | tokens out | USD | wall min | CPU s | served |",
          "|---|---|---|---|---|---|---|---|---|---|"]

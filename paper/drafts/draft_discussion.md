@@ -3,7 +3,8 @@
 **What the heterogeneity says.** The pre-registration listed four outcomes
 and this is the fourth: the same three signals, in the same loop, with the
 same model, produced a detectable gain on one held-out parser (parson,
-under measured coverage), nothing on the other (tomlc99), and nothing
+under measured coverage), a gain against the proxy but not against no
+steering on a second (cJSON), nothing on the third (tomlc99), and nothing
 attributable to any signal on the development target, where the crash
 rule made every steered arm the same loop. Three readings are consistent
 with that and the study separates them only partly. (1) Headroom: the seed
@@ -12,13 +13,13 @@ need inputs a grammar-derived generator does not naturally produce. parson
 is the target with the most reachable functions (40 of 144) and the one
 where the oracle found something to do; tomlc99's remaining branches are
 error paths a TOML grammar does not describe. (2) Author: the cheap model
-failed a guard in 33 of 140 seeds, and on tomlc99 its seeds lose to a
+failed a guard in 44 of 180 seeds, and on tomlc99 its seeds lose to a
 mechanical generator, so on that target there may be nothing for a signal
 to improve. (3) The signal's form: the scalar helped on parson and the
 named-function variant did not, which suggests the model can act on "do
 better" with a number attached but not on "cover function X" when X is a
-name it has never seen the body of. The second model planned for the
-revision tests (2); a larger-budget arm tests (1); a C3n variant that shows
+name it has never seen the body of. The second model, whose runs were
+under way when this submission was frozen, tests (2); a larger-budget arm tests (1); a C3n variant that shows
 the function's source would test (3), and is the natural next condition.
 
 **The proxy is not vindicated and not condemned.** It cannot be
@@ -47,7 +48,8 @@ separately is what kept it from contaminating the held-out claims.
 **What Gentoo's thesis looks like from below.** Gentoo found that a strong
 white-box agent's generators do not need coverage guidance at fuzz time.
 Our cheap blind author's generators do not benefit from a blind signal at
-synthesis time, and benefit from measured coverage on one target in three.
+synthesis time, and benefit from measured coverage on one held-out target
+in three, and against the proxy only on a second.
 The common reading is that the grammar, plus whatever the model knows about
 the format, fixes most of the generator's reach at the first attempt. That
 reading has a sharp limit on tomlc99, where a mechanical generator from the
@@ -57,14 +59,14 @@ same grammar beat every LLM condition.
 model fix its own code has a repair path, and ours shows a clean,
 replicated failure of the "here is your code, change one thing" pattern:
 the model anchors on its own output and resubmits it, recovering 2 times in
-21. Re-seeding with the failure text recovers 7 in 9, and a loop that
+25. Re-seeding with the failure text recovers 12 in 14, and a loop that
 always re-seeds produced no unusable generator in 20 runs on two targets.
 This is exploratory in the registered sense and the collapse-count
 difference is not established at ten replicates per cell, but the two-path
-table is over 60 replicates, it replicates under the oracle arms, and its
+table is over 80 replicates, it replicates under the oracle arms, and its
 direction is not subtle.
 
-**Cost.** A run costs about three cents and five minutes. On the two
+**Cost.** A run costs about three cents and five minutes. On the three
 held-out targets it buys at most two points of coverage, and only under
 measured coverage on one of them. Twenty independent seeds cost less than
 one Gentoo synthesis and, on tomlc99, would be better spent on the grammar
@@ -74,4 +76,6 @@ and the adaptation note than on any refinement.
 missed would need to be below about A12 0.8 (Section 5.9). A second model
 family, a larger budget, a C3n that shows function bodies, and parsers with
 more unreached branches are the four cheapest ways to look for it; the
-first two and the Stage 2 parsers are pre-specified for the revision.
+second model's runs were under way when this submission was frozen
+(Section 4.6), and it and the remaining Stage 2 parser are pre-specified
+for the revision.

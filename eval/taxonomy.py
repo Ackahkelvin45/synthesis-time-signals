@@ -71,9 +71,12 @@ def events(rd: Path) -> list[dict]:
 
 
 def main() -> int:
+    global ARMS
     ap = argparse.ArgumentParser()
+    ap.add_argument("--arms", default=",".join(ARMS), help="arms to include (default: all known)")
     ap.add_argument("--out", default="eval/matrix/taxonomy.md")
     args = ap.parse_args()
+    ARMS = tuple(c for c in args.arms.split(',') if c)
     rows = []
     for t in TARGETS:
         for c in ARMS:

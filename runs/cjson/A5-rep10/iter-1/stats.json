@@ -1,0 +1,93 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.35533333333333333,
+  "summary": {
+    "outcomes": {
+      "reject": 233,
+      "valid": 117
+    },
+    "acceptance_rate": 0.334,
+    "max_nesting_depth": 1000,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.162,
+    "novelty": 19,
+    "divergences": 53,
+    "divergence_examples": [
+      "b'\\xef\\xbb\\xbf{}'",
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 0 of 14",
+        8
+      ],
+      [
+        "parse error at byte 0 of 1",
+        6
+      ],
+      [
+        "parse error at byte 0 of 4",
+        6
+      ],
+      [
+        "parse error at byte 0 of 3",
+        5
+      ],
+      [
+        "parse error at byte 58 of 111",
+        5
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 72.24,
+  "probes": {
+    "unicode_escape": {
+      "target": 0.9,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 72.24
+}

@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.25566666666666665,
+  "summary": {
+    "outcomes": {
+      "valid": 99,
+      "reject": 251
+    },
+    "acceptance_rate": 0.283,
+    "max_nesting_depth": 1002,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.04,
+    "novelty": 26,
+    "divergences": 47,
+    "divergence_examples": [
+      "b'\"\\\\udc00\"'",
+      "b'{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"'",
+      "b'{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 34 of 417",
+        7
+      ],
+      [
+        "parse error at byte 2 of 126",
+        6
+      ],
+      [
+        "parse error at byte 2 of 31",
+        4
+      ],
+      [
+        "parse error at byte 14 of 88",
+        4
+      ],
+      [
+        "parse error at byte 2 of 285",
+        3
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 99,
+      "reject": 251
+    },
+    "acceptance_rate": 0.283,
+    "max_nesting_depth": 1002,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.04,
+    "novelty": 26,
+    "divergences": 47,
+    "divergence_examples": [
+      "b'\"\\\\udc00\"'",
+      "b'{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"'",
+      "b'{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"k\":[{\"'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 76.8,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 76.8
+}

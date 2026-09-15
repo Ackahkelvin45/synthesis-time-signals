@@ -26,7 +26,7 @@ LABEL = {"C2": "proxy", "A5": "no steering", "C3s": "coverage", "C3n": "coverage
 
 def t1():
     L = ["## T1. Targets", "", "| target | source | lines | functions | parse-reachable functions | grammar (grammars-v4) | ground-truth bug builds | role |",
-         "|---|---|---|---|---|---|---|---|"]
+         "|-------|----------|-----|--------|----------|--------------|--------------|-----------|"]
     role = {"json-parser": "development (in-sample)", "parson": "held out", "tomlc99": "held out", "cjson": "held out (Stage 2)"}
     for t, v in TARGETS.items():
         src = ROOT / v["src"]
@@ -43,10 +43,10 @@ def t1():
 def t2(data):
     L = ["## T2. Final-generator level and refinement delta per target and arm", "",
          "Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; failed cells and collapsed finals score 0). "
-         "Mean ± 95% CI over ten replicates (median). Δ = final − seed per replicate, exact sign-flip test; replicates whose seed "
-         "generator failed but whose final works are excluded from Δ and counted in the last column.", "",
-         "| target | arm | final | collapsed | Δ final − seed | up / down | sign-flip p | seed failed, final works | last working where it differs |",
-         "|---|---|---|---|---|---|---|---|---|"]
+         "Mean ± 95% CI over ten replicates (median); coll. = collapsed replicates; last working = the last working iteration's level where it differs from the final (n = replicates where it differs). Δ = final − seed per replicate, exact sign-flip test; replicates whose seed "
+         "generator failed but whose final works are excluded from Δ and counted under seed failed.", "",
+         "| target | arm | final | coll. | Δ final − seed | up / down | sign-flip p | seed failed | last working |",
+         "|--------|--------------|-----------------|-----|--------------|-------|--------|-------|-----------|"]
     for t in ("json-parser", "parson", "tomlc99", "cjson"):
         d = data[t]
         for c in ARMS:

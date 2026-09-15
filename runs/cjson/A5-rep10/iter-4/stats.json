@@ -1,0 +1,93 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.24433333333333332,
+  "summary": {
+    "outcomes": {
+      "reject": 247,
+      "valid": 103
+    },
+    "acceptance_rate": 0.294,
+    "max_nesting_depth": 976,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.155,
+    "novelty": 20,
+    "divergences": 57,
+    "divergence_examples": [
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'[ {\"\\xc3\\xaf\\xc4\\x84\\x1a\\\\\"\\x12\\\\b\\xc3\\xb2_\\x1b\\\\u7521\\\\\\\\\\\\u4cC0\":{},\"<\\xc2\\x87\\xc4\\x9c\\xf0\\xb8\\xb0\\xa2ct\":[ \"\" , \"\\\\u89aD\" ]} ]abc'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 0 of 1",
+        4
+      ],
+      [
+        "parse error at byte 26 of 77",
+        4
+      ],
+      [
+        "parse error at byte 4852 of 5832",
+        4
+      ],
+      [
+        "parse error at byte 1 of 3",
+        3
+      ],
+      [
+        "parse error at byte 2 of 3",
+        3
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 73.1,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 73.1
+}

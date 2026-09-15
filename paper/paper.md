@@ -14,17 +14,17 @@ coverage of the parser's reachable region each round, with and without the
 names of the least-covered functions. The study is pre-registered, with one
 primary outcome (the area under the branch-coverage curve to ten thousand
 inputs on seeds the loop never saw), ten independent loop replicates per
-cell, and three C parsers in two text formats. No comparison in the
+cell, and four C parsers in two text formats. No comparison in the
 confirmatory family survives correction. Five rounds of refinement move
 the first-draft generator's coverage by one to two points: upward under
-measured coverage on one held-out parser, not at all on the other, and
-never under the proxy or under no steering. Naming the functions to cover
+measured coverage on one held-out parser, within noise on the other two,
+and never under the proxy or under no steering. Naming the functions to cover
 did worse than giving the number. Whether the first draft beats
 Grammarinator on the identical grammar depends on the target (a tie, ahead,
 and clearly behind on TOML). The loop's one visible failure, an unusable
 output generator, traces to its repair policy rather than its signal: shown
-its own failed code the model resubmits it, recovering 2 times in 21;
-re-seeded from the grammar it recovers 7 in 9, and a re-seeding loop
+its own failed code the model resubmits it, recovering 2 times in 25;
+re-seeded from the grammar it recovers 12 in 14, and a re-seeding loop
 produced no unusable generator in twenty runs. On the development target a
 crash-first rule silently made every steered arm one loop, a confound only
 replication exposed. At three cents a run, the grammar-seeded first draft
@@ -63,21 +63,22 @@ We pre-registered the design (hypotheses, one primary outcome, ten
 replicates per cell, exclusion rules, analysis code, a neutral title)
 before the first replicate run, froze it in version control, and report
 every deviation. The unit of analysis is the loop replicate, because the
-model is a high-variance author: 33 of our 140 first drafts failed a guard,
+model is a high-variance author: 44 of our 180 first drafts failed a guard,
 and the pilot's single-run 51-to-72 score trajectory did not reproduce.
 
 Contributions.
 1. A replicated, pre-registered comparison of four synthesis-time signals
-   on three C parsers. No comparison survives correction; measured coverage
-   produced a detectable gain on one held-out target before correction,
-   the proxy and no steering never did, and naming functions to cover did
-   worse than the number (Section 5).
+   on four C parsers. No comparison survives correction; measured coverage
+   produced a detectable gain on one held-out target before correction
+   and beat the proxy, but not no steering, on a second; the proxy never
+   did, and naming functions to cover did worse than the number (Section
+   5).
 2. The community baseline the LLM-generator literature usually omits:
    Grammarinator on the identical grammar against twenty LLM first drafts
    per target. LLM authorship is a tie, ahead, and clearly behind,
    depending on the target (Section 5.4).
 3. A mechanism for the loop's only visible failure, unusable output
-   generators: fixation under in-place repair, a three-path table over 60
+   generators: fixation under in-place repair, a three-path table over 80
    replicates that replicates under the oracle arms, and a pre-specified
    intervention (repair by re-seed) that removes the failure on two targets
    without changing coverage (Section 6).
@@ -219,12 +220,18 @@ timestamp. Deviations are disclosed in Section 4.6.
 
 ### 4.2 Targets
 
-Three C parsers, three grammars, two formats: json-parser (JSON; the
+Four C parsers, three grammars, two formats: json-parser (JSON; the
 development target, on which the proxy was designed, reported separately),
-parson (JSON; held out), tomlc99 (TOML; held out). Each has a sanitizer build
+parson (JSON; held out), tomlc99 (TOML; held out), and cJSON (JSON; held
+out; the first of the two Stage 2 targets named in the pre-registration,
+run after the Stage 1 analysis, Section 4.6). cJSON v1.7.18 is parsed
+through its length-taking entry point with an exact-length buffer, so that
+the harness can reach the over-read of Section 4.5 in the bug build; its
+adaptation note and prompts are anonymised so that no library name reaches
+the model. Each has a sanitizer build
 (ASan and UBSan, -O0, no recovery) used by the loop, a coverage build used
-only for measurement, and, for json-parser and tomlc99, sanitizer builds at
-pinned pre-fix commits of known bugs (Section 4.5). Absolute coverage is not
+only for measurement, and, for json-parser, tomlc99 and cJSON, sanitizer
+builds at pinned pre-fix commits of known bugs (Section 4.5). Absolute coverage is not
 comparable across targets; every comparison is within a target.
 
 The primary outcome's denominator is the parse-reachable region: the
@@ -235,7 +242,8 @@ per target and its hash is recorded in every run and every measurement.
 ### 4.3 Conditions, replicates, and order
 
 Loop conditions C2, A5, C3s and C3n, ten independent replicates each per
-target (120 runs), plus C2' on json-parser and tomlc99 (20 runs). Fixed generators: random text,
+target (160 runs), plus C2' on json-parser and tomlc99 (20 runs). Fixed
+generators, measured on the three Stage 1 targets: random text,
 Grammarinator 26.1 on the identical grammar (defaults, and with recursive
 alternatives up-weighted to match the mean nesting depth of the development
 target's pilot seed), and each replicate's own seed generator. Model:
@@ -295,20 +303,29 @@ confirmatory family (RQ1, RQ3, RQ4, the mechanism analysis, C2') is
 exploratory and is labelled so in every table.
 
 **Deviations from the registered design.** C3s on json-parser and parson,
-and C3n on all three targets, were run as blocks after phases 1a and 1b
+and C3n on all three Stage 1 targets, were run as blocks after phases 1a and 1b
 rather than interleaved with them, so provider drift is not orthogonal to
 those cells (the served model identifier was constant across every batch);
 C2' was added after the mechanism analysis and is outside the confirmatory
-family; Stage 2 targets, the AFL++ reference row and the second model were
-not run for this submission. The registered Stage 1 budget was 4.00 USD;
-3.80 USD was spent on 140 runs, plus about 0.03 USD on attempts discarded
-after network failures.
+family. The first Stage 2 target, cJSON, was run in full (four arms, ten
+replicates) after the Stage 1 analysis, as the registration's Stage 2
+allows, and is reported in every table beside the Stage 1 targets; its
+fixed references (RQ1), its RQ3 cells and its bug campaigns were not
+measured before the submission cutoff. The second Stage 2 target
+(libexpat), the AFL++ reference row and the second model (gpt-5-mini on
+tomlc99, arms C2, A5 and C3s) were not completed: the second model's batch
+stood at 18 of 30 runs when the submission was frozen, and those runs are
+excluded from every table and kept in the artifact. The registered Stage 1
+budget was 4.00 USD; 3.80 USD was spent on the 140 Stage 1 and C2' runs
+and 0.84 USD on the 40 cJSON runs (4.63 USD in total), plus about 0.03
+USD on attempts discarded after network failures and about 1.4 USD of
+OpenAI credit on the excluded second-model runs.
 
 ### 4.7 Use of large language models
 
 Large language models were used in two distinct roles. As the object of
 study, the generators evaluated in this paper were written by the DeepSeek
-model named in Section 4.3 (and, for Section 5.10, by gpt-5-mini), under
+model named in Section 4.3, under
 the prompts released in the artifact; that use is the experiment. As an
 assistant during the research, an AI coding assistant (Claude, Anthropic)
 was used for writing and refactoring the evaluation and analysis code, for
@@ -328,21 +345,22 @@ per-replicate delta against the seed, and the last working iteration's
 level where it differs from the final. Figure 1 shows the coverage curves,
 Figure 2 the between-arm effect sizes, Figure 3 the deltas.
 
-**Table 1. Targets
+**Table 1. Targets**
 
 | target | source | lines | functions | parse-reachable functions | grammar (grammars-v4) | ground-truth bug builds | role |
-|---|---|---|---|---|---|---|---|
+|-------|----------|-----|--------|----------|--------------|--------------|-----------|
 | json-parser | json.c | 1057 | 10 | 9 | JSON.g4 | issue68, issue78 | development (in-sample) |
 | parson | parson.c | 2486 | 144 | 40 | JSON.g4 | none | held out |
+| cjson | cJSON.c | 3143 | 112 | 13 | JSON.g4 | cve-2023-53154 | held out (Stage 2) |
 | tomlc99 | toml.c | 2392 | 82 | 53 | TomlLexer.g4, TomlParser.g4 | issue50, recursion | held out |
 
 
-**Table 2. Final-generator level and refinement delta per target and arm
+**Table 2. Final-generator level and refinement delta per target and arm**
 
-Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; failed cells and collapsed finals score 0). Mean ± 95% CI over ten replicates (median). Δ = final − seed per replicate, exact sign-flip test; replicates whose seed generator failed but whose final works are excluded from Δ and counted in the last column.
+Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; failed cells and collapsed finals score 0). Mean ± 95% CI over ten replicates (median); coll. = collapsed replicates; last working = the last working iteration's level where it differs from the final (n = replicates where it differs). Δ = final − seed per replicate, exact sign-flip test; replicates whose seed generator failed but whose final works are excluded from Δ and counted under seed failed.
 
-| target | arm | final | collapsed | Δ final − seed | up / down | sign-flip p | seed failed, final works | last working where it differs |
-|---|---|---|---|---|---|---|---|---|
+| target | arm | final | coll. | Δ final − seed | up / down | sign-flip p | seed failed | last working |
+|--------|--------------|-----------------|-----|--------------|-------|--------|-------|-----------|
 | json-parser | C2 proxy | 51.0 ± 19.3 (63.9) | 2 | -1.02 ± 0.81 | 2 / 6 | 0.031 | 0 | - |
 | json-parser | A5 no steering | 63.7 ± 2.8 (64.6) | 0 | +0.15 ± 1.16 | 6 / 4 | 0.768 | 0 | - |
 | json-parser | C3s coverage | 48.8 ± 18.7 (59.4) | 2 | -1.60 ± 1.70 | 2 / 6 | 0.062 | 0 | - |
@@ -357,6 +375,10 @@ Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; fai
 | tomlc99 | C3s coverage | 55.1 ± 14.1 (60.6) | 1 | +0.22 ± 0.61 | 5 / 1 | 0.438 | 0 | 50.7 (n 6) |
 | tomlc99 | C3n coverage + names | 57.4 ± 3.7 (58.5) | 0 | -0.70 ± 0.96 | 0 / 3 | 0.250 | 1 | 51.2 (n 4) |
 | tomlc99 | C2R C2' re-seed repair | 59.3 ± 2.4 (60.3) | 0 | -1.41 ± 1.64 | 1 / 7 | 0.086 | 0 | 60.2 (n 3) |
+| cjson | C2 proxy | 61.8 ± 15.6 (68.3) | 1 | -0.51 ± 0.46 | 2 / 7 | 0.039 | 0 | 67.1 (n 1) |
+| cjson | A5 no steering | 70.3 ± 1.6 (70.1) | 0 | +1.35 ± 1.69 | 6 / 3 | 0.113 | 0 | - |
+| cjson | C3s coverage | 64.2 ± 16.2 (72.2) | 1 | +1.15 ± 2.10 | 6 / 2 | 0.234 | 1 | 71.7 (n 2) |
+| cjson | C3n coverage + names | 66.6 ± 5.1 (68.8) | 0 | -3.28 ± 6.23 | 2 / 5 | 0.156 | 2 | 60.9 (n 1) |
 
 
 ![Branch coverage of the parse-reachable region against inputs drawn, per target and arm: median over replicates with the interquartile band; the seed mean and the stronger Grammarinator variant as dashed and dotted lines.](figures/f1_curves.pdf)
@@ -392,15 +414,20 @@ Vargha-Delaney A12 of the final level, ten replicates per arm, bootstrap
 | json-parser (see 5.1) | 0.36 [0.14, 0.63], p 0.24 | 0.36 [0.11, 0.62], p 0.67 | 0.36 [0.12, 0.64], p 0.96 |
 | parson | 0.59 [0.32, 0.84], p 0.90 | 0.76 [0.52, 0.96], p 0.044, Holm 0.13 | 0.33 [0.09, 0.59], p 0.96 |
 | tomlc99 | 0.39 [0.14, 0.66], p 0.29 | 0.60 [0.35, 0.86], p 0.65 | 0.47 [0.21, 0.74], p 0.71 |
+| cjson (Stage 2, Section 4.6) | 0.25 [0.06, 0.49], p 0.046, Holm 0.14 | 0.78 [0.52, 0.98], p 0.49 | 0.54 [0.28, 0.80], p 0.74 |
 
 ![Vargha-Delaney A12 with bootstrap 95% CI for every between-arm contrast run, per target; the shaded bands are the registered negligible and small ranges.](figures/f2_forest.pdf)
 
-H1 is null on all three targets, with the point estimate favouring no
-steering on two of them; the mean differences there are driven by the
-proxy arm's collapsed replicates (two, one and one), which score zero as
-registered, and among usable generators the two arms are indistinguishable
-on every target (json-parser 63.7 vs 63.7; parson A12 0.66 [0.38, 0.89];
-tomlc99 0.43 [0.16, 0.71]).
+H1 is null on all four targets after correction, with the point estimate
+favouring no steering on three of them; the mean differences are driven by
+the proxy arm's collapsed replicates (two, one, one and one), which score
+zero as registered, and among usable generators the two arms are
+indistinguishable on the three Stage 1 targets (json-parser 63.7 vs 63.7;
+parson A12 0.66 [0.38, 0.89]; tomlc99 0.43 [0.16, 0.71]). cJSON, the
+fourth target, run after the Stage 1 analysis (Section 4.6), is the one
+target where the proxy arm also sits below no steering among usable
+generators (68.7 vs 70.3, A12 0.28 [0.07, 0.53], p 0.09): A12 0.25 [0.06,
+0.49] before correction, p 0.046, Holm 0.14.
 
 H2s is null on tomlc99 and on the development target. On parson the
 coverage-scalar oracle is the one cell in the family with a detectable
@@ -411,9 +438,17 @@ steering, and every one of its ten replicates produced a usable generator.
 Holm over the three-member family takes the p to 0.13, so by the
 registered rule the family is null on parson too; the cell is reported as
 what it is, a practical-band effect on one target that the design's
-correction does not confirm.
+correction does not confirm. cJSON repeats the parson pattern in a weaker
+form: the coverage-scalar finals reach 64.2 ± 16.2 (median 72.2; 71.4
+among usable generators) against the proxy's 61.8 ± 15.6 (68.7 usable),
+A12 0.78 [0.52, 0.98], and 0.84 [0.60, 1.00] (p 0.017) among usable
+generators; the permutation p on the mean difference is 0.49 because each
+arm has one collapsed replicate. Against no steering (70.3 ± 1.6) the same
+arm is A12 0.62 [0.35, 0.88], p 0.83, so on cJSON measured coverage beats
+the proxy and does not detectably beat leaving the model alone.
 
-H2n is null on all three targets, and on parson the named-function variant
+H2n is null on all four targets (cJSON A12 0.54 [0.28, 0.80]; 0.28 [0.04,
+0.54] against the scalar oracle), and on parson the named-function variant
 is clearly below the scalar one (A12 0.09 [0.00, 0.26], p 0.001, an
 exploratory contrast outside the family): telling the model which
 functions were least covered did worse than telling it the number.
@@ -432,7 +467,12 @@ delta by the whole final level and are flagged in Table 2): proxy −0.01,
 no steering +1.80, C3s +0.22, C3n −0.70, C2' −1.41. On json-parser the
 degenerate loop of 5.1 moves every steered arm down: proxy −1.02 (p 0.03),
 C3s −1.60 (p 0.06), C3n −9.2 with its collapse and −0.1 to −6.5 without it
-(10 of 10 down, p 0.002), C2' −1.32; no steering is within noise. Five
+(10 of 10 down, p 0.002), C2' −1.32; no steering is within noise. On cJSON
+the proxy moves its seed down by −0.51 ± 0.46 (2 up, 7 down, p 0.039), no
+steering +1.35 ± 1.69 (p 0.11), the coverage scalar +1.15 ± 2.10 over the
+nine replicates whose seed drew (p 0.23), and the named-function oracle
+−3.28 ± 6.23 over eight, one of which lost 21 points to a final whose
+draws time out (Section 8). Five
 rounds of feedback change the seed's coverage by one to two points on the
 held-out targets, upward only under measured coverage on parson.
 
@@ -455,7 +495,10 @@ mean. On tomlc99 Grammarinator also beats every loop arm's finals (A12 0.14
 against no steering, 0.13 against the proxy) and, in Figure 1, the oracle
 arms only reach it at 10 000 inputs. Three of twenty tomlc99 seed
 generators could not draw at all. The TOML Grammarinator was not
-depth-calibrated (Section 7).
+depth-calibrated (Section 7). cJSON's fixed references (random text and
+Grammarinator on the JSON grammar, byte-identical to the json-parser and
+parson input sets) were not measured before the submission cutoff (Section
+4.6); cJSON has no RQ1 row and no equal-time view.
 
 ### 5.5 RQ3: the proxy tracks coverage across generators, not across a run's own iterations
 
@@ -525,28 +568,33 @@ the buffer, which the LLM seeds emit because the prompt asks for near-valid
 malformed inputs. Every other crash signature seen in the campaigns
 occurred on a pre-fix source (a known UBSan integer overflow in old
 json-parser; scan_string over-reads in old tomlc99, fixed upstream since);
-the pinned HEAD builds produced none, so there are no new findings.
+the pinned HEAD builds produced none, so there are no new findings. The
+cJSON campaigns (CVE-2023-53154, Section 4.5) were not run before the
+submission cutoff; the bug build, its positive control and the campaign
+driver are in the artifact.
 
 ### 5.7 RQ5: how the author fails
 
-Ninety-six guard events across 140 replicates (Table 4; eval/matrix/
-taxonomy.md). The largest classes are unparseable responses (17),
-strategy-versus-value confusion (15: concatenating a strategy object to a
-string, calling a strategy as a value), generic Python errors (14), and
+One hundred and twenty-one guard events across 180 replicates (four
+targets, the four registered arms and C2'; Table 4; eval/matrix/
+taxonomy.md). The largest classes are unparseable responses (24),
+strategy-versus-value confusion (24: concatenating a strategy object to a
+string, calling a strategy as a value), generic Python errors (18),
 Hypothesis's ExceptionGroup wrapper (13, all in the proxy arm), whose
 message names no exception, line or construct because the loop's error
 formatter forwards the wrapper rather than its sub-exceptions, so those
-repair prompts carried no information. Recursion and health-check failures
-(12) cluster in the coverage-scalar arm (10). Thirty-three of 140 seeds
-failed at least one guard at iteration 1. By target: tomlc99 46 events,
-json-parser 42, parson 8; the two-file, mode-based TOML grammar is the
-harder authoring task and the one where Grammarinator wins.
+repair prompts carried no information, recursion and health-check failures
+(13, of which 10 in the coverage-scalar arm) and hallucinated Hypothesis
+API names (13). Forty-four of 180 seeds failed at least one guard at
+iteration 1. By target: tomlc99 46 events, json-parser 42, cJSON 25,
+parson 8; the two-file, mode-based TOML grammar is the harder authoring
+task and the one where Grammarinator wins.
 
 ### 5.8 Cost
 
-Table 6 (eval/matrix/cost_table.md). 140 runs, 3.80 USD in total; a run
-costs 0.019 to 0.041 USD (mean 0.027) and 3.6 to 9.4 minutes of wall clock
-(mean 4.5), with 14 000 to 31 000 tokens in and about the same out. Every
+Table 6 (eval/matrix/cost_table.md). 180 runs, 4.63 USD in total; a run
+costs 0.018 to 0.041 USD (mean 0.026) and 3.6 to 9.4 minutes of wall clock
+(mean 4.4), with 12 000 to 31 000 tokens in and about the same out. Every
 call was served by deepseek-flash. Gentoo reports 7.5 to 12.8 USD per
 synthesis; twenty independent seeds on one target cost less than one of
 theirs.
@@ -554,9 +602,9 @@ theirs.
 ### 5.9 Sensitivity of the design
 
 With ten replicates per arm and the between-replicate SD of usable
-generators (3.3, 2.2 and 5.2 AUC points on json-parser, parson and
-tomlc99), the registered permutation test reaches 80% power at a mean
-shift of 4.5, 3.0 and 6.5 points, a true A12 of about 0.82. Effects in the
+generators (3.3, 2.2, 5.2 and 2.2 AUC points on json-parser, parson,
+tomlc99 and cJSON), the registered permutation test reaches 80% power at
+a mean shift of 4.5, 3.0, 6.5 and 3.0 points, a true A12 of about 0.82. Effects in the
 lower half of the registered practical band (0.64 to 0.80) are not
 reliably detectable by this design, so every null above reads "no
 detectable effect at this budget". Collapsed replicates, which score zero,
@@ -570,9 +618,10 @@ the logs after the confirmatory analysis.
 
 ### 6.1 The collapsed replicates resubmit their own code
 
-Eight replicates across the registered arms ended with a generator that
-raised on every draw (proxy: json-parser 7 and 10, parson 6, tomlc99 3;
-C3s: json-parser 9 and 10, tomlc99 8; C3n: json-parser 8). In the four
+Ten replicates across the registered arms ended with a generator that
+raised on every draw (proxy: json-parser 7 and 10, parson 6, tomlc99 3,
+cJSON 1; C3s: json-parser 9 and 10, tomlc99 8, cJSON 8; C3n: json-parser
+8). In the four
 proxy-arm cases analysed first, the model received the same repair
 instruction at iterations 2 to 5 and answered with code 98.4% similar to
 the previous iteration; three of the four returned byte-identical modules
@@ -583,23 +632,24 @@ AttributeError and still resubmitted.
 ### 6.2 Recovery is a property of the path, not the arm
 
 After a gate event the loop takes one of three paths, decided by what the
-next prompt shows the model. Pooled over the 60 proxy and no-steering
-replicates:
+next prompt shows the model. Pooled over the 80 proxy and no-steering
+replicates on the four targets:
 
 | path | cases | next iteration recovered | code similarity to the failed iteration |
 |---|---|---|---|
-| in place: the failed code with "make exactly one change" | 21 (C2 18, A5 3) | 2 of 21 | 0.98 (min 0.75) |
-| fallback: the last working generator | 3 (C2 3) | 2 of 3 | 0.95 |
-| re-seed from the grammar with the failure text | 9 (C2 5, A5 4) | 7 of 9 | 0.07 (0.02 to 0.11) |
+| in place: the failed code with "make exactly one change" | 25 (C2 22, A5 3) | 2 of 25 | 0.98 (min 0.75) |
+| fallback: the last working generator | 4 (C2 3, A5 1) | 3 of 4 | 0.95 |
+| re-seed from the grammar with the failure text | 14 (C2 9, A5 5) | 12 of 14 | 0.07 (0.02 to 0.11) |
 
-The pattern holds under the oracle arms, pooled over their 60
-replicates: in place 3 of 19 recovered at similarity 0.96 to 1.00, re-seed
-10 of 11 at 0.02 to 0.15, fallback 1 of 2 (eval/matrix/full_report.md,
+The pattern holds under the oracle arms, pooled over their 80
+replicates: in place 7 of 25 recovered at similarity 0.93 to 1.00, re-seed
+11 of 15 at 0.02 to 0.15, fallback 1 of 2 (eval/matrix/full_report.md,
 per-target tables). In-iteration repairs, which always show the failed code,
 resubmit near-identical code in every in-place arm (mean similarity 0.94
 to 1.00). Both arms use the identical seed prompt and guards, so the
 iteration-1 gate incidence is sampling variation of one process; within
-the proxy arm an iteration-1 gate predicts collapse (4 of 4 collapsed had
+the proxy arm on the three Stage 1 targets an iteration-1 gate predicts
+collapse (4 of 4 collapsed had
 one, 5 of 26 healthy; Fisher p 0.005).
 
 ### 6.3 C2': repair by re-seed, on two targets
@@ -630,7 +680,8 @@ the failure text) before it is about the signal.
 **What the heterogeneity says.** The pre-registration listed four outcomes
 and this is the fourth: the same three signals, in the same loop, with the
 same model, produced a detectable gain on one held-out parser (parson,
-under measured coverage), nothing on the other (tomlc99), and nothing
+under measured coverage), a gain against the proxy but not against no
+steering on a second (cJSON), nothing on the third (tomlc99), and nothing
 attributable to any signal on the development target, where the crash
 rule made every steered arm the same loop. Three readings are consistent
 with that and the study separates them only partly. (1) Headroom: the seed
@@ -639,13 +690,13 @@ need inputs a grammar-derived generator does not naturally produce. parson
 is the target with the most reachable functions (40 of 144) and the one
 where the oracle found something to do; tomlc99's remaining branches are
 error paths a TOML grammar does not describe. (2) Author: the cheap model
-failed a guard in 33 of 140 seeds, and on tomlc99 its seeds lose to a
+failed a guard in 44 of 180 seeds, and on tomlc99 its seeds lose to a
 mechanical generator, so on that target there may be nothing for a signal
 to improve. (3) The signal's form: the scalar helped on parson and the
 named-function variant did not, which suggests the model can act on "do
 better" with a number attached but not on "cover function X" when X is a
-name it has never seen the body of. The second model planned for the
-revision tests (2); a larger-budget arm tests (1); a C3n variant that shows
+name it has never seen the body of. The second model, whose runs were
+under way when this submission was frozen, tests (2); a larger-budget arm tests (1); a C3n variant that shows
 the function's source would test (3), and is the natural next condition.
 
 **The proxy is not vindicated and not condemned.** It cannot be
@@ -674,7 +725,8 @@ separately is what kept it from contaminating the held-out claims.
 **What Gentoo's thesis looks like from below.** Gentoo found that a strong
 white-box agent's generators do not need coverage guidance at fuzz time.
 Our cheap blind author's generators do not benefit from a blind signal at
-synthesis time, and benefit from measured coverage on one target in three.
+synthesis time, and benefit from measured coverage on one held-out target
+in three, and against the proxy only on a second.
 The common reading is that the grammar, plus whatever the model knows about
 the format, fixes most of the generator's reach at the first attempt. That
 reading has a sharp limit on tomlc99, where a mechanical generator from the
@@ -684,14 +736,14 @@ same grammar beat every LLM condition.
 model fix its own code has a repair path, and ours shows a clean,
 replicated failure of the "here is your code, change one thing" pattern:
 the model anchors on its own output and resubmits it, recovering 2 times in
-21. Re-seeding with the failure text recovers 7 in 9, and a loop that
+25. Re-seeding with the failure text recovers 12 in 14, and a loop that
 always re-seeds produced no unusable generator in 20 runs on two targets.
 This is exploratory in the registered sense and the collapse-count
 difference is not established at ten replicates per cell, but the two-path
-table is over 60 replicates, it replicates under the oracle arms, and its
+table is over 80 replicates, it replicates under the oracle arms, and its
 direction is not subtle.
 
-**Cost.** A run costs about three cents and five minutes. On the two
+**Cost.** A run costs about three cents and five minutes. On the three
 held-out targets it buys at most two points of coverage, and only under
 measured coverage on one of them. Twenty independent seeds cost less than
 one Gentoo synthesis and, on tomlc99, would be better spent on the grammar
@@ -701,7 +753,9 @@ and the adaptation note than on any refinement.
 missed would need to be below about A12 0.8 (Section 5.9). A second model
 family, a larger budget, a C3n that shows function bodies, and parsers with
 more unreached branches are the four cheapest ways to look for it; the
-first two and the Stage 2 parsers are pre-specified for the revision.
+second model's runs were under way when this submission was frozen
+(Section 4.6), and it and the remaining Stage 2 parser are pre-specified
+for the revision.
 
 ## 8. Threats to validity
 
@@ -729,13 +783,18 @@ for the follow-up. Draw times were measured under varying machine load; they mat
 because every generator produces and runs its 10 000 inputs in under five
 minutes, so the equal-time views coincide with the equal-n view. The
 batch-drift check (seed levels of later batches against earlier ones, same
-prompt) shows no shift: A12 0.43 to 0.61, p > 0.15, on every target. The bug
+prompt) shows no shift: A12 0.43 to 0.61, p > 0.15, on every target. One cJSON
+final generator (C3n replicate 2) draws its 10 000 inputs in 785 to 890 s
+against the protocol's 900 s draw limit; 6 of its 20 cells timed out and
+score 0 as registered, which is why that replicate's mean is 48.0 in Table
+2 and why the C3n row on cJSON carries the widest interval. The bug
 campaigns are time-budgeted and ran nine at a time on an eleven-core machine
 under heavy load; the load was shared by every arm, so it compresses every
 campaign's input count alike, but inputs-to-trigger is the more reliable of
 the two trigger measures and is the one reported first.
 
-**External.** Three small C parsers of two text formats; one model family;
+**External.** Four small C parsers of two text formats (three of them JSON);
+one model family;
 one grammar source; five iterations of 500 inputs. The nulls are "no
 detectable effect at this budget", and the design's sensitivity is stated
 next to each (with ten replicates per arm at the observed variance, the registered test
@@ -795,7 +854,7 @@ and no access to the parser, the generator an LLM writes from a grammar in
 its first attempt is most of the generator you get. Telling it nothing or
 structural facts about its own outputs changed the outcome by about one
 point on the held-out parsers; measured coverage added one to two points on
-one of them and nothing on the other; naming the functions to cover helped
+one of them and nothing detectable on the other two; naming the functions to cover helped
 less than the number. Whether that first attempt beats a mechanical
 grammar generator depends on the grammar. The one way the loop visibly
 fails, handing back a generator that cannot run, is a property of how it
@@ -803,9 +862,10 @@ repairs broken code, and a policy that never shows the model its own failed
 code removes it. On the development target a crash-first rule made every
 steered arm the same loop, which only ten replicates per cell could show.
 Everything needed to check these statements is in the artifact. Three
-extensions are pre-specified and costed: two more parsers (cJSON,
-libexpat), a second model family, and an oracle that shows the model the
-function it is asked to cover.
+extensions are pre-specified and costed: one more parser (libexpat), a
+second model family (whose runs were under way when this submission was
+frozen and are excluded from it, Section 4.6), and an oracle that shows
+the model the function it is asked to cover.
 
 The use of large language models in this work is declared in Section 4.7.
 
@@ -815,8 +875,9 @@ The use of large language models in this work is declared in Section 4.7.
 interests directly or indirectly related to this work.
 
 **Funding.** No external funding was received. API usage was paid by the
-authors (about 5 USD of DeepSeek credit and the OpenAI credit stated in
-Section 5.10).
+authors (about 5 USD of DeepSeek credit, and about 1.4 USD of OpenAI
+credit on second-model runs that are excluded from this submission,
+Section 4.6).
 
 **Data availability.** Every run (prompts, responses, generators,
 per-iteration statistics, provenance), every measured cell with its

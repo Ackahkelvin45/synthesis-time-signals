@@ -18,6 +18,7 @@ Per replicate the mean over 20 draw seeds; per arm the mean ± 95% CI over repli
 | C2R seed | 75.8 ± 0.8 | 75.8 ± 0.8 | 10000 |
 | grammarinator | 68.9 | 68.9 | 10000 |
 | grammarinator-deep | 69.3 | 69.3 | 10000 |
+| random | 43.1 | 43.1 | 10000 |
 
 ## parson
 
@@ -33,6 +34,7 @@ Per replicate the mean over 20 draw seeds; per arm the mean ± 95% CI over repli
 | C3n seed | 78.4 ± 1.0 | 78.4 ± 1.0 | 10000 |
 | grammarinator | 71.0 | 71.0 | 10000 |
 | grammarinator-deep | 71.2 | 71.2 | 10000 |
+| random | 36.1 | 36.1 | 10000 |
 
 ## tomlc99
 
@@ -49,4 +51,18 @@ Per replicate the mean over 20 draw seeds; per arm the mean ± 95% CI over repli
 | C2R final | 79.9 ± 1.2 | 79.9 ± 1.2 | 10000 |
 | C2R seed | 80.7 ± 1.0 | 80.7 ± 1.0 | 10000 |
 | grammarinator | 80.3 | 80.3 | 10000 |
+| random | 26.0 | 26.0 | 10000 |
+
+## cjson
+
+| generator | 5 min | 30 min | inputs affordable in 5 min (median) |
+|---|---|---|---|
+| C2 final | 70.9 ± 15.5 | 70.9 ± 15.5 | 10000 |
+| C2 seed | 71.4 ± 15.6 | 71.4 ± 15.6 | 10000 |
+| A5 final | 81.8 ± 1.4 | 81.8 ± 1.4 | 10000 |
+| A5 seed | 79.4 ± 1.4 | 79.4 ± 1.4 | 10000 |
+| C3s final | 73.6 ± 16.1 | 73.6 ± 16.1 | 10000 |
+| C3s seed | 63.4 ± 20.7 | 63.4 ± 20.7 | 10000 |
+| C3n final | 76.1 ± 4.7 | 76.2 ± 4.7 | 10000 |
+| C3n seed | 62.6 ± 20.4 | 62.6 ± 20.4 | 10000 |
 

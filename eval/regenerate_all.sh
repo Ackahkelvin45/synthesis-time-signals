@@ -13,8 +13,8 @@ echo "[2/9] full report";        $PY eval/full_report.py --inputs $INPUTS --out 
 echo "[3/9] tables T1/T2";       $PY eval/tables.py --inputs $INPUTS --out $M/tables.md > /dev/null
 echo "[4/9] RQ1";                $PY eval/rq1_report.py --gram $M/fixed.jsonl --out $M/rq1_report.md > /dev/null
 echo "[5/9] taxonomy, cost, equal-time"
-$PY eval/taxonomy.py --out $M/taxonomy.md > /dev/null
-$PY eval/cost_table.py --out $M/cost_table.md > /dev/null
+$PY eval/taxonomy.py --arms C2,A5,C3s,C3n,C2R --out $M/taxonomy.md > /dev/null
+$PY eval/cost_table.py --arms C2,A5,C3s,C3n,C2R --out $M/cost_table.md > /dev/null
 $PY eval/equal_time.py --inputs $INPUTS $M/fixed.jsonl --out $M/equal_time.md > /dev/null
 echo "[6/9] RQ3";                [ -f $M/rq3.jsonl ] && $PY eval/rq3_report.py --cells $M/rq3.jsonl --out $M/rq3_report.md > /dev/null || true
 echo "[7/9] RQ4";                $PY eval/rq4_report.py --in eval/campaigns/rq4.jsonl --out $M/rq4_report.md > /dev/null

@@ -1,0 +1,135 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.6113333333333334,
+  "summary": {
+    "outcomes": {
+      "valid": 150,
+      "reject": 200
+    },
+    "acceptance_rate": 0.429,
+    "max_nesting_depth": 1047,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.013,
+    "novelty": 23,
+    "divergences": 75,
+    "divergence_examples": [
+      "b'nullnull'",
+      "b'1 2'",
+      "b'\\xef\\xbb\\xbf\"x\"'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 0 of 1",
+        11
+      ],
+      [
+        "parse error at byte 4 of 34",
+        6
+      ],
+      [
+        "parse error at byte 0 of 4",
+        6
+      ],
+      [
+        "parse error at byte 0 of 2",
+        6
+      ],
+      [
+        "parse error at byte 3 of 26",
+        6
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 76.99,
+    "region_coverage_pct": 94.25
+  },
+  "coverage_in_loop": {
+    "branch_pct": 76.99,
+    "region_pct": 94.25,
+    "line_pct": 87.12,
+    "branch_pct_file": 25.78,
+    "region_pct_file": 26.64,
+    "least_covered_functions": [
+      {
+        "name": "cJSON_Compare",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 128
+      },
+      {
+        "name": "print_value",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 81
+      },
+      {
+        "name": "print_string_ptr",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 79
+      },
+      {
+        "name": "print_number",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 78
+      },
+      {
+        "name": "print_object",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 78
+      }
+    ],
+    "functions_total": 112
+  },
+  "proxy_score": 73.26,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 76.99
+}

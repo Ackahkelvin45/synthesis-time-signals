@@ -50,7 +50,8 @@ def main():
             return f"[{name} not generated yet]"
         j = tables.find("\n## ", i + 3)
         block = tables[i:j if j > 0 else None].strip()
-        return "**Table " + block[len("## T"):].replace(". ", ". ", 1).replace("T1.", "1.").replace("T2.", "2.") + "\n"
+        first, _, rest = block.partition("\n")
+        return "**Table " + first[len("## T"):].strip() + "**\n" + rest + "\n"
     text = text.replace("<!-- TABLE:T1 -->", table("T1")).replace("<!-- TABLE:T2 -->", table("T2"))
     Path(a.out).write_text(text)
     words = len(re.findall(r"\b\w+\b", text))

@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.37799999999999995,
+  "summary": {
+    "outcomes": {
+      "valid": 111,
+      "reject": 239
+    },
+    "acceptance_rate": 0.317,
+    "max_nesting_depth": 947,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.162,
+    "novelty": 25,
+    "divergences": 29,
+    "divergence_examples": [
+      "b'\\xef\\xbb\\xbf[]xyz'",
+      "b'{\"\\\\nd\\\\ud800\":true,\"\\\\nd\\\\ud800\":\"\"}'",
+      "b'{\"\\\\udecb\":\"\",\"\\\\udecb\":0e309,\"\\\\udecb\":\"\",\"\\\\udecb\":\"\",\"\\\\udecb\":\"\"}'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 2 of 204",
+        6
+      ],
+      [
+        "parse error at byte 21 of 49",
+        5
+      ],
+      [
+        "parse error at byte 77 of 389",
+        4
+      ],
+      [
+        "parse error at byte 2 of 201",
+        4
+      ],
+      [
+        "parse error at byte 22 of 194",
+        4
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 111,
+      "reject": 239
+    },
+    "acceptance_rate": 0.317,
+    "max_nesting_depth": 947,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.162,
+    "novelty": 25,
+    "divergences": 29,
+    "divergence_examples": [
+      "b'\\xef\\xbb\\xbf[]xyz'",
+      "b'{\"\\\\nd\\\\ud800\":true,\"\\\\nd\\\\ud800\":\"\"}'",
+      "b'{\"\\\\udecb\":\"\",\"\\\\udecb\":0e309,\"\\\\udecb\":\"\",\"\\\\udecb\":\"\",\"\\\\udecb\":\"\"}'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 78.24,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 78.24
+}

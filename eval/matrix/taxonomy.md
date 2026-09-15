@@ -1,17 +1,17 @@
 # RQ5: author-failure taxonomy (log-only, exploratory)
 
-Guard events over 141 completed replicates (arms C2, A5, C3s, C3n, C2R; targets json-parser, parson, tomlc99, cjson), coded from recorded exception and rejection text by ordered regexes (first match wins). 101 events. Iterations with no event are not listed.
+Guard events over 180 completed replicates (arms C2, A5, C3s, C3n, C2R; targets json-parser, parson, tomlc99, cjson), coded from recorded exception and rejection text by ordered regexes (first match wins). 121 events. Iterations with no event are not listed.
 
 ## Cause class by arm (events)
 
 | cause | C2 | A5 | C3s | C3n | C2R | total |
 |---|---|---|---|---|---|---|
-| strategy/value confusion (two-level semantics) | 11 | 1 | 6 | 2 | 0 | 20 |
-| syntax / unparseable response | 3 | 2 | 6 | 5 | 1 | 17 |
-| generic Python error (TypeError/ValueError/KeyError/NameError) | 3 | 3 | 2 | 2 | 4 | 14 |
+| syntax / unparseable response | 5 | 3 | 10 | 5 | 1 | 24 |
+| strategy/value confusion (two-level semantics) | 12 | 2 | 7 | 3 | 0 | 24 |
+| generic Python error (TypeError/ValueError/KeyError/NameError) | 5 | 3 | 4 | 2 | 4 | 18 |
 | ExceptionGroup wrapper (sub-exceptions hidden) | 13 | 0 | 0 | 0 | 0 | 13 |
-| recursion / Hypothesis health check | 1 | 0 | 10 | 1 | 0 | 12 |
-| hallucinated Hypothesis API | 5 | 0 | 3 | 0 | 1 | 9 |
+| recursion / Hypothesis health check | 1 | 0 | 10 | 2 | 0 | 13 |
+| hallucinated Hypothesis API | 5 | 0 | 7 | 0 | 1 | 13 |
 | low acceptance (valid code, invalid outputs) | 0 | 5 | 0 | 0 | 1 | 6 |
 | wrong alphabet / characters argument | 0 | 0 | 4 | 0 | 1 | 5 |
 | invalid strategy arguments | 1 | 0 | 1 | 1 | 0 | 3 |
@@ -21,21 +21,21 @@ Guard events over 141 completed replicates (arms C2, A5, C3s, C3n, C2R; targets 
 
 | kind | json-parser | parson | tomlc99 | cjson |
 |---|---|---|---|
-| build rejection | 17 | 2 | 22 | 0 |
-| gate failure | 25 | 6 | 19 | 5 |
+| build rejection | 17 | 2 | 22 | 13 |
+| gate failure | 25 | 6 | 19 | 12 |
 | mid-run error | 0 | 0 | 5 | 0 |
 
 ## Replicates with at least one event, by arm and target
 
 | arm | json-parser | parson | tomlc99 | cjson |
 |---|---|---|---|
-| C2 | 3/10 | 1/10 | 7/10 | 1/1 |
-| A5 | 4/10 | 0/10 | 3/10 | - |
-| C3s | 5/10 | 2/10 | 7/10 | - |
-| C3n | 3/10 | 1/10 | 5/10 | - |
+| C2 | 3/10 | 1/10 | 7/10 | 5/10 |
+| A5 | 4/10 | 0/10 | 3/10 | 2/10 |
+| C3s | 5/10 | 2/10 | 7/10 | 5/10 |
+| C3n | 3/10 | 1/10 | 5/10 | 2/10 |
 | C2R | 3/10 | - | 3/10 | - |
 
-Iteration-1 (seed) failures: 34 events in 34 replicates; by class: generic Python error (TypeError/ValueError/KeyError/NameError) 8, recursion / Hypothesis health check 6, strategy/value confusion (two-level semantics) 6, syntax / unparseable response 4, ExceptionGroup wrapper (sub-exceptions hidden) 3, invalid strategy arguments 2, wrong alphabet / characters argument 2, disallowed import or name (screen) 2, hallucinated Hypothesis API 1
+Iteration-1 (seed) failures: 44 events in 44 replicates; by class: generic Python error (TypeError/ValueError/KeyError/NameError) 12, strategy/value confusion (two-level semantics) 9, recursion / Hypothesis health check 7, syntax / unparseable response 6, ExceptionGroup wrapper (sub-exceptions hidden) 3, invalid strategy arguments 2, wrong alphabet / characters argument 2, disallowed import or name (screen) 2, hallucinated Hypothesis API 1
 
 ## Unclassified (0), verbatim for audit
 

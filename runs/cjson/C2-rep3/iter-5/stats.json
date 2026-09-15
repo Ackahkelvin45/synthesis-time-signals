@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.1446666666666667,
+  "summary": {
+    "outcomes": {
+      "reject": 278,
+      "valid": 72
+    },
+    "acceptance_rate": 0.206,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.0,
+    "novelty": 8,
+    "divergences": 59,
+    "divergence_examples": [
+      "b'\"\\\\\"\\xc3\\xa2\\xc2\\xb7S\\xe2\\x98\\x83\\x7f\\xc4\\x9a\\xf0\\xa4\\x9f\\xa2\":+98'",
+      "b'\"\\\\\"\\xc4\\x9a\\xc2\\xb7S\\xe2\\x98\\x83\\x7f\\xc4\\x9a\\xf0\\xa4\\x9f\\xa2\":+98'",
+      "b'\"\\\\\"\\xc4\\x9a\\xc4\\x9aS\\xe2\\x98\\x83\\x7f\\xc4\\x9a\\xf0\\xa4\\x9f\\xa2\":+98'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 14 of 145",
+        5
+      ],
+      [
+        "parse error at byte 8 of 381",
+        5
+      ],
+      [
+        "parse error at byte 11 of 71",
+        4
+      ],
+      [
+        "parse error at byte 12 of 49",
+        4
+      ],
+      [
+        "parse error at byte 12 of 45",
+        4
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "reject": 278,
+      "valid": 72
+    },
+    "acceptance_rate": 0.206,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.0,
+    "novelty": 8,
+    "divergences": 59,
+    "divergence_examples": [
+      "b'\"\\\\\"\\xc3\\xa2\\xc2\\xb7S\\xe2\\x98\\x83\\x7f\\xc4\\x9a\\xf0\\xa4\\x9f\\xa2\":+98'",
+      "b'\"\\\\\"\\xc4\\x9a\\xc2\\xb7S\\xe2\\x98\\x83\\x7f\\xc4\\x9a\\xf0\\xa4\\x9f\\xa2\":+98'",
+      "b'\"\\\\\"\\xc4\\x9a\\xc4\\x9aS\\xe2\\x98\\x83\\x7f\\xc4\\x9a\\xf0\\xa4\\x9f\\xa2\":+98'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 58.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 0.9,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 58.0
+}

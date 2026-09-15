@@ -99,12 +99,18 @@ timestamp. Deviations are disclosed in Section 4.6.
 
 ### 4.2 Targets
 
-Three C parsers, three grammars, two formats: json-parser (JSON; the
+Four C parsers, three grammars, two formats: json-parser (JSON; the
 development target, on which the proxy was designed, reported separately),
-parson (JSON; held out), tomlc99 (TOML; held out). Each has a sanitizer build
+parson (JSON; held out), tomlc99 (TOML; held out), and cJSON (JSON; held
+out; the first of the two Stage 2 targets named in the pre-registration,
+run after the Stage 1 analysis, Section 4.6). cJSON v1.7.18 is parsed
+through its length-taking entry point with an exact-length buffer, so that
+the harness can reach the over-read of Section 4.5 in the bug build; its
+adaptation note and prompts are anonymised so that no library name reaches
+the model. Each has a sanitizer build
 (ASan and UBSan, -O0, no recovery) used by the loop, a coverage build used
-only for measurement, and, for json-parser and tomlc99, sanitizer builds at
-pinned pre-fix commits of known bugs (Section 4.5). Absolute coverage is not
+only for measurement, and, for json-parser, tomlc99 and cJSON, sanitizer
+builds at pinned pre-fix commits of known bugs (Section 4.5). Absolute coverage is not
 comparable across targets; every comparison is within a target.
 
 The primary outcome's denominator is the parse-reachable region: the
@@ -115,7 +121,8 @@ per target and its hash is recorded in every run and every measurement.
 ### 4.3 Conditions, replicates, and order
 
 Loop conditions C2, A5, C3s and C3n, ten independent replicates each per
-target (120 runs), plus C2' on json-parser and tomlc99 (20 runs). Fixed generators: random text,
+target (160 runs), plus C2' on json-parser and tomlc99 (20 runs). Fixed
+generators, measured on the three Stage 1 targets: random text,
 Grammarinator 26.1 on the identical grammar (defaults, and with recursive
 alternatives up-weighted to match the mean nesting depth of the development
 target's pilot seed), and each replicate's own seed generator. Model:
@@ -175,20 +182,29 @@ confirmatory family (RQ1, RQ3, RQ4, the mechanism analysis, C2') is
 exploratory and is labelled so in every table.
 
 **Deviations from the registered design.** C3s on json-parser and parson,
-and C3n on all three targets, were run as blocks after phases 1a and 1b
+and C3n on all three Stage 1 targets, were run as blocks after phases 1a and 1b
 rather than interleaved with them, so provider drift is not orthogonal to
 those cells (the served model identifier was constant across every batch);
 C2' was added after the mechanism analysis and is outside the confirmatory
-family; Stage 2 targets, the AFL++ reference row and the second model were
-not run for this submission. The registered Stage 1 budget was 4.00 USD;
-3.80 USD was spent on 140 runs, plus about 0.03 USD on attempts discarded
-after network failures.
+family. The first Stage 2 target, cJSON, was run in full (four arms, ten
+replicates) after the Stage 1 analysis, as the registration's Stage 2
+allows, and is reported in every table beside the Stage 1 targets; its
+fixed references (RQ1), its RQ3 cells and its bug campaigns were not
+measured before the submission cutoff. The second Stage 2 target
+(libexpat), the AFL++ reference row and the second model (gpt-5-mini on
+tomlc99, arms C2, A5 and C3s) were not completed: the second model's batch
+stood at 18 of 30 runs when the submission was frozen, and those runs are
+excluded from every table and kept in the artifact. The registered Stage 1
+budget was 4.00 USD; 3.80 USD was spent on the 140 Stage 1 and C2' runs
+and 0.84 USD on the 40 cJSON runs (4.63 USD in total), plus about 0.03
+USD on attempts discarded after network failures and about 1.4 USD of
+OpenAI credit on the excluded second-model runs.
 
 ### 4.7 Use of large language models
 
 Large language models were used in two distinct roles. As the object of
 study, the generators evaluated in this paper were written by the DeepSeek
-model named in Section 4.3 (and, for Section 5.10, by gpt-5-mini), under
+model named in Section 4.3, under
 the prompts released in the artifact; that use is the experiment. As an
 assistant during the research, an AI coding assistant (Claude, Anthropic)
 was used for writing and refactoring the evaluation and analysis code, for
@@ -225,13 +241,18 @@ for the follow-up. Draw times were measured under varying machine load; they mat
 because every generator produces and runs its 10 000 inputs in under five
 minutes, so the equal-time views coincide with the equal-n view. The
 batch-drift check (seed levels of later batches against earlier ones, same
-prompt) shows no shift: A12 0.43 to 0.61, p > 0.15, on every target. The bug
+prompt) shows no shift: A12 0.43 to 0.61, p > 0.15, on every target. One cJSON
+final generator (C3n replicate 2) draws its 10 000 inputs in 785 to 890 s
+against the protocol's 900 s draw limit; 6 of its 20 cells timed out and
+score 0 as registered, which is why that replicate's mean is 48.0 in Table
+2 and why the C3n row on cJSON carries the widest interval. The bug
 campaigns are time-budgeted and ran nine at a time on an eleven-core machine
 under heavy load; the load was shared by every arm, so it compresses every
 campaign's input count alike, but inputs-to-trigger is the more reliable of
 the two trigger measures and is the one reported first.
 
-**External.** Three small C parsers of two text formats; one model family;
+**External.** Four small C parsers of two text formats (three of them JSON);
+one model family;
 one grammar source; five iterations of 500 inputs. The nulls are "no
 detectable effect at this budget", and the design's sensitivity is stated
 next to each (with ten replicates per arm at the observed variance, the registered test

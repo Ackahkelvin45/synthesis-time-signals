@@ -25,18 +25,22 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     md = (ROOT / a.md).read_text()
     title = " ".join(re.search(r"^# (.+?)\n\n", md, re.M | re.S).group(1).split())   # the heading may wrap
+    short = title.split(":")[0].strip()
+    if len(short) > 70:
+        short = " ".join(short.split()[:8])
     abstract = md[md.index("## Abstract"):md.index("**Keywords.**")].split("\n", 1)[1].strip()
     keywords = re.search(r"\*\*Keywords\.\*\* (.+)", md).group(1).strip().rstrip(".")
     body = md[md.index("## 1. Introduction"):]
     body = re.sub(r"^## (\d+)\. ", "## ", body, flags=re.M)          # svjour3 numbers sections itself
     body = re.sub(r"^### (\d+\.\d+) ", "### ", body, flags=re.M)
+    body = re.sub(r"^## (Statements and Declarations|References)$", r"## \1 {-}", body, flags=re.M)  # unnumbered
     (out / "body.md").write_text(body)
     figs = out / "figures"
     figs.mkdir(exist_ok=True)
     for f in (ROOT / "paper" / "figures").glob("*.pdf"):
         shutil.copy(f, figs / f.name)
     subprocess.run(["docker", "run", "--rm", "-v", f"{out}:/data", "pandoc/core:latest", "body.md",
-                    "-f", "markdown", "-t", "latex", "-o", "body.tex"], check=True)
+                    "-f", "markdown", "-t", "latex", "--shift-heading-level-by=-1", "-o", "body.tex"], check=True)
     body_tex = (out / "body.tex").read_text()
     # pandoc wraps caption-less tables in {\def\LTcaptype{none} ...}; svjour3 has no such counter
     body_tex = body_tex.replace("{\\def\\LTcaptype{none} % do not increment counter\n", "{\n")
@@ -60,6 +64,8 @@ def main():
 \journalname{Empirical Software Engineering}
 \begin{document}
 \title{%s}
+\titlerunning{%s}
+\authorrunning{Authors to be filled}
 \author{Author names to be filled by the authors}
 \institute{Institution to be filled by the authors}
 \date{Received: date / Accepted: date}
@@ -70,7 +76,7 @@ def main():
 \end{abstract}
 \input{body.tex}
 \end{document}
-""" % (title, abstract.replace("\n", " "), keywords.replace(";", " \\and"))
+""" % (title, short, abstract.replace("\n", " "), keywords.replace(";", " \\and"))
     (out / "paper.tex").write_text(tex)
     r = subprocess.run(["/Library/TeX/texbin/xelatex", "-interaction=nonstopmode", "-halt-on-error", "paper.tex"],
                        cwd=out, capture_output=True, text=True)

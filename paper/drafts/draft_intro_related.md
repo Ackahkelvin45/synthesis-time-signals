@@ -20,17 +20,17 @@ coverage of the parser's reachable region each round, with and without the
 names of the least-covered functions. The study is pre-registered, with one
 primary outcome (the area under the branch-coverage curve to ten thousand
 inputs on seeds the loop never saw), ten independent loop replicates per
-cell, and three C parsers in two text formats. No comparison in the
+cell, and four C parsers in two text formats. No comparison in the
 confirmatory family survives correction. Five rounds of refinement move
 the first-draft generator's coverage by one to two points: upward under
-measured coverage on one held-out parser, not at all on the other, and
-never under the proxy or under no steering. Naming the functions to cover
+measured coverage on one held-out parser, within noise on the other two,
+and never under the proxy or under no steering. Naming the functions to cover
 did worse than giving the number. Whether the first draft beats
 Grammarinator on the identical grammar depends on the target (a tie, ahead,
 and clearly behind on TOML). The loop's one visible failure, an unusable
 output generator, traces to its repair policy rather than its signal: shown
-its own failed code the model resubmits it, recovering 2 times in 21;
-re-seeded from the grammar it recovers 7 in 9, and a re-seeding loop
+its own failed code the model resubmits it, recovering 2 times in 25;
+re-seeded from the grammar it recovers 12 in 14, and a re-seeding loop
 produced no unusable generator in twenty runs. On the development target a
 crash-first rule silently made every steered arm one loop, a confound only
 replication exposed. At three cents a run, the grammar-seeded first draft
@@ -69,21 +69,22 @@ We pre-registered the design (hypotheses, one primary outcome, ten
 replicates per cell, exclusion rules, analysis code, a neutral title)
 before the first replicate run, froze it in version control, and report
 every deviation. The unit of analysis is the loop replicate, because the
-model is a high-variance author: 33 of our 140 first drafts failed a guard,
+model is a high-variance author: 44 of our 180 first drafts failed a guard,
 and the pilot's single-run 51-to-72 score trajectory did not reproduce.
 
 Contributions.
 1. A replicated, pre-registered comparison of four synthesis-time signals
-   on three C parsers. No comparison survives correction; measured coverage
-   produced a detectable gain on one held-out target before correction,
-   the proxy and no steering never did, and naming functions to cover did
-   worse than the number (Section 5).
+   on four C parsers. No comparison survives correction; measured coverage
+   produced a detectable gain on one held-out target before correction
+   and beat the proxy, but not no steering, on a second; the proxy never
+   did, and naming functions to cover did worse than the number (Section
+   5).
 2. The community baseline the LLM-generator literature usually omits:
    Grammarinator on the identical grammar against twenty LLM first drafts
    per target. LLM authorship is a tie, ahead, and clearly behind,
    depending on the target (Section 5.4).
 3. A mechanism for the loop's only visible failure, unusable output
-   generators: fixation under in-place repair, a three-path table over 60
+   generators: fixation under in-place repair, a three-path table over 80
    replicates that replicates under the oracle arms, and a pre-specified
    intervention (repair by re-seed) that removes the failure on two targets
    without changing coverage (Section 6).
@@ -177,7 +178,7 @@ and no access to the parser, the generator an LLM writes from a grammar in
 its first attempt is most of the generator you get. Telling it nothing or
 structural facts about its own outputs changed the outcome by about one
 point on the held-out parsers; measured coverage added one to two points on
-one of them and nothing on the other; naming the functions to cover helped
+one of them and nothing detectable on the other two; naming the functions to cover helped
 less than the number. Whether that first attempt beats a mechanical
 grammar generator depends on the grammar. The one way the loop visibly
 fails, handing back a generator that cannot run, is a property of how it
@@ -185,9 +186,10 @@ repairs broken code, and a policy that never shows the model its own failed
 code removes it. On the development target a crash-first rule made every
 steered arm the same loop, which only ten replicates per cell could show.
 Everything needed to check these statements is in the artifact. Three
-extensions are pre-specified and costed: two more parsers (cJSON,
-libexpat), a second model family, and an oracle that shows the model the
-function it is asked to cover.
+extensions are pre-specified and costed: one more parser (libexpat), a
+second model family (whose runs were under way when this submission was
+frozen and are excluded from it, Section 4.6), and an oracle that shows
+the model the function it is asked to cover.
 
 The use of large language models in this work is declared in Section 4.7.
 
@@ -197,8 +199,9 @@ The use of large language models in this work is declared in Section 4.7.
 interests directly or indirectly related to this work.
 
 **Funding.** No external funding was received. API usage was paid by the
-authors (about 5 USD of DeepSeek credit and the OpenAI credit stated in
-Section 5.10).
+authors (about 5 USD of DeepSeek credit, and about 1.4 USD of OpenAI
+credit on second-model runs that are excluded from this submission,
+Section 4.6).
 
 **Data availability.** Every run (prompts, responses, generators,
 per-iteration statistics, provenance), every measured cell with its

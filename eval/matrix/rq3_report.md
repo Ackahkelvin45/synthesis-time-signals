@@ -32,5 +32,10 @@ Each point is one loop iteration's generator: its proxy score as recorded by the
 - within C3n: rho = +0.44 [+0.17, +0.66], n = 45
 - within C2R: rho = +0.13 [-0.17, +0.41], n = 47
 - within replicate (does the proxy rank a run's own iterations as coverage does?): median rho over 44 replicates = +0.35; 28 positive, 14 negative
-- in-loop pairing (coverage arms): proxy score vs branch coverage on the same 500 inputs: rho = +0.46 [+0.24, +0.65], n = 77
+- in-loop pairing (coverage arms): proxy score vs branch coverage on the same 500 inputs: rho = +0.47 [+0.28, +0.63], n = 98
+
+## cjson
+
+- pooled, all arms: n = 0 (too few)
+- in-loop pairing (coverage arms): proxy score vs branch coverage on the same 500 inputs: rho = +0.30 [+0.11, +0.47], n = 87
 

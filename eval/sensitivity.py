@@ -64,17 +64,25 @@ def true_a12(shift, sd):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--inputs", default="eval/matrix/stage1.jsonl,eval/matrix/day2.jsonl")
+    ap.add_argument("--targets", default="json-parser,parson,tomlc99,cjson")
+    args = ap.parse_args()
     data = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
-    for line in (ROOT / "eval/matrix/stage1.jsonl").read_text().splitlines():
-        if not line.strip():
+    for src in args.inputs.split(","):
+        if not (ROOT / src).exists():
             continue
-        r = json.loads(line)
-        pr = parse_run_cond(r["condition"])
-        if pr and pr[2] == "final":
-            data[r["target"]][pr[0]][pr[1]][r["seed"]] = 0.0 if "error" in r else r["auc_branch_reach"]
+        for line in (ROOT / src).read_text().splitlines():
+            if not line.strip():
+                continue
+            r = json.loads(line)
+            pr = parse_run_cond(r["condition"])
+            if pr and pr[2] == "final" and pr[0] in ("C2", "A5"):
+                data[r["target"]][pr[0]][pr[1]][r["seed"]] = 0.0 if "error" in r else r["auc_branch_reach"]
     print("| target | arm | SD all replicates | SD healthy | shift for 80% power (perm) | A12 at that shift | shift for 80% CI-excludes-0.5 |")
     print("|---|---|---|---|---|---|---|")
-    for t in ("json-parser", "parson", "tomlc99"):
+    for t in [t for t in args.targets.split(",") if t in data]:
         for arm in ("C2", "A5"):
             reps = [st.mean(v.values()) for v in data[t][arm].values()]
             healthy = [x for x in reps if x > 0]
