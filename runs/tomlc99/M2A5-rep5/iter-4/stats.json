@@ -1,0 +1,123 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.067,
+  "summary": {
+    "outcomes": {
+      "valid": 27,
+      "reject": 314,
+      "skip": 9
+    },
+    "acceptance_rate": 0.079,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "integer",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 11,
+    "divergences": 2,
+    "divergence_examples": [
+      "b'\\n#\\xc2\\x9c\\xc3\\x8aQ\\xc2\\xa5\\x16\\xf3\\xb9\\x89\\xbaF\\xc2\\x80\\xc3\\xb8+r'",
+      "b'[\"\".\\'\\xf0\\xb9\\xa7\\x81\\xc2\\x82\\x15\"~\\xf4\\x89\\x9d\\x93O0\\xf3\\xa2\\x83\\xb0^\\x14\\'.\\'\\'.PMS]\\n\"\" = [\"I\", \"\\xc3\\xbb\\xc3\\xb0\\xc3\\xbc\\xf3\\x8b\\x96\\xbcr)VE\\xc3\\x95\\xc2\\x9d\\x10\",]\\nPMS = [\"I'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        58
+      ],
+      [
+        "line 1: invalid key",
+        21
+      ],
+      [
+        "line 2: invalid key",
+        16
+      ],
+      [
+        "line 1: extra chars after value",
+        15
+      ],
+      [
+        "line 3: expect hex char",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 126.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 126.0
+}

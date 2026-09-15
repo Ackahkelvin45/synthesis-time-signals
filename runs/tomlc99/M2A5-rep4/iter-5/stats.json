@@ -1,0 +1,123 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.311,
+  "summary": {
+    "outcomes": {
+      "valid": 64,
+      "reject": 196
+    },
+    "acceptance_rate": 0.246,
+    "max_nesting_depth": 937,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "quoted_key",
+      "dotted_key",
+      "floating_point",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "NL",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 14,
+    "divergences": 43,
+    "divergence_examples": [
+      "b'value = 0000-00-00T00:00:00'",
+      "b'value = 0476-85-89T04:70:15'",
+      "b'value = 0476-85-89T04:15:15'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 2: missing =",
+        40
+      ],
+      [
+        "line 1: missing =",
+        40
+      ],
+      [
+        "line 1: invalid or missing key",
+        22
+      ],
+      [
+        "line 3: missing =",
+        17
+      ],
+      [
+        "line 2: syntax error",
+        15
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 174.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 174.0
+}

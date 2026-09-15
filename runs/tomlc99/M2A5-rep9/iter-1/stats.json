@@ -1,0 +1,123 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.389,
+  "summary": {
+    "outcomes": {
+      "valid": 137,
+      "reject": 213
+    },
+    "acceptance_rate": 0.391,
+    "max_nesting_depth": 4,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "ML_BASIC_STRING",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "BOOLEAN",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "BIN_INT",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 57,
+    "divergences": 44,
+    "divergence_examples": [
+      "b'[\\'\\x04Cc5V*EsrC\\'.P.\"\".\"N\"]'",
+      "b'[\\'N\\']\\n[\"\"]\\n[[\"\\\\u03b3-}\"]]\\n[m]'",
+      "b'[[\"\\\\u5b57Z:q\"]]\\n[[\"\".WI1Hy-CJq.\"\"]]'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: extra chars after ] or ]]",
+        31
+      ],
+      [
+        "line 2: expect hex char",
+        26
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        22
+      ],
+      [
+        "line 2: syntax error",
+        18
+      ],
+      [
+        "line 2: key exists",
+        16
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 232.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 232.0
+}

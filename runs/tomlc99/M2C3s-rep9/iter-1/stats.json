@@ -1,0 +1,165 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.413,
+  "summary": {
+    "outcomes": {
+      "valid": 141,
+      "reject": 209
+    },
+    "acceptance_rate": 0.403,
+    "max_nesting_depth": 2,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "integer",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 40,
+    "divergences": 29,
+    "divergence_examples": [
+      "b'[[\\'k\\xc2\\x90+\\xf2\\xb0\\xb9\\xb1\\xc2\\x91\\x17yG\\'.\"I\\xc2\\x80\\xf1\\xae\\x90\\x8b\".\\'j\\xf2\\xa2\\xb1\\xa230\\x07\\xf2\\x9a\\xbc\\x91o\\x1eE*\\xf1\\x83\\x96\\x9a\\xc2\\xa50\\xc3\\x9f\\xeb\\x99\\xa3%\\x14\\xc2\\xa9\\xc3\\xac\\xc4\\x82\\xf2\\xad\\x98\\x98\\xc4\\x82\\xf0\\x9b\\xa4\\x93\\x1b\\xc2\\x8f\\xc3\\x86'",
+      "b'[[\"Wk\\xf1\\x91\\xa3\\xbf\\xf1\\x84\\xb1\\x8d\"]]\\n[[9p.6l9.\"\\\\b\\\\U00000041\\\\t\\\\n\"]]\\n'",
+      "b\"['r'.'%\\xf3\\x80\\xa8\\xab\\xf0\\xa3\\x94\\xb5|\\xc2\\xa1\\xc3\\x8c\\xf3\\xb8\\x94\\xaa\\xc2\\x93!!\\xf3\\xb6\\xb7\\xaaX\\xc2\\x80\\xc2\\x84\\xf1\\x91\\xac\\xaa\\xf1\\x9f\\xa5\\x96\\xc4\\x81\\xc2\\xb9\\xc3\\x94\\xc3\\x8c3Y']\\n[[VR]]\\n# D\\x1e\\xf4\\x88\\x8f\\xa8\\xf2\\x8a\\x82\\x9d\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: bad escape char",
+        28
+      ],
+      [
+        "line 2: key exists",
+        25
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        10
+      ],
+      [
+        "line 2: syntax error",
+        10
+      ],
+      [
+        "line 3: key exists",
+        9
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 57.56,
+    "region_coverage_pct": 62.54
+  },
+  "coverage_in_loop": {
+    "branch_pct": 57.56,
+    "region_pct": 62.54,
+    "line_pct": 67.85,
+    "branch_pct_file": 45.97,
+    "region_pct_file": 49.66,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      },
+      {
+        "name": "toml_rtos",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 41
+      },
+      {
+        "name": "toml_timestamp_at",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 25
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 170.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 57.56
+}

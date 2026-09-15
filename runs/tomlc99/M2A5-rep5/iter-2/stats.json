@@ -1,0 +1,124 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.078,
+  "summary": {
+    "outcomes": {
+      "valid": 46,
+      "reject": 298,
+      "skip": 6
+    },
+    "acceptance_rate": 0.134,
+    "max_nesting_depth": 4,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "LOCAL_DATE_TIME",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "string",
+      "integer",
+      "bool_",
+      "array_values",
+      "nl_or_comment",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 14,
+    "divergences": 8,
+    "divergence_examples": [
+      "b'Ir.\"\\xc3\\x91\\xc2\\x9b\\xc2\\x8c\\xc3\\x89k`\\xc3\\x80\".\"\\xc2\\xb2\\xc3\\xa2A\".\\'Z\\x19ZL\\x17\\xc2\\xae1\\xc2\\x9a\\xc3\\x85\\xf3\\x92\\x9d\\x85\\xc2\\x9b\\xc2\\xa6\\x19\\xf3\\x8f\\xbd\\xa2\\xf0\\xb9\\xac\\xa11\\xf3\\x90\\xbf\\xb0\\' = []'",
+      "b'\\n#\\x18M\\xc3\\xa8\\n\\n\\n\\n'",
+      "b'\\n#\\n\\n#\\x18M\\xc3\\xa8\\n\\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        43
+      ],
+      [
+        "line 4: expect hex char",
+        29
+      ],
+      [
+        "line 3: expect hex char",
+        27
+      ],
+      [
+        "line 6: expect hex char",
+        17
+      ],
+      [
+        "line 2: expect hex char",
+        13
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 134.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 134.0
+}

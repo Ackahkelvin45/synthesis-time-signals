@@ -1,0 +1,166 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.23333333333333336,
+  "summary": {
+    "outcomes": {
+      "valid": 94,
+      "reject": 249,
+      "skip": 7
+    },
+    "acceptance_rate": 0.274,
+    "max_nesting_depth": 3,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_table",
+      "comment",
+      "document",
+      "dotted_key",
+      "expression",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 33,
+    "divergences": 17,
+    "divergence_examples": [
+      "b'# \\xc3\\x9c)R\\xc3\\xb2\\x04\\n'",
+      "b'[7V]\\r\\n[[\"\\\\n\\\\n\\\\n\"]]\\r\\n[[\\'F\\']]\\r\\n# \\\\\\r\\n[[\\'\\\\\\']]\\r\\n'",
+      "b'[[\"p\\xc3\\xb9Q\\xc2\\x8d\\xf1\\xbb\\xbf\\xa6\\xf1\\x99\\x8d\\xb6\\xf1\\xb3\\x94\\xa7\"]]\\n# \\x0b\\xc2\\xbb\\xc3\\x82\\xc2\\x94\\xf0\\xb9\\x8f\\x97\\xc3\\x82\\n[[\"\\xc2\\x9f\\t\"]]\\n[[A4YAYSF.TdPvR.\\'H\\'.\"\".\"\"]]\\n['"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: bad escape char",
+        39
+      ],
+      [
+        "line 2: syntax error",
+        34
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        15
+      ],
+      [
+        "line 2: bad escape char",
+        11
+      ],
+      [
+        "line 3: syntax error",
+        10
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 61.75,
+    "region_coverage_pct": 66.01
+  },
+  "coverage_in_loop": {
+    "branch_pct": 61.75,
+    "region_pct": 66.01,
+    "line_pct": 71.48,
+    "branch_pct_file": 49.31,
+    "region_pct_file": 52.41,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_rtots",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      },
+      {
+        "name": "toml_rtos",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 41
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 138.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 61.75
+}

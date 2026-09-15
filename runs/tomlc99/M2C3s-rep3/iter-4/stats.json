@@ -1,0 +1,165 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.26666666666666666,
+  "summary": {
+    "outcomes": {
+      "valid": 51,
+      "reject": 299
+    },
+    "acceptance_rate": 0.146,
+    "max_nesting_depth": 2,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "NL",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "dotted_key",
+      "integer",
+      "floating_point",
+      "bool_",
+      "array_values",
+      "nl_or_comment",
+      "BOOLEAN",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 19,
+    "divergences": 20,
+    "divergence_examples": [
+      "b'\\njLbK =  {vPkupPWX = {I = {\"B\" = [], \\'\\xc2\\x9e\\' = [], \"\" = \"\\xf3\\x85\\x85\\x9d\"},},}\\n[[wQk]]\\n'",
+      "b\"['N\\xc2\\xa8.']\\r\\n'\\xf0\\x9f\\x98\\x8d\\xf1\\xb5\\xaf\\xb4$\\xf1\\x98\\xa2\\x8b\\xc3\\x92\\xc8\\xbe\\x02\\xf3\\xad\\x8e\\x88 R\\xc3\\xb5\\xc3\\x84'=[] #\\xf2\\xb0\\x81\\xb1#:,\\xf0\\xac\\x88\\xac\\xf2\\xb0\\x99\\x9f\\r\\n\"",
+      "b\"['N\\xc2\\xa8.']\\r\\n'\\xf0\\x9f\\x98\\x8d\\xf1\\xb5\\xaf\\xb4\\xf0\\xac\\x88\\xac\\xf1\\x98\\xa2\\x8b\\xc3\\x92\\xc8\\xbe\\x02\\xf3\\xad\\x8e\\x88 R\\xc3\\xb5\\xc3\\x84'=[] #\\xf2\\xb0\\x81\\xb1#:,\\xf0\\xac\\x88\\xac\\xf2\\xb0\\x99\\x9f\\r\\n\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        59
+      ],
+      [
+        "line 2: bad escape char",
+        30
+      ],
+      [
+        "line 5: key exists",
+        26
+      ],
+      [
+        "line 3: key exists",
+        20
+      ],
+      [
+        "line 5: bad escape char",
+        18
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 74.17,
+    "region_coverage_pct": 74.42
+  },
+  "coverage_in_loop": {
+    "branch_pct": 74.17,
+    "region_pct": 74.42,
+    "line_pct": 79.12,
+    "branch_pct_file": 59.23,
+    "region_pct_file": 59.09,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      },
+      {
+        "name": "toml_rtos",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 41
+      },
+      {
+        "name": "toml_timestamp_at",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 25
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 149.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 74.17
+}

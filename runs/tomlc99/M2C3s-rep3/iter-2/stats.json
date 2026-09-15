@@ -1,0 +1,165 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.10000000000000002,
+  "summary": {
+    "outcomes": {
+      "valid": 39,
+      "reject": 311
+    },
+    "acceptance_rate": 0.111,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "integer",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_values",
+      "nl_or_comment",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 12,
+    "divergences": 21,
+    "divergence_examples": [
+      "b\"[[G8fbLku]]\\r\\n\\r\\n\\r\\n#\\xf1\\x92\\xaf\\x98\\xc2\\xb1Q\\xc3\\xbf|\\xc3\\xb1\\r\\n#0\\xc2\\xa4\\xf2\\x82\\x8e\\xa8\\xf2\\x81\\xa2\\xaf\\xc3\\xb7\\xf0\\xab\\xa0\\x8d\\x02\\xf1\\xa7\\x84\\xb1l\\xc2\\xaf\\r\\n['\\x10?du\\xc2\\xbe8\\xc3\\x90.\\xc2\\xa1\\xc2\\x9a\\xc2\\xb2\\xc2\\x80\"",
+      "b\"[[G8fbLku]]\\r\\n\\r\\n\\r\\n#\\xf1\\x92\\xaf\\x98\\xc2\\xb1Q\\xf2\\x82\\x8e\\xa8|\\xc3\\xb1\\r\\n#0\\xc2\\xa4\\xf2\\x82\\x8e\\xa8\\xf2\\x81\\xa2\\xaf\\xc3\\xb7\\xf0\\xab\\xa0\\x8d\\x02\\xf1\\xa7\\x84\\xb1l\\xc2\\xaf\\r\\n['\\x10?du\\xc2\\xbe8\\xc3\\x90.\\xc2\\xa1\\xc2\\x9a\\xc2\\xb2\"",
+      "b\"[[G8fbLku]]\\r\\n\\r\\n\\r\\n#\\xf1\\x92\\xaf\\x98\\xc2\\xb1Q\\xf2\\x82\\x8e\\xa8|\\xc3\\xb1\\r\\n#\\xf1\\x92\\xaf\\x98\\xc2\\xb1Q\\xf2\\x82\\x8e\\xa8|\\xc3\\xb1\\r\\n['\\x10?du\\xc2\\xbe8\\xc3\\x90.\\xc2\\xa1\\xc2\\x9a\\xc2\\xb2\\xc2\\x80\\\\O']\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: bad escape char",
+        40
+      ],
+      [
+        "line 3: bad escape char",
+        33
+      ],
+      [
+        "line 3: key exists",
+        23
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        22
+      ],
+      [
+        "line 2: key exists",
+        21
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 74.29,
+    "region_coverage_pct": 75.55
+  },
+  "coverage_in_loop": {
+    "branch_pct": 74.29,
+    "region_pct": 75.55,
+    "line_pct": 80.33,
+    "branch_pct_file": 59.33,
+    "region_pct_file": 59.99,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      },
+      {
+        "name": "toml_rtos",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 41
+      },
+      {
+        "name": "toml_timestamp_at",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 25
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 132.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 74.29
+}

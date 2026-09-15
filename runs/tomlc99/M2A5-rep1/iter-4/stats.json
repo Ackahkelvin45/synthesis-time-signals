@@ -1,0 +1,123 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.24433333333333332,
+  "summary": {
+    "outcomes": {
+      "valid": 61,
+      "reject": 289
+    },
+    "acceptance_rate": 0.174,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "expression",
+      "floating_point",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "dotted_key",
+      "bool_",
+      "date_time",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "NAN",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 21,
+    "divergences": 14,
+    "divergence_examples": [
+      "b'\\n[[s]]\\n[\"`\\\\r\\\\u20ac\"]\\n\\n'",
+      "b'#\\xc3\\xaf\\xc2\\x8c\\xc3\\xaf\\x04\\xc2\\xa8\\xc2\\xb4\\xc3\\x88\\x01\\x15\\xc2\\xae\\xc2\\xb2\\xc2\\xba\\xc3\\x89\\x19\\xc2\\xbf\\xc3\\xb1\\xc3\\x8b\\xc2\\xa1'",
+      "b\"'' = -073261606862439203998037486635702618955003047886529933088098381348\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: invalid or missing key",
+        53
+      ],
+      [
+        "line 1: unterminated quote",
+        40
+      ],
+      [
+        "line 1: unterminated s-quote",
+        25
+      ],
+      [
+        "line 1: missing =",
+        24
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        17
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 161.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 161.0
+}

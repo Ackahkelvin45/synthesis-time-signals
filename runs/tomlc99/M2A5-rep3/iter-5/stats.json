@@ -1,0 +1,124 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.13633333333333333,
+  "summary": {
+    "outcomes": {
+      "reject": 427,
+      "valid": 26,
+      "skip": 21,
+      "crash": 22
+    },
+    "acceptance_rate": 0.055,
+    "max_nesting_depth": 3579,
+    "productions_accepted": [
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "LOCAL_TIME",
+      "ML_LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "standard_table",
+      "BASIC_STRING",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE"
+    ],
+    "cap_distance_mass": 0.077,
+    "novelty": 10,
+    "divergences": 7,
+    "divergence_examples": [
+      "b\"'\\xc3\\xa8\\xc3\\x85B\\x08' = [{'' = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\"",
+      "b\"'' = [{'' = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\"",
+      "b'# z>(+kVGcZ[COHxJP3\\r\\n\\r\\n0LjR = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['"
+    ],
+    "unique_crash_signatures": [
+      "asan:stack-overflow|malloc>expand>expand_arritem"
+    ],
+    "reject_reasons_sample": [
+      [
+        "line 1: missing =",
+        66
+      ],
+      [
+        "line 1: expect hex char",
+        65
+      ],
+      [
+        "line 2: expect hex char",
+        50
+      ],
+      [
+        "line 2: syntax error",
+        28
+      ],
+      [
+        "line 4: syntax error",
+        18
+      ]
+    ]
+  },
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": true,
+  "score": 166.54
+}

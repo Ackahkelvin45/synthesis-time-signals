@@ -44,15 +44,19 @@ def main():
     ]
     text = "".join(out)
     tables = (ROOT / "eval" / "matrix" / "tables.md").read_text() if (ROOT / "eval" / "matrix" / "tables.md").exists() else ""
-    def table(name):
+    def table(name, num):
         i = tables.find(f"## {name}.")
         if i < 0:
             return f"[{name} not generated yet]"
         j = tables.find("\n## ", i + 3)
         block = tables[i:j if j > 0 else None].strip()
         first, _, rest = block.partition("\n")
-        return "**Table " + first[len("## T"):].strip() + "**\n" + rest + "\n"
-    text = text.replace("<!-- TABLE:T1 -->", table("T1")).replace("<!-- TABLE:T2 -->", table("T2"))
+        return "**Table " + str(num) + first[len("## T") + 1:].strip() + "**\n" + rest + "\n"
+    # generated tables are numbered in order of appearance, after the hand-written Table 1 (Section 3)
+    import re as _re
+    order = [m.group(1) for m in _re.finditer(r"<!-- TABLE:(T\d) -->", text)]
+    for k, name in enumerate(order, start=2):
+        text = text.replace(f"<!-- TABLE:{name} -->", table(name, k))
     Path(a.out).write_text(text)
     words = len(re.findall(r"\b\w+\b", text))
     ph = re.findall(r"(?<!!)\[(?![−+0-9])[^\]]*\]", text)   # image captions are not placeholders
