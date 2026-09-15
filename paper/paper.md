@@ -272,7 +272,7 @@ guards, and then each signal.
 | C2 proxy | the structural summary of its own outputs and the parser's exit codes | one of: add or up-weight a production, generate deeper, fix a feature, broaden, revert | by proxy score | in place |
 | C3s coverage | branch and region coverage of the reachable region, two numbers | "increase branch coverage" | by measured coverage | in place |
 | C3n coverage+names | the two numbers and the five least-covered reachable functions by name | "cover function F" | by measured coverage | in place |
-| C2′ re-seed repair (follow-up) | as C2 proxy | as C2 proxy | as C2 proxy | re-seed from the grammar with the failure text |
+| C2' re-seed repair (follow-up) | as C2 proxy | as C2 proxy | as C2 proxy | re-seed from the grammar with the failure text |
 
 ### 3.1 The shared loop
 
@@ -393,7 +393,7 @@ F has 0% branch coverage; names are not anonymised, so this arm is
 white-box in the smallest possible way. Both arms record the proxy summary
 as well, which yields the RQ3 validity data at no extra cost.
 
-**C2′ re-seed repair (follow-up).** Identical to C2 proxy except that a
+**C2' re-seed repair (follow-up).** Identical to C2 proxy except that a
 generator failing the gate is never shown back to the model: the
 in-iteration repair, and every prompt while the held generator is a failed
 one, is the grammar seed prompt with the failure text appended. Added
@@ -421,7 +421,7 @@ than the signal: the crash rule turned every steered arm on the development
 target into the same loop (Section 5.1), and the in-place repair is the
 mechanism behind every collapsed replicate (Section 6). We report both as
 findings rather than fixing them, and the one intervention we did run,
-C2′, was pre-specified after the mechanism analysis and is reported
+C2', was pre-specified after the mechanism analysis and is reported
 outside the family.
 
 ## 4. Experimental design
@@ -481,7 +481,7 @@ per target and its hash is recorded in every run and every measurement.
 
 Loop conditions C2 proxy, A5 no steering, C3s coverage and C3n
 coverage+names, ten independent replicates each per target (160 runs), plus
-C2′ re-seed repair on json-parser and tomlc99 (20 runs). Fixed generators,
+C2' re-seed repair on json-parser and tomlc99 (20 runs). Fixed generators,
 measured on the three Stage 1 targets: random text, Grammarinator 26.1 on
 the identical grammar (defaults, and with recursive alternatives up-weighted
 to match the mean nesting depth of the development target's pilot seed),
@@ -560,14 +560,14 @@ per-replicate delta (final minus seed) with an exact sign-flip test. Bands,
 fixed at registration: A12 at or beyond 0.64 (or 0.36) with an interval
 excluding 0.5 is a practical difference; 0.56 to 0.64 small; otherwise
 negligible. Targets are replications, not pooled. Everything outside the
-confirmatory family (RQ1, RQ3, RQ4, the mechanism analysis, C2′) is
+confirmatory family (RQ1, RQ3, RQ4, the mechanism analysis, C2') is
 exploratory and is labelled so in every table.
 
 **Deviations from the registered design.** C3s on json-parser and parson,
 and C3n on all three Stage 1 targets, were run as blocks after phases 1a and 1b
 rather than interleaved with them, so provider drift is not orthogonal to
 those cells (the served model identifier was constant across every batch);
-C2′ was added after the mechanism analysis and is outside the confirmatory
+C2' was added after the mechanism analysis and is outside the confirmatory
 family. The first Stage 2 target, cJSON, was run in full (four arms, ten
 replicates) after the Stage 1 analysis, as the registration's Stage 2
 allows, and is reported in every table beside the Stage 1 targets; its
@@ -577,7 +577,7 @@ measured before the submission cutoff. The second Stage 2 target
 tomlc99, arms C2, A5 and C3s) were not completed: the second model's batch
 stood at 18 of 30 runs when the submission was frozen, and those runs are
 excluded from every table and kept in the artifact. The registered Stage 1
-budget was 4.00 USD; 3.80 USD was spent on the 140 Stage 1 and C2′ runs
+budget was 4.00 USD; 3.80 USD was spent on the 140 Stage 1 and C2' runs
 and 0.84 USD on the 40 cJSON runs (4.63 USD in total), plus about 0.03
 USD on attempts discarded after network failures and about 1.4 USD of
 OpenAI credit on the excluded second-model runs.
@@ -620,7 +620,7 @@ Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; fai
 | json-parser | A5 no steering | 63.7 ± 2.8 (64.6) | 0 | +0.15 ± 1.16 | 6 / 4 | 0.768 | 0 | - |
 | json-parser | C3s coverage | 48.8 ± 18.7 (59.4) | 2 | -1.60 ± 1.70 | 2 / 6 | 0.062 | 0 | - |
 | json-parser | C3n coverage+names | 54.9 ± 14.0 (61.5) | 1 | -9.20 ± 13.62 | 0 / 10 | 0.002 | 0 | - |
-| json-parser | C2′ re-seed repair | 63.9 ± 1.3 (64.4) | 0 | -1.32 ± 1.40 | 2 / 7 | 0.074 | 0 | - |
+| json-parser | C2' re-seed repair | 63.9 ± 1.3 (64.4) | 0 | -1.32 ± 1.40 | 2 / 7 | 0.074 | 0 | - |
 | parson | C2 proxy | 60.9 ± 15.4 (67.1) | 1 | +0.89 ± 0.50 | 7 / 1 | 0.016 | 0 | - |
 | parson | A5 no steering | 66.3 ± 1.6 (66.7) | 0 | +0.54 ± 0.75 | 7 / 2 | 0.160 | 0 | - |
 | parson | C3s coverage | 69.1 ± 1.1 (69.4) | 0 | +1.59 ± 0.86 | 8 / 2 | 0.008 | 0 | 68.6 (n 1) |
@@ -629,7 +629,7 @@ Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; fai
 | tomlc99 | A5 no steering | 60.2 ± 3.4 (59.8) | 0 | +1.80 ± 2.33 | 6 / 3 | 0.121 | 1 | - |
 | tomlc99 | C3s coverage | 55.1 ± 14.1 (60.6) | 1 | +0.22 ± 0.61 | 5 / 1 | 0.438 | 0 | 50.7 (n 6) |
 | tomlc99 | C3n coverage+names | 57.4 ± 3.7 (58.5) | 0 | -0.70 ± 0.96 | 0 / 3 | 0.250 | 1 | 51.2 (n 4) |
-| tomlc99 | C2′ re-seed repair | 59.3 ± 2.4 (60.3) | 0 | -1.41 ± 1.64 | 1 / 7 | 0.086 | 0 | 60.2 (n 3) |
+| tomlc99 | C2' re-seed repair | 59.3 ± 2.4 (60.3) | 0 | -1.41 ± 1.64 | 1 / 7 | 0.086 | 0 | 60.2 (n 3) |
 | cjson | C2 proxy | 61.8 ± 15.6 (68.3) | 1 | -0.51 ± 0.46 | 2 / 7 | 0.039 | 0 | 67.1 (n 1) |
 | cjson | A5 no steering | 70.3 ± 1.6 (70.1) | 0 | +1.35 ± 1.69 | 6 / 3 | 0.113 | 0 | - |
 | cjson | C3s coverage | 64.2 ± 16.2 (72.2) | 1 | +1.15 ± 2.10 | 6 / 2 | 0.234 | 1 | 71.7 (n 2) |
@@ -664,7 +664,7 @@ Counts over ten replicates x four refinements = 40 per cell, read from each run'
 | json-parser | A5 no steering | 0 | 0 | 35 | 0 | 5 |
 | json-parser | C3s coverage | 30 | 0 | 0 | 0 | 10 |
 | json-parser | C3n coverage+names | 36 | 0 | 0 | 0 | 4 |
-| json-parser | C2′ re-seed repair | 33 | 0 | 0 | 1 | 6 |
+| json-parser | C2' re-seed repair | 33 | 0 | 0 | 1 | 6 |
 | parson | C2 proxy | 0 | 28 | 0 | 8 | 4 |
 | parson | A5 no steering | 0 | 0 | 40 | 0 | 0 |
 | parson | C3s coverage | 0 | 39 | 0 | 0 | 1 |
@@ -673,7 +673,7 @@ Counts over ten replicates x four refinements = 40 per cell, read from each run'
 | tomlc99 | A5 no steering | 0 | 0 | 38 | 0 | 2 |
 | tomlc99 | C3s coverage | 0 | 27 | 0 | 1 | 12 |
 | tomlc99 | C3n coverage+names | 0 | 27 | 0 | 9 | 4 |
-| tomlc99 | C2′ re-seed repair | 0 | 33 | 0 | 4 | 3 |
+| tomlc99 | C2' re-seed repair | 0 | 33 | 0 | 4 | 3 |
 | cjson | C2 proxy | 0 | 32 | 0 | 0 | 8 |
 | cjson | A5 no steering | 0 | 0 | 38 | 0 | 2 |
 | cjson | C3s coverage | 0 | 32 | 0 | 0 | 8 |
@@ -767,7 +767,7 @@ seed upward with a consistent sign is the coverage scalar on parson, +1.59
 +0.89 ± 0.50 (7 up, p 0.016). No steering (+0.54, p 0.16) and the
 named-function oracle (−0.16, 5 up, 5 down) are within noise there. On
 tomlc99 every arm is within noise once the flagged replicates are set aside:
-proxy −0.01, no steering +1.80, coverage +0.22, coverage+names −0.70, C2′
+proxy −0.01, no steering +1.80, coverage +0.22, coverage+names −0.70, C2'
 −1.41. On cJSON the proxy moves its seed down, −0.51 ± 0.46 (2 up, 7 down, p
 0.039). No steering moves up within noise, +1.35 ± 1.69 (p 0.11), as does
 the coverage scalar, +1.15 ± 2.10 over the nine replicates whose seed drew
@@ -777,7 +777,7 @@ one of which lost 21 points to a final whose draws time out (Section 8).
 The exception is the development target, and it moves every steered arm
 down: proxy −1.02 (p 0.03), coverage −1.60 (p 0.06), coverage+names −9.2
 with its collapse and −0.1 to −6.5 without it (10 of 10 down, p 0.002),
-C2′ −1.32, while no steering is within noise. The mechanism is the one
+C2' −1.32, while no steering is within noise. The mechanism is the one
 of 5.1: four rounds of mutating around a crash that every object input
 already reaches narrow the generator, and the primary outcome is measured
 on the whole reachable region.
@@ -948,7 +948,7 @@ classes by arm.
 
 121 events over 180 completed replicates (four targets), coded from the recorded exception and rejection text by ordered regular expressions, first match wins; iterations without an event are not listed. Arm codes as in Table 1.
 
-| cause | C2 | A5 | C3s | C3n | C2′ | total |
+| cause | C2 | A5 | C3s | C3n | C2' | total |
 |------------------------------|-----|-----|-----|-----|-----|------|
 | syntax / unparseable response | 5 | 3 | 10 | 5 | 1 | 24 |
 | strategy/value confusion (two-level semantics) | 12 | 2 | 7 | 3 | 0 | 24 |
@@ -1005,7 +1005,7 @@ grammar and the adaptation note than on any refinement.
 
 **Table 7. Synthesis cost per run, by target**
 
-Mean over every completed run of the five DeepSeek arms (C2, A5, C3s, C3n, C2′); every call served by deepseek-flash; the per-arm table is in the artifact (eval/matrix/cost_table.md).
+Mean over every completed run of the five DeepSeek arms (C2, A5, C3s, C3n, C2'); every call served by deepseek-flash; the per-arm table is in the artifact (eval/matrix/cost_table.md).
 
 | target | runs | LLM calls | tokens in | tokens out | USD per run | wall minutes |
 |-----------|------|------|--------|--------|--------|--------|
@@ -1092,7 +1092,7 @@ iteration-1 gate incidence is sampling variation of one process; within the
 proxy arm on the three Stage 1 targets an iteration-1 gate predicts
 collapse (4 of 4 collapsed had one, 5 of 26 healthy; Fisher p 0.005).
 
-### 6.3 C2′: repair by re-seed, on two targets
+### 6.3 C2': repair by re-seed, on two targets
 
 The one pre-specified test of the mechanism replaces the in-place repair
 with a re-seed from the grammar and the failure text, and changes nothing
@@ -1254,7 +1254,7 @@ depth-calibrated, so on tomlc99 the Grammarinator row is the defaults only.
 
 **Statistical.** Ten replicates per cell was fixed at registration; the
 intervals are wide and are reported everywhere the point estimate is. The
-mechanism analysis (Section 6) is exploratory and post hoc; C2′ is its only
+mechanism analysis (Section 6) is exploratory and post hoc; C2' is its only
 pre-specified test and it was run on two targets.
 
 ## 9. Related work

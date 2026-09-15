@@ -31,7 +31,7 @@ ARMS = ["C2", "A5", "C3s", "C3n", "C2R"]
 COLOR = {"C2": "#2a78d6", "A5": "#eb6834", "C3s": "#1baf7a", "C3n": "#eda100", "C2R": "#e87ba4",
          "seed": "#555555", "grammarinator": "#111111", "grammarinator-deep": "#111111", "random": "#999999"}
 LABEL = {"C2": "C2 proxy", "A5": "A5 no steering", "C3s": "C3s coverage", "C3n": "C3n coverage+names",
-         "C2R": "C2\u2032 re-seed repair", "seed": "seed (mean)", "grammarinator": "Grammarinator",
+         "C2R": "C2' re-seed repair", "seed": "seed (mean)", "grammarinator": "Grammarinator",
          "grammarinator-deep": "Grammarinator depth-matched", "random": "random text"}
 TARGETS = ["json-parser", "parson", "tomlc99", "cjson"]
 CPS = [10, 30, 100, 150, 300, 1000, 3000, 10000]
@@ -114,7 +114,7 @@ def contrasts(loop, t):
     out = []
     lv = lambda arm: [st.mean(auc(r) for r in v["final"].values()) for v in loop[t][arm].values() if v.get("final")]
     for a, b, name in (("C2", "A5", "H1: C2 vs A5"), ("C3s", "C2", "H2s: C3s vs C2"), ("C3n", "C2", "H2n: C3n vs C2"),
-                       ("C2R", "C2", "C2\u2032 vs C2 (follow-up)")):
+                       ("C2R", "C2", "C2' vs C2 (follow-up)")):
         if a in loop[t] and b in loop[t]:
             x, y = lv(a), lv(b)
             if len(x) >= 2 and len(y) >= 2:

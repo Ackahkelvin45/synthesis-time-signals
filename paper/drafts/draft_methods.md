@@ -30,7 +30,7 @@ guards, and then each signal.
 | C2 proxy | the structural summary of its own outputs and the parser's exit codes | one of: add or up-weight a production, generate deeper, fix a feature, broaden, revert | by proxy score | in place |
 | C3s coverage | branch and region coverage of the reachable region, two numbers | "increase branch coverage" | by measured coverage | in place |
 | C3n coverage+names | the two numbers and the five least-covered reachable functions by name | "cover function F" | by measured coverage | in place |
-| C2′ re-seed repair (follow-up) | as C2 proxy | as C2 proxy | as C2 proxy | re-seed from the grammar with the failure text |
+| C2' re-seed repair (follow-up) | as C2 proxy | as C2 proxy | as C2 proxy | re-seed from the grammar with the failure text |
 
 ### 3.1 The shared loop
 
@@ -151,7 +151,7 @@ F has 0% branch coverage; names are not anonymised, so this arm is
 white-box in the smallest possible way. Both arms record the proxy summary
 as well, which yields the RQ3 validity data at no extra cost.
 
-**C2′ re-seed repair (follow-up).** Identical to C2 proxy except that a
+**C2' re-seed repair (follow-up).** Identical to C2 proxy except that a
 generator failing the gate is never shown back to the model: the
 in-iteration repair, and every prompt while the held generator is a failed
 one, is the grammar seed prompt with the failure text appended. Added
@@ -179,7 +179,7 @@ than the signal: the crash rule turned every steered arm on the development
 target into the same loop (Section 5.1), and the in-place repair is the
 mechanism behind every collapsed replicate (Section 6). We report both as
 findings rather than fixing them, and the one intervention we did run,
-C2′, was pre-specified after the mechanism analysis and is reported
+C2', was pre-specified after the mechanism analysis and is reported
 outside the family.
 
 ## 4. Experimental design
@@ -231,7 +231,7 @@ per target and its hash is recorded in every run and every measurement.
 
 Loop conditions C2 proxy, A5 no steering, C3s coverage and C3n
 coverage+names, ten independent replicates each per target (160 runs), plus
-C2′ re-seed repair on json-parser and tomlc99 (20 runs). Fixed generators,
+C2' re-seed repair on json-parser and tomlc99 (20 runs). Fixed generators,
 measured on the three Stage 1 targets: random text, Grammarinator 26.1 on
 the identical grammar (defaults, and with recursive alternatives up-weighted
 to match the mean nesting depth of the development target's pilot seed),
@@ -310,14 +310,14 @@ per-replicate delta (final minus seed) with an exact sign-flip test. Bands,
 fixed at registration: A12 at or beyond 0.64 (or 0.36) with an interval
 excluding 0.5 is a practical difference; 0.56 to 0.64 small; otherwise
 negligible. Targets are replications, not pooled. Everything outside the
-confirmatory family (RQ1, RQ3, RQ4, the mechanism analysis, C2′) is
+confirmatory family (RQ1, RQ3, RQ4, the mechanism analysis, C2') is
 exploratory and is labelled so in every table.
 
 **Deviations from the registered design.** C3s on json-parser and parson,
 and C3n on all three Stage 1 targets, were run as blocks after phases 1a and 1b
 rather than interleaved with them, so provider drift is not orthogonal to
 those cells (the served model identifier was constant across every batch);
-C2′ was added after the mechanism analysis and is outside the confirmatory
+C2' was added after the mechanism analysis and is outside the confirmatory
 family. The first Stage 2 target, cJSON, was run in full (four arms, ten
 replicates) after the Stage 1 analysis, as the registration's Stage 2
 allows, and is reported in every table beside the Stage 1 targets; its
@@ -327,7 +327,7 @@ measured before the submission cutoff. The second Stage 2 target
 tomlc99, arms C2, A5 and C3s) were not completed: the second model's batch
 stood at 18 of 30 runs when the submission was frozen, and those runs are
 excluded from every table and kept in the artifact. The registered Stage 1
-budget was 4.00 USD; 3.80 USD was spent on the 140 Stage 1 and C2′ runs
+budget was 4.00 USD; 3.80 USD was spent on the 140 Stage 1 and C2' runs
 and 0.84 USD on the 40 cJSON runs (4.63 USD in total), plus about 0.03
 USD on attempts discarded after network failures and about 1.4 USD of
 OpenAI credit on the excluded second-model runs.
@@ -399,5 +399,5 @@ depth-calibrated, so on tomlc99 the Grammarinator row is the defaults only.
 
 **Statistical.** Ten replicates per cell was fixed at registration; the
 intervals are wide and are reported everywhere the point estimate is. The
-mechanism analysis (Section 6) is exploratory and post hoc; C2′ is its only
+mechanism analysis (Section 6) is exploratory and post hoc; C2' is its only
 pre-specified test and it was run on two targets.

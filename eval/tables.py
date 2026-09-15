@@ -23,7 +23,7 @@ from full_report import load, level, collapsed  # noqa: E402
 ARMS = ("C2", "A5", "C3s", "C3n", "C2R", "M2C2", "M2A5", "M2C3s")
 # canonical arm names: used identically in prose, tables, figures and captions
 NAME = {"C2": "C2 proxy", "A5": "A5 no steering", "C3s": "C3s coverage", "C3n": "C3n coverage+names",
-        "C2R": "C2\u2032 re-seed repair",
+        "C2R": "C2' re-seed repair",
         "M2C2": "C2 proxy (gpt-5-mini)", "M2A5": "A5 no steering (gpt-5-mini)", "M2C3s": "C3s coverage (gpt-5-mini)"}
 TARGET_ORDER = ("json-parser", "parson", "tomlc99", "cjson")
 
@@ -117,7 +117,7 @@ def t4():
     head = re.search(r"Guard events over (\d+) completed replicates.*?(\d+) events", tx, re.S)
     i = tx.index("## Cause class by arm"); j = tx.index("\n## ", i + 5)
     block = [l for l in tx[i:j].splitlines() if l.startswith("|")]
-    block[0] = block[0].replace("| C2R |", "| C2\u2032 |")
+    block[0] = block[0].replace("| C2R |", "| C2' |")
     block[1] = "|------------------------------|-----|-----|-----|-----|-----|------|"
     return ["## T4. RQ5: guard events by cause class and arm", "",
             f"{head.group(2)} events over {head.group(1)} completed replicates (four targets), coded from the recorded "
@@ -169,7 +169,7 @@ def t6():
         c = [x.strip() for x in l.strip("|").split("|")]
         per.setdefault(c[0], []).append((int(c[2]), float(c[3]), float(c[4]), float(c[5]), float(c[6]), float(c[7])))
     L = ["## T6. Synthesis cost per run, by target", "",
-         "Mean over every completed run of the five DeepSeek arms (C2, A5, C3s, C3n, C2\u2032); every call served by deepseek-flash; "
+         "Mean over every completed run of the five DeepSeek arms (C2, A5, C3s, C3n, C2'); every call served by deepseek-flash; "
          "the per-arm table is in the artifact (eval/matrix/cost_table.md).", "",
          "| target | runs | LLM calls | tokens in | tokens out | USD per run | wall minutes |",
          "|-----------|------|------|--------|--------|--------|--------|"]

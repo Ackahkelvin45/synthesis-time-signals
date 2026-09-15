@@ -19,7 +19,7 @@ Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; fai
 | json-parser | A5 no steering | 63.7 ± 2.8 (64.6) | 0 | +0.15 ± 1.16 | 6 / 4 | 0.768 | 0 | - |
 | json-parser | C3s coverage | 48.8 ± 18.7 (59.4) | 2 | -1.60 ± 1.70 | 2 / 6 | 0.062 | 0 | - |
 | json-parser | C3n coverage+names | 54.9 ± 14.0 (61.5) | 1 | -9.20 ± 13.62 | 0 / 10 | 0.002 | 0 | - |
-| json-parser | C2′ re-seed repair | 63.9 ± 1.3 (64.4) | 0 | -1.32 ± 1.40 | 2 / 7 | 0.074 | 0 | - |
+| json-parser | C2' re-seed repair | 63.9 ± 1.3 (64.4) | 0 | -1.32 ± 1.40 | 2 / 7 | 0.074 | 0 | - |
 | parson | C2 proxy | 60.9 ± 15.4 (67.1) | 1 | +0.89 ± 0.50 | 7 / 1 | 0.016 | 0 | - |
 | parson | A5 no steering | 66.3 ± 1.6 (66.7) | 0 | +0.54 ± 0.75 | 7 / 2 | 0.160 | 0 | - |
 | parson | C3s coverage | 69.1 ± 1.1 (69.4) | 0 | +1.59 ± 0.86 | 8 / 2 | 0.008 | 0 | 68.6 (n 1) |
@@ -28,7 +28,7 @@ Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; fai
 | tomlc99 | A5 no steering | 60.2 ± 3.4 (59.8) | 0 | +1.80 ± 2.33 | 6 / 3 | 0.121 | 1 | - |
 | tomlc99 | C3s coverage | 55.1 ± 14.1 (60.6) | 1 | +0.22 ± 0.61 | 5 / 1 | 0.438 | 0 | 50.7 (n 6) |
 | tomlc99 | C3n coverage+names | 57.4 ± 3.7 (58.5) | 0 | -0.70 ± 0.96 | 0 / 3 | 0.250 | 1 | 51.2 (n 4) |
-| tomlc99 | C2′ re-seed repair | 59.3 ± 2.4 (60.3) | 0 | -1.41 ± 1.64 | 1 / 7 | 0.086 | 0 | 60.2 (n 3) |
+| tomlc99 | C2' re-seed repair | 59.3 ± 2.4 (60.3) | 0 | -1.41 ± 1.64 | 1 / 7 | 0.086 | 0 | 60.2 (n 3) |
 | cjson | C2 proxy | 61.8 ± 15.6 (68.3) | 1 | -0.51 ± 0.46 | 2 / 7 | 0.039 | 0 | 67.1 (n 1) |
 | cjson | A5 no steering | 70.3 ± 1.6 (70.1) | 0 | +1.35 ± 1.69 | 6 / 3 | 0.113 | 0 | - |
 | cjson | C3s coverage | 64.2 ± 16.2 (72.2) | 1 | +1.15 ± 2.10 | 6 / 2 | 0.234 | 1 | 71.7 (n 2) |
@@ -49,7 +49,7 @@ Primary outcome at 10^4 inputs, draw seeds 0..19. Fixed generators: mean over th
 
 121 events over 180 completed replicates (four targets), coded from the recorded exception and rejection text by ordered regular expressions, first match wins; iterations without an event are not listed. Arm codes as in Table 1.
 
-| cause | C2 | A5 | C3s | C3n | C2′ | total |
+| cause | C2 | A5 | C3s | C3n | C2' | total |
 |------------------------------|-----|-----|-----|-----|-----|------|
 | syntax / unparseable response | 5 | 3 | 10 | 5 | 1 | 24 |
 | strategy/value confusion (two-level semantics) | 12 | 2 | 7 | 3 | 0 | 24 |
@@ -72,7 +72,7 @@ Counts over ten replicates x four refinements = 40 per cell, read from each run'
 | json-parser | A5 no steering | 0 | 0 | 35 | 0 | 5 |
 | json-parser | C3s coverage | 30 | 0 | 0 | 0 | 10 |
 | json-parser | C3n coverage+names | 36 | 0 | 0 | 0 | 4 |
-| json-parser | C2′ re-seed repair | 33 | 0 | 0 | 1 | 6 |
+| json-parser | C2' re-seed repair | 33 | 0 | 0 | 1 | 6 |
 | parson | C2 proxy | 0 | 28 | 0 | 8 | 4 |
 | parson | A5 no steering | 0 | 0 | 40 | 0 | 0 |
 | parson | C3s coverage | 0 | 39 | 0 | 0 | 1 |
@@ -81,7 +81,7 @@ Counts over ten replicates x four refinements = 40 per cell, read from each run'
 | tomlc99 | A5 no steering | 0 | 0 | 38 | 0 | 2 |
 | tomlc99 | C3s coverage | 0 | 27 | 0 | 1 | 12 |
 | tomlc99 | C3n coverage+names | 0 | 27 | 0 | 9 | 4 |
-| tomlc99 | C2′ re-seed repair | 0 | 33 | 0 | 4 | 3 |
+| tomlc99 | C2' re-seed repair | 0 | 33 | 0 | 4 | 3 |
 | cjson | C2 proxy | 0 | 32 | 0 | 0 | 8 |
 | cjson | A5 no steering | 0 | 0 | 38 | 0 | 2 |
 | cjson | C3s coverage | 0 | 32 | 0 | 0 | 8 |
@@ -89,7 +89,7 @@ Counts over ten replicates x four refinements = 40 per cell, read from each run'
 
 ## T6. Synthesis cost per run, by target
 
-Mean over every completed run of the five DeepSeek arms (C2, A5, C3s, C3n, C2′); every call served by deepseek-flash; the per-arm table is in the artifact (eval/matrix/cost_table.md).
+Mean over every completed run of the five DeepSeek arms (C2, A5, C3s, C3n, C2'); every call served by deepseek-flash; the per-arm table is in the artifact (eval/matrix/cost_table.md).
 
 | target | runs | LLM calls | tokens in | tokens out | USD per run | wall minutes |
 |-----------|------|------|--------|--------|--------|--------|

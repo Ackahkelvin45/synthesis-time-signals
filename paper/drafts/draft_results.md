@@ -122,7 +122,7 @@ seed upward with a consistent sign is the coverage scalar on parson, +1.59
 +0.89 ± 0.50 (7 up, p 0.016). No steering (+0.54, p 0.16) and the
 named-function oracle (−0.16, 5 up, 5 down) are within noise there. On
 tomlc99 every arm is within noise once the flagged replicates are set aside:
-proxy −0.01, no steering +1.80, coverage +0.22, coverage+names −0.70, C2′
+proxy −0.01, no steering +1.80, coverage +0.22, coverage+names −0.70, C2'
 −1.41. On cJSON the proxy moves its seed down, −0.51 ± 0.46 (2 up, 7 down, p
 0.039). No steering moves up within noise, +1.35 ± 1.69 (p 0.11), as does
 the coverage scalar, +1.15 ± 2.10 over the nine replicates whose seed drew
@@ -132,7 +132,7 @@ one of which lost 21 points to a final whose draws time out (Section 8).
 The exception is the development target, and it moves every steered arm
 down: proxy −1.02 (p 0.03), coverage −1.60 (p 0.06), coverage+names −9.2
 with its collapse and −0.1 to −6.5 without it (10 of 10 down, p 0.002),
-C2′ −1.32, while no steering is within noise. The mechanism is the one
+C2' −1.32, while no steering is within noise. The mechanism is the one
 of 5.1: four rounds of mutating around a crash that every object input
 already reaches narrow the generator, and the primary outcome is measured
 on the whole reachable region.
@@ -410,7 +410,7 @@ iteration-1 gate incidence is sampling variation of one process; within the
 proxy arm on the three Stage 1 targets an iteration-1 gate predicts
 collapse (4 of 4 collapsed had one, 5 of 26 healthy; Fisher p 0.005).
 
-### 6.3 C2′: repair by re-seed, on two targets
+### 6.3 C2': repair by re-seed, on two targets
 
 The one pre-specified test of the mechanism replaces the in-place repair
 with a re-seed from the grammar and the failure text, and changes nothing
