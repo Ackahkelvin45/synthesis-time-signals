@@ -904,7 +904,7 @@ MUST be checked against their sources before submission.
   generation via LLM-driven synthesis over fuzzer space. USENIX Security
   2025. https://doi.org/10.48550/arXiv.2506.10323
 - Klees, G., Ruef, A., Cooper, B., Wei, S., and Hicks, M. (2018). Evaluating
-  fuzz testing. ACM CCS 2018.
+  fuzz testing. ACM CCS 2018. https://doi.org/10.1145/3243734.3243804
 - Padhye, R., Lemieux, C., Sen, K., Papadakis, M., and Le Traon, Y. (2019).
   Semantic fuzzing with Zest. ISSTA 2019.
 - Park, S., and Yun, I. (2026). Agentic fuzzing: opportunities and
@@ -914,8 +914,9 @@ MUST be checked against their sources before submission.
 - Xia, C. S., Paltenghi, M., Le Tian, J., Pradel, M., and Zhang, L. (2024).
   Fuzz4All: Universal fuzzing with large language models. ICSE 2024.
 - Zhang, et al. (2025). G2Fuzz. USENIX Security 2025. https://doi.org/10.48550/arXiv.2501.19282
-- Hodovan, R., and Kiss, A. (2018). Grammarinator: a grammar-based open
-  source fuzzer. A-TEST 2018. (Tool used at version 26.1; the pinned
+- Hodovan, R., Kiss, A., and Gyimothy, T. (2018). Grammarinator: a
+  grammar-based open source fuzzer. A-TEST 2018.
+  https://doi.org/10.1145/3278186.3278193 (Tool used at version 26.1; the pinned
   generator and every parameter are in the artifact.)
 - MacIver, D. R., Hatfield-Dodds, Z., et al. (2019). Hypothesis: a new
   approach to property-based testing. Journal of Open Source Software 4(43). https://doi.org/10.21105/joss.01891
