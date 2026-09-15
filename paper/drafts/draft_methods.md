@@ -194,7 +194,11 @@ The hypotheses, single primary outcome, target set, conditions, replicate
 count, exclusion rules, analysis code and a neutral title were frozen in the
 repository (commit 4762bad) before the first replicate run; the design was
 not registered on a public registry, and the git history serves as the
-timestamp. Deviations are disclosed in Section 4.6.
+timestamp. The registered title named the three steering conditions; the
+title used here shortens that list to "four steering signals" and adds
+"pre-registered", a change of presentation made after the results were
+known and recorded in the artifact. Deviations are disclosed in Section
+4.6.
 
 ### 4.2 Targets
 

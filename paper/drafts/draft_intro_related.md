@@ -3,8 +3,7 @@
 ## Title (registered, neutral)
 
 Synthesis-time feedback for LLM-authored grammar-based generators: a
-replicated comparison of no steering, a structural proxy, and a coverage
-oracle on C parsers
+pre-registered, replicated comparison of four steering signals on C parsers
 
 ## Abstract (about 240 words)
 
