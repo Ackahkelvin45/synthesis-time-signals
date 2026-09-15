@@ -66,10 +66,10 @@ def main():
 \title{%s}
 \titlerunning{%s}
 \authorrunning{K. Ackah et al.}
-\author{Kelvin Ackah \and Kwabena Owusu-Agyemang \and Rose-Mary Owusuaa Mensah Gyening}
-\institute{K. Ackah (corresponding author) \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{kackah@st.knust.edu.gh}
-  \and K. Owusu-Agyemang \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{kwabenaoa@knust.edu.gh}
-  \and R.-M. O. Mensah Gyening \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{rmo.mensah@knust.edu.gh}}
+\author{Kelvin Ackah \and Dr Owusu-Agyemang Kwabena \and Dr Rose-Mary Owusuaa Mensah Gyening}
+\institute{Kelvin Ackah (corresponding author) \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{kackah@st.knust.edu.gh}
+  \and Dr Owusu-Agyemang Kwabena \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{kwabenaoa@knust.edu.gh}
+  \and Dr Rose-Mary Owusuaa Mensah Gyening \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{rmo.mensah@knust.edu.gh}}
 \date{Received: date / Accepted: date}
 \maketitle
 \begin{abstract}
