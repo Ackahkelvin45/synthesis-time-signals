@@ -117,12 +117,12 @@ def t4():
     head = re.search(r"Guard events over (\d+) completed replicates.*?(\d+) events", tx, re.S)
     i = tx.index("## Cause class by arm"); j = tx.index("\n## ", i + 5)
     block = [l for l in tx[i:j].splitlines() if l.startswith("|")]
-    block[0] = block[0].replace("| C2 |", f"| {NAME['C2']} |").replace("| A5 |", f"| {NAME['A5']} |").replace("| C3s |", f"| {NAME['C3s']} |") \
-                       .replace("| C3n |", f"| {NAME['C3n']} |").replace("| C2R |", f"| {NAME['C2R']} |")
-    block[1] = "|--------------------------|------|------|------|------|------|------|"
+    block[0] = block[0].replace("| C2R |", "| C2\u2032 |")
+    block[1] = "|------------------------------|-----|-----|-----|-----|-----|------|"
     return ["## T4. RQ5: guard events by cause class and arm", "",
             f"{head.group(2)} events over {head.group(1)} completed replicates (four targets), coded from the recorded "
-            "exception and rejection text by ordered regular expressions, first match wins; iterations without an event are not listed.", ""] + block + [""]
+            "exception and rejection text by ordered regular expressions, first match wins; iterations without an event are not listed. "
+            "Arm codes as in Table 1.", ""] + block + [""]
 
 
 EDIT_CLASS = {"intensify_near_crash": "crash", "increase_branch_coverage": "signal", "cover_function": "signal",

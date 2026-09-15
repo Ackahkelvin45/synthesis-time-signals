@@ -47,10 +47,10 @@ Primary outcome at 10^4 inputs, draw seeds 0..19. Fixed generators: mean over th
 
 ## T4. RQ5: guard events by cause class and arm
 
-121 events over 180 completed replicates (four targets), coded from the recorded exception and rejection text by ordered regular expressions, first match wins; iterations without an event are not listed.
+121 events over 180 completed replicates (four targets), coded from the recorded exception and rejection text by ordered regular expressions, first match wins; iterations without an event are not listed. Arm codes as in Table 1.
 
-| cause | C2 proxy | A5 no steering | C3s coverage | C3n coverage+names | C2′ re-seed repair | total |
-|--------------------------|------|------|------|------|------|------|
+| cause | C2 | A5 | C3s | C3n | C2′ | total |
+|------------------------------|-----|-----|-----|-----|-----|------|
 | syntax / unparseable response | 5 | 3 | 10 | 5 | 1 | 24 |
 | strategy/value confusion (two-level semantics) | 12 | 2 | 7 | 3 | 0 | 24 |
 | generic Python error (TypeError/ValueError/KeyError/NameError) | 5 | 3 | 4 | 2 | 4 | 18 |

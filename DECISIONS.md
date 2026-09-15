@@ -1322,3 +1322,43 @@ runs) plus cJSON (40 runs), 180 runs and 4.63 USD. The chains were left
 running at the user's request; whatever they produce goes into the
 revision, not this submission. Excluded and disclosed in Section 4.6:
 cJSON RQ1 references, RQ3 cells and campaigns; libexpat; AFL++; M2.
+
+## D29 — Paper revised to a communication blueprint drawn from the base paper (2026-09-15)
+
+**Why.** The user asked for the paper to reach the base paper's level of
+organisation and flow without copying it. A style study of Vikram and
+Padhye (paper/base-paper-style.md), a gap analysis of our draft
+(paper/style-gap-analysis.md) and a revision plan with two decisions
+(paper/revision-plan.md) preceded the rewrite.
+
+**Decisions.** Motivating example = the collapsed proxy replicate parson
+C2-rep6 (numbers read from runs/parson/C2-rep6/iter-*/; scratch note kept
+with file paths). Tables 3 to 6 of the old draft enter the paper as
+generated tables (eval/tables.py T3 to T6, inlined by
+eval/assemble_paper.py in order of appearance, after the hand-written
+configuration table). A loop schematic (paper/figures/f0_loop) is new.
+Canonical arm names (C2 proxy, A5 no steering, C3s coverage, C3n
+coverage+names, C2′ re-seed repair) are used identically in prose, tables
+and figures. The registered title is kept; a finding-bearing display title
+is proposed to the author separately and, if adopted, is disclosed in 4.1
+as a presentation change.
+
+**What changed in the text.** Introduction rebuilt as a funnel with an
+assumption-shaped gap, a motivating example and a contributions
+paragraph; background split into three purposeful subsections; approach
+opens with the differing axis and explains the proxy at three levels with
+one recorded iteration (parson C2-rep2, iteration 1 to 2); a
+design-decision subsection; RQ list in 4.6; every results subsection in
+question, measurement, figure, aggregate, spread, exception, mechanism,
+answer form with a closing Finding; bridge from 5.7 to Section 6;
+discussion led by the broader pattern; conclusion shortened; related work
+gains the LLM-property-based-testing and evaluation-methodology themes.
+Mandatory fixes: internal note removed from References, G2Fuzz entry
+completed, RQ2 labelled, "does not claim" paragraph rewritten, artifact
+URL placeholder pending the user. No number was written that was not read
+from a file in the session; the DOIs added from standard references
+(Claessen and Hughes, Arcuri and Briand, Vargha and Delaney, Fuzz4All)
+resolve at doi.org and the author checks their titles.
+
+**Numbers.** 15.4k words, 36 pages in svjour3; mean sentence length 34 to
+27 words; sentences over 40 words 77 of 239 to 67 of 460.
