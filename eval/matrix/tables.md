@@ -24,11 +24,17 @@ Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; fai
 | parson | A5 no steering | 66.3 ± 1.6 (66.7) | 0 | +0.54 ± 0.75 | 7 / 2 | 0.160 | 0 | - |
 | parson | C3s coverage | 69.1 ± 1.1 (69.4) | 0 | +1.59 ± 0.86 | 8 / 2 | 0.008 | 0 | 68.6 (n 1) |
 | parson | C3n coverage+names | 66.0 ± 1.3 (65.8) | 0 | -0.16 ± 1.48 | 5 / 5 | 0.797 | 0 | - |
+| parson | C2 proxy (gpt-5-mini) | 62.9 ± 1.2 (62.9) | 0 | +0.67 ± 1.38 | 4 / 4 | 0.336 | 1 | 62.1 (n 5) |
+| parson | A5 no steering (gpt-5-mini) | 60.2 ± 2.2 (60.3) | 0 | -1.06 ± 0.76 | 1 / 8 | 0.008 | 0 | - |
+| parson | C3s coverage (gpt-5-mini) | 62.0 ± 1.1 (62.2) | 0 | -0.12 ± 0.79 | 5 / 4 | 0.754 | 0 | - |
 | tomlc99 | C2 proxy | 52.9 ± 13.9 (57.4) | 1 | -0.01 ± 1.10 | 2 / 4 | 1.000 | 1 | - |
 | tomlc99 | A5 no steering | 60.2 ± 3.4 (59.8) | 0 | +1.80 ± 2.33 | 6 / 3 | 0.121 | 1 | - |
 | tomlc99 | C3s coverage | 55.1 ± 14.1 (60.6) | 1 | +0.22 ± 0.61 | 5 / 1 | 0.438 | 0 | 50.7 (n 6) |
 | tomlc99 | C3n coverage+names | 57.4 ± 3.7 (58.5) | 0 | -0.70 ± 0.96 | 0 / 3 | 0.250 | 1 | 51.2 (n 4) |
 | tomlc99 | C2' re-seed repair | 59.3 ± 2.4 (60.3) | 0 | -1.41 ± 1.64 | 1 / 7 | 0.086 | 0 | 60.2 (n 3) |
+| tomlc99 | C2 proxy (gpt-5-mini) | 51.8 ± 3.1 (51.0) | 0 | +0.51 ± 0.52 | 6 / 1 | 0.047 | 1 | 38.5 (n 3) |
+| tomlc99 | A5 no steering (gpt-5-mini) | 52.5 ± 3.9 (50.6) | 0 | -0.64 ± 2.08 | 3 / 4 | 0.516 | 3 | - |
+| tomlc99 | C3s coverage (gpt-5-mini) | 38.8 ± 17.1 (49.9) | 2 | -0.81 ± 1.88 | 3 / 4 | 0.422 | 0 | 38.3 (n 4) |
 | cjson | C2 proxy | 61.8 ± 15.6 (68.3) | 1 | -0.51 ± 0.46 | 2 / 7 | 0.039 | 0 | 67.1 (n 1) |
 | cjson | A5 no steering | 70.3 ± 1.6 (70.1) | 0 | +1.35 ± 1.69 | 6 / 3 | 0.113 | 0 | - |
 | cjson | C3s coverage | 64.2 ± 16.2 (72.2) | 1 | +1.15 ± 2.10 | 6 / 2 | 0.234 | 1 | 71.7 (n 2) |
@@ -43,7 +49,7 @@ Primary outcome at 10^4 inputs, draw seeds 0..19. Fixed generators: mean over th
 | json-parser | 26.4 | 61.1 | 63.9 | 57.8 | 18 of 20 | 0.62 [0.43, 0.80] |
 | parson | 21.7 | 61.6 | 64.8 | 62.9 | 19 of 20 | 0.70 [0.51, 0.87] |
 | tomlc99 | 17.1 | 65.1 | - | 49.6 | 17 of 20 | 0.13 [0.02, 0.28] |
-| cjson | not measured | not measured | - | 65.6 | 19 of 20 | not measured |
+| cjson | 36.0 | 61.6 | 65.0 | 65.6 | 19 of 20 | 0.94 [0.87, 0.99] |
 
 ## T4. RQ5: guard events by cause class and arm
 
@@ -94,8 +100,8 @@ Mean over every completed run of the five DeepSeek arms (C2, A5, C3s, C3n, C2');
 | target | runs | LLM calls | tokens in | tokens out | USD per run | wall minutes |
 |-----------|------|------|--------|--------|--------|--------|
 | json-parser | 50 | 5.7 | 17451 | 18576 | 0.025 | 5.5 |
-| parson | 40 | 5.3 | 15496 | 16388 | 0.022 | 4.0 |
-| tomlc99 | 50 | 5.6 | 24180 | 24103 | 0.033 | 3.9 |
+| parson | 70 | 5.3 | 14397 | 18104 | 0.031 | 4.7 |
+| tomlc99 | 80 | 5.7 | 23686 | 27507 | 0.048 | 6.9 |
 | cjson | 40 | 5.5 | 14424 | 15444 | 0.021 | 4.2 |
-| all | 180 | | | | 0.026 (total 4.633) | 4.4 |
+| all | 240 | | | | 0.034 (total 8.116) | 5.5 |
 

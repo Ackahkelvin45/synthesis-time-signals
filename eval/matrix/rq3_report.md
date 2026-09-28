@@ -21,7 +21,7 @@ Each point is one loop iteration's generator: its proxy score as recorded by the
 - within C3s: rho = +0.09 [-0.23, +0.40], n = 48
 - within C3n: rho = +0.09 [-0.23, +0.40], n = 49
 - within replicate (does the proxy rank a run's own iterations as coverage does?): median rho over 38 replicates = +0.00; 18 positive, 18 negative
-- in-loop pairing (coverage arms): proxy score vs branch coverage on the same 500 inputs: rho = +0.17 [-0.03, +0.35], n = 97
+- in-loop pairing (coverage arms): proxy score vs branch coverage on the same 500 inputs: rho = +0.53 [+0.43, +0.61], n = 146
 
 ## tomlc99
 
@@ -32,10 +32,15 @@ Each point is one loop iteration's generator: its proxy score as recorded by the
 - within C3n: rho = +0.44 [+0.17, +0.66], n = 45
 - within C2R: rho = +0.13 [-0.17, +0.41], n = 47
 - within replicate (does the proxy rank a run's own iterations as coverage does?): median rho over 44 replicates = +0.35; 28 positive, 14 negative
-- in-loop pairing (coverage arms): proxy score vs branch coverage on the same 500 inputs: rho = +0.47 [+0.28, +0.63], n = 98
+- in-loop pairing (coverage arms): proxy score vs branch coverage on the same 500 inputs: rho = +0.51 [+0.36, +0.65], n = 111
 
 ## cjson
 
-- pooled, all arms: n = 0 (too few)
+- pooled, all arms: rho = +0.23 [+0.08, +0.36], n = 175
+- within C2: rho = +0.45 [+0.16, +0.66], n = 40
+- within A5: rho = +0.21 [-0.10, +0.48], n = 48
+- within C3s: rho = -0.12 [-0.39, +0.17], n = 39
+- within C3n: rho = +0.34 [+0.05, +0.58], n = 48
+- within replicate (does the proxy rank a run's own iterations as coverage does?): median rho over 37 replicates = +0.10; 20 positive, 17 negative
 - in-loop pairing (coverage arms): proxy score vs branch coverage on the same 500 inputs: rho = +0.30 [+0.11, +0.47], n = 87
 

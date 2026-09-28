@@ -1,0 +1,104 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.48900000000000005,
+  "summary": {
+    "outcomes": {
+      "valid": 96,
+      "reject": 164
+    },
+    "acceptance_rate": 0.369,
+    "max_nesting_depth": 2048,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "obj",
+      "pair",
+      "value"
+    ],
+    "productions_gap": [
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.531,
+    "novelty": 10,
+    "divergences": 21,
+    "divergence_examples": [
+      "b'-'",
+      "b'-.'",
+      "b'[{}] //extra'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 96,
+      "reject": 164
+    },
+    "acceptance_rate": 0.369,
+    "max_nesting_depth": 2048,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "obj",
+      "pair",
+      "value"
+    ],
+    "productions_gap": [
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.531,
+    "novelty": 10,
+    "divergences": 21,
+    "divergence_examples": [
+      "b'-'",
+      "b'-.'",
+      "b'[{}] //extra'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 55.620000000000005,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.9,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 55.620000000000005
+}

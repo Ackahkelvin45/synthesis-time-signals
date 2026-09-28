@@ -1,0 +1,102 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.2333333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 79,
+      "reject": 271
+    },
+    "acceptance_rate": 0.226,
+    "max_nesting_depth": 2002,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.291,
+    "novelty": 11,
+    "divergences": 62,
+    "divergence_examples": [
+      "b'-0.396372e+5\\x05'",
+      "b'-462e4\\xc3\\xb5d\\xf3\\x93\\xae\\xb6'",
+      "b'-44e4\\xc3\\xb5d\\xf3\\x93\\xae\\xb6'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 79,
+      "reject": 271
+    },
+    "acceptance_rate": 0.226,
+    "max_nesting_depth": 2002,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.291,
+    "novelty": 11,
+    "divergences": 62,
+    "divergence_examples": [
+      "b'-0.396372e+5\\x05'",
+      "b'-462e4\\xc3\\xb5d\\xf3\\x93\\xae\\xb6'",
+      "b'-44e4\\xc3\\xb5d\\xf3\\x93\\xae\\xb6'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 66.82,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.9,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 66.82
+}

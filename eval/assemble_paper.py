@@ -27,7 +27,7 @@ def main():
     disc = (D / "draft_discussion.md").read_text()
     body = disc[disc.index("**What the heterogeneity says.**"):].rstrip() + "\n\n"
     out = [
-        part(intro, "## Title", "## Abstract").replace("## Title (registered, neutral)\n\n", "# "),
+        part(intro, "## Title", "## Abstract").replace("## Title (frozen, neutral)\n\n", "# "),
         part(intro, "## Abstract", "## 1. Introduction").replace("## Abstract (about 240 words)", "## Abstract"),
         part(intro, "## 1. Introduction", "## 2. Background"),
         part(intro, "## 2. Background", "## 8. Related work"),

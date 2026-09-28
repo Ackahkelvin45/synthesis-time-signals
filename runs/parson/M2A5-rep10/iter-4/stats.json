@@ -1,0 +1,73 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.43333333333333335,
+  "summary": {
+    "outcomes": {
+      "valid": 100,
+      "reject": 250
+    },
+    "acceptance_rate": 0.286,
+    "max_nesting_depth": 2048,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "obj",
+      "pair",
+      "value"
+    ],
+    "productions_gap": [
+      "true",
+      "null"
+    ],
+    "cap_distance_mass": 0.11,
+    "novelty": 15,
+    "divergences": 31,
+    "divergence_examples": [
+      "b'\"\"0'",
+      "b'[true,]\"|y'",
+      "b'\"\"0'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 57.2,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 57.2
+}

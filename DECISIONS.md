@@ -1362,3 +1362,76 @@ resolve at doi.org and the author checks their titles.
 
 **Numbers.** 15.4k words, 36 pages in svjour3; mean sentence length 34 to
 27 words; sentences over 40 words 77 of 239 to 67 of 460.
+
+## D30 — Revision after the EMSE desk rejection: wording, the second model on two targets, the reference rows, and two data rules (2026-09-26 to 2026-09-28)
+
+**Trigger.** EMSE desk-rejected the 2026-09-15 submission (editorial
+pre-screen, no external reviews). The one point specific to the paper: a
+plan committed to the project's own repository is not a pre-registration;
+that term is reserved for a public registry or a Registered Report.
+
+**Wording.** Every "pre-registered" and bare "registered" in the paper now
+reads "pre-specified" or "frozen analysis plan", except the explicit
+statement in Section 4.1 that the plan was not registered and two
+literature references to a genuine registered report. Display title chosen
+by the author from a researched shortlist (question form, as in the two
+closest prior papers): "Does synthesis-time steering help LLM-authored
+generators? A replicated comparison of four signals on C parsers"; the
+change from the frozen title is disclosed in 4.1.
+
+**Data added (all local compute except the second-model runs).** M2 =
+gpt-5-mini (served gpt-5-mini-2025-08-07, provider default temperature) on
+tomlc99 as pre-specified (30 runs, 2.16 USD; the batch that stood at 18/30
+at the first cutoff, completed 2026-09-15) and, beyond the plan, on parson
+(30 runs, 1.32 USD, 2026-09-26), chosen because parson is where the oracle
+effect appeared under the first model; both measured at K=20, N=10^4
+(eval/matrix/m2_tomlc99_*, m2_parson_*). cJSON fixed references (random,
+Grammarinator defaults and depth-matched; eval/matrix/fixed.jsonl), cJSON
+RQ3 cells (175 iteration strategies, rq3_cjson_*), cJSON campaigns
+(CVE-2023-53154, eval/campaigns/rq4.jsonl), and the AFL++ reference row
+(4 targets x 5 runs x 3600 s, eval/matrix/afl_ref.jsonl). Total spend 8.12
+USD (4.63 DeepSeek, 3.48 OpenAI). libexpat still not run.
+
+**Results (exploratory, outside the family).** tomlc99 under M2 is null
+(M2C2 vs M2A5 A12 0.46; M2C3s vs M2C2 0.39; two M2C3s collapses). parson
+under M2 reverses the first model's ordering: proxy beats no steering (A12
+0.79 [0.56, 0.96], p 0.022) and coverage does not beat the proxy (0.35).
+gpt-5-mini is the weaker author on every arm on both targets (A5 vs M2A5
+A12 0.97 and 0.85; C3s vs M2C3s 1.00 and 0.84). cJSON RQ1: healthy seeds
+beat the stronger Grammarinator, A12 0.94. cJSON RQ3: pooled rho 0.23,
+within-replicate median 0.10. AFL++ in one hour reaches 81.2 / 81.5 / 82.8
+/ 89.5% of the reachable region (json-parser / parson / cJSON / tomlc99),
+above every generator, at about 500x the executions.
+
+**Two data rules.** (1) eval/merge_fill.py: a run whose final.json has
+has_strategy False (every iteration build-rejected, no strategy file) is
+scored as collapsed for BOTH seed and final with 20 explicit error rows
+each; the matrix had skipped both conditions as "no loop run for it yet"
+and the merge filled only a missing seed when a final existed, so tomlc99
+M2C3s-rep10 had silently vanished (n=9). No earlier run had hit the case;
+older merges are byte-identical. (2) Three cJSON campaigns (C2-rep6,
+A5-rep9, C3n-rep4) recorded a failed positive control under load; by the
+D28 rule their rows were dropped (backup in the session scratchpad) and
+the three jobs rerun on a quiet machine. AFL++: 16 of 20 runs failed to
+start when the image pull hit a DNS outage; rerun the same day, the four
+that had started (run 5 of each target) kept.
+
+**Housekeeping.** build/_inputs (regenerable draw cache, 125 GB, 91k
+files) purged of files older than one day on 2026-09-26; every measured
+cell keeps its input-set id. eval/regenerate_all.sh merges the parson M2
+shards, feeds day2 seed cells to rq1_report (cJSON RQ1) and keeps the
+taxonomy at the first model's arms (Section 5.7 counts 180 replicates);
+the cost table includes M2. rq4_report's positive-control line ignores
+error rows.
+
+**Addendum (2026-09-28 01:30 UTC), cJSON C2-rep6 campaign.** Of the
+three failed-control campaigns, A5-rep9 and C3n-rep4 passed their control
+on rerun (3 workers). C2-rep6's control failed again under 3 workers and
+again alone through the scheduler, five failures in all, each "after 0
+inputs"; yet `campaign.positive_control("cjson", ...)` passed in three
+direct calls and `eval/campaign.py` with the scheduler's exact argv passed
+its control and ran (1-minute probe). No difference between the two
+invocations was found. The campaign was therefore run directly with the
+same argv and the full 30-minute budget and its row appended; this is
+disclosed here rather than hidden in a rerun count. The scheduler's other
+212 rows had passing controls.

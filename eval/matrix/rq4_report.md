@@ -1,17 +1,24 @@
 # RQ4: ground-truth bug campaigns (exploratory)
 
-173 campaigns; budget [30.0] minutes each; a campaign counts as triggered when an input's normalised crash signature matches the bug's proof of concept (Magma-style). Generators: each registered arm's final per replicate (seed = 1000 x replicate), plus fixed references at seed 0. A final that cannot draw is censored at zero inputs.
+213 campaigns; budget [30.0] minutes each; a campaign counts as triggered when an input's normalised crash signature matches the bug's proof of concept (Magma-style). Generators: each registered arm's final per replicate (seed = 1000 x replicate), plus fixed references at seed 0. A final that cannot draw is censored at zero inputs.
 
 ## cjson / cve-2023-53154
 
-positive control passed: True; build: pre-fix build bug-cve-2023-53154; campaigns recorded as error (final generator could not draw, censored at 0): 0
+positive control passed: True; build: pre-fix build bug-cve-2023-53154; campaigns recorded as error (final generator could not draw, censored at 0): 2
 
 | generator | campaigns | triggered | median inputs to trigger | median seconds | inputs run (median) |
 |---|---|---|---|---|---|
+| C2 | 10 | 0 | - | - | 640000 |
+| A5 | 10 | 6 | 12689.5 | 26.225 | 34000 |
+| C3s | 10 | 4 | 2595.5 | 4.49 | 312000 |
+| C3n | 10 | 0 | - | - | 786000 |
 | Grammarinator defaults (C0b) | 1 | 0 | - | - | 10000000 |
 | Grammarinator depth-matched (C0b) | 1 | 0 | - | - | 10000000 |
 | random text (C0a) | 1 | 0 | - | - | 7258000 |
 
+- C2 0/10 vs A5 6/10 triggered: Fisher exact p = 0.011
+- C3s 4/10 vs C2 0/10 triggered: Fisher exact p = 0.087
+- C3n 0/10 vs C2 0/10 triggered: Fisher exact p = 1.000
 
 ## json-parser / issue68 (this pre-fix build also contains issue 78, which shares the signature: the row measures either end-of-buffer over-read)
 
@@ -92,3 +99,4 @@ positive control passed: True; build: pinned HEAD (bug unfixed upstream); campai
 - json-parser: `timeout` x1081
 - tomlc99: `asan:heap-buffer-overflow|scan_string>next_token>eat_token` x1024
 - tomlc99: `asan:heap-buffer-overflow|toml_rtoi>valtype>parse_array` x39
+- cjson: `timeout` x1

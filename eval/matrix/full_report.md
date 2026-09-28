@@ -88,12 +88,32 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 - C3n final: 66.0 ± 1.3 (median 65.8); replicate means 63.3, 65.6, 66.0, 65.0, 69.9, 67.0, 65.3, 67.3, 64.1, 66.1
 - C3n: Δ(final − seed) = r1:-1.9, r2:-3.0, r3:-2.2, r4:+2.9, r5:+2.5, r6:+0.7, r7:+1.1, r8:+0.7, r9:-2.2, r10:-0.2; mean -0.16 ± 1.48; 5 up / 5 down / 0 zero of 10; sign-flip p = 0.7969
 - C3n collapsed (final unusable, scored 0): 0 of 10
+- M2C2 final: 62.9 ± 1.2 (median 62.9); replicate means 62.3, 63.0, 64.2, 66.1, 61.1, 60.4, 64.5, 61.6, 62.9, 63.3
+- M2C2: Δ(final − seed) = r1:+0.5, r2:-0.3, r3:+64.2, r4:-0.1, r5:-1.5, r6:-0.5, r7:+4.4, r8:+0.9, r9:+0.0, r10:+2.7; mean +7.03 ± 14.41; 5 up / 4 down / 1 zero of 10; sign-flip p = 0.1680
+- M2C2: seed failed but final works for rep3 (delta inflated by the whole final level); without them mean +0.67 ± 1.38, p = 0.3359, n = 9
+- M2C2 last working iteration where it differs from final (5 replicates): 62.1 ± 1.9 (median 62.3)
+- M2C2 collapsed (final unusable, scored 0): 0 of 10
+- M2A5 final: 60.2 ± 2.2 (median 60.3); replicate means 62.8, 62.1, 65.0, 60.9, 59.6, 57.8, 58.8, 54.9, 57.3, 62.5
+- M2A5: Δ(final − seed) = r1:+0.5, r2:-0.6, r3:-0.6, r4:-0.8, r5:+0.0, r6:-2.8, r7:-0.5, r8:-1.6, r9:-1.9, r10:-2.4; mean -1.06 ± 0.76; 1 up / 8 down / 1 zero of 10; sign-flip p = 0.0078
+- M2A5 collapsed (final unusable, scored 0): 0 of 10
+- M2C3s final: 62.0 ± 1.1 (median 62.2); replicate means 61.9, 64.6, 60.6, 62.9, 62.7, 59.1, 61.0, 62.4, 62.0, 62.9
+- M2C3s: Δ(final − seed) = r1:-1.3, r2:+1.0, r3:-2.5, r4:-0.4, r5:+1.3, r6:+0.3, r7:+0.0, r8:-0.4, r9:+0.4, r10:+0.4; mean -0.12 ± 0.79; 5 up / 4 down / 1 zero of 10; sign-flip p = 0.7539
+- M2C3s collapsed (final unusable, scored 0): 0 of 10
 
 ### Confirmatory family
 
 - H1: C2 vs A5: Δmean (C2 − A5) = -5.46; A12 = 0.59 [0.32, 0.84] → small, favouring C2; permutation p = 0.8972; n = 10 vs 10; Holm-adjusted p = 1.0000
 - H2s: C3s vs C2: Δmean (C3s − C2) = +8.25; A12 = 0.76 [0.52, 0.96] → practical, favouring C3s; permutation p = 0.0441; n = 10 vs 10; Holm-adjusted p = 0.1324
 - H2n: C3n vs C2: Δmean (C3n − C2) = +5.09; A12 = 0.33 [0.09, 0.59] → practical, favouring C2; permutation p = 0.9562; n = 10 vs 10; Holm-adjusted p = 1.0000
+
+### RQ5: the three-way under the second model (gpt-5-mini; exploratory, outside the family)
+
+- M2 H1, M2C2 vs M2A5: Δmean (M2C2 − M2A5) = +2.77; A12 = 0.79 [0.56, 0.96] → practical, favouring M2C2; permutation p = 0.0222; n = 10 vs 10
+- M2 H2s, M2C3s vs M2C2: Δmean (M2C3s − M2C2) = -0.92; A12 = 0.35 [0.12, 0.61] → practical, favouring M2C2; permutation p = 0.2162; n = 10 vs 10
+- M2C3s vs M2A5 (context): Δmean (M2C3s − M2A5) = +1.85; A12 = 0.69 [0.42, 0.91] → practical, favouring M2C3s; permutation p = 0.1033; n = 10 vs 10
+- cross-model, same arm: C2 vs M2C2: Δmean (C2 − M2C2) = -2.05; A12 = 0.87 [0.65, 1.00] → practical, favouring C2; permutation p = 1.0000; n = 10 vs 10
+- cross-model, same arm: A5 vs M2A5: Δmean (A5 − M2A5) = +6.18; A12 = 0.97 [0.88, 1.00] → practical, favouring A5; permutation p = 0.0001; n = 10 vs 10
+- cross-model, same arm: C3s vs M2C3s: Δmean (C3s − M2C3s) = +7.12; A12 = 1.00 [1.00, 1.00] → practical, favouring C3s; permutation p = 0.0000; n = 10 vs 10
 
 ### Exploratory contrasts
 
@@ -110,6 +130,9 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 - A5: rows 400, failed cells 0, runs 10
 - C3s: rows 420, failed cells 0, runs 10
 - C3n: rows 400, failed cells 0, runs 10
+- M2C2: rows 500, failed cells 20, runs 10
+- M2A5: rows 400, failed cells 0, runs 10
+- M2C3s: rows 400, failed cells 0, runs 10
 - reachable_region_sha ['6f136bf56adebd27']; features_backend ['jvm']
 
 ### Mechanism: path after a gate event (log-only, exploratory)
@@ -124,6 +147,15 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 | C3s | (summary) | collapsed 0/10 | iteration-1 gate events 1 | in-iteration repair similarity 0.99 over 3 |
 | C3n | re-seed | 1 | 1 of 1 | n/a |
 | C3n | (summary) | collapsed 0/10 | iteration-1 gate events 1 | no repairs |
+| M2C2 | fallback refine (last working generator shown) | 1 | 1 of 1 | 0.92 (min 0.92, max 0.92) |
+| M2C2 | in-place | 1 | 1 of 1 | 0.97 (min 0.97, max 0.97) |
+| M2C2 | re-seed | 1 | 1 of 1 | n/a |
+| M2C2 | (summary) | collapsed 0/10 | iteration-1 gate events 2 | in-iteration repair similarity 0.99 over 4 |
+| M2A5 | fallback refine (last working generator shown) | 1 | 1 of 1 | 0.95 (min 0.95, max 0.95) |
+| M2A5 | re-seed | 3 | 3 of 3 | 0.02 (min 0.02, max 0.02) |
+| M2A5 | (summary) | collapsed 0/10 | iteration-1 gate events 3 | in-iteration repair similarity 1.00 over 1 |
+| M2C3s | re-seed | 1 | 1 of 1 | 0.04 (min 0.04, max 0.04) |
+| M2C3s | (summary) | collapsed 0/10 | iteration-1 gate events 1 | in-iteration repair similarity 1.00 over 2 |
 
 ## tomlc99
 
@@ -150,6 +182,19 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 - C2R: Δ(final − seed) = r1:-0.8, r2:+0.0, r3:-1.1, r4:-1.7, r5:-1.1, r6:-0.6, r7:+0.0, r8:+1.9, r9:-5.3, r10:-5.4; mean -1.41 ± 1.64; 1 up / 7 down / 2 zero of 10; sign-flip p = 0.0859
 - C2R last working iteration where it differs from final (3 replicates): 60.2 ± 8.1 (median 61.8)
 - C2R collapsed (final unusable, scored 0): 0 of 10
+- M2C2 final: 51.8 ± 3.1 (median 51.0); replicate means 49.9, 54.6, 46.9, 46.2, 50.8, 54.1, 48.0, 59.1, 56.7, 51.2
+- M2C2: Δ(final − seed) = r1:+49.9, r2:+0.0, r3:+0.0, r4:+0.6, r5:-0.1, r6:+1.5, r7:+1.6, r8:+0.0, r9:+0.8, r10:+0.1; mean +5.45 ± 11.18; 7 up / 1 down / 2 zero of 10; sign-flip p = 0.0234
+- M2C2: seed failed but final works for rep1 (delta inflated by the whole final level); without them mean +0.51 ± 0.52, p = 0.0469, n = 9
+- M2C2 last working iteration where it differs from final (3 replicates): 38.5 ± 83.2 (median 54.6)
+- M2C2 collapsed (final unusable, scored 0): 0 of 10
+- M2A5 final: 52.5 ± 3.9 (median 50.6); replicate means 51.8, 48.4, 59.5, 49.3, 56.7, 47.6, 47.3, 49.8, 63.0, 51.4
+- M2A5: Δ(final − seed) = r1:+51.8, r2:-0.3, r3:+1.8, r4:+49.3, r5:-4.8, r6:+47.6, r7:+1.0, r8:-2.0, r9:+0.9, r10:-1.1; mean +14.42 ± 17.39; 6 up / 4 down / 0 zero of 10; sign-flip p = 0.1875
+- M2A5: seed failed but final works for rep1, rep4, rep6 (delta inflated by the whole final level); without them mean -0.64 ± 2.08, p = 0.5156, n = 7
+- M2A5 collapsed (final unusable, scored 0): 0 of 10
+- M2C3s final: 38.8 ± 17.1 (median 49.9); replicate means 53.1, 57.9, 63.5, 43.5, 47.6, 17.1, 52.7, 0.0, 52.3, 0.0
+- M2C3s: Δ(final − seed) = r1:-0.1, r2:+1.8, r3:-0.7, r4:-7.1, r5:-3.6, r6:+0.0, r7:+1.1, r8:+0.0, r9:+0.6, r10:+0.0; mean -0.81 ± 1.88; 3 up / 4 down / 3 zero of 10; sign-flip p = 0.4219
+- M2C3s last working iteration where it differs from final (4 replicates): 38.3 ± 41.6 (median 48.2)
+- M2C3s collapsed (final unusable, scored 0): 2 of 10 (rep8, rep10)
 
 ### Confirmatory family
 
@@ -161,6 +206,15 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 
 - C2R vs C2: Δmean (C2R − C2) = +6.37; A12 = 0.54 [0.28, 0.81] → negligible; permutation p = 0.4140; n = 10 vs 10
 - C2R vs A5: Δmean (C2R − A5) = -0.87; A12 = 0.40 [0.15, 0.68] → small, favouring A5; permutation p = 0.6471; n = 10 vs 10
+
+### RQ5: the three-way under the second model (gpt-5-mini; exploratory, outside the family)
+
+- M2 H1, M2C2 vs M2A5: Δmean (M2C2 − M2A5) = -0.73; A12 = 0.46 [0.20, 0.74] → negligible; permutation p = 0.7404; n = 10 vs 10
+- M2 H2s, M2C3s vs M2C2: Δmean (M2C3s − M2C2) = -12.97; A12 = 0.39 [0.14, 0.66] → small, favouring M2C2; permutation p = 0.1428; n = 10 vs 10
+- M2C3s vs M2A5 (context): Δmean (M2C3s − M2A5) = -13.70; A12 = 0.41 [0.16, 0.68] → small, favouring M2A5; permutation p = 0.1222; n = 10 vs 10
+- cross-model, same arm: C2 vs M2C2: Δmean (C2 − M2C2) = +1.16; A12 = 0.76 [0.50, 0.97] → practical, favouring C2; permutation p = 0.9512; n = 10 vs 10
+- cross-model, same arm: A5 vs M2A5: Δmean (A5 − M2A5) = +7.68; A12 = 0.85 [0.65, 0.98] → practical, favouring A5; permutation p = 0.0050; n = 10 vs 10
+- cross-model, same arm: C3s vs M2C3s: Δmean (C3s − M2C3s) = +16.33; A12 = 0.84 [0.62, 1.00] → practical, favouring C3s; permutation p = 0.1028; n = 10 vs 10
 
 ### Exploratory contrasts
 
@@ -178,6 +232,9 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 - C3s: rows 520, failed cells 60, runs 10
 - C3n: rows 480, failed cells 20, runs 10
 - C2R: rows 460, failed cells 0, runs 10
+- M2C2: rows 460, failed cells 42, runs 10
+- M2A5: rows 400, failed cells 62, runs 10
+- M2C3s: rows 480, failed cells 103, runs 10
 - reachable_region_sha ['d7be29f10279a4f2']; features_backend ['jvm']
 
 ### Mechanism: path after a gate event (log-only, exploratory)
@@ -199,6 +256,17 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 | C3n | (summary) | collapsed 0/10 | iteration-1 gate events 3 | in-iteration repair similarity 1.00 over 3 |
 | C2R | re-seed | 3 | 3 of 3 | 0.03 (min 0.03, max 0.03) |
 | C2R | (summary) | collapsed 0/10 | iteration-1 gate events 3 | in-iteration repair similarity 0.05 over 3 |
+| M2C2 | fallback refine (last working generator shown) | 1 | 1 of 1 | 0.99 (min 0.99, max 0.99) |
+| M2C2 | in-place | 5 | 3 of 5 | 0.97 (min 0.84, max 1.00) |
+| M2C2 | re-seed | 8 | 4 of 8 | 0.03 (min 0.03, max 0.03) |
+| M2C2 | (summary) | collapsed 0/10 | iteration-1 gate events 5 | in-iteration repair similarity 0.99 over 12 |
+| M2A5 | fallback refine (last working generator shown) | 2 | 2 of 2 | n/a |
+| M2A5 | in-place | 6 | 4 of 6 | 0.97 (min 0.93, max 1.00) |
+| M2A5 | re-seed | 9 | 2 of 9 | n/a |
+| M2A5 | (summary) | collapsed 0/10 | iteration-1 gate events 6 | in-iteration repair similarity 0.99 over 7 |
+| M2C3s | in-place | 3 | 0 of 3 | 1.00 (min 1.00, max 1.00) |
+| M2C3s | re-seed | 11 | 3 of 11 | 0.06 (min 0.06, max 0.06) |
+| M2C3s | (summary) | collapsed 0/10 | iteration-1 gate events 5 | in-iteration repair similarity 0.99 over 4 |
 
 ## cjson
 
@@ -264,7 +332,7 @@ Primary outcome `auc_branch_reach` (10^4 inputs x 20 fresh draw seeds per replic
 ## Spend (per-run final.json at .env prices)
 
 - json-parser: {'C2': 0.305, 'A5': 0.21, 'C3s': 0.278, 'C3n': 0.231, 'C2R': 0.233}
-- parson: {'C2': 0.214, 'A5': 0.194, 'C3s': 0.263, 'C3n': 0.218}
-- tomlc99: {'C2': 0.321, 'A5': 0.302, 'C3s': 0.414, 'C3n': 0.326, 'C2R': 0.289, 'M2C2': 0.54, 'M2A5': 0.506, 'M2C3s': 0.409}
+- parson: {'C2': 0.214, 'A5': 0.194, 'C3s': 0.263, 'C3n': 0.218, 'M2C2': 0.438, 'M2A5': 0.441, 'M2C3s': 0.441}
+- tomlc99: {'C2': 0.321, 'A5': 0.302, 'C3s': 0.414, 'C3n': 0.326, 'C2R': 0.289, 'M2C2': 0.738, 'M2A5': 0.76, 'M2C3s': 0.664}
 - cjson: {'C2': 0.194, 'A5': 0.177, 'C3s': 0.232, 'C3n': 0.232}
-- total 6.088 USD
+- total 8.115 USD

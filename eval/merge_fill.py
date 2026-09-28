@@ -42,7 +42,28 @@ def main():
         if m and r["n"] == a.n:
             have[(r["target"], m.group(1), int(m.group(2)))].add(m.group(3))
     filled = []
+    # A run whose every iteration was build-rejected has no strategy file at
+    # all, so the matrix skipped BOTH its conditions ("no loop run for it
+    # yet"). Under the registered rule it is a collapsed replicate: 20
+    # explicit error rows for seed and final each, scored 0.
+    from pathlib import Path
+    for (t, c, k) in sorted({(t, c, k) for (t, c, k) in have}):
+        for j in range(1, 11):
+            if (t, c, j) in have:
+                continue
+            fj = Path(__file__).resolve().parent.parent / "runs" / t / f"{c}-rep{j}" / "final.json"
+            if fj.exists() and json.load(open(fj)).get("has_strategy") is False:
+                have[(t, c, j)] = set()
     for (t, c, k), whats in sorted(have.items()):
+        if not whats:
+            for what in ("seed", "final"):
+                for s in range(a.k):
+                    rows.append({"target": t, "condition": f"run:{c}-rep{k}:{what}", "seed": s, "n": a.n,
+                                 "strategy_ref": None,
+                                 "error": "every iteration of this run was build-rejected (no strategy file; matrix skipped both conditions); "
+                                          "scored as the registered minimum"})
+            filled.append(f"{t} {c}-rep{k} (seed+final)")
+            continue
         if "final" in whats and "seed" not in whats:
             for s in range(a.k):
                 rows.append({"target": t, "condition": f"run:{c}-rep{k}:seed", "seed": s, "n": a.n,

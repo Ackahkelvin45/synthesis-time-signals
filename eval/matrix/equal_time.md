@@ -65,4 +65,7 @@ Per replicate the mean over 20 draw seeds; per arm the mean ± 95% CI over repli
 | C3s seed | 63.4 ± 20.7 | 63.4 ± 20.7 | 10000 |
 | C3n final | 76.1 ± 4.7 | 76.2 ± 4.7 | 10000 |
 | C3n seed | 62.6 ± 20.4 | 62.6 ± 20.4 | 10000 |
+| grammarinator | 69.8 | 69.8 | 10000 |
+| grammarinator-deep | 70.4 | 70.4 | 10000 |
+| random | 48.9 | 48.9 | 10000 |
 

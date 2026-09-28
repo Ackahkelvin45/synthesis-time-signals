@@ -1,0 +1,102 @@
+{
+  "mode": "gpt-5-mini",
+  "validate_acceptance": 0.5443333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 158,
+      "reject": 192
+    },
+    "acceptance_rate": 0.451,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.0,
+    "novelty": 12,
+    "divergences": 27,
+    "divergence_examples": [
+      "b'null\\xf2\\x80\\x9a\\xbb\\xc4\\x86'",
+      "b'null\\xf2\\x80\\x9a\\xbb\\xc4\\x86'",
+      "b'[1072]garbage123'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 158,
+      "reject": 192
+    },
+    "acceptance_rate": 0.451,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.0,
+    "novelty": 12,
+    "divergences": 27,
+    "divergence_examples": [
+      "b'null\\xf2\\x80\\x9a\\xbb\\xc4\\x86'",
+      "b'null\\xf2\\x80\\x9a\\xbb\\xc4\\x86'",
+      "b'[1072]garbage123'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 62.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.9,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 62.0
+}
