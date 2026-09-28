@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--springer", required=True)
+    ap.add_argument("--springer", default=None, help="Springer svjour3 package dir; omit for a plain article-class build (Elsevier Your Paper Your Way)")
     ap.add_argument("--md", default="paper/paper.md")
     ap.add_argument("--out", default="paper/tex")
     a = ap.parse_args()
@@ -45,9 +45,46 @@ def main():
     # pandoc wraps caption-less tables in {\def\LTcaptype{none} ...}; svjour3 has no such counter
     body_tex = body_tex.replace("{\\def\\LTcaptype{none} % do not increment counter\n", "{\n")
     (out / "body.tex").write_text(body_tex)
-    for f in Path(a.springer).iterdir():   # class, its .clo option files, bibliography styles
-        if f.suffix in (".cls", ".clo", ".bst", ".sty"):
-            shutil.copy(f, out / f.name)
+    if a.springer:
+        for f in Path(a.springer).iterdir():   # class, its .clo option files, bibliography styles
+            if f.suffix in (".cls", ".clo", ".bst", ".sty"):
+                shutil.copy(f, out / f.name)
+    else:
+        tex = r"""\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+\setkeys{Gin}{width=\linewidth,keepaspectratio}
+\setlength{\parskip}{4pt}
+\begin{document}
+\title{%s}
+\author{Kelvin Ackah\thanks{Corresponding author. kackah@st.knust.edu.gh} \and Dr Owusu-Agyemang Kwabena\thanks{kwabenaoa@knust.edu.gh} \and Dr Rose-Mary Owusuaa Mensah Gyening\thanks{rmo.mensah@knust.edu.gh}\\[4pt]
+  \normalsize Kwame Nkrumah University of Science and Technology, Kumasi, Ghana}
+\date{}
+\maketitle
+\begin{abstract}
+%s
+\end{abstract}
+\noindent\textbf{Keywords:} %s
+\input{body.tex}
+\end{document}
+""" % (title, abstract.replace("\n", " "), keywords)
+        (out / "paper.tex").write_text(tex)
+        r = subprocess.run(["/Library/TeX/texbin/xelatex", "-interaction=nonstopmode", "-halt-on-error", "paper.tex"],
+                           cwd=out, capture_output=True, text=True)
+        log = (out / "paper.log").read_text() if (out / "paper.log").exists() else r.stdout
+        err = [l for l in log.splitlines() if l.startswith("! ")]
+        pages = re.search(r"Output written on paper.pdf \((\d+) pages", log)
+        print("xelatex (article) exit", r.returncode, "| pages", pages.group(1) if pages else None, "| errors", err[:3])
+        return
     tex = r"""\documentclass[smallextended]{svjour3}
 \usepackage{fontspec}
 \usepackage{graphicx}
