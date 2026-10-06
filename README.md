@@ -1,3 +1,28 @@
+# Artifact: Does synthesis-time steering help LLM-authored generators?
+
+This branch (`paper/multi-target`, tag `jss-submission-2026-10`) is the
+artifact of the replicated comparison of four steering signals for
+LLM-authored grammar-based generators on four C parsers (json-parser,
+parson, tomlc99, cJSON), two served models and an AFL++ reference row.
+The `main` branch holds the earlier single-target study described below.
+
+- **Frozen analysis plan**: `paper/preregistration.md` (frozen at commit
+  4762bad before the first replicate run; not lodged with a public
+  registry) with `paper/plan.md` and `paper/experiment-matrix.md`;
+  amendments and every design decision in `DECISIONS.md` (D13 to D30).
+- **Runs**: `runs/<target>/<arm>-rep<k>/` (prompts, responses, every
+  iteration's generator and statistics, `final.json` with served model id,
+  tokens and cost); batch manifests in `runs/_batches/`.
+- **Measured cells**: `eval/matrix/*.jsonl` (every row carries its
+  input-set hash), reports `eval/matrix/*.md`, AFL++ replay
+  `eval/matrix/afl_ref.jsonl`, bug campaigns `eval/campaigns/rq4.jsonl`.
+- **Reproduce every table and figure**: `bash eval/regenerate_all.sh`
+  (figures land in `paper/figures/`). Rerunning the loop needs an API key
+  (`.env.example`); measurement and analysis need none.
+- Vendored parser sources at their pinned commits: `vendor/`, `targets/`.
+
+---
+
 # Agentic Fuzzing — json-parser (JSON)
 
 Blackbox, grammar-driven fuzzing of the [json-parser](https://github.com/udp/json-parser)
