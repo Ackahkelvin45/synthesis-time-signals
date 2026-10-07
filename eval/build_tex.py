@@ -66,7 +66,7 @@ def main():
 \setlength{\parskip}{4pt}
 \begin{document}
 \title{%s}
-\author{Kelvin Ackah\thanks{Corresponding author. kackah@st.knust.edu.gh} \and Dr Owusu-Agyemang Kwabena\thanks{kwabenaoa@knust.edu.gh} \and Dr Rose-Mary Owusuaa Mensah Gyening\thanks{rmo.mensah@knust.edu.gh}\\[4pt]
+\author{Kelvin Ackah\thanks{Corresponding author. kackah@st.knust.edu.gh} \and Dr Owusu-Agyemang Kwabena\thanks{kwabenaoa@knust.edu.gh} \and Dr Rose-Mary Owusuaa Mensah Gyening\thanks{rmo.mensah@knust.edu.gh} \and Dr Kate Takyi\thanks{takyikate@knust.edu.gh}\\[4pt]
   \normalsize Kwame Nkrumah University of Science and Technology, Kumasi, Ghana}
 \date{}
 \maketitle
@@ -103,10 +103,11 @@ def main():
 \title{%s}
 \titlerunning{%s}
 \authorrunning{K. Ackah et al.}
-\author{Kelvin Ackah \and Dr Owusu-Agyemang Kwabena \and Dr Rose-Mary Owusuaa Mensah Gyening}
+\author{Kelvin Ackah \and Dr Owusu-Agyemang Kwabena \and Dr Rose-Mary Owusuaa Mensah Gyening \and Dr Kate Takyi}
 \institute{Kelvin Ackah (corresponding author) \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{kackah@st.knust.edu.gh}
   \and Dr Owusu-Agyemang Kwabena \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{kwabenaoa@knust.edu.gh}
-  \and Dr Rose-Mary Owusuaa Mensah Gyening \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{rmo.mensah@knust.edu.gh}}
+  \and Dr Rose-Mary Owusuaa Mensah Gyening \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{rmo.mensah@knust.edu.gh}
+  \and Dr Kate Takyi \at Kwame Nkrumah University of Science and Technology, Kumasi, Ghana \\ \email{takyikate@knust.edu.gh}}
 \date{Received: date / Accepted: date}
 \maketitle
 \begin{abstract}
