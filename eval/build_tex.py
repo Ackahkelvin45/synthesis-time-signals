@@ -1,4 +1,4 @@
-"""build_tex.py — paper/paper.md -> paper/tex/paper.tex under Springer's svjour3 (EMSE) via pandoc in Docker, then xelatex.
+"""build_tex.py — paper/paper.md -> paper/tex/paper.tex under Springer svjour3 (legacy layout) or a plain article class (JSS submission) via pandoc in Docker, then xelatex.
 
 The abstract and keywords are lifted from the Markdown; the body (everything from
 "## 1. Introduction") is converted with pandoc as a fragment and wrapped in the
@@ -98,7 +98,7 @@ def main():
 \providecommand{\pandocbounded}[1]{#1}
 \setkeys{Gin}{width=\linewidth,keepaspectratio}
 \smartqed
-\journalname{Empirical Software Engineering}
+\journalname{Journal of Systems and Software}
 \begin{document}
 \title{%s}
 \titlerunning{%s}
