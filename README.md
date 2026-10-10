@@ -1,10 +1,14 @@
 # Artifact: Does synthesis-time steering help LLM-authored generators?
 
-This branch (`paper/multi-target`, tag `jss-submission-2026-10`) is the
+This branch (`paper/multi-target`, tag `jss-submission-2026-10b`) is the
 artifact of the replicated comparison of four steering signals for
 LLM-authored grammar-based generators on four C parsers (json-parser,
 parson, tomlc99, cJSON), two served models and an AFL++ reference row.
 The `main` branch holds the earlier single-target study described below.
+The section below describes the earlier single-target pilot. Its results
+(a +2.5-point refinement gain and a proxy correlation near +0.9 on one
+target) did not reproduce in the replicated study; see the paper, Sections
+2.3, 5.3 and 5.5.
 
 - **Frozen analysis plan**: `paper/preregistration.md` (frozen at commit
   4762bad before the first replicate run; not lodged with a public

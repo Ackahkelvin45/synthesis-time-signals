@@ -51,7 +51,7 @@ def main():
                 shutil.copy(f, out / f.name)
     else:
         tex = r"""\documentclass[11pt,a4paper]{article}
-\usepackage[margin=2.5cm]{geometry}
+\usepackage[margin=2.2cm]{geometry}
 \usepackage{fontspec}
 \usepackage{graphicx}
 \usepackage{booktabs}
