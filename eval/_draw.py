@@ -44,6 +44,8 @@ def _draw_grammarinator(ref: str, n: int, sd: int) -> list[str]:
     import random
     from pathlib import Path
     _, fmt, variant = ref.split(":")
+    mut = variant.endswith("+mut")
+    variant = variant[:-4] if mut else variant
     root = Path(__file__).resolve().parent.parent
     pin = _json.loads((root / "eval" / "grammarinator.json").read_text())[fmt]
     gen = root / pin["generator"]
@@ -59,7 +61,33 @@ def _draw_grammarinator(ref: str, n: int, sd: int) -> list[str]:
     random.seed(sd)
     g = cls(model=model, limit=RuleSize(depth=400, tokens=float("inf")))
     start = getattr(g, pin["start_rule"])
-    return [str(start()) for _ in range(n)]
+    xs = [str(start()) for _ in range(n)]
+    if mut:
+        xs = [_mutate(x, random, fmt) for x in xs]
+    return xs
+
+
+# Follow-up baseline (review of October 2026, point 7): Grammarinator plus a small,
+# fixed mutation stage. Half of the inputs pass unchanged; the other half get exactly
+# one of: truncation (drop the last 1 to 8 bytes), deletion of one structural delimiter,
+# or replacement of one structural delimiter by another. Nothing format-specific beyond
+# the delimiter alphabet. Same seeded `random` as the draw, so the set is reproducible.
+_DELIMS = {"JSON": '{}[]",:', "TOML": '[]"=,.{}'}
+
+
+def _mutate(x: str, rnd, fmt: str) -> str:
+    if not x or rnd.random() < 0.5:
+        return x
+    op = rnd.randrange(3)
+    if op == 0:
+        return x[:max(0, len(x) - rnd.randint(1, 8))]
+    pos = [i for i, c in enumerate(x) if c in _DELIMS.get(fmt, '{}[]",:')]
+    if not pos:
+        return x[:max(0, len(x) - rnd.randint(1, 8))]
+    i = rnd.choice(pos)
+    if op == 1:
+        return x[:i] + x[i + 1:]
+    return x[:i] + rnd.choice(_DELIMS.get(fmt, '{}[]",:')) + x[i + 1:]
 
 
 def main() -> int:

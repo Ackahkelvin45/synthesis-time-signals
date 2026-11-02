@@ -40,10 +40,11 @@ def main():
     for f in (ROOT / "paper" / "figures").glob("*.pdf"):
         shutil.copy(f, figs / f.name)
     subprocess.run(["docker", "run", "--rm", "-v", f"{out}:/data", "pandoc/core:latest", "body.md",
-                    "-f", "markdown", "-t", "latex", "--shift-heading-level-by=-1", "-o", "body.tex"], check=True)
+                    "-f", "markdown+autolink_bare_uris", "-t", "latex", "--shift-heading-level-by=-1", "-o", "body.tex"], check=True)
     body_tex = (out / "body.tex").read_text()
     # pandoc wraps caption-less tables in {\def\LTcaptype{none} ...}; svjour3 has no such counter
     body_tex = body_tex.replace("{\\def\\LTcaptype{none} % do not increment counter\n", "{\n")
+    body_tex = re.sub(r"^(\\textbf\{Table \d+\.)", r"\\needspace{10\\baselineskip}\n\1", body_tex, flags=re.M)  # keep a caption with its table
     (out / "body.tex").write_text(body_tex)
     if a.springer:
         for f in Path(a.springer).iterdir():   # class, its .clo option files, bibliography styles
@@ -51,7 +52,7 @@ def main():
                 shutil.copy(f, out / f.name)
     else:
         tex = r"""\documentclass[11pt,a4paper]{article}
-\usepackage[margin=2.2cm]{geometry}
+\usepackage[margin=1.8cm]{geometry}
 \usepackage{fontspec}
 \usepackage{graphicx}
 \usepackage{booktabs}
@@ -59,7 +60,11 @@ def main():
 \usepackage{array}
 \usepackage{calc}
 \usepackage{amsmath}
+\PassOptionsToPackage{hyphens}{url}
 \usepackage[hidelinks]{hyperref}
+\usepackage{etoolbox}
+\newcommand{\needspace}[1]{\par\vspace{0pt plus #1}\pagebreak[3]\vspace{0pt plus -#1}}
+\AtBeginEnvironment{longtable}{\small}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \providecommand{\pandocbounded}[1]{#1}
 \setkeys{Gin}{width=\linewidth,keepaspectratio}
@@ -93,6 +98,7 @@ def main():
 \usepackage{array}
 \usepackage{calc}
 \usepackage{amsmath}
+\PassOptionsToPackage{hyphens}{url}
 \usepackage{hyperref}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \providecommand{\pandocbounded}[1]{#1}

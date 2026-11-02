@@ -265,7 +265,7 @@ def grammarinator_ref(fmt: str, variant: str = "defaults") -> str:
     """Strategy reference for the Grammarinator baseline: `grammarinator:<FMT>:defaults`
     (uniform model, unlimited depth) or `grammarinator:<FMT>:deep` (recursive
     alternatives up-weighted to match the LLM seed's depth; see the pin file)."""
-    assert variant in ("defaults", "deep")
+    assert variant in ("defaults", "deep", "defaults+mut", "deep+mut")
     grammarinator_generator(fmt)
     return f"grammarinator:{fmt}:{variant}"
 

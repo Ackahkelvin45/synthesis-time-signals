@@ -25,7 +25,7 @@ ARMS = ("C2", "A5", "C3s", "C3n", "C2R", "M2C2", "M2A5", "M2C3s")
 NAME = {"C2": "C2 proxy", "A5": "A5 no steering", "C3s": "C3s coverage", "C3n": "C3n coverage+names",
         "C2R": "C2' re-seed repair",
         "M2C2": "C2 proxy (gpt-5-mini)", "M2A5": "A5 no steering (gpt-5-mini)", "M2C3s": "C3s coverage (gpt-5-mini)"}
-TARGET_ORDER = ("json-parser", "parson", "tomlc99", "cjson")
+TARGET_ORDER = ("parson", "tomlc99", "cjson", "json-parser")
 
 
 def t1():
@@ -47,11 +47,11 @@ def t1():
 def t2(data):
     L = ["## T2. Final-generator level and refinement delta per target and arm", "",
          "Primary outcome auc_branch_reach (10^4 inputs x 20 draw seeds per replicate; failed cells and collapsed finals score 0). "
-         "Mean ± 95% CI over ten replicates (median); coll. = collapsed replicates; last working = the last working iteration's level where it differs from the final (n = replicates where it differs). Δ = final − seed per replicate, exact sign-flip test; replicates whose seed "
-         "generator failed but whose final works are excluded from Δ and counted under seed failed.", "",
-         "| target | arm | final | coll. | Δ final − seed | up / down | sign-flip p | seed failed | last working |",
+         "Mean ± 95% CI over ten replicates (median); coll. = collapsed replicates (final unusable, scored 0); last working = the last working iteration's level where it differs from the final (n = replicates where it differs). Δ = final − seed per replicate, exact sign-flip test; up / down / zero count the replicates entering the test, and sum to ten minus seed failed; a collapsed replicate whose seed also failed enters as a zero delta, and one whose seed drew enters as a negative delta. Replicates whose seed "
+         "generator failed but whose final works are excluded from Δ and counted under seed failed. json-parser is the development target (Section 5.1).", "",
+         "| target | arm | final | coll. | Δ final − seed | up / down / zero | sign-flip p | seed failed | last working |",
          "|--------|--------------|-----------------|-----|--------------|-------|--------|-------|-----------|"]
-    for t in ("json-parser", "parson", "tomlc99", "cjson"):
+    for t in TARGET_ORDER:
         d = data[t]
         for c in ARMS:
             fin, seed = level(d, c, "final"), level(d, c, "seed")
@@ -65,7 +65,7 @@ def t2(data):
             if len(ok) >= 2:
                 dd, half, p = paired_perm_test([seed[k] for k in ok], [fin[k] for k in ok])
                 ds = [fin[k] - seed[k] for k in ok]
-                dcell, ud, pcell = f"{dd:+.2f} ± {half:.2f}", f"{sum(x > 0 for x in ds)} / {sum(x < 0 for x in ds)}", f"{p:.3f}"
+                dcell, ud, pcell = f"{dd:+.2f} ± {half:.2f}", f"{sum(x > 0 for x in ds)} / {sum(x < 0 for x in ds)} / {sum(x == 0 for x in ds)}", f"{p:.3f}"
             else:
                 dcell = ud = pcell = "-"
             last = level(d, c, "last")
@@ -167,23 +167,26 @@ def t6():
     per = {}
     for l in rows:
         c = [x.strip() for x in l.strip("|").split("|")]
-        per.setdefault(c[0], []).append((int(c[2]), float(c[3]), float(c[4]), float(c[5]), float(c[6]), float(c[7])))
-    L = ["## T6. Synthesis cost per run, by target", "",
-         "Mean over every completed run of the five DeepSeek arms (C2, A5, C3s, C3n, C2'); every call served by deepseek-flash; "
-         "the per-arm table is in the artifact (eval/matrix/cost_table.md).", "",
-         "| target | runs | LLM calls | tokens in | tokens out | USD per run | wall minutes |",
-         "|-----------|------|------|--------|--------|--------|--------|"]
+        model = "gpt-5-mini" if c[9].startswith("gpt") else "deepseek-flash"
+        per.setdefault((c[0], model), []).append((int(c[2]), float(c[3]), float(c[4]), float(c[5]), float(c[6]), float(c[7])))
+    L = ["## T6. Synthesis cost per run, by target and served model", "",
+         "Mean over every completed run; API charges and synthesis wall clock only. deepseek-flash rows pool the arms C2, A5, C3s, C3n and, on json-parser and tomlc99, C2' (180 runs); "
+         "gpt-5-mini rows pool C2, A5 and C3s (60 runs). Measurement (10 200 cells), the bug campaigns and the AFL++ runs are local compute and are not costed; "
+         "the hand work per target is described in Section 3.3. The per-arm table is in the artifact (eval/matrix/cost_table.md).", "",
+         "| target | served model | runs | LLM calls | tokens in | tokens out | USD per run | wall minutes |",
+         "|-----------|------|------|------|--------|--------|--------|--------|"]
     tot_runs = tot_usd = 0.0
     for t in TARGET_ORDER:
-        if t not in per:
-            continue
-        v = per[t]; n = sum(x[0] for x in v); w = [x[0] / n for x in v]
-        m = lambda i: sum(wi * x[i] for wi, x in zip(w, v))  # noqa: E731
-        tot_runs += n; tot_usd += sum(x[0] * x[4] for x in v)
-        L.append(f"| {t} | {n} | {m(1):.1f} | {m(2):.0f} | {m(3):.0f} | {m(4):.3f} | {m(5):.1f} |")
+        for model in ("deepseek-flash", "gpt-5-mini"):
+            if (t, model) not in per:
+                continue
+            v = per[(t, model)]; n = sum(x[0] for x in v); w = [x[0] / n for x in v]
+            m = lambda i: sum(wi * x[i] for wi, x in zip(w, v))  # noqa: E731
+            tot_runs += n; tot_usd += sum(x[0] * x[4] for x in v)
+            L.append(f"| {t} | {model} | {n} | {m(1):.1f} | {m(2):.0f} | {m(3):.0f} | {m(4):.3f} | {m(5):.1f} |")
     import re as _re
     tot = _re.search(r"All runs: (\d+); total ([0-9.]+) USD; mean ([0-9.]+) USD, ([0-9.]+) min", (ROOT / "eval/matrix/cost_table.md").read_text())
-    L.append(f"| all | {tot.group(1)} | | | | {tot.group(3)} (total {tot.group(2)}) | {tot.group(4)} |")
+    L.append(f"| all | both | {tot.group(1)} | | | | {tot.group(3)} (total {tot.group(2)}) | {tot.group(4)} |")
     return L + [""]
 
 

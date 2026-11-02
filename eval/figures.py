@@ -33,7 +33,8 @@ COLOR = {"C2": "#2a78d6", "A5": "#eb6834", "C3s": "#1baf7a", "C3n": "#eda100", "
 LABEL = {"C2": "C2 proxy", "A5": "A5 no steering", "C3s": "C3s coverage", "C3n": "C3n coverage+names",
          "C2R": "C2' re-seed repair", "seed": "seed (mean)", "grammarinator": "Grammarinator",
          "grammarinator-deep": "Grammarinator depth-matched", "random": "random text"}
-TARGETS = ["json-parser", "parson", "tomlc99", "cjson"]
+TARGETS = ["parson", "tomlc99", "cjson", "json-parser"]
+TITLE = {"json-parser": "json-parser (development, 5.1)"}
 CPS = [10, 30, 100, 150, 300, 1000, 3000, 10000]
 plt.rcParams.update({"font.size": 8, "axes.spines.top": False, "axes.spines.right": False,
                      "axes.edgecolor": "#888", "axes.linewidth": 0.6, "xtick.color": "#444",
@@ -99,7 +100,7 @@ def f1(loop, fixed, outdir):
         if gk in fixed[t]:
             ax.plot(CPS, rep_mean_curve(fixed[t][gk]), color=COLOR[gk], linewidth=1.2, linestyle=":", label=LABEL[gk])
         ax.set_xscale("log")
-        ax.set_title(t, fontsize=9, loc="left")
+        ax.set_title(TITLE.get(t, t), fontsize=9, loc="left")
         ax.set_xlabel("inputs (log)")
         ax.grid(True, axis="y")
     axes[0].set_ylabel("branch coverage of reachable region (%)\nmedian over replicates, IQR band")
@@ -124,8 +125,11 @@ def contrasts(loop, t):
 
 def f2(loop, outdir):
     ts = present(loop)
-    fig, axes = plt.subplots(1, len(ts), figsize=(2.4 * len(ts), 2.0), sharex=True, squeeze=False)
-    axes = axes[0]
+    ncol = 2 if len(ts) > 2 else len(ts); nrow = -(-len(ts) // ncol)
+    fig, axes = plt.subplots(nrow, ncol, figsize=(3.6 * ncol, 2.2 * nrow), sharex=True, squeeze=False)
+    axes = [a for row in axes for a in row]
+    for ax in axes[len(ts):]:
+        ax.axis("off")
     for ax, t in zip(axes, ts):
         cs = contrasts(loop, t)
         ax.axvspan(0.36, 0.64, color="#f2f2f2", zorder=0)
@@ -140,7 +144,7 @@ def f2(loop, outdir):
         ax.set_ylim(-0.6, max(len(cs) - 0.4, 0.6))
         ax.invert_yaxis()
         ax.set_xlim(0, 1)
-        ax.set_title(t, fontsize=9, loc="left")
+        ax.set_title(TITLE.get(t, t), fontsize=9, loc="left")
         ax.set_xlabel("A12 (bootstrap 95% CI)")
     fig.tight_layout()
     fig.savefig(outdir / "f2_forest.pdf", bbox_inches="tight")
@@ -180,7 +184,7 @@ def f3(loop, outdir):
         ax.set_ylim(YMIN - 0.5, YMAX + 0.5)
         ax.set_xticks(range(len(arms)))
         ax.set_xticklabels(arms)
-        ax.set_title(t, fontsize=9, loc="left")
+        ax.set_title(TITLE.get(t, t), fontsize=9, loc="left")
         ax.grid(True, axis="y")
     axes[0].set_ylabel("final minus seed (AUC points)")
     fig.text(0.5, -0.04, "triangles: off-scale replicates (up: the seed generator failed, so the delta is the whole final level; "
@@ -210,7 +214,7 @@ def f4(loop, fixed, outdir):
         ax.tick_params(axis="x", labelsize=6.5)
         ax.set_xticks(range(len(labels)))
         ax.set_xticklabels(labels, fontsize=7)
-        ax.set_title(t, fontsize=9, loc="left")
+        ax.set_title(TITLE.get(t, t), fontsize=9, loc="left")
         ax.grid(True, axis="y")
     axes[0].set_ylabel("AUC branch coverage, reachable region")
     fig.tight_layout()
@@ -260,7 +264,7 @@ def f5(rq3_path, outdir):
                     ys.append(st.mean(meas[key]))
             if xs:
                 ax.scatter(xs, ys, s=9, color=COLOR[arm], edgecolor="white", linewidth=0.3, alpha=0.85, label=LABEL[arm], zorder=3)
-        ax.set_title(t, fontsize=9, loc="left")
+        ax.set_title(TITLE.get(t, t), fontsize=9, loc="left")
         ax.set_xlabel("proxy score (loop-internal)")
         ax.grid(True, axis="both")
     axes[0].set_ylabel("AUC branch coverage, reachable region\n(3 fresh draw seeds, 1 000 inputs)")
@@ -275,14 +279,17 @@ def f6(rq4_path, outdir):
     """RQ4: fraction of a bug's campaigns that had triggered it by n inputs, per arm; a
     campaign that never triggers is censored at the inputs it consumed. Baselines dashed."""
     import re
-    rows = [json.loads(l) for l in Path(rq4_path).read_text().splitlines() if l.strip()]
+    rows = [json.loads(l) for p in str(rq4_path).split(",") for l in Path(p).read_text().splitlines() if l.strip()]
+    rows = [r for r in rows if r.get("positive_control", True)]
     rx = re.compile(r"/(C2|A5|C3s|C3n|C2R)-rep(\d+)/")
     bugs = sorted({(r["target"], r["bug"]) for r in rows})
     fig, axes = plt.subplots(1, len(bugs), figsize=(2.4 * len(bugs), 2.3), squeeze=False)
     axes = axes[0]
     for ax, (t, b) in zip(axes, bugs):
         NICE = {"builtin:text": "random text", "grammarinator:JSON:defaults": "Grammarinator defaults",
-                "grammarinator:JSON:deep": "Grammarinator depth-matched", "grammarinator:TOML:defaults": "Grammarinator defaults"}
+                "grammarinator:JSON:deep": "Grammarinator depth-matched", "grammarinator:TOML:defaults": "Grammarinator defaults",
+                "grammarinator:JSON:defaults+mut": "Grammarinator + mutation", "grammarinator:JSON:deep+mut": "Grammarinator + mutation",
+                "grammarinator:TOML:defaults+mut": "Grammarinator + mutation"}
         groups = defaultdict(list)
         for r in rows:
             if (r["target"], r["bug"]) != (t, b):
@@ -301,8 +308,8 @@ def f6(rq4_path, outdir):
             if g in COLOR:
                 style = dict(color=COLOR[g], linewidth=1.6, label=LABEL[g])
             else:
-                style = dict(color="#999" if g == "random text" else "#111", linewidth=1.1,
-                             linestyle=":" if g == "random text" else "--", label=g)
+                style = dict(color="#999" if g == "random text" else "#7a3db8" if g == "Grammarinator + mutation" else "#111", linewidth=1.1,
+                             linestyle=":" if g == "random text" else "-." if g == "Grammarinator + mutation" else "--", label=g)
             ax.step(xs, ys, where="post", **style)
         ax.set_xscale("log")
         ax.set_ylim(-0.03, 1.03)
