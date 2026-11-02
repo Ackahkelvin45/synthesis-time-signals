@@ -1,0 +1,125 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.46666666666666673,
+  "summary": {
+    "outcomes": {
+      "valid": 157,
+      "reject": 193
+    },
+    "acceptance_rate": 0.449,
+    "max_nesting_depth": 1010,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "false"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 16,
+    "divergences": 126,
+    "divergence_examples": [
+      "b'\\xef\\xbb\\xbf[]'",
+      "b'1\\x001'",
+      "b'[0,916027826211668473.,true,04599,913244.868460e-7]\\x00[0,916027826211668473.,true,'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 28 of 107",
+        5
+      ],
+      [
+        "parse error at byte 2 of 24",
+        3
+      ],
+      [
+        "parse error at byte 51 of 107",
+        3
+      ],
+      [
+        "parse error at byte 2 of 78",
+        3
+      ],
+      [
+        "parse error at byte 2 of 84",
+        2
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 157,
+      "reject": 193
+    },
+    "acceptance_rate": 0.449,
+    "max_nesting_depth": 1010,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "false"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 16,
+    "divergences": 126,
+    "divergence_examples": [
+      "b'\\xef\\xbb\\xbf[]'",
+      "b'1\\x001'",
+      "b'[0,916027826211668473.,true,04599,913244.868460e-7]\\x00[0,916027826211668473.,true,'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 61.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 0.8,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 61.0
+}

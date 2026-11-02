@@ -1,0 +1,315 @@
+```python
+from hypothesis import strategies as st
+import json
+
+# ---------- leaf strategies ----------
+
+def _escaped_string():
+    # safe codepoints: exclude " \ and control chars
+    safe = st.characters(
+        blacklist_categories=("Cs",),
+        blacklist_characters='\\"\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'
+        '\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f',
+    )
+    escapes = st.sampled_from(
+        ['\\"', '\\\\', '\\/', '\\b', '\\f', '\\n', '\\r', '\\t']
+    )
+    unicode_esc = st.builds(
+        lambda h: "\\u" + h,
+        st.text(alphabet="0123456789abcdefABCDEF", min_size=4, max_size=4),
+    )
+    # lone surrogates (rejected) and valid pairs
+    lone_surrogate = st.sampled_from(
+        ["\\ud800", "\\udfff", "\\udabc", "\\udc00"]
+    )
+    surrogate_pair = st.builds(
+        lambda hi, lo: "\\u" + hi + "\\u" + lo,
+        st.sampled_from(["d800", "dbff", "d801"]),
+        st.sampled_from(["dc00", "dfff", "dc01"]),
+    )
+    # raw control / NUL bytes inside a string (accepted by parser)
+    raw_ctrl = st.sampled_from(
+        ["\x00", "\x01", "\x09", "\x0a", "\x0d", "\x1f", "\x7f"]
+    )
+    inner = st.one_of(
+        safe,
+        escapes,
+        unicode_esc,
+        lone_surrogate,
+        surrogate_pair,
+        raw_ctrl,
+    )
+    return st.lists(inner, max_size=8).map("".join).map(lambda s: '"' + s + '"')
+
+
+def _number():
+    digits = st.text(alphabet="0123456789", min_size=1, max_size=6)
+    int_part = st.one_of(
+        st.just("0"),
+        st.builds(lambda d: d, st.text(alphabet="123456789", min_size=1, max_size=1)),
+        st.builds(
+            lambda a, b: a + b,
+            st.text(alphabet="123456789", min_size=1, max_size=1),
+            st.text(alphabet="0123456789", min_size=0, max_size=5),
+        ),
+    )
+    # leading zeros (accepted by parser)
+    leading_zero = st.builds(
+        lambda z, d: "0" + z + d,
+        st.text(alphabet="0123456789", min_size=1, max_size=3),
+        st.text(alphabet="0123456789", min_size=1, max_size=3),
+    )
+    frac = st.builds(
+        lambda d: "." + d,
+        st.text(alphabet="0123456789", min_size=1, max_size=6),
+    )
+    # trailing dot (accepted)
+    trailing_dot = st.just(".")
+    exp = st.builds(
+        lambda e, s, d: e + s + d,
+        st.sampled_from(["e", "E"]),
+        st.sampled_from(["", "+", "-"]),
+        st.text(alphabet="0123456789", min_size=1, max_size=4),
+    )
+    # extreme exponents
+    extreme_exp = st.sampled_from(
+        ["e309", "e999", "e-999", "e+308", "E400", "e00000000000000000000001"]
+    )
+    hex_num = st.builds(
+        lambda h: "0x" + h,
+        st.text(alphabet="0123456789abcdefABCDEF", min_size=1, max_size=8),
+    )
+    sign = st.sampled_from(["", "-"])
+    base = st.one_of(int_part, leading_zero)
+    body = st.tuples(
+        base,
+        st.one_of(st.none(), frac, trailing_dot),
+        st.one_of(st.none(), exp, extreme_exp),
+    ).map(lambda t: t[0] + (t[1] or "") + (t[2] or ""))
+    num = st.tuples(sign, body).map(lambda t: t[0] + t[1])
+    return st.one_of(num, hex_num)
+
+
+# ---------- recursive structure ----------
+
+# depth budget: concentrate near the 1000 limit
+_depth_choices = st.one_of(
+    st.integers(min_value=0, max_value=3),
+    st.integers(min_value=990, max_value=1005),
+    st.integers(min_value=100, max_value=900),
+)
+
+
+def _leaf():
+    return st.one_of(
+        _escaped_string(),
+        _number(),
+        st.sampled_from(["true", "false", "null"]),
+    )
+
+
+def _ws():
+    return st.text(alphabet=" \t\n\r", max_size=3)
+
+
+value = st.recursive(
+    _leaf(),
+    lambda children: st.one_of(
+        # array
+        st.tuples(
+            _ws(),
+            st.lists(children, max_size=4),
+            _ws(),
+        ).map(lambda t: "[" + t[0] + ",".join(t[1]) + t[2] + "]"),
+        # object with possible duplicate keys
+        st.tuples(
+            _ws(),
+            st.lists(
+                st.tuples(_escaped_string(), st.just(":"), children).map(
+                    lambda t: t[0] + t[1] + t[2]
+                ),
+                max_size=4,
+            ),
+            _ws(),
+        ).map(lambda t: "{" + t[0] + ",".join(t[1]) + t[2] + "}"),
+    ),
+    max_leaves=40,
+)
+
+
+def _deep(depth):
+    # build a deeply nested array at exactly `depth` levels
+    return st.just("[" * depth + "0" + "]" * depth)
+
+
+def _deep_obj(depth):
+    return st.just('{"a":' * depth + "0" + "}" * depth)
+
+
+deep_value = _depth_choices.flatmap(
+    lambda d: st.one_of(_deep(d), _deep_obj(d))
+)
+
+
+# ---------- malformed / near-valid inputs ----------
+
+def _malformed():
+    return st.sampled_from(
+        [
+            "",
+            " ",
+            ",",
+            "[,]",
+            "{,}",
+            "[1,]",
+            '{"a":1,}',
+            '{"a" 1}',
+            '{"a":}',
+            "{:1}",
+            "[1 2]",
+            '"unterminated',
+            "'single'",
+            "{unquoted:1}",
+            "+1",
+            ".5",
+            "-",
+            "-.",
+            "NaN",
+            "Infinity",
+            "-Infinity",
+            "01",
+            "1.",
+            "0x10",
+            "1e",
+            "1e+",
+            "1e-",
+            "tru",
+            "fals",
+            "nul",
+            "True",
+            "NULL",
+            '"\\x41"',
+            '"\\u12"',
+            '"\\ud800"',
+            '"\\udfff"',
+            "\xef\xbb\xbf",  # BOM alone (no value)
+            "\x00",
+            "1\x00",
+            "\x00{}",
+        ]
+    )
+
+
+# trailing content after a valid value is ACCEPTED
+trailing = st.tuples(
+    value,
+    st.one_of(
+        st.just(""),
+        st.sampled_from(["abc", " 1 2", "\x00", "\n", "[]", "junk", "\x00\x00"]),
+    ),
+).map(lambda t: t[0] + t[1])
+
+
+# leading BOM then value (accepted)
+bom_value = value.map(lambda v: "\xef\xbb\xbf" + v)
+
+
+# ---------- targeted null coverage ----------
+# The last run showed `null` was a production gap: no accepted `null` values.
+# Emit explicit nulls, including inside structures, to exercise that production.
+_null_value = st.one_of(
+    st.just("null"),
+    st.just("null "),
+    st.just(" null"),
+    st.just("[null]"),
+    st.just("[null,null]"),
+    st.just('{"a":null}'),
+    st.just('{"a":null,"b":null}'),
+    st.just('{"null":null}'),
+    st.just("[true,false,null]"),
+    st.just("[null,1,\"x\",true,false]"),
+    st.just('{"a":[null],"b":null}'),
+    st.just("[null,[null],{\"k\":null}]"),
+)
+
+
+# ---------- truncated deep / near-limit structures ----------
+# The last run showed divergences on truncated deep nesting prefixes
+# (e.g. many '[' with no closing) and on '1e+'. Add truncation of deep
+# structures and dangling-exponent numbers to probe the depth cap and
+# incomplete-number divergence paths more directly.
+def _truncate(s):
+    if not s:
+        return s
+    # drop a random-ish suffix length deterministically from the string
+    return s[: max(1, len(s) // 2)]
+
+
+_truncated_deep = _depth_choices.flatmap(
+    lambda d: st.one_of(
+        _deep(d).map(_truncate),
+        _deep_obj(d).map(_truncate),
+    )
+)
+
+_dangling_exp = st.sampled_from(["1e+", "1e-", "1e", "0E+", "12e", "-1e+"])
+
+
+# ---------- targeted divergences from last run ----------
+# The last run surfaced divergences on dangling-exponent numbers ('1e+', '0E+')
+# and on a valid value followed by a trailing NUL ('{ }\x00'). Emit these
+# shapes directly, plus a small family of whitespace+trailing-NUL variants,
+# to hit those divergence paths more reliably.
+_trailing_nul = st.one_of(
+    st.just("{ }\x00"),
+    st.just("{}\x00"),
+    st.just("[ ]\x00"),
+    st.just("[]\x00"),
+    st.just("null\x00"),
+    st.just("true\x00"),
+    st.just("false\x00"),
+    st.just("0\x00"),
+    st.just(" \"x\"\x00"),
+    st.just("{\"a\":1}\x00"),
+    st.just("[1,2,3]\x00"),
+)
+
+_dangling_exp_ws = st.builds(
+    lambda a, b: a + b,
+    _dangling_exp,
+    st.sampled_from(["", " ", "\x00", " ]", " }", "\n"]),
+)
+
+
+# ---------- improved coverage: valid values with trailing NUL ----------
+# Divergences clustered on "valid value + trailing NUL" and on dangling
+# exponents. Generate structured combinations rather than only fixed literals
+# so more accepted shapes are exercised alongside the divergence paths.
+_value_trailing_nul = st.builds(
+    lambda v, sep: v + sep + "\x00",
+    value,
+    st.sampled_from(["", " ", "\n", "\t", "  "]),
+)
+
+_value_trailing_junk = st.builds(
+    lambda v, j: v + j,
+    value,
+    st.sampled_from(["\x00", "\x00\x00", " ", "\n", "x", "]"]),
+)
+
+
+strategy = st.one_of(
+    value,
+    _null_value,
+    deep_value,
+    _truncated_deep,
+    _dangling_exp,
+    _dangling_exp_ws,
+    _trailing_nul,
+    _value_trailing_nul,
+    _value_trailing_junk,
+    _malformed(),
+    trailing,
+    bom_value,
+)
+```

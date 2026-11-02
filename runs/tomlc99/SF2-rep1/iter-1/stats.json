@@ -1,0 +1,166 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.17566666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 30,
+      "reject": 304,
+      "skip": 16
+    },
+    "acceptance_rate": 0.09,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "integer",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 17,
+    "divergences": 8,
+    "divergence_examples": [
+      "b'#\\xf3\\x9e\\x8c\\x81\\xc3\\x9d6\\xf3\\xa8\\xab\\xbe\\x0b\\x0f['",
+      "b'\"\\xc3\\x8a(n\\xc3\\x9b\\xc3\\xb0\\xc3\\xb2\" = [0015-39-90, 017938, 1e-309, -0.0]\\n[[\\'\\xc2\\xb6\\x16`\\xf4\\x8d\\xac\\x8f\\xf1\\x9f\\x95\\xa2\\xc3\\x84\\'.\\'\\xc2\\xb6\\x16`\\xf4\\x8d\\xac\\x8f\\xf1\\x9f'",
+      "b'[[\\'\\xc2\\xb6\\x16`\\xf4\\x8d\\xac\\x8f\\xf1\\x9f\\x95\\xa2\\xc3\\x84\\'.\\'\\xc2\\xb6\\x16`\\xf4\\x8d\\xac\\x8f\\xf1\\x9f\\x95\\xa2\\xc3\\x84\\'.\"\\xc3\\x8a(n\\xc3\\x9b\\xc3\\xb0\\xc3\\xb2\"]]\\n[[\\'\\xc2\\xb6\\x16`\\xf4\\x8d\\xac\\x8f\\xf1\\x9f\\x95\\xa2\\xc3\\x84\\'.\\'\\xc2\\xb6\\x16`\\xf4\\x8d\\xac\\x8f\\xf1'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: invalid key",
+        36
+      ],
+      [
+        "line 1: syntax error",
+        32
+      ],
+      [
+        "line 1: invalid or missing key",
+        28
+      ],
+      [
+        "line 1: missing =",
+        19
+      ],
+      [
+        "line 2: missing =",
+        17
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 66.67,
+    "region_coverage_pct": 68.41
+  },
+  "coverage_in_loop": {
+    "branch_pct": 66.67,
+    "region_pct": 68.41,
+    "line_pct": 73.22,
+    "branch_pct_file": 53.24,
+    "region_pct_file": 54.32,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      },
+      {
+        "name": "toml_rtos",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 41
+      },
+      {
+        "name": "toml_ucs_to_utf8",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 32
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 142.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 66.67
+}

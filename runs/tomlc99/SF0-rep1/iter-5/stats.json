@@ -1,0 +1,124 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.11866666666666666,
+  "summary": {
+    "outcomes": {
+      "valid": 29,
+      "skip": 26,
+      "reject": 295
+    },
+    "acceptance_rate": 0.09,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "integer",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_values",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 17,
+    "divergences": 17,
+    "divergence_examples": [
+      "b'\"\\xc3\\x97\\xf1\\xb8\\x91\\x81\\xc3\\xb8\\xc2\\xb8\\xf3\\xb5\\xb2\\x92\\xc2\\xa1\" = {0 = 23724, \"\\xc3\\x97\\xf1\\xb8\\x91\\x81\\xc3\\xb8\\xc2\\xb8\\xf3\\xb5\\xb2\\x92\\xc2\\xa1,\" = 2240-13-53T15:69:54.23724'",
+      "b'\"\\xc3\\x97\\xf1\\xb8\\x91\\x81\\xc3\\xb8\\xc2\\xb8\\xf3\\xb5\\xb2\\x92\\xc2\\xa1\" = {\"0\" = 23724, \"\\xc3\\x97\\xf1\\xb8\\x91\\x81\\xc3\\xb8\\xc2\\xb8\\xf3\\xb5\\xb2\\x92,\\xc2\\xa1\" = 2240-13-53T15:69:54.237'",
+      "b\"#\\xc3\\xb5L$\\n[['\\xf0\\xaf\\x94\\x8c\\x03U']]\\n#\\xc3\\xb3 = 1\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: invalid key",
+        58
+      ],
+      [
+        "line 1: invalid or missing key",
+        41
+      ],
+      [
+        "line 1: syntax error",
+        39
+      ],
+      [
+        "line 1: missing =",
+        15
+      ],
+      [
+        "line 1: expect a string",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 132.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 132.0
+}

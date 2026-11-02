@@ -1,0 +1,47 @@
+{"input": "", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 007", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = [1 2]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)"}
+{"input": "a = NaN", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = '0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated s-quote"}
+{"input": "a = '\u0015\u0007\udae5\udd7a\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated s-quote"}
+{"input": "a = {b = }", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "a = _1", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1e-", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = -", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " = 1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "a. = 1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "a = \"\\uD800\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1979-05-27T07:32:00Z", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = +", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = \"\\U0001F600\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1979-05-27", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = \"\\x41\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: bad escape char"}
+{"input": "[[a.b]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = '''a''''''", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[t]\na = 1\n[u]\nb = 2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid or missing key"}
+{"input": "#", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a=1", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1#comment", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = inf", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[t]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = \"\"\"\"\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1979-05-27T07:32:00.123456789Z", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1_", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = True", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1e+", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = [ # comment\n1]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[t]\n[[t]]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 2: key exists"}
+{"input": "a = 0b1010", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = {= 1}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect a string"}
+{"input": "a = 0o777", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = [1, # comment\n2]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1\n[t]\nb = 2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1979-05-27T07:32:00", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 0b1_0_1", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 0o7", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 1979-05-27T07:32:00.Z", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 0o0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = 0O1", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}

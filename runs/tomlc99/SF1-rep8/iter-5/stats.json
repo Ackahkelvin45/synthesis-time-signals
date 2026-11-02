@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.222,
+  "summary": {
+    "outcomes": {
+      "reject": 245,
+      "valid": 105
+    },
+    "acceptance_rate": 0.3,
+    "max_nesting_depth": 7,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 27,
+    "divergences": 43,
+    "divergence_examples": [
+      "b\"# \\x01\\x02\\r\\n# J\\r\\n# non-ascii: \\xc3\\xa9\\r\\n['\\xf4\\x8b\\xaa\\xaf\\xc3\\xbdr\\xc3\\x9d']\\r\\n\\r\\n\"",
+      "b\"# \\x01\\x02\\r\\n# \\x01\\x02\\r\\n# non-ascii: \\xc3\\xa9\\r\\n['\\xf4\\x8b\\xaa\\xaf\\xc3\\xbdr\\xc3\\x9d']\\r\\n\\r\\n\"",
+      "b\"[['\\x1b\\x0c']]\\r\\n[-]\\r\\n[H1an]\\r\\n\\r\\n\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        46
+      ],
+      [
+        "line 1: extra chars after value",
+        21
+      ],
+      [
+        "line 1: syntax error",
+        20
+      ],
+      [
+        "line 1: newline not allowed in inline table",
+        19
+      ],
+      [
+        "line 1: invalid char U+000c",
+        13
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "reject": 245,
+      "valid": 105
+    },
+    "acceptance_rate": 0.3,
+    "max_nesting_depth": 7,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 27,
+    "divergences": 43,
+    "divergence_examples": [
+      "b\"# \\x01\\x02\\r\\n# J\\r\\n# non-ascii: \\xc3\\xa9\\r\\n['\\xf4\\x8b\\xaa\\xaf\\xc3\\xbdr\\xc3\\x9d']\\r\\n\\r\\n\"",
+      "b\"# \\x01\\x02\\r\\n# \\x01\\x02\\r\\n# non-ascii: \\xc3\\xa9\\r\\n['\\xf4\\x8b\\xaa\\xaf\\xc3\\xbdr\\xc3\\x9d']\\r\\n\\r\\n\"",
+      "b\"[['\\x1b\\x0c']]\\r\\n[-]\\r\\n[H1an]\\r\\n\\r\\n\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 202.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 202.0
+}

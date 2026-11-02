@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.38866666666666666,
+  "summary": {
+    "outcomes": {
+      "reject": 221,
+      "valid": 129
+    },
+    "acceptance_rate": 0.369,
+    "max_nesting_depth": 1009,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.132,
+    "novelty": 18,
+    "divergences": 56,
+    "divergence_examples": [
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'\\xef\\xbb\\xbf[ \"\" , \"\\xc3\\xa2\\xf2\\xa4\\x8f\\x8c\\xc2\\x81\\xf1\\x87\\x89\\x88\\xf3\\xa1\\x99\\xb1\" , false , \"\" ]'",
+      "b'\\xef\\xbb\\xbf[ \"\" , \"\\xc3\\xa2\\xf2\\xa4\\x8f\\x8c\\xc2\\x81\\xf1\\x87\\x89\\x88\\xf3\\xa1\\x99\\xb1\" , false , \"\\xc3\\xa2\\xf2\\xa4\\x8f\\x8c\\xc2\\x81\\xf1\\x87\\x89\\x88\\xf3\\xa1\\x99\\xb1\" ]'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 0 of 1",
+        8
+      ],
+      [
+        "parse error at byte 0 of 8",
+        4
+      ],
+      [
+        "parse error at byte 1000 of 2008",
+        4
+      ],
+      [
+        "parse error at byte 0 of 4",
+        3
+      ],
+      [
+        "parse error at byte 6 of 17",
+        3
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "reject": 221,
+      "valid": 129
+    },
+    "acceptance_rate": 0.369,
+    "max_nesting_depth": 1009,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.132,
+    "novelty": 18,
+    "divergences": 56,
+    "divergence_examples": [
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'\\xef\\xbb\\xbf[ \"\" , \"\\xc3\\xa2\\xf2\\xa4\\x8f\\x8c\\xc2\\x81\\xf1\\x87\\x89\\x88\\xf3\\xa1\\x99\\xb1\" , false , \"\" ]'",
+      "b'\\xef\\xbb\\xbf[ \"\" , \"\\xc3\\xa2\\xf2\\xa4\\x8f\\x8c\\xc2\\x81\\xf1\\x87\\x89\\x88\\xf3\\xa1\\x99\\xb1\" , false , \"\\xc3\\xa2\\xf2\\xa4\\x8f\\x8c\\xc2\\x81\\xf1\\x87\\x89\\x88\\xf3\\xa1\\x99\\xb1\" ]'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 70.64,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 70.64
+}

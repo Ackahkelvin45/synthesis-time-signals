@@ -1,0 +1,350 @@
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"k\":0,\"k\":1}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"k\":1,\"k\":2,\"k\":3}\t  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "01", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n\r1e+\t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t \"3\\udfff\\udbff\"\r \n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]\n \r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{ \n\n1e-309,1.7976931348623157e308,true,4.9406564584124654e-324\t }\r\n\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{ \n\ntrue,1.7976931348623157e308,true,4.9406564584124654e-324\t }\r\n\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{ \n\ntrue,1.7976931348623157e308,true,true\t }\r\n\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{ \n\ntrue,true,true,true\t }\r\n\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{ \n\ntrue,true,true\t }\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{ true,true,true\t }\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{ true,true,true  }\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \r\t-1e309\t\n ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \r\t-1e309 \r\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":1,}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \r{\"a\":1,}\r \n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r \n{\"a\":1,}\r \n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r \n{,\"a\":1}\r \n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"0\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"Y\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-1abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\r-.\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-.\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\t\n{\t151585,{}\n\t }", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\t1\n\t }\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\t1\n\t}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\"\"\n\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\"\"\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\"\"\t\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\"\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\":vk\"\t\r\r:1E+308\n\t\t}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\":vk\"\t\r\r:1E+308\r}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\":vk\"\t\r\r:1E+308\r}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"0\"\t\r\r:1E+308\r}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\":\t\r\r\"\"\r}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\":\t\r\r\"\"}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \n [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{ \n\n1e309} // c\t  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{1e309} // c\t  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{1e309\t  } // c\t  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{1e309} // c", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\t\r]\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\n]\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\n {\t{2.2250738585072014e-308\n\r},-1e-400\t\t\n},2.2250738585072014e-308,[false,4.9406564584124654e-324,18446744073709551616,18446744073709551616\n],[-1E-308,2.2250738585072014e-308,-Infinity\r\n ]\t \n \n\n]\t ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\n {\t{2.2250738585072014e-308\n\r\t},-1e-400\t\t\n},2.2250738585072014e-308,[false,4.9406564584124654e-324,18446744073709551616,18446744073709551616\n],[-1E-308,2.2250738585072014e-308,-Infinity\r\n ]\t \n \n\n]\t ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"abc \t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"abc \t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"abc \t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"abc \t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"abc \t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\"\\u0000\\udc00\\ud800\ud815\udc1a\ud82e\udcae\uda1c\udc9f\"\r \n:0.0000000000000000000000001\n\t,\"\\b\u001b2`T\\ud840\\udf00\":274877906945}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\"\\u0000\\udc00\\ud800\ud815\udc1a\ud82e\udcae\uda1c\udc9f\"\r \n:274877906945\n\t,\"\\b\u001b2`T\\ud840\\udf00\":274877906945}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\"\\u0000\\udc00\\ud800\\u0000\ud82e\udcae\uda1c\udc9f\"\r \n:274877906945\n\t,\"\\b\u001b2`T\\ud840\\udf00\":274877906945}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\"0\\udc00\\ud800\\u0000\ud82e\udcae\uda1c\udc9f\"\r \n:274877906945\n\t,\"\\b\u001b2`T\\ud840\\udf00\":274877906945}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\"0\\udc00\\ud800\\u0000\ud82e\udcae\uda1c\udc9f\"\r \n:27\n\t,\"\\b\u001b2`T\\ud840\\udf00\":274877906945}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\n\"0\\udc00\\ud800\\u0000\ud82e\udcae\uda1c\udc9f\"\r \n:27\n\t,\"\\b\u001b2`T\\ud840\\udf00\":10}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[\r\n\n\"\\\",1e309\r\t\r],{\r18446744073709551616,[\n\r\t]},11268,-685571079.1919\n\t \t\r }abc ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[\r\n\n\"\\\",1e309\r\t\r],{\r18446744073709551616,[\n\r\t]},11268,-685571079.1919\n\t \r}abc ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[\r\n\n\"\\\",1e309\r\t\r],{\r18446744073709551616,-685571079.1919},11268,-685571079.1919\n\t \r}abc ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[\r\n\n\"\\\",1e309\r\t\r],{\r18446744073709551616,-1.0}\n\t \r}abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[\r\n\n\"\\\",1e309\r\t\r\r],{\r18446744073709551616,-1.0}\n\t \r}abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[\r\n\n1e309\r\t\r\r],\"\\\"\"\n\t \r}abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[\r\n\n1e309\r\t\r\r],\"0\"\n\t \r}abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\r\r\"trailing\\\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\"trailing\\\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\u000b\"\r\r ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"0\"\r\r ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\r \"0\"\r\r ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"\r\r ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\r \"\"\r\r ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [1 2]\r\t\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\t\t[1 2]\r\t\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\t\t{\"k\":0,\"k\":1}\r\t\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{ \n\n}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \t-1E-308 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \t-1E-308  \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[\t[\n\n\t-1E-308 ],[\t\r\t[\t\n -1E-308\t \n\t] \n \t],{\t\r\rnull,-0.0\r\n\t},{ \t\rNaN,-0.0\t\t\n\r}\n \t]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[\t[\n\n\t-1E-308 ],[\t\r\t[\t\n -1E-308\t \n\t] \n \t],{\t\r\rnull,-0.0\r\n\t},[ \t\rNaN,-0.0\t\t\n\r]\n \t]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[\t[\n\n\t-1E-308 ],[ \t\rNaN,-0.0\t\t\n\r],{\t\r\rnull,-0.0\r\n\t},[ \t\rNaN,-0.0\t\t\n\r]\n \t]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[\t[\n\n\t-1E-308 ],[ \t\rNaN,-0.0\t\t\n\r],{\t\r\rnull,-0.0\r\n\t},[ \t\rNaN,-0.0\t\t\n\r]\n \t]\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[\t[\n\n\t-1E-308 ],[ \t\rNaN,-0.0\t\t\n\r],{\t\r\rnull,-0.0\r\n\t},[ \t\rNaN,NaN\t\t\n\r]\n \t]\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[\t[\n\n\t-1E-308 ],[ \t\rNaN,-0.0\t\t\n\r],{\t\r\rnull,NaN\r\n\t},[ \t\rNaN,NaN\t\t\n\r]\n \t]\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"MhdM\\r|\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"0\\r|\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n {\"\\t\\u001f\\b\u00a5\" \r\r:1e-309, \r\"\":1.7976931348623159e308}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n {\"\\t\\u001f\\t\u00a5\" \r\r:1e-309, \r\"\":1.7976931348623159e308}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n {\"\\t\\t\\t\u00a5\" \r\r:1e-309, \r\"\":1.7976931348623159e308}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n {\"\\t\\t\\t\u00a5\" \r\r:1e-309, \r\"\":1e-309}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n {\"\\t\\t\\t\u00a5\" \r\r:1e-309, \r\"\\t\\t\\t\u00a5\":1e-309}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\t\\t\\t\u00a5\" \r\r:1e-309, \r\"\\t\\t\\t\u00a5\":1e-309}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\t\\t\\t\u00a5\" \r\r:1e-309, \r\"\u00a5\\t\\t\u00a5\":1e-309}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{,\"a\":1} \n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \n\t{,\"a\":1} \n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t --1 \n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t --1 \t ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\n\r{ }", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{ }", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " { }", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n\n[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\n\n\t\"\\udbff\n\":\"bad\\uZZZZ\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\n\n\t\"\\udbff\u0001\":\"bad\\uZZZZ\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\n\n\t\"\\udbff\\udbff\":\"bad\\uZZZZ\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\n\n\t\"\\udbff\\udbff\":\"bad\\uZZZZ\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\n\n\t\"\\udbff\\udbff\\udbff\":18446744073709551616}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0.0000000000000000000000001", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e+ \t ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t 1e+ \t ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\n{} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\n{ } ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " { } ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t1e+", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e+", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\t}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\t}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\r\r\n-3322539005.0\r\r\t]\n\n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\r\r\n-1.0\r\r\t]\r\r\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]\n\r\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{\"k\":null}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{\"k\":null}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{\"k\":null}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \n \"\\uD800\"\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \n \"\\uD800\" \n ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\t\n-9223372036854775809,1E+308,9007199254740993,2.2250738585072014e-308\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\t\n-9223372036854775809,1E+308,1E+308,2.2250738585072014e-308\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\t\n-9223372036854775809,1E+308,1E+308,1E+308\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\t\n1E+308,1E+308,1E+308,1E+308\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{1E+308,1E+308,1E+308,1E+308\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \t92877934 \t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \t8 \t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "8", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\r{\t\n\t\"\"\n\n:\r\r\n18446744073709551616\n\t\t} \n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\r{\t\n\t\"\"\n\n:\r\r\n18446744073709551616\n\t\t} \n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\r{\t\n\t\"\"\n\n:\r\r\n18446744073709551616\n\n} \n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n\t{\t\n\t\"\"\n\n:\r\r\n18446744073709551616\n\n} \n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n\t{\t\n\t\"\"\n\n:\n\n18446744073709551616\n\n} \n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n\t{\n\n\"\"\n\n:\n\n18446744073709551616\n\n} \n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n\t{\n\n\"\"\n\n:\n\n18446744073709551616\n\n} \n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":1,\"b\":2,\"a\":3}\t\n ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n {\"a\":1,\"b\":2,\"a\":3}\t\n ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[-0\n\n\n  \n]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[-0\n\n\n  \n]\t\n\n\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\n\n[-0\n\n\n  \n]\t\n\n\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\n\n[-0  \n  \n]\t\n\n\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\r\t123456789012345678901234567890 \t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\n123456789012345678901234567890 \t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \" ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[}\t\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\t[}\t\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\t{,\"a\":1}\t\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\t\n\"fq4Z\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\t\n\"fq4Z\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\t\n\"ff\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"f\"\t\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"0\"\t\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r \r-1E-00,[\t-1\r],{\r\t\n1.7976931348623157e308\r\r\r},{\r 1.7976931348623159e308,0.1811e309\n\t\n}\r } \n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\r \r{\"\"}\r }", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r \r{0}\r }", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r \r{0,0}\r }", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r \r{0}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\"\\/\u0016\" \n\n:\ttrue\n\n\t,\r\"D\u0014\\udfff\":123456789012345678901234567890}\n\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\"\\/\u0016\" \n\n:\ttrue\n\n\t,\r\"\":\"\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\"\" \n\n:\ttrue\n\n\t,\r\"\":\"\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\"\" \n\n:\ttrue\n\n\t,\r\"\":true}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-1e-400\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r-1e-400\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n\n\"\\uDC00\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\\uDC00\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\r\n1e999999999\t\t\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\r\n1e999999999\t\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n[] \r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\n[ \r\n] \r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \r\n[ \r\n] \r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\rInfinity", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "Infinity", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"q\\ud83c\\uDE00s\\ud83d\\udf00\\uDBFF\\udc01anon\"\r \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"q\\ud83c\\uDE00s\\ud83d\\udf00\\uDBFF\\udc01anon\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"q\\ud83d\\uDE00s\\ud83d\\udf00\\uDBFF\\udc01anon\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"q\\ud83d\\udf00s\\ud83d\\udf00\\uDBFF\\udc01anon\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\\ud800\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\n\t1e-400\n  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\n\t1e-400\n  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[{\"\ud92e\udf15\",-9223372036854775809,1.7976931348623157e308,1.7976931348623159e308\t},[[-1237.0],[\r\t\rfalse],[\n false,4.9406564584124654e-324,\"\"  ]\t\t\t]\n\n\t\n ],[\"\u0001\"],[-1237.0],[\r\t\rfalse]\r\n\t\r}\n ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{[{\"\ud92e\udf15\",-9223372036854775809,1.7976931348623157e308,1.7976931348623159e308\t},[\"\"\t\t\t],{\"\ud92e\udf15\",-9223372036854775809,1.7976931348623157e308,1.7976931348623159e308\t},[\"\"\t\t\t]\n\n\t\n ]\r\n\t\r}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\n\r\r\"\ud8fa\udf72\\u0000\\ud83d\\uDE00\ud8c6\udc8c\\\\?\":1444\r, \"4'<5\":1E+308}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\r\r\"\ud8fa\udf72\\u0000\\ud83d\\uDE00\ud8c6\udc8c\\\\?\":10\r} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\r\r\"\ud8fa\udf72\\ud83d\\uDE00\\ud83d\\uDE00\ud8c6\udc8c\\\\?\":10\r} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\r\r\"\ud8fa\udf72\\ud83d\\uDE00\\\\\ud8c6\udc8c\\\\?\":10\r} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\r\r\"\ud8fa\udf72\\ud83d\\uDE00\\\\\ud8c6\udc8c\\\\\\\\\":10\r} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\r\r\"0\\ud83d\\uDE00\\\\\ud8c6\udc8c\\\\\\\\\":10\r} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\r\r\"\ud800\udc00\\ud83d\\uDE00\\\\\ud8c6\udc8c\\\\\\\\\":10\r} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\n\t18767451,[  \r-0 \t] \r\n] // c\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\n\t-0,[  \r-0 \t] \r\n] // c\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\n\t-0,-0 \r\n] // c\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[-0,-0 \r\n] // c\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \r[ {false \t\r}\r]  \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[ {false \t\r}\r]  \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[ {false,0 \t\r}\r]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\n}\r ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r {\n}\r ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\n}\r ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r {\r }\r ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\r\t[]] \t\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\t[]] \t\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\" 1} \r\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{,\"a\":1} \r\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{,\"a\":1}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\r \t}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r \t{\r \t}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r \t{\r \t}\r \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t  {\"\"\n\n\t:\r\n\t1E+308\r,\r\"H\u0012ld}NZ^\":123456789012345678901234567890}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t  {\"\"\n\n\t:\r\n\t123456789012345678901234567890\r,\r\"H\u0012ld}NZ^\":123456789012345678901234567890}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t  {\"\"\n\n\t:\r\n\t123456789012345678901234567890\r,\r\"l\u0012ld}NZ^\":123456789012345678901234567890}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t  {\"\"\n\n\t:\r\n\t123456789012345678901234567890\r,\r\"l\u0012ld0\":123456789012345678901234567890}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t  {\"l\u0012ld0\"\n\n\t:\r\n\t123456789012345678901234567890\r,\r\"l\u0012ld0\":123456789012345678901234567890}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t  {\"l\u0012ldl\"\n\n\t:\r\n\t123456789012345678901234567890\r,\r\"l\u0012ld0\":123456789012345678901234567890}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t  {\"l\u0012ldl\"\n\n\t:\r\n\t123456789012345678901234567890\r,\r\"l\u0012ldl\":123456789012345678901234567890}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"\f\"\r:\n1e-400\t}\t\t\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\r\t\n} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":1,}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{,\"a\":1}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{,\"a\":1}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\r{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t\r{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\" \t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\n \"\ud960\udcc3\udaea\udd03)\u0013\ud800\udc00\u0011\"\r:\n1e309\n\r,\"\ud80a\udc76\u0092\u0098\ud82d\udc2f\u0085\":[]}\r \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\n \"\ud960\udcc3\udaea\udd03)\u0013\ud800\udc00\u0011\"\r:\n1e309\n\r,\"\ud960\udcc3\udaea\udd03)\u0013\ud800\udc00\u0011\":[]}\r \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\n \"\ud960\udcc3\udaea\udd03)\u0013\ud800\udc00\u0011\"\r:\n1e309\n\r,\"\ud960\udcc3\udaea\udd03)\u0013\ud800\udc00)\":[]}\r \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\n \"\ud960\udcc3\udaea\udd03)\u00130\u0011\"\r:\n1e309\n\r,\"\ud960\udcc3\udaea\udd03)\u0013\ud800\udc00)\":[]}\r \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\n\n \"\ud960\udcc3\udaea\udd03)\u00130\u0011\"\r:\n1e309\n\r,\"\ud960\udcc3\udaea\udd03)\udaea\udd03\ud800\udc00)\":[]}\r \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\n\n \"\ud960\udcc3\udaea\udd03)\u00130\u0011\":\"\"\n\r}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\n\n \"\ud960\udcc3\ud800\udc00)\u00130\u0011\":\"\"\n\r}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n  { 123456789012345678901234567890,[\n \r2.2250738585072014e-308,-2129182.0e-309,9007199254740993],{\"\"},[\n0,false,{ },1e-400\n ]\n\r\t\r\r}0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n  { 123456789012345678901234567890,[\n \r2.2250738585072014e-308,-2129182.0e-309,9007199254740993],{\"\"},[\n0,false,{ },1e-400\n ]\n\r\t\r\r}0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\n\r[\n\t\n14016,1e-309,1e999999999\n],{\r1.7976931348623159e308\t\r\t\r},{\t\r\t{\n\t\t{},1e999999999,\"\"\r\t\t}\t} \n\n\n  ]abc\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\n\r[\n\t\n14016,1e-309,1e999999999\n],{\r1.7976931348623159e308\t\r\t\r},[\t\r\t0\t] \n\n\n  ]abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\n\r[\n\t\n14016,1e-309,1e999999999\n],{\r1.7976931348623159e308\t\r\t\r},[\t\r\t0\t] \n\n\n  ]abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\n\r[\n\t\n14016,1e-309,1e999999999\n],{\r1e999999999\t\r\t\r},[\t\r\t0\t] \n\n\n  ]abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\n\r[\n\t\n14016,0.0,1e999999999\n],{\r1e999999999\t\r\t\r},[\t\r\t0\t] \n\n\n  ]abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"\\ud83d\\uDE00\\\"\\t\u00ea\"\t:-9223372036854775809,\n\r\n\"F\\u0000\u0001\ud8ca\udfb5\":1e-309} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"\\ud83d\\uDE00\\\"\\t\u00ea\"\t:1e-309,\n\r\n\"F\\u0000\u0001\ud8ca\udfb5\":1e-309} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"\\ud83d\\uDE00\\\"\\t\u00ea\"\t:1e-309,\n\r\n\"F\\u0000\u0001\\u0000\":1e-309} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"\\ud83d\\uDE00\\t\\t\u00ea\"\t:1e-309,\n\r\n\"F\\u0000\u0001\\u0000\":1e-309} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\u0000\":0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\u0000\":0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t01 \n\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \n\n01 \n\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-9223372036854775809\r\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\t-9223372036854775809\r\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\r{\n\"\\uDBFF\\udc00W7+\\uD83D\\ude00\udb06\udfa7\\u0000P\"\r\t :\t1.7976931348623157e308\n\t }\r \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\r{\n\"\\uDBFF\\udc00W7+\\uD83D\\ude00\udb06\udfa70P\"\r\t :\t1.7976931348623157e308\n\t }\r \r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\r{\n\"\\uDBFF\\udc00W7+\\uD83D\\ude00\udb06\udfa70P\"\r\t :\t1.7976931348623157e308\t}\r \r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\n\"\\uDBFF\\udc00W7+\\udfff\":\"0P\"\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\n\"\\uDBFF\\udc00W7+\\udfff\":\"\\uDBFF\\udc00W7+\\udfff\"\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\n\"\\uDBFF\\udc00W7+\\udfff\":\"\\udfffW7+\\udfff\"\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\n\"\\udfffW7+\\udfff\":\"\\udfffW7+\\udfff\"\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e309", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\t\n[\r-0,1E+308,18446744073709551616,1E+308\r\t],{false,-1e309},{-0.0}\n\r\n\t ]abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\t\n[\r-0,1E+308,18446744073709551616,1E+308\r\t],{false,-1e309},{false,-1e309}\n\r\n\t ]abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\t\n[\r-0,1E+308,18446744073709551616,1E+308\r\t],[\r-0,1E+308,18446744073709551616,1E+308\r\t],{false,-1e309}\n\r\n\t ]abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\t\n[\r-0,1E+308,18446744073709551616,1E+308\r\t],[\r-0,1E+308,18446744073709551616,1E+308\r\t],[\r-0,1E+308,18446744073709551616,1E+308\r\t]\n\r\n\t ]abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\t\n[\r-0,1E+308,18446744073709551616,1E+308],[\r-0,1E+308,18446744073709551616,1E+308\r\t],[\r-0,1E+308,18446744073709551616,1E+308\r\t]\n\r\n\t ]abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\t\n[\r-0,1E+308,18446744073709551616,1E+308],\"\"\n\r\n\t ]abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\t\t\n[\r-0,1E+308,18446744073709551616,1E+308],[\r-0,1E+308,18446744073709551616,1E+308]\n\r\n\t ]abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"18>\\b\"\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\r\r}\r\t\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\r\r}\r\r\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\r\r{\r\r\r}\r\r\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\r\t}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \r\r01", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n \r{\n\n}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n \r{\n\n}\n \r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n \r{\n \r}\n \r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\n\n[]\r\t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\t\r[]\r\t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\t\r[\r\t\r]\r\t\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\r\n-1159", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-1", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{ \r \"\udabe\udf47\ud817\udc10\ud808\udc6d\udbd8\udee95J`\":\t\r 18446744073709551616\r} \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{ \r \"\udabe\udf47\ud817\udc10\ud808\udc6d\udbd8\udee95J`\":18446744073709551616\r} \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{ \r \"\udabe\udf47\ud817\udc10\ud808\udc6d\udbd8\udee95J`\":18446744073709551616\r} \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{ \r \"5J`\ud817\udc10\ud808\udc6d\udbd8\udee95J`\":18446744073709551616\r} \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{ \r \"5J`\ud817\udc10\ud808\udc6d\ud800\udc005J`\":18446744073709551616\r} \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{ \r \"\ud817\udc10\ud817\udc10\ud808\udc6d\ud800\udc005J`\":18446744073709551616\r} \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{ \r \"\ud817\udc10\ud817\udc10\ud808\udc6d5J`5J`\":18446744073709551616\r} \t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \n{\"k\":1,\"k\":2,\"k\":3}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"k\":1,\"k\":2,\"k\":3}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t \t\"\u011bFM\\b\ud801\udcee_Hy<-\"\n\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\n\"\u011bFM\\b\ud801\udcee_Hy<-\"\n\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\n\"\u011bFM\\b\ud801\udcee0y<-\"\n\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\n\"\u011bFM\\b\ud801\udcee\ud801\udceey<-\"\n\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\n\"\u011bFM\\b\ud801\udcee\ud801\udceeFM\"\n\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\n\"\u011bFM\\b\ud801\udcee\\bFM\"\n\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\n\"\u011bFM\\b\ud800\udc00\\bFM\"\n\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\"\"\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\t{\n\r\t}\n\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\t{\n\r\t}\n\t\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\t{\n\r\t}\n\r\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\r\t{\n\r\t}\n\r\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \n\r\"trailing\\ ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \n\r\"trailing\\ \n\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\r[\n\t[ -0.0\t\r]\n\t]\t  }\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\r[\n\t[ -0.0\r]\n\t]\t  }\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\r[\n\t\"\"\n\t],[\n\t[ -0.0\r]\n\t]\t  }\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\r[\n\t-0.0\n\t],[\n\t[ -0.0\r]\n\t]\t  }\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\r[\n\t[ -0.0\r]\n\t],[\n\t[ -0.0\r]\n\t]\t  }\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\t\r[\n\t[ -0.0\r]\n\t],[\n\t\"\"\n\t],[\n\t[ -0.0\r]\n\t],[\n\t[ -0.0\r]\n\t]\t  }\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[  [\n[{\r}\r ] \t],-41363,{{\r1.7976931348623157e308,\"\udb31\udc04\ud964\udc90\u001a\ud808\udedd\ud8cd\udf05c\",1e309,-16236 \r },{\r\r\r0.0000000000000000000000001,-20934.7371\n},123456789012345678901234567890,{\n-14.39599,-1035.0E-00,-1e-400\t\t\t\r\r }\n \n}\n\t\t]\n  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[  [\n[{\r}\r ] \t],-41363,{{\r1.7976931348623157e308,123456789012345678901234567890,0e3 \r },[0e3]\n \n},\"\"\n\t\t]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[  [\n[{\r}\r ] \t],-41363,{{\r1.7976931348623157e308,0e3,0e3 \r },[0e3]\n \n},\"\"\n\t\t]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[  [\n[{\r}\r ] \t],-41363,{{\r1.7976931348623157e308,0e0,0e3 \r },[0e3]\n \n},\"\"\n\t\t]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[  [\n[{\r}\r \t] \t],-41363,{{\r1.7976931348623157e308,0e0,0e3 \r },[0e3]\n \n},\"\"\n\t\t]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[  [\n[{\r}\r \t] \t],-41363,{{\r1.7976931348623157e308,0e0,0e3 \r },[\"\"],[{\r}\r \t]\n \n},-41363\n\t\t]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[  [\n[{\r}\r \t] \t],-41363,{{\r1.7976931348623157e308,0e0,0e3 \r },[\"\"],[\"\"\r \t]\n \n}\n\t\t]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\t}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\r\t}\r\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\t{\r\t}\r\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]\t \n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\r\t\t]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\t\n\"\\uB5Da(f?/[gT\ud8a5\udc4c\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"0\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-0 \r\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \r\r-0 \r\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\r\n00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e+\n\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e+", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\r{\r\r\t\"\":-9223372036854775809}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t\r{\"\":-9223372036854775809}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\":-9223372036854775809}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\":-9223372036854775809}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t--1\t\t\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}

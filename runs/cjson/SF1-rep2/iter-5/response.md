@@ -1,0 +1,284 @@
+```python
+from hypothesis import strategies as st
+import json
+
+# ---------- primitives ----------
+
+def _hex4():
+    return st.text(alphabet="0123456789abcdefABCDEF", min_size=4, max_size=4)
+
+def _unicode_escape():
+    return st.one_of(
+        _hex4().map(lambda h: "\\u" + h),
+        # surrogate pair (valid)
+        st.tuples(
+            st.integers(min_value=0xD800, max_value=0xDBFF),
+            st.integers(min_value=0xDC00, max_value=0xDFFF),
+        ).map(lambda t: "\\u%04x\\u%04x" % t),
+        # lone surrogate (rejected by parser)
+        st.integers(min_value=0xD800, max_value=0xDFFF).map(lambda c: "\\u%04x" % c),
+    )
+
+def _escape():
+    return st.one_of(
+        st.sampled_from(["\\\"", "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"]),
+        _unicode_escape(),
+    )
+
+def _safe_char():
+    # printable-ish code points safe to embed
+    return st.one_of(
+        st.characters(min_codepoint=0x20, max_codepoint=0x7E,
+                      blacklist_categories=("Cs",)),
+        st.characters(min_codepoint=0xA0, max_codepoint=0x2FFF,
+                      blacklist_categories=("Cs",)),
+        # raw control bytes / NUL (accepted by parser)
+        st.integers(min_value=0, max_value=0x1F).map(chr),
+    )
+
+def _string_body():
+    return st.one_of(
+        st.text(alphabet=st.characters(min_codepoint=0x20, max_codepoint=0x7E,
+                                       blacklist_characters='"\\'),
+                max_size=12),
+        st.lists(st.one_of(_escape(), _safe_char()), max_size=10).map("".join),
+    )
+
+def _string():
+    return _string_body().map(lambda s: '"' + s + '"')
+
+# ---------- numbers ----------
+
+def _int_part():
+    return st.one_of(
+        st.just("0"),
+        st.integers(min_value=1, max_value=9).map(str),
+        st.integers(min_value=10, max_value=10**18).map(str),
+        # leading zeros (accepted)
+        st.tuples(st.just("0"), st.integers(min_value=0, max_value=999)).map(
+            lambda t: t[0] + str(t[1])),
+    )
+
+def _frac_part():
+    return st.one_of(
+        st.integers(min_value=0, max_value=10**12).map(lambda n: "." + str(n)),
+        st.just("."),  # trailing dot (accepted)
+    )
+
+def _exp_part():
+    return st.one_of(
+        st.tuples(
+            st.sampled_from(["e", "E"]),
+            st.one_of(st.just(""), st.just("+"), st.just("-")),
+            st.integers(min_value=0, max_value=9999).map(str),
+        ).map("".join),
+        # extreme exponents
+        st.sampled_from(["e309", "e-309", "e999", "E+308", "e400", "e-400"]),
+    )
+
+def _number():
+    sign = st.one_of(st.just(""), st.just("-"))
+    core = st.one_of(
+        _int_part(),
+        st.tuples(_int_part(), _frac_part()).map("".join),
+        st.tuples(_int_part(), _frac_part(), _exp_part()).map("".join),
+        st.tuples(_int_part(), _exp_part()).map("".join),
+    )
+    valid = st.tuples(sign, core).map("".join)
+    # hex numbers (accepted)
+    hexnum = st.tuples(
+        sign,
+        st.just("0x"),
+        st.text(alphabet="0123456789abcdefABCDEF", min_size=1, max_size=8),
+    ).map("".join)
+    return st.one_of(valid, hexnum)
+
+# ---------- malformed near-valid fragments ----------
+
+def _malformed():
+    return st.sampled_from([
+        "", "-", "+1", ".5", "-.5", "01", "1.", "1..", "1e", "1e+",
+        "NaN", "Infinity", "-Infinity", "nan", "inf",
+        "truee", "falsee", "nulll", "tru", "fals", "nul",
+        "{,}", "[,]", "[1,,2]", "{\"a\":,}", "{\"a\" 1}",
+        "{a:1}", "{'a':1}", "'x'", "[1 2]", "{\"a\":1,}",
+        "\"unterminated", "\"a\\", "\"\\u12\"", "\"\\x41\"",
+        "{\"a\":1", "[1,2", "{", "[", "}", "]", ",", ":",
+        "1 2 3", "1abc", "truex", "[]]", "{}extra",
+    ])
+
+# ---------- recursive value/obj/arr (bounded depth) ----------
+
+_MAX_DEPTH = 4
+
+def _leaf():
+    return st.one_of(
+        _string(),
+        _number(),
+        st.sampled_from(["true", "false", "null"]),
+        _malformed(),
+    )
+
+def _value(depth=0):
+    if depth >= _MAX_DEPTH:
+        return _leaf()
+    return st.one_of(_leaf(), _obj(depth), _arr(depth))
+
+def _pair(depth):
+    return st.tuples(_string(), st.just(":"), _value(depth)).map("".join)
+
+def _obj(depth):
+    return st.one_of(
+        st.just("{}"),
+        st.lists(_pair(depth + 1), min_size=1, max_size=4).map(
+            lambda ps: "{" + ",".join(ps) + "}"),
+        # duplicate keys (accepted)
+        st.tuples(_string(), st.just(":"), _leaf(),
+                  st.just(","), _string(), st.just(":"), _leaf()
+                  ).map("".join).map(lambda s: "{" + s + "}"),
+    )
+
+def _arr(depth):
+    return st.one_of(
+        st.just("[]"),
+        st.lists(_value(depth + 1), min_size=1, max_size=4).map(
+            lambda vs: "[" + ",".join(vs) + "]"),
+    )
+
+# ---------- deep nesting near the 1000 limit ----------
+
+def _deep():
+    depth = st.integers(min_value=990, max_value=1005)
+    return st.tuples(
+        depth,
+        st.sampled_from(["[", "{"]),
+        st.sampled_from(["]", "}"]),
+    ).map(lambda t: t[1] * t[0] + "0" + t[2] * t[0])
+
+def _deep_alt():
+    depth = st.integers(min_value=990, max_value=1005)
+    return depth.map(lambda d: "[" * d + "]" * d)
+
+# ---------- top-level ----------
+
+def _ws():
+    return st.text(alphabet=" \t\n\r", max_size=3)
+
+def _top():
+    return st.one_of(
+        _value(0),
+        _malformed(),
+        _deep(),
+        _deep_alt(),
+        # BOM prefix (accepted)
+        st.tuples(st.just("\ufeff"), _value(0)).map("".join),
+        # trailing content after complete value (accepted)
+        st.tuples(_value(0), st.sampled_from(["abc", " 1 2", "\x00", "junk"])).map("".join),
+        # NUL after value
+        st.tuples(_value(0), st.just("\x00")).map("".join),
+        # whitespace padding
+        st.tuples(_ws(), _value(0), _ws()).map("".join),
+        # raw NUL inside string
+        st.just('"a\x00b"'),
+        st.just('"tab\there"'),
+        st.just('"nl\nhere"'),
+    )
+
+# ---------- improved top-level with trailing-garbage focus ----------
+
+def _top_improved():
+    # Focus on trailing-content divergences: complete value followed by junk,
+    # with variations in the junk and separators, since these dominate divergences.
+    junk = st.one_of(
+        st.sampled_from(["abc", " 1 2", "\x00", "junk", "x", "0", " ", "\t",
+                         "null", "true", "[]", "{}", "\"s\"", "1.5"]),
+        st.text(alphabet=" \t\n\r\x00abc0123{}[]\",:", min_size=1, max_size=6),
+    )
+    sep = st.one_of(st.just(""), st.text(alphabet=" \t\n\r", min_size=1, max_size=2))
+    return st.tuples(_value(0), sep, junk).map("".join)
+
+def _top_final():
+    return st.one_of(
+        _top_improved(),
+        _top(),
+    )
+
+# ---------- improved strategy: fix unterminated-string divergence ----------
+# The run showed a divergence on b'"\"abc' — a complete value followed by
+# trailing garbage where the value itself was a string. Also the
+# b'"a\\x00b"' divergence suggests the raw-NUL-in-string literal was emitted
+# with a backslash-x00 byte sequence rather than a real NUL. To broaden
+# coverage of trailing-garbage paths we weight _top_improved more heavily and
+# add explicit unterminated-string + trailing-garbage combinations.
+
+def _unterminated_with_junk():
+    # e.g. '"abc' + junk, '"abc\\' + junk, '"\\u12' + junk
+    prefix = st.sampled_from(['"abc', '"abc\\', '"\\u12', '"', '"a\x00b'])
+    junk = st.one_of(
+        st.just(""),
+        st.sampled_from(["abc", " 1 2", "\x00", "junk", "x", "0", " ", "\t"]),
+        st.text(alphabet=" \t\n\r\x00abc0123{}[]\",:", min_size=1, max_size=6),
+    )
+    return st.tuples(prefix, junk).map("".join)
+
+def _top_improved2():
+    # Give trailing-garbage cases more weight since they dominate divergences.
+    return st.one_of(
+        _top_improved(),
+        _top_improved(),
+        _unterminated_with_junk(),
+        st.tuples(_string(), st.text(alphabet=" \t\n\r\x00abc0123{}[]\",:",
+                                     min_size=1, max_size=6)).map("".join),
+    )
+
+# ---------- fix: avoid emitting empty-string value followed by junk ----------
+# The divergence b'"\"abc' is generated by _top_improved when _value(0) yields
+# the empty string "" and junk begins with "abc". The empty-string case adds
+# noise; ensure the leading value is non-empty when combined with junk so the
+# trailing-garbage path is exercised with a real complete value.
+
+def _nonempty_value():
+    return _value(0).filter(lambda s: len(s) > 0)
+
+def _top_improved3():
+    junk = st.one_of(
+        st.sampled_from(["abc", " 1 2", "\x00", "junk", "x", "0", " ", "\t",
+                         "null", "true", "[]", "{}", "\"s\"", "1.5"]),
+        st.text(alphabet=" \t\n\r\x00abc0123{}[]\",:", min_size=1, max_size=6),
+    )
+    sep = st.one_of(st.just(""), st.text(alphabet=" \t\n\r", min_size=1, max_size=2))
+    return st.tuples(_nonempty_value(), sep, junk).map("".join)
+
+# ---------- new: ensure the "null" production is exercised ----------
+# The run reported a production gap for "null" — no accepted input contained a
+# bare null literal. We add a dedicated strategy that emits null in a variety
+# of positions (top-level, inside arrays, inside objects, with whitespace and
+# with trailing garbage) so the parser's null path is reliably hit.
+
+def _null_focused():
+    ws = st.text(alphabet=" \t\n\r", max_size=2)
+    null = st.just("null")
+    return st.one_of(
+        # bare null with optional surrounding whitespace
+        st.tuples(ws, null, ws).map("".join),
+        # null inside arrays
+        st.tuples(st.just("["), ws, null, ws, st.just("]")).map("".join),
+        st.tuples(st.just("["), null, st.just(","), null, st.just("]")).map("".join),
+        st.tuples(st.just("["), null, st.just(","), _value(1), st.just("]")).map("".join),
+        # null inside objects
+        st.tuples(st.just("{\"k\":"), ws, null, ws, st.just("}")).map("".join),
+        st.tuples(st.just("{\"k\":"), null, st.just(",\"j\":"), _value(1),
+                  st.just("}")).map("".join),
+        # null with trailing garbage
+        st.tuples(null, st.sampled_from(["abc", " 1", "\x00", "junk", "x"])).map("".join),
+        # case variants / near-null (should be rejected but exercise lexer)
+        st.sampled_from(["NULL", "Null", "nul", "nulll", "nullx"]),
+    )
+
+strategy = st.one_of(
+    _top_improved3(),
+    _top_improved2(),
+    _top_final(),
+    _null_focused(),
+)
+```

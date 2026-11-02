@@ -1,0 +1,165 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.222,
+  "summary": {
+    "outcomes": {
+      "reject": 236,
+      "valid": 114
+    },
+    "acceptance_rate": 0.326,
+    "max_nesting_depth": 10,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "date_time",
+      "BOOLEAN",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 22,
+    "divergences": 21,
+    "divergence_examples": [
+      "b'[E93xGpXfGihe]\\r\\n# \\xc3\\x94`\\xf1\\xbb\\x85\\xab\\xc3\\x99\\xc3\\x8f\\xc2\\x9aK\\xf3\\x8a\\xa1\\x87\\xc3\\x89\\r\\n# non-ascii: \\xc3\\xa9\\r\\nHFx = \"\"\"\\\\b\\t\\\\t\\\\f\\\\u0000\\xc2'",
+      "b'[E93xGpXfGihe]\\r\\n# E93xGpXfGihe\\r\\n# non-ascii: \\xc3\\xa9\\r\\nHFx = \"\"\"\\\\b\\t\\\\t\\\\f\\\\u0000\\xc2\\x83\\\\u0041\\n'",
+      "b'[E93xGpXfGihe]\\r\\n# HFx\\r\\n# non-ascii: \\xc3\\xa9\\r\\nHFx = \"\"\"\\\\b\\t\\\\t\\\\f\\\\u0000\\xc2\\x83\\\\u0041\\n\\xf0\\xb6\\xa0\\x83\\xc2\\xbb\"\"\"'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        41
+      ],
+      [
+        "line 1: extra chars after value",
+        16
+      ],
+      [
+        "line 1: invalid char U+000b",
+        14
+      ],
+      [
+        "line 2: key exists",
+        13
+      ],
+      [
+        "line 1: newline not allowed in inline table",
+        13
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 66.91,
+    "region_coverage_pct": 68.76
+  },
+  "coverage_in_loop": {
+    "branch_pct": 66.91,
+    "region_pct": 68.76,
+    "line_pct": 73.83,
+    "branch_pct_file": 53.44,
+    "region_pct_file": 54.6,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_rtots",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      },
+      {
+        "name": "toml_rtos",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 41
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 187.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 66.91
+}

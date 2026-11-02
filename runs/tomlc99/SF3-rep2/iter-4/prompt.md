@@ -1,0 +1,483 @@
+Here is the current Hypothesis strategy:
+
+```python
+from hypothesis import strategies as st
+import json
+
+# ---------- helpers ----------
+
+_ws = st.sampled_from([" ", "\t", "  ", "\t\t", ""])
+
+# characters safe (non-quote, non-backslash, non-newline, non-NUL) for basic strings
+_basic_safe = st.characters(
+    blacklist_categories=("Cs",),
+    blacklist_characters='\\"\n\r\x00',
+)
+
+# Multibyte / non-ASCII characters specifically exercise the UTF-8 decoder
+# (toml_utf8_to_ucs) and string normalization (norm_lit_str).
+_unicode_safe = st.characters(
+    blacklist_categories=("Cs", "Cc"),
+    blacklist_characters='\\"\n\r\x00',
+    min_codepoint=0x80,
+)
+
+_esc = st.sampled_from(
+    ['\\"', "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t",
+     "\\u0000", "\\uFFFF", "\\u00e9", "\\U0001F600", "\\U00000041",
+     "\\u0041", "\\u007f", "\\u0080", "\\u07ff", "\\u0800", "\\ud7ff",
+     "\\ue000", "\\uffff", "\\U00010000", "\\U0010FFFF",
+     "\\u00A0", "\\u2028", "\\u2029"]
+)
+
+def _basic_string_body():
+    return st.one_of(_basic_safe, _unicode_safe, _esc)
+
+basic_string = st.lists(_basic_string_body(), max_size=12).map(
+    lambda cs: '"' + "".join(cs) + '"'
+)
+
+literal_string = st.lists(
+    st.one_of(
+        st.characters(blacklist_characters="'\n\r\x00"),
+        _unicode_safe,
+    ),
+    max_size=12,
+).map(lambda cs: "'" + "".join(cs) + "'")
+
+ml_basic_string = st.lists(
+    st.one_of(_basic_safe, _unicode_safe, _esc, st.just("\n"), st.just("\r\n")),
+    max_size=10,
+).map(lambda cs: '"""' + "".join(cs) + '"""')
+
+ml_literal_string = st.lists(
+    st.one_of(
+        st.characters(blacklist_characters="'\x00"),
+        _unicode_safe,
+        st.just("\n"),
+        st.just("\r\n"),
+    ),
+    max_size=10,
+).map(lambda cs: "'''" + "".join(cs) + "'''")
+
+# ---------- integers ----------
+
+_dec_int = st.one_of(
+    st.integers(min_value=0, max_value=9).map(str),
+    st.integers(min_value=-(10**25), max_value=10**25).map(str),
+    st.just("007"),
+    st.just("0"),
+    st.just("+0"),
+    st.just("-0"),
+    st.just("1_000"),
+    st.just("9" * 40),
+    st.just("1" + "_0" * 30),
+)
+
+_hex_int = st.one_of(
+    st.integers(min_value=0, max_value=2**70).map(lambda n: "0x" + format(n, "x")),
+    st.just("0xDEADBEEF"),
+    st.just("0x0"),
+    st.just("0xdead_beef"),
+    st.just("0x" + "f" * 40),
+)
+
+_oct_int = st.one_of(
+    st.integers(min_value=0, max_value=2**70).map(lambda n: "0o" + format(n, "o")),
+    st.just("0o0"),
+    st.just("0o777"),
+    st.just("0o7_7_7"),
+)
+
+_bin_int = st.one_of(
+    st.integers(min_value=0, max_value=2**70).map(lambda n: "0b" + format(n, "b")),
+    st.just("0b0"),
+    st.just("0b1010"),
+    st.just("0b1_0_1"),
+)
+
+integer = st.one_of(_dec_int, _hex_int, _oct_int, _bin_int)
+
+# ---------- floats ----------
+
+_float = st.one_of(
+    st.floats(allow_nan=False, allow_infinity=False).map(repr),
+    st.just("1."),
+    st.just(".5"),
+    st.just("+1.0"),
+    st.just("-0.0"),
+    st.just("1e309"),
+    st.just("1e-309"),
+    st.just("6.626e-34"),
+    st.just("1_000.0"),
+    st.just("1.0_1"),
+    st.just("0e0"),
+    st.just("1E+10"),
+)
+
+_inf_nan = st.sampled_from(["inf", "+inf", "-inf", "nan", "+nan", "-nan"])
+
+floating_point = st.one_of(_float, _inf_nan)
+
+# ---------- booleans ----------
+
+boolean = st.sampled_from(["true", "false"])
+
+# ---------- date-times ----------
+# Wider coverage of the timestamp parser (toml_timestamp_at): valid and
+# invalid dates/times, fractional seconds, offsets, and malformed variants.
+
+_date = st.one_of(
+    st.sampled_from([
+        "1979-05-27", "0000-00-00", "1979-02-30", "9999-12-31",
+        "2024-01-01", "1979-13-45", "2000-02-29", "1900-02-29",
+        "2024-02-29", "2023-02-29", "1970-01-01", "0001-01-01",
+        "9999-12-31", "2024-12-31", "2024-01-31", "2024-04-31",
+    ])
+)
+
+_time = st.one_of(
+    st.sampled_from([
+        "07:32:00", "00:00:00", "23:59:59.999999", "07:32:00.1",
+        "99:99:99", "12:00:00.000000001", "00:00:00.0", "23:59:60",
+        "24:00:00", "12:34:56.123456789", "01:02:03.000000000",
+    ])
+)
+
+_offset = st.sampled_from(["Z", "z", "+00:00", "-07:00", "+23:59", "-00:00",
+                           "+05:30", "-12:00", "+14:00"])
+
+_sep = st.sampled_from(["T", "t", " "])
+
+def _mk_dt(parts):
+    return "".join(parts)
+
+datetime_ = st.one_of(
+    st.tuples(_date, _sep, _time, _offset).map(_mk_dt),
+    st.tuples(_date, _sep, _time).map(_mk_dt),
+    _date,
+    _time,
+)
+
+# ---------- keys ----------
+
+_unquoted_key = st.one_of(
+    st.text(alphabet="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-",
+            min_size=1, max_size=8),
+    st.just("a"),
+    st.just("key"),
+    st.just("x" * 100),
+    st.just("k" * 10000),
+    st.just("-"),
+    st.just("_"),
+    st.just("123"),
+)
+
+_quoted_key = st.one_of(basic_string, literal_string, st.just('""'))
+
+simple_key = st.one_of(_unquoted_key, _quoted_key)
+
+def _dotted_key(parts):
+    return ".".join(parts)
+
+dotted_key = st.lists(simple_key, min_size=2, max_size=4).map(_dotted_key)
+
+key = st.one_of(simple_key, dotted_key)
+
+# ---------- comments ----------
+
+_comment_text = st.lists(
+    st.one_of(
+        st.characters(blacklist_characters="\n\r\x00"),
+        _unicode_safe,
+    ),
+    max_size=20,
+).map(lambda cs: "#" + "".join(cs))
+
+comment_opt = st.one_of(st.just(""), _comment_text)
+
+# ---------- recursive values: arrays and inline tables ----------
+
+def _join_array(parts):
+    inner = ",".join(parts)
+    return "[" + inner + "]"
+
+def _join_inline(parts):
+    inner = ", ".join(parts)
+    return "{" + inner + "}"
+
+_simple_value_no_container = st.one_of(
+    basic_string,
+    ml_basic_string,
+    literal_string,
+    ml_literal_string,
+    integer,
+    floating_point,
+    boolean,
+    datetime_,
+)
+
+def _make_recursive_value():
+    base = _simple_value_no_container
+    def extend(children):
+        arr = st.lists(children, max_size=4).map(_join_array)
+        inner = st.lists(
+            st.tuples(key, children).map(lambda t: t[0] + " = " + t[1]),
+            max_size=4,
+        ).map(_join_inline)
+        return st.one_of(arr, inner)
+    return st.recursive(base, extend, max_leaves=30)
+
+_recursive_value = _make_recursive_value()
+
+value = _recursive_value
+
+# empty containers explicitly
+_empty_containers = st.sampled_from(["[]", "{}", "[ ]", "{ }", "[\n]", "[\n\n]"])
+
+value = st.one_of(value, _empty_containers)
+
+# deep nesting: build arrays nested up to ~2048 deep
+_deep_array = st.integers(min_value=1, max_value=2048).map(
+    lambda n: "[" * n + "]" * n
+)
+
+value = st.one_of(value, _deep_array)
+
+# ---------- key-value lines ----------
+
+key_value = st.tuples(key, value).map(lambda t: t[0] + " = " + t[1])
+
+# ---------- tables ----------
+
+_standard_table = key.map(lambda k: "[" + k + "]")
+_array_table = key.map(lambda k: "[[" + k + "]]")
+
+table = st.one_of(_standard_table, _array_table)
+
+# ---------- expressions ----------
+
+expression = st.one_of(
+    st.tuples(key_value, comment_opt).map(lambda t: t[0] + (" " + t[1] if t[1] else "")),
+    st.tuples(table, comment_opt).map(lambda t: t[0] + (" " + t[1] if t[1] else "")),
+    comment_opt,
+)
+
+# ---------- malformed / near-valid inputs ----------
+
+_malformed = st.sampled_from([
+    # missing delimiter
+    "a = [1, 2",
+    "a = {b = 1",
+    "a = {b = 1,}",
+    "a = [1, 2,]",
+    "[t",
+    "[[t]",
+    # doubled delimiter
+    "a = [[1, 2]]",
+    "a = {{b = 1}}",
+    "[t]]",
+    "[[t]]]",
+    # unterminated string
+    'a = "unterminated',
+    "a = 'unterminated",
+    'a = """unterminated',
+    "a = '''unterminated",
+    # stray token
+    "a = ",
+    "= 1",
+    "a 1",
+    "a = 1 2",
+    "a = ,",
+    "a = [1 2]",
+    "a = {b = 1 c = 2}",
+    # duplicate keys (rejected by parser)
+    "a = 1\na = 2",
+    "[t]\n[t]",
+    # newline in inline table (rejected)
+    "a = {b = 1,\nc = 2}",
+    # invalid escape
+    'a = "\\q"',
+    # value on next line
+    "a =\n1",
+    # bare key with unicode
+    "café = 1",
+    # leading zeros, floats without digits (accepted)
+    "a = 007",
+    "a = 1.",
+    "a = .5",
+    # raw control char in string
+    'a = "x\x01y"',
+    # control char in comment
+    "# comment with \x01 control",
+    # trailing comma in inline table (accepted)
+    "a = {b = 1,}",
+    # calendar-invalid date (accepted)
+    "a = 1979-02-30",
+    # UTF-8 / unicode edge cases to exercise toml_utf8_to_ucs & norm_lit_str
+    'a = "\u00e9\u4e2d\U0001F600"',
+    'a = "\u2028\u2029"',
+    'a = "\u0080\u07ff\u0800"',
+    "a = '\u00e9\u4e2d\U0001F600'",
+    "a = '''\u00e9\u4e2d\U0001F600'''",
+    'a = """\u00e9\u4e2d\U0001F600"""',
+    "# \u00e9\u4e2d\U0001F600 comment",
+    # invalid UTF-8 bytes represented as lone surrogates in the str
+    'a = "\ud800"',
+    'a = "\udc00\ud800"',
+    "a = '\ud800'",
+    # overlong / truncated sequences
+    'a = "\xc0\x80"',
+    'a = "\xe0\x80\x80"',
+    'a = "\xf0\x80\x80\x80"',
+    'a = "\xff"',
+    'a = "\xed\xa0\x80"',
+    # BOM and misc
+    "\ufeffa = 1",
+    "a = 1\ufeff",
+    # timestamp edge cases
+    "a = 2024-02-29T00:00:00Z",
+    "a = 2023-02-29T00:00:00Z",
+    "a = 1979-05-27T07:32:00.999999-07:00",
+    "a = 1979-05-27 07:32:00z",
+    "a = 24:00:00",
+    "a = 23:59:60",
+    # large / deep nesting to stress recursion
+    "a = " + "[" * 300 + "]" * 300,
+    "a = " + "[" * 2048 + "]" * 2048,
+])
+
+# ---------- document ----------
+
+def _join_exprs(exprs):
+    return "\n".join(exprs)
+
+# Unicode-heavy documents drive the UTF-8 decoder and string normalizer.
+_unicode_document = st.lists(
+    st.one_of(
+        key_value,
+        table,
+        comment_opt,
+    ),
+    min_size=1,
+    max_size=6,
+).map(_join_exprs)
+
+# Targeted documents that specifically exercise the least-covered functions:
+# toml_utf8_to_ucs, norm_lit_str, toml_rtos, toml_timestamp_at.
+# Each is a full valid (or near-valid) document so the parser reaches the
+# relevant code path rather than bailing out early.
+_targeted_document = st.one_of(
+    # toml_rtos: string-to-value conversion for every scalar type
+    st.sampled_from([
+        'a = "hello"',
+        "a = 'hello'",
+        'a = """multi\nline"""',
+        "a = '''multi\nline'''",
+        'a = "\\u00e9\\U0001F600"',
+        "a = 'plain literal é中😀'",
+        'a = """\\t\\n\\r\\\\"""',
+        "a = '''\t\n\r\\'''",
+        'a = ""',
+        "a = ''",
+        'a = """x"""',
+        "a = '''x'''",
+        'a = "\\u0000"',
+        'a = "\\U0010FFFF"',
+    ]),
+    # toml_utf8_to_ucs: multibyte UTF-8 decoding via escaped & literal unicode
+    st.sampled_from([
+        'a = "\\u00e9"',
+        'a = "\\u4e2d"',
+        'a = "\\U0001F600"',
+        'a = "\\u0080"',
+        'a = "\\u07ff"',
+        'a = "\\u0800"',
+        'a = "\\uffff"',
+        'a = "\\U00010000"',
+        'a = "\\U0010FFFF"',
+        'a = "é"',
+        'a = "中"',
+        'a = "😀"',
+        'a = "\u0080\u07ff\u0800\uffff"',
+        'a = "\U00010000\U0010FFFF"',
+        'a = "\\u00e9\\u4e2d\\U0001F600"',
+        'a = "\\uD7FF\\uE000"',
+        'a = "\\uD800"',
+        'a = "\\uDFFF"',
+        'a = "\\uFFFF"',
+        'a = "\\U0000FFFF"',
+        'a = "\\U00110000"',
+        'a = "\\UFFFFFFFF"',
+    ]),
+    # norm_lit_str: literal-string normalization (multiline trimming, escapes)
+    st.sampled_from([
+        "a = '''\nhello'''",
+        "a = '''\n\nhello\n\n'''",
+        "a = '''hello\\nworld'''",
+        "a = '''line1\nline2\nline3'''",
+        "a = '''\r\nfoo\r\n'''",
+        "a = '''\\'''",
+        "a = ''''''''",
+        "a = '''''''''",
+        "a = '''x''y'''",
+        "a = '''\\t\\n'''",
+        "a = '''é中😀'''",
+        "a = '''\u2028\u2029'''",
+        "a = '''\n'''",
+        "a = '''\n\n'''",
+        "a = '''a\nb'''",
+        "a = '''a\r\nb'''",
+    ]),
+    # toml_timestamp_at: full timestamp parsing paths
+    st.sampled_from([
+        "a = 1979-05-27T07:32:00Z",
+        "a = 1979-05-27T07:32:00.999999-07:00",
+        "a = 1979-05-27T00:32:00.999999",
+        "a = 1979-05-27",
+        "a = 07:32:00",
+        "a = 07:32:00.999999",
+        "a = 1979-05-27 07:32:00",
+        "a = 1979-05-27t07:32:00z",
+        "a = 0000-01-01T00:00:00Z",
+        "a = 9999-12-31T23:59:59.999999+23:59",
+        "a = 1979-05-27T07:32:00+00:00",
+        "a = 1979-05-27T07:32:00-00:00",
+        "a = 1979-05-27T07:32:00.123456789Z",
+        "a = 1979-02-30T00:00:00Z",
+        "a = 2024-02-29T23:59:60Z",
+        "a = 1979-05-27T24:00:00Z",
+        "a = 1979-13-01T00:00:00Z",
+        "a = 1979-05-27T07:32:00.Z",
+        "a = 1979-05-27T07:32:00.1234567890123Z",
+        "a = 1979-05-27T07:32Z",
+        "a = 1979-05-27T07:32:00.5",
+    ]),
+)
+
+document = st.one_of(
+    st.lists(expression, min_size=0, max_size=8).map(_join_exprs),
+    _unicode_document,
+    _malformed,
+    _targeted_document,
+)
+
+# final strategy: strings
+strategy = document
+```
+
+Here is the code coverage its last run achieved on the parser (measured with instrumentation):
+{
+  "branch_coverage_pct": 73.06,
+  "region_coverage_pct": 74.63,
+  "least_covered_functions": [
+    "toml_utf8_to_ucs (0% of branches)",
+    "toml_parse_file (0% of branches)",
+    "norm_lit_str (0% of branches)",
+    "toml_rtos (0% of branches)",
+    "toml_timestamp_at (0% of branches)"
+  ]
+}
+
+Make EXACTLY ONE change to the strategy: **improve_strategy** — make it a better fuzzer for this grammar, using the run feedback above where it is given.
+Change nothing else. Keep it a valid Hypothesis strategy producing `str`. Return the full revised module as one ```python code block.

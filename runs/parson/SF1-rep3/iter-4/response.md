@@ -1,0 +1,362 @@
+```python
+from hypothesis import strategies as st
+import json
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+# SAFECODEPOINT excludes ", \, and control chars 0x00-0x1F.
+# We must NEVER emit a raw NUL byte, so we exclude 0x00 from the safe set.
+_SAFE_CHARS = [
+    chr(c)
+    for c in range(0x20, 0x7F)
+    if c not in (ord('"'), ord('\\'))
+]
+_SAFE_CHARS_EXTRA = [
+    "\u00e9", "\u00ff", "\u0100", "\u20ac", "\u4e2d", "\U0001F600",
+]
+
+# Escapes that are legal inside JSON strings.
+_SIMPLE_ESCAPES = ['\\"', '\\\\', '\\/', '\\b', '\\f', '\\n', '\\r', '\\t']
+
+
+def _hex4():
+    return st.text(alphabet="0123456789abcdefABCDEF", min_size=4, max_size=4)
+
+
+def _unicode_escape():
+    # \uXXXX, including surrogates and lone surrogates.
+    return st.one_of(
+        _hex4().map(lambda h: "\\u" + h),
+        st.sampled_from(["\\uD800", "\\uDBFF", "\\uDC00", "\\uDFFF",
+                         "\\uD83D\\uDE00", "\\u0000", "\\u001f", "\\uFFFF"]),
+    )
+
+
+def _string_body():
+    pieces = [
+        st.text(alphabet=_SAFE_CHARS, min_size=0, max_size=8),
+        st.sampled_from(_SAFE_CHARS_EXTRA),
+        st.sampled_from(_SIMPLE_ESCAPES),
+        _unicode_escape(),
+    ]
+    return st.lists(st.one_of(pieces), min_size=0, max_size=6).map("".join)
+
+
+def _json_string():
+    return _string_body().map(lambda s: '"' + s + '"')
+
+
+# ---------------------------------------------------------------------------
+# Numbers
+# ---------------------------------------------------------------------------
+
+_INT = st.one_of(
+    st.just("0"),
+    st.integers(min_value=1, max_value=9).map(str),
+    st.integers(min_value=10, max_value=10 ** 18).map(str),
+    st.sampled_from(["1", "9", "10", "12345678901234567890",
+                     "99999999999999999999999999"]),
+)
+
+_EXP = st.one_of(
+    st.just(""),
+    st.tuples(
+        st.sampled_from(["e", "E"]),
+        st.sampled_from(["", "+", "-"]),
+        st.one_of(
+            st.just("0"),
+            st.integers(min_value=1, max_value=400).map(str),
+            st.just("308"),
+            st.just("309"),
+            st.just("310"),
+            st.just("999"),
+            st.just("000"),
+        ),
+    ).map(lambda t: t[0] + t[1] + t[2]),
+)
+
+_FRAC = st.one_of(
+    st.just(""),
+    st.integers(min_value=0, max_value=10 ** 12).map(lambda n: "." + str(n)),
+    st.sampled_from([".0", ".5", ".000", ".999999"]),
+)
+
+
+def _number():
+    return st.tuples(
+        st.sampled_from(["", "-"]),
+        _INT,
+        _FRAC,
+        _EXP,
+    ).map(lambda t: t[0] + t[1] + t[2] + t[3])
+
+
+# ---------------------------------------------------------------------------
+# Recursive value/obj/arr
+# ---------------------------------------------------------------------------
+
+# Depth budget: concentrate near but not far beyond the parser cap (2048).
+# We use a modest recursion depth for generation and separately emit
+# deep-nesting probes near the cap.
+
+_LEAF = st.one_of(
+    _json_string(),
+    _number(),
+    st.sampled_from(["true", "false", "null"]),
+)
+
+
+def _pair(key_strategy):
+    return st.tuples(
+        key_strategy,
+        st.just(":"),
+        st.deferred(lambda: _value_impl),
+    ).map(lambda t: t[0] + t[1] + t[2])
+
+
+_value_impl = None  # filled in below
+
+
+def _obj(key_strategy, value_strategy):
+    pairs = st.lists(_pair(key_strategy), min_size=0, max_size=4)
+    return st.tuples(
+        st.just("{"),
+        pairs.map(lambda ps: ",".join(ps)),
+        st.just("}"),
+    ).map(lambda t: t[0] + t[1] + t[2])
+
+
+def _arr(value_strategy):
+    vals = st.lists(value_strategy, min_size=0, max_size=4)
+    return st.tuples(
+        st.just("["),
+        vals.map(lambda vs: ",".join(vs)),
+        st.just("]"),
+    ).map(lambda t: t[0] + t[1] + t[2])
+
+
+# Key strategy: sometimes deliberately duplicate-prone (small alphabet).
+_KEY_NORMAL = _json_string()
+_KEY_DUPY = st.sampled_from(['"k"', '"a"', '"key"', '"dup"', '""'])
+
+
+_value_impl = st.recursive(
+    _LEAF,
+    lambda children: st.one_of(
+        _obj(_KEY_NORMAL, children),
+        _arr(children),
+        _obj(_KEY_DUPY, children),
+    ),
+    max_leaves=12,
+)
+
+
+# ---------------------------------------------------------------------------
+# Deep nesting near the parser cap (2048)
+# ---------------------------------------------------------------------------
+
+_DEPTH_CHOICES = st.sampled_from([
+    1, 2, 3, 10, 100, 1000, 2000, 2040, 2047, 2048, 2049, 2050, 2100, 3000,
+])
+
+
+def _deep_nesting():
+    return st.tuples(
+        _DEPTH_CHOICES,
+        st.sampled_from(["[", "{"]),
+        st.sampled_from(["", "0", "1", '"x"', "null", "true"]),
+    ).map(lambda t: _build_deep(t[0], t[1], t[2]))
+
+
+def _build_deep(depth, opener, filler):
+    if depth <= 0:
+        return filler
+    if opener == "[":
+        return "[" * depth + filler + "]" * depth
+    # For objects, nest {"k": ... } depth times.
+    return '{"k":' * depth + filler + "}" * depth
+
+
+# ---------------------------------------------------------------------------
+# Malformed / near-valid inputs
+# ---------------------------------------------------------------------------
+
+_MALFORMED = st.sampled_from([
+    # double commas
+    "[1,,2]", "{,}", '{"a":1,,"b":2}', "[,]", "[1,2,,]",
+    # missing colons
+    '{"a" 1}', '{"a"}', '{"a":}', '{"a" "b"}',
+    # trailing commas
+    "[1,2,]", '{"a":1,}', "[,]", "{,}",
+    # unterminated strings
+    '"abc', '"', '{"a":"b', '["x', '"\\', '"\\u12',
+    # bad numbers / leading +, leading zeros, lone dot
+    "01", "+1", ".5", "1.", "-", "-.", "+", "0x1", "1e", "1e+", "1e-",
+    "00", "-01", "1..2", "1.2.3", "0.", ".", "1e309", "-1e309",
+    "1e999999", "1234567890123456789012345678901234567890",
+    # bad literals
+    "tru", "truee", "nul", "falsee", "True", "NULL", "None",
+    # stray punctuation / structure
+    "}", "]", "{{", "[[", "]", "}", "{]", "[}", "}{",
+    '{"a":1}}', "[1]]", '{"a":[1,2}',
+    # trailing content (parser accepts!)
+    "1abc", "1 garbage", "[]xyz", "{}trailing", '"s"more', "nullx",
+    # whitespace-only / empty
+    "", " ", "\t", "\n", "   \n\t ",
+    # escapes
+    '"\\u0000"', '"\\uD800"', '"\\uDC00"', '"\\uD83D\\uDE00"',
+    '"\\q"', '"\\x41"', '"\\u12"', '"\\uZZZZ"',
+    # duplicate keys (parser rejects)
+    '{"k":0,"k":1}', '{"a":1,"a":2,"a":3}',
+    # non-finite (parser rejects)
+    "1e309", "-1e309", "1e400", "1E999",
+    # control chars embedded (not NUL)
+    '"\x01"', '"\x1f"', '"a\x07b"',
+    # BOM / weird
+    "\ufeff{}", "\xef\xbb\xbf{}",
+    # lone sign accepted as 0
+    "-", "-.",
+])
+
+
+# ---------------------------------------------------------------------------
+# Truncation probes: take a valid value and cut it at a random point.
+# This targets the "unterminated / partial input" divergence class observed
+# in the run (e.g. b'1e+', deeply-opened '[[[[...').
+# ---------------------------------------------------------------------------
+
+def _truncate(s):
+    if not s:
+        return s
+    n = len(s)
+    # Bias toward cutting near the end (partial trailing token) and at
+    # structural boundaries, but allow any prefix.
+    cut = st.integers(min_value=0, max_value=n)
+    return cut
+
+
+_TRUNCATION = st.tuples(
+    _value_impl,
+    st.integers(min_value=0, max_value=64),
+).map(lambda t: t[0][:t[1]] if t[1] < len(t[0]) else t[0])
+
+
+def _deep_prefix():
+    # Opened-but-unclosed deep nesting: the parser must bail on depth cap
+    # even when there is no matching closer.
+    return st.tuples(
+        _DEPTH_CHOICES,
+        st.sampled_from(["[", "{"]),
+    ).map(lambda t: t[1] * t[0])
+
+
+# ---------------------------------------------------------------------------
+# Top-level strategy
+# ---------------------------------------------------------------------------
+
+# The previous run produced many divergences (62) but the parser accepted a
+# good fraction. The divergences clustered around deep prefixes at the depth
+# cap. We now allocate an explicit, larger share of the budget to depth-cap
+# probes (both well-formed and prefix-only), plus deeper mixed nesting and
+# a few more structural-truncation shapes, while keeping the valid/malformed
+# mix that already exercised every production.
+_WEIGHTED = st.one_of(
+    st.lists(
+        st.one_of(
+            _value_impl,
+            _deep_nesting(),
+            _MALFORMED,
+            _TRUNCATION,
+            _deep_prefix(),
+        ),
+        min_size=1,
+        max_size=1,
+    ).map(lambda xs: xs[0]),
+)
+
+# Dedicated depth-cap campaign: emit many more probes concentrated exactly at
+# and just beyond 2048, in both balanced and unbalanced (prefix) forms, and
+# with varied openers/fillers so the cap check is hit on both array and
+# object paths.
+_CAP_DEPTHS = st.sampled_from([
+    2046, 2047, 2048, 2049, 2050, 2051, 2052, 2060, 2100,
+])
+
+_CAP_PROBE = st.tuples(
+    _CAP_DEPTHS,
+    st.sampled_from(["balanced_arr", "balanced_obj",
+                     "prefix_arr", "prefix_obj"]),
+    st.sampled_from(["", "0", "1", '"x"', "null", "true", "[]", "{}"]),
+).map(lambda t: _build_cap(t[0], t[1], t[2]))
+
+
+def _build_cap(depth, kind, filler):
+    if kind == "balanced_arr":
+        return "[" * depth + filler + "]" * depth
+    if kind == "balanced_obj":
+        return '{"k":' * depth + filler + "}" * depth
+    if kind == "prefix_arr":
+        return "[" * depth
+    return '{"k":' * depth
+
+
+# Mixed deep nesting: alternate openers to stress the depth counter uniformly.
+def _mixed_deep(s):
+    depth = s
+    out = []
+    for i in range(depth):
+        out.append("[" if i % 2 == 0 else '{"k":')
+    return "".join(out)
+
+
+_MIXED_DEEP = st.sampled_from([
+    2046, 2047, 2048, 2049, 2050, 2051, 2052,
+]).map(_mixed_deep)
+
+
+# Truncation of deep prefixes at the cap boundary: cut a balanced deep value
+# at many points so the parser must handle partial deep structures.
+_DEEP_TRUNC = st.tuples(
+    st.sampled_from([2047, 2048, 2049, 2050, 2100, 3000]),
+    st.sampled_from(["[", "{"]),
+    st.integers(min_value=0, max_value=64),
+).map(lambda t: _build_deep(t[0], t[1], "")[: t[2]]
+      if t[2] < len(_build_deep(t[0], t[1], ""))
+      else _build_deep(t[0], t[1], ""))
+
+
+# NEW: valid JSON values with trailing garbage. The parser accepts these
+# (trailing content ignored), which is a distinct acceptance path from
+# clean valid values and from malformed rejects. Boosting this class
+# increases the valid fraction while still exercising the parser's
+# "stop after first value" behavior.
+_TRAILING_GARBAGE = st.tuples(
+    _value_impl,
+    st.sampled_from([
+        "x", "abc", " ", "  ", "\t", "\n", "garbage", "]", "}", ",",
+        "nullx", "[]xyz", "{}trailing", "0", "1.5", '"s"', "true",
+    ]),
+).map(lambda t: t[0] + t[1])
+
+
+# NEW: whitespace-padded valid values. Valid JSON with leading/trailing
+# whitespace is accepted; this exercises whitespace-skipping paths at the
+# top level and around tokens without hitting the malformed branch.
+_WS_PAD = st.tuples(
+    st.sampled_from(["", " ", "  ", "\t", "\n", " \n\t "]),
+    _value_impl,
+    st.sampled_from(["", " ", "  ", "\t", "\n", " \n\t "]),
+).map(lambda t: t[0] + t[1] + t[2])
+
+
+strategy = st.one_of(
+    _WEIGHTED,
+    _CAP_PROBE,
+    _MIXED_DEEP,
+    _DEEP_TRUNC,
+    _TRAILING_GARBAGE,
+    _WS_PAD,
+).map(lambda s: s.replace("\x00", "\\u0000") if "\x00" in s else s)
+```

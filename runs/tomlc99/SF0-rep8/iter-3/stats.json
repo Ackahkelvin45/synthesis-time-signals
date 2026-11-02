@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.222,
+  "summary": {
+    "outcomes": {
+      "reject": 250,
+      "valid": 100
+    },
+    "acceptance_rate": 0.286,
+    "max_nesting_depth": 13,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_table",
+      "comment",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 30,
+    "divergences": 29,
+    "divergence_examples": [
+      "b\"[['\\xf2\\x85\\x84\\xab\\xc2\\xbe\\x7fX\\x0c)\\xc2\\xb1\\xc4\\x96']]\\r\\n\\r\\n\"",
+      "b'[\"\\xf3\\x84\\xa3\\xaaT\\\\u0041V(\"]\\n#\\n#\\n[[\\'\\t\\x7f\\']]\\n# \\x01\\x02\\n[[\\'9\\x7f\\xc4\\x97\\t\\x1b\\x0b\\xf0\\x9f\\x98\\x8d\\xc3\\x93\\']]\\n\\n'",
+      "b\"'\\x7f\\x0b\\t\\xc3\\xaa' = 000\\n['\\x1b\\x0b\\x7f\\x7f\\x1bo\\xc3\\xac\\x0b']\\n# comment\\n[['']]\\n\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        58
+      ],
+      [
+        "line 1: bad escape char",
+        28
+      ],
+      [
+        "line 2: invalid char U+001b",
+        14
+      ],
+      [
+        "line 1: newline not allowed in inline table",
+        12
+      ],
+      [
+        "line 1: extra chars after value",
+        12
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 150.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 150.0
+}

@@ -1,0 +1,350 @@
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " null ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[]\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\nfalse\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " null\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [1,,2]\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"k\":0,\"k\":0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":\"\",\"a\":0} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":\"\",\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":\"\",\"a\":0}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[,]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[,]\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[,]\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [,]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\" 1}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\" 1}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"a\" 1}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[1,2,]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[1,2,]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":1,,\"b\":2}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":1,,\"b\":2}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"a\":1,,\"b\":2}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  []", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-0E+9904", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1E0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "10E0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"a\" 1}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {,}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{,}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[1,,2] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [1,,2] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":1,}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\rnull", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\rnull\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [1,,2]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [1,,2]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[1.,{}]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{}]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\nnull ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\nnull\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":1,}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"a\":1,}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n+1 ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n+1\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"a\":}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e-323 garbage\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"xyz\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":1,}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"a\":1,}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t+1\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t+1\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  []\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  []  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t070\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t1e\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t1e09", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e09", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],[],0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,false]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],false,0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,false]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[false,false,0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,false]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[false,false,0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,false]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[false,false,false,false]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t1e\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\nunquoted\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tunquoted\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[,]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [1,,2] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\"} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t1_000", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1_000", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  +1\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  +1  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud81b\\n\\r\"  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud81b\\n\\n\"  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud81b\\n\\ud800\"  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud81b\\n\\n\"\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud800\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\"\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\"}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"a\"}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n-0\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\"}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\"}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n-\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{,}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{,}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-.  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-.\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[,]\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":null}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[1,2,]  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[1,2,]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n1. ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 1. ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  Infinity\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\rInfinity\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\nnull  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " .5", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " .5 ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{,}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{,}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  -0.0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  -0.0  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [{},{},{\"\" :  71168489119,\"\\u001a\\u000d\\udd69\\ude3b\ud857\ude58\\u0000\\u001b\\u0000\u00972\\f\\u0000\":\"\u00c0\",\"\\u88dF\"\t:\ttrue,\"\"\r:\t{}},82695e8384]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [{},{},{\"\" :  71168489119,\"\\u001a\\u000d\\udd69\\ude3b\ud857\ude58\\u0000\\u001b\\u0000\u00972\\udc00\\u0000\":\"\u00c0\",\"\\u88dF\"\t:\ttrue,\"\"\r:\t{}},82695e8384]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [{},{},{\"\" :  71168489119,\"\\u001a\\u000d\\udd69\\ude3b\ud857\ude58\\u0000\\u001b\\u0000\u00972\\udc00\\u0000\":\"\u00c0\",\"\u00c0\"\t:\ttrue,\"\"\r:\t{}},82695e8384]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [{},{},{\"\" :  71168489119,\"\\u001a\\u000d\\udd69\\ude3b\ud857\ude58\\u0000\\u001b\\u0000\u00972\\udc00\\u0000\":\"\u00c0\",\"\u00c0\"\t:\ttrue,\"\"\r:\t{}},82695e8384]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [{},{},{\"\" :  71168489119,\"\\u001a\\u000d\\udd69\\ude3b\ud857\ude58\\u0000\\u001b\\u0000\u00972\\udc00\\u0000\":\"\u00c0\",\"\u00c0\"\t:\ttrue,\"\"\r:\t{}},72695e8384]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [{},{},{\"\" :  71168489119,\"\\u001a\\u000d\\udd69\\ude3b\ud857\ude58\\u0000\\u001b\\u0000\u00972\\udc00\\u0000\":\"\u00c0\",\"\u00c0\"\t:\ttrue,\"\"\r:\t{}},72695]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [{},{},{\"\" :  72695,\"\\u001a\\u000d\\udd69\\ude3b\ud857\ude58\\u0000\\u001b\\u0000\u00972\\udc00\\u0000\":\"\u00c0\",\"\u00c0\"\t:\ttrue,\"\"\r:\t{}},72695]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"a\":1,}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":1,}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[]null\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[]abc\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " []\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t+1  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ntrue\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  -1e309\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r-1e309\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [false]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [false]  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":1,,\"b\":2}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":1,,\"b\":2}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r+1\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  +1\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " -", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[1,2,]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \"\\u0000\\uEfEF\\u0013\"xyz  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \"\\u0000\\u0013\\u0013\"xyz  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \"\\u0013\\u0013\\u0013\"xyz  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \"\\u0013\\u0013\\u0005\"abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \"\"abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \"\"abc  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t.5\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ntrue\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ttrue\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [,]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r01\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r01\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[,]\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[,]\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "nu,ll\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n.5\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " false", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "false", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[0.00]\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[0.00]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[0]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[0]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[0e0]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{,}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " +1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "+1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " false\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " false ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\"} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\"}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\\n\\u0000\uda6b\udf33\\u7CE6\\t\\udab5\\udaa6\\udc4D\\udb3c\udb41\uddd1\\u0000\\udaf4\"  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\\n\\u0000\uda6b\udf33\\u7CE6\\t\\udab5\\udaa6\\udc4D\\udb3c\udb41\uddd1\\u0000\\ud800\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\\n\\u0000\uda6b\udf33\\u7CE6\\t\\ud800\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\\n\\u0000\uda6b\udf33\\u7CE6\\t\\\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\\n\\u0000\uda6b\udf33\\u7CE6\\t\\\"\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"t\\udd83\\u000f\": {}}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"t\\udd83\\udd83\": {}}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"\\udc00\\udd83\\udd83\": {}}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"\\udc00\\udd83\\udd83\":  {}}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"\\udc00\\udd83\\udc00\":  {}}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  -\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  -  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {,}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {,}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"x\":1e308,\"x\":0} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"x\":1e308,\"x\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "true\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\rtrue\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " -. ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"x\":null,\"x\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"x\":null,\"x\":0} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[]  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\"abc  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-0  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-0\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":null}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[1,,2]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0e0 1 ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 0e0 1 ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"k\":true,\"k\":0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"k\":true,\"k\":0}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[1,,2]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{\"a\" 1} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [1,,2]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\"} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  false ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  false  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[,]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[,]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\rnull\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tnull\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {,} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "01 ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 01 ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t0.0\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n0.0\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"a\":1,}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t999999999999999999999999999999\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n999999999999999999999999999999\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\u16d2\\ud9a2\\udfff\\u0000\\ude44\\\\\\u01c9\\u0012\\udfaf\\bt\u00f6\" ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\u16d2\\ud9a2\\udfff\\u0000\\ude44\\\\\\u01c9\\u0012\\udfaf\\b\u00f6\u00f6\" ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud9a2\\ud9a2\\udfff\\u0000\\ude44\\\\\\u01c9\\u0012\\udfaf\\b\u00f6\u00f6\" ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud9a2\\ud9a2\\udfff\\u0000\\ude44\\\\\\u01c9\\u0012\\udfaf\\b\u00f6\u00f6\"\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud9a2\\ud9a2\\udc00\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud800\"\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n-.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "-.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\t\\udbb3\\udac8\\u,d8be\\u0003\\u0000\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\t\\u\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\udbb3\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\udbb3", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\ud800\\ud", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\udbb3\\ud", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\\udbb3\\ud", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":1,} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r-\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " null\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  []null\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \"\"null\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 1.999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r1.999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n.5\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[,]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r.5\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r.5\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\"}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tfalse  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tfalse\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":1,}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[1,2,]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":null}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[,] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"x\":true,\"x\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}abc\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{}abc\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"k\":true,\"k\":0} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"k\":true,\"k\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":1,,\"b\":2}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":1,,\"b\":2} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"a\" 1}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  \r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "    ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n01  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  01  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  []\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"\\u0018\\\\\\uda30\\udad1\\u0007\\udcd6\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t:\t0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,\"\\ude53\\u0000\u011f\\u0019\\u0000\u00fdI\\u5E12\\udcc1\\b\\u0012\\u0000\"\t: -714147994.878182941E-7392,\"\\ud9a2\\udb70\u00bc\"\r:\t[true,10.0,[-0,true,[],0.0487]]}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"\\u0018\\\\\\uda30\\udad1\\u0007\\udcd6\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t:\t0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,\"\\ude53\\u0000\u011f\\u0019\\u0000\u00fdI\\u5E12\\udcc1\\b\\u0012\\u0000\"\t: -714147994.0E-7392,\"\\ud9a2\\udb70\u00bc\"\r:\t[true,10.0,[-0,true,[],0.0487]]}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"\\u0018\\\\\\uda30\\udad1\\u0007\\udc00\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t:\t0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,\"\\ude53\\u0000\u011f\\u0019\\u0000\u00fdI\\u5E12\\udcc1\\b\\u0012\\u0000\"\t: -714147994.0E-7392,\"\\ud9a2\\udb70\u00bc\"\r:\t[true,10.0,[-0,true,[],0.0487]]}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"\\u0018\\\\\\uda30\\udad1\\u0007\\udc00\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t:\t0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,\"\\ude53\\u0000\u011f\\u0019\\u0000\u00fdI\\u5E12\\udcc1\\b\\u0012\\u0000\"\t: -10.0E-7392,\"\\ud9a2\\udb70\u00bc\"\r:\t[true,10.0,[-0,true,[],0.0487]]}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"\\u0018\\\\\\uda30\\udad1\\u0007\\udc00\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t:\t0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,\"\\u0018\\\\\\uda30\\udad1\\u0007\\udc00\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t: -10.0E-7392,\"\\ud9a2\\udb70\u00bc\"\r:\t[true,10.0,[-0,true,[],0.0487]]}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"\\u0018\\\\\\uda30\\udad1\\u0007\\udc00\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t:\t0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,\"\\u0018\\\\\\uda30\\udad1\\u0007\\udc00\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t: -10.0E-7392,\"\\u0018\\\\\\uda30\\udad1\\u0007\\udc00\\ud801\\u0000\\udc00\\f\\udf85\\u000c\"\t: -10.0E-7392}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":\"\\udca7#\\ucA2e\\u0014\u00ef\\ude4b\\t\\u0000\\u0012\\u001a\ud802\udfc1\\ud8c2\",\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":\"\\udca7#\\ucA2e\\u0014\u00ef\\ude4b0\\u0000\\u0012\\u001a\ud802\udfc1\\ud8c2\",\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":\"\\udca7#\\ucA2e\\u0014\u00ef\\ude4b0\\u0000\\u0012\\u001a\ud802\udfc1#\",\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":\"\\udca7#\\ucA2e\\u0014\u00ef00\\u0000\\u0012\\u001a\ud802\udfc1#\",\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":\"\\udca7#\\ucA2e\\u0014\u00ef00\\u0000\\u0012\\u0014\ud802\udfc1#\",\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":\"\\udca7#\\ucA2e\\u0014\u00ef00\\u0000\\u0014\\u0014\ud802\udfc1#\",\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":\"\\udca7#\\ucA2e\\u0014\u00ef00\\u0000\\u0014\\u0000\ud802\udfc1#\",\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n0.55e+014\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t0.55e+014\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t0.014e+014\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":1,}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":-7593099.7,\"a\":0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":-77.7,\"a\":0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":-6.0E7,\"a\":0} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":-6.0E7,\"a\":0}  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":-6.0,\"a\":0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"a\":-6.0,\"a\":0} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":null}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [1,,2]\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\" 1}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\" 1}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " true ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}

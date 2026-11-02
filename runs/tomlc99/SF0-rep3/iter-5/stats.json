@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.333,
+  "summary": {
+    "outcomes": {
+      "valid": 73,
+      "reject": 277
+    },
+    "acceptance_rate": 0.209,
+    "max_nesting_depth": 2047,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "ML_BASIC_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "BOOLEAN",
+      "ML_LITERAL_STRING",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.164,
+    "novelty": 34,
+    "divergences": 21,
+    "divergence_examples": [
+      "b'a = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'a = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b\"'' = 0b1.1011\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: invalid or missing key",
+        24
+      ],
+      [
+        "line 2: expect hex char",
+        21
+      ],
+      [
+        "line 2: bad escape char",
+        20
+      ],
+      [
+        "line 1: syntax error",
+        14
+      ],
+      [
+        "line 1: expect hex char",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 237.28,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 237.28
+}

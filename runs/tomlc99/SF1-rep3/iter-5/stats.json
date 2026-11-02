@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.633,
+  "summary": {
+    "outcomes": {
+      "valid": 194,
+      "reject": 156
+    },
+    "acceptance_rate": 0.554,
+    "max_nesting_depth": 1999,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "BOOLEAN",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "BIN_INT",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.041,
+    "novelty": 30,
+    "divergences": 91,
+    "divergence_examples": [
+      "b'a = \"\"\"\\\\uD83Dd\"\"\"\\n'",
+      "b'a = \"\"\"k#m\\x1f\\xe2\\x98\\x83W\\xc3\\xbc> \\xc3\\xbc\"\"\"\\n'",
+      "b'a = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        26
+      ],
+      [
+        "line 1: syntax error",
+        21
+      ],
+      [
+        "line 2: bad escape char",
+        20
+      ],
+      [
+        "line 1: bad escape char",
+        18
+      ],
+      [
+        "line 1: invalid or missing key",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 194,
+      "reject": 156
+    },
+    "acceptance_rate": 0.554,
+    "max_nesting_depth": 1999,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "BOOLEAN",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "BIN_INT",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.041,
+    "novelty": 30,
+    "divergences": 91,
+    "divergence_examples": [
+      "b'a = \"\"\"\\\\uD83Dd\"\"\"\\n'",
+      "b'a = \"\"\"k#m\\x1f\\xe2\\x98\\x83W\\xc3\\xbc> \\xc3\\xbc\"\"\"\\n'",
+      "b'a = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 205.82,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 205.82
+}

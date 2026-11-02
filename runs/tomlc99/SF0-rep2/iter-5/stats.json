@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.478,
+  "summary": {
+    "outcomes": {
+      "valid": 221,
+      "reject": 129
+    },
+    "acceptance_rate": 0.631,
+    "max_nesting_depth": 1338,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "ML_LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "INF",
+      "NAN",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 86,
+    "divergences": 70,
+    "divergence_examples": [
+      "b'[\"\"]\\n\"\" = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'[\"\"]\\n\"\" = [] #\\xf3\\xb0\\xae\\xbd\\n[[_]] #|;\\xc3\\xaf\\x7fe)`\\xc3\\x88\\xc2\\xa8\\xc3\\xa6\\xc3\\xa5\\xc3\\x80V_\\xc3\\xa6D\\xf3\\x93\\x9e\\x96\\xc2\\x8d\\x1a\\xf4\\x82\\xae\\xb3\\n#\\xf2\\xb3\\x90\\x82\\xc3\\xae\\x0c\\x12\\xc2\\xa5}\\xc2\\x8f\\n#\\nkk'",
+      "b'[\"\"]\\n\"\" = [] #\\xf3\\xb0\\xae\\xbd\\n[[_]] #|;\\xc3\\xaf\\x7f\\x7f)`\\xc3\\x88\\xc2\\xa8\\xc3\\xa6\\xc3\\xa5\\xc3\\x80V_\\xc3\\xa6D\\xf3\\x93\\x9e\\x96\\xc2\\x8d\\x1a\\xf4\\x82\\xae\\xb3\\n#\\xf2\\xb3\\x90\\x82\\xc3\\xae\\x0c\\x12\\xc2\\xa5}\\xc2\\x8f\\n#\\nkk'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 6: key exists",
+        16
+      ],
+      [
+        "line 3: key exists",
+        16
+      ],
+      [
+        "line 2: key exists",
+        13
+      ],
+      [
+        "line 1: key exists",
+        11
+      ],
+      [
+        "line 4: key exists",
+        8
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 266.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 266.0
+}

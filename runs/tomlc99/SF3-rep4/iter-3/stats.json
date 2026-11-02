@@ -1,0 +1,173 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.5866666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 156,
+      "reject": 190,
+      "skip": 4
+    },
+    "acceptance_rate": 0.451,
+    "max_nesting_depth": 99,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "LOCAL_TIME",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "INF",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 42,
+    "divergences": 67,
+    "divergence_examples": [
+      "b'0 = 0000-00-00T00:00:00Z'",
+      "b'jKfj = 23:59:60'",
+      "b'fKfj = 23:59:60'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        37
+      ],
+      [
+        "line 1: syntax error",
+        25
+      ],
+      [
+        "line 1: invalid key",
+        22
+      ],
+      [
+        "line 1: extra chars after value",
+        18
+      ],
+      [
+        "line 1: bad escape char",
+        18
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 51.66,
+    "region_coverage_pct": 55.76,
+    "least_covered_functions": [
+      "toml_utf8_to_ucs (0% of branches)",
+      "toml_rtots (0% of branches)",
+      "toml_rtod_ex (0% of branches)",
+      "toml_parse_file (0% of branches)",
+      "norm_lit_str (0% of branches)"
+    ]
+  },
+  "coverage_in_loop": {
+    "branch_pct": 51.66,
+    "region_pct": 55.76,
+    "line_pct": 59.23,
+    "branch_pct_file": 41.26,
+    "region_pct_file": 44.28,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_rtots",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_rtod_ex",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 217.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 51.66
+}

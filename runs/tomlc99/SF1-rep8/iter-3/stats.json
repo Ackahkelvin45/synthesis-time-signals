@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.222,
+  "summary": {
+    "outcomes": {
+      "reject": 244,
+      "valid": 106
+    },
+    "acceptance_rate": 0.303,
+    "max_nesting_depth": 10,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_table",
+      "comment",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "date_time",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 28,
+    "divergences": 41,
+    "divergence_examples": [
+      "b'\"\".\"\" = \\'\\'\\'\"\\xf1\\x8d\\xad\\xaaSu\\x1b\\x1b\\xc2\\x81\\'\\'\\'\\r\\n[N.\"\"]\\r\\n'",
+      "b'\"\".\"\" = \\'\\'\\'\"\\xf1\\x8d\\xad\\xaaSu\\x1b\\x1b\\xc2\\x81\\'\\'\\'\\r\\n[N.\"\"]\\r\\n'",
+      "b\"# \\r\\n[['\\xc2\\x91a'.O_TQre8AK4_P.ZbFh6Db]]\\r\\n# non-ascii: \\xc3\\xa9\\r\\n['\\xf2\\xac\\xa7\\x80\\xf2\\xba\\xad\\xb9\\x1b\\xc3\\x91'.'N\\t\\xf1\\xb4\\xb7\\x9e\\x1b\\xf2\\xaf\\x93\\xbc\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        39
+      ],
+      [
+        "line 1: expect hex char",
+        21
+      ],
+      [
+        "line 1: extra chars after value",
+        17
+      ],
+      [
+        "line 2: key exists",
+        14
+      ],
+      [
+        "line 2: expect hex char",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "reject": 244,
+      "valid": 106
+    },
+    "acceptance_rate": 0.303,
+    "max_nesting_depth": 10,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_table",
+      "comment",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "date_time",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 28,
+    "divergences": 41,
+    "divergence_examples": [
+      "b'\"\".\"\" = \\'\\'\\'\"\\xf1\\x8d\\xad\\xaaSu\\x1b\\x1b\\xc2\\x81\\'\\'\\'\\r\\n[N.\"\"]\\r\\n'",
+      "b'\"\".\"\" = \\'\\'\\'\"\\xf1\\x8d\\xad\\xaaSu\\x1b\\x1b\\xc2\\x81\\'\\'\\'\\r\\n[N.\"\"]\\r\\n'",
+      "b\"# \\r\\n[['\\xc2\\x91a'.O_TQre8AK4_P.ZbFh6Db]]\\r\\n# non-ascii: \\xc3\\xa9\\r\\n['\\xf2\\xac\\xa7\\x80\\xf2\\xba\\xad\\xb9\\x1b\\xc3\\x91'.'N\\t\\xf1\\xb4\\xb7\\x9e\\x1b\\xf2\\xaf\\x93\\xbc\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 158.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 158.0
+}

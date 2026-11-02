@@ -1,0 +1,172 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.222,
+  "summary": {
+    "outcomes": {
+      "reject": 256,
+      "valid": 94
+    },
+    "acceptance_rate": 0.269,
+    "max_nesting_depth": 11,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "date_time",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "INF",
+      "NAN",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 27,
+    "divergences": 27,
+    "divergence_examples": [
+      "b\"[Irng]\\n[['\\x7f\\x01\\x0b\\xc3\\xa3{\\x0bM\\xf0\\x9f\\x8f\\xbb'.SeOe6gbwHoF]]\\n[lfsUiOqRtV5u]\\n# \\xc2\\xa0\\xc3\\x90\\xc3\\x89\\xc2\\x93\\xc3\\x85\\xf2\\xa6\\xa5\\xaf\\n[['\\x0c9\\x01\\xf3\\xbd\\x84\\xa4\"",
+      "b'\\'\\xc3\\x92\\xc8\\xba\\x01\\xf2\\x84\\x83\\xb5\\x0b\\x7f\\xf1\\xab\\xb5\\x88\\'.G = {}\\n[\\'\\xc3\\x95\\'.\"\\xc3\\xaa\\\\fy\".x9WHaNpi3J5m.\\'\\x7f\\xf1\\xb9\\x94\\x9f>\\']\\n[[\\'\\xf3\\x9b\\x90\\x81\\t\\x01\\x0b\\xc3\\x83\\t~\\xc4\\x8d\\'.'",
+      "b'\\'\\xc3\\x92\\xc8\\xba\\x01\\xf2\\x84\\x83\\xb5\\x0b\\x7f\\xf1\\xab\\xb5\\x88\\'.G = {}\\n[\\'\\xc3\\x95\\'.\"\\xc3\\xaa\\\\fy\".x9WHaNpi3J5m.\\'\\x7f\\xf1\\xb9\\x94\\x9f>\\']\\n[[\\'\\xf3\\x9b\\x90\\x81\\t\\x01\\x0b\\xc3\\x83\\t~\\xc4\\x8d\\'.'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        75
+      ],
+      [
+        "line 1: newline not allowed in inline table",
+        21
+      ],
+      [
+        "line 1: extra chars after value",
+        17
+      ],
+      [
+        "line 1: expect hex char",
+        15
+      ],
+      [
+        "line 1: bad escape char",
+        13
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 68.76,
+    "region_coverage_pct": 69.89,
+    "least_covered_functions": [
+      "toml_utf8_to_ucs (0% of branches)",
+      "toml_parse_file (0% of branches)",
+      "norm_lit_str (0% of branches)",
+      "toml_rtos (0% of branches)",
+      "toml_ucs_to_utf8 (0% of branches)"
+    ]
+  },
+  "coverage_in_loop": {
+    "branch_pct": 68.76,
+    "region_pct": 69.89,
+    "line_pct": 76.25,
+    "branch_pct_file": 54.91,
+    "region_pct_file": 55.5,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      },
+      {
+        "name": "toml_rtos",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 41
+      },
+      {
+        "name": "toml_ucs_to_utf8",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 32
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 197.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 68.76
+}

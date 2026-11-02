@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.611,
+  "summary": {
+    "outcomes": {
+      "valid": 214,
+      "reject": 136
+    },
+    "acceptance_rate": 0.611,
+    "max_nesting_depth": 1879,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "NAN",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.019,
+    "novelty": 73,
+    "divergences": 92,
+    "divergence_examples": [
+      "b'a = .5'",
+      "b'\"\" = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b\"[['\\xc3\\xba\\xc3\\x9c\\xf4\\x89\\xac\\xadQ\\xc2\\xbd\\xc2\\xbd\\xc3\\x9a\\xf2\\x9b\\x86\\x80\\x15\\xf3\\xb9\\xb4\\x90W\\xc2\\xa8'.key.'\\xf0\\xbd\\xb0\\x82\\xf0\\x9d\\xa9\\x85\\xc3\\xb7\\xf3\\x8a\\x8d\\xb5\\xd2\\xaa'.key]]\\n#\\xf3\\x89\\x81\\x9d\\xc2\\x99\\xc2\\xb8\\xc3\\x81\\xc3\\x80\\xc2\\x8d\\x1d\\xc3\\x81\\x1a\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 7: key exists",
+        16
+      ],
+      [
+        "line 2: key exists",
+        12
+      ],
+      [
+        "line 3: key exists",
+        10
+      ],
+      [
+        "line 4: key exists",
+        8
+      ],
+      [
+        "line 4: invalid char U+001b",
+        7
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 273.38,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 273.38
+}

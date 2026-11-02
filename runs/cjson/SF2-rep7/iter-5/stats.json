@@ -1,0 +1,136 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.39999999999999997,
+  "summary": {
+    "outcomes": {
+      "valid": 131,
+      "reject": 219
+    },
+    "acceptance_rate": 0.374,
+    "max_nesting_depth": 1513,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "obj",
+      "pair",
+      "value"
+    ],
+    "productions_gap": [
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.008,
+    "novelty": 21,
+    "divergences": 68,
+    "divergence_examples": [
+      "b'[{\"a\":[[{\"a\":[[{\"a\":[[{\"a\":[[{\"a\":[[{\"a\":[[{\"a\":[[{\"a\":[[{\"a\":[[{\"a\":[[{\"a\":[[{\"'",
+      "b'\"\",'",
+      "b'[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 2 of 4",
+        8
+      ],
+      [
+        "parse error at byte 2 of 3",
+        8
+      ],
+      [
+        "parse error at byte 1 of 3",
+        7
+      ],
+      [
+        "parse error at byte 1 of 2",
+        7
+      ],
+      [
+        "parse error at byte 0 of 1",
+        6
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 78.98,
+    "region_coverage_pct": 94.95
+  },
+  "coverage_in_loop": {
+    "branch_pct": 78.98,
+    "region_pct": 94.95,
+    "line_pct": 89.3,
+    "branch_pct_file": 26.45,
+    "region_pct_file": 26.83,
+    "least_covered_functions": [
+      {
+        "name": "cJSON_Compare",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 128
+      },
+      {
+        "name": "print_value",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 81
+      },
+      {
+        "name": "print_string_ptr",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 79
+      },
+      {
+        "name": "print_number",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 78
+      },
+      {
+        "name": "print_object",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 78
+      }
+    ],
+    "functions_total": 112
+  },
+  "proxy_score": 56.16,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 78.98
+}

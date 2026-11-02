@@ -1,0 +1,690 @@
+Here is the current Hypothesis strategy:
+
+```python
+from hypothesis import strategies as st
+import json
+
+# ---------- primitives ----------
+
+_hex = "0123456789abcdefABCDEF"
+
+
+@st.composite
+def _unicode_escape(draw):
+    kind = draw(st.integers(min_value=0, max_value=5))
+    if kind == 0:
+        # lone surrogate
+        return "\\u" + draw(st.sampled_from(["d800", "dbff", "dc00", "dfff", "D800", "DFFF"]))
+    if kind == 1:
+        # surrogate pair
+        hi = draw(st.sampled_from(["d800", "d801", "dbff", "D800", "DBFF"]))
+        lo = draw(st.sampled_from(["dc00", "dc01", "dfff", "DC00", "DFFF"]))
+        return "\\u" + hi + "\\u" + lo
+    if kind == 2:
+        # reversed / broken surrogate pair
+        return "\\u" + draw(st.sampled_from(["dc00", "dfff"])) + "\\u" + draw(
+            st.sampled_from(["d800", "dbff"])
+        )
+    if kind == 3:
+        # \u0000 escape (six chars, fine)
+        return "\\u0000"
+    if kind == 4:
+        # control-ish escapes
+        return draw(st.sampled_from(["\\u001f", "\\u007f", "\\uFFFF", "\\u0001", "\\u00e9"]))
+    # random hex
+    return "\\u" + "".join(draw(st.lists(st.sampled_from(_hex), min_size=4, max_size=4)))
+
+
+@st.composite
+def _string_char(draw):
+    kind = draw(st.integers(min_value=0, max_value=4))
+    if kind == 0:
+        # simple ascii, avoid quote, backslash, raw control
+        return draw(
+            st.text(
+                alphabet=st.characters(
+                    min_codepoint=0x20,
+                    max_codepoint=0x7E,
+                    blacklist_characters='"\\',
+                ),
+                min_size=1,
+                max_size=4,
+            )
+        )
+    if kind == 1:
+        return draw(st.sampled_from(["\\\"", "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"]))
+    if kind == 2:
+        return draw(_unicode_escape())
+    if kind == 3:
+        # non-ascii safe codepoint (avoid raw control chars 0x00-0x1F)
+        return draw(
+            st.characters(
+                min_codepoint=0x20,
+                max_codepoint=0x10FFFF,
+                blacklist_categories=("Cs",),
+                blacklist_characters='"\\',
+            )
+        )
+    # raw control byte other than NUL (0x01-0x1F) — invalid JSON but no raw NUL
+    return chr(draw(st.integers(min_value=0x01, max_value=0x1F)))
+
+
+@st.composite
+def _json_string(draw):
+    body = draw(st.lists(_string_char(), max_size=6))
+    return '"' + "".join(body) + '"'
+
+
+# ---------- numbers ----------
+
+_INT = st.one_of(
+    st.just("0"),
+    st.integers(min_value=1, max_value=10**18).map(str),
+    st.integers(min_value=-(10**18), max_value=-1).map(str),
+)
+
+_FRAC = st.one_of(
+    st.just(".0"),
+    st.integers(min_value=0, max_value=10**9).map(lambda n: "." + str(n)),
+)
+
+_EXP = st.one_of(
+    st.integers(min_value=-400, max_value=400).map(lambda e: "e" + str(e)),
+    st.integers(min_value=-400, max_value=400).map(lambda e: "E+" + str(e)),
+    st.just("e309"),
+    st.just("E+309"),
+    st.just("e-309"),
+    st.just("e01"),
+    st.just("E-00"),
+)
+
+_NUMBER = st.one_of(
+    _INT,
+    st.builds(lambda i, f: i + f, _INT, _FRAC),
+    st.builds(lambda i, e: i + e, _INT, _EXP),
+    st.builds(lambda i, f, e: i + f + e, _INT, _FRAC, _EXP),
+    st.just("-0"),
+    st.just("-0.0"),
+    st.just("1e309"),
+    st.just("-1e309"),
+    st.just("1e-309"),
+    st.just("0.0000000000000000000000001"),
+    st.just("123456789012345678901234567890"),
+    st.just("1e999999999"),
+    st.just("1E+308"),
+    st.just("-1E-308"),
+)
+
+
+# ---------- malformed numbers ----------
+
+_MALFORMED_NUMBER = st.one_of(
+    st.just("01"),
+    st.just("00"),
+    st.just("+1"),
+    st.just(".5"),
+    st.just("1."),
+    st.just("-.5"),
+    st.just("-"),
+    st.just("-."),
+    st.just("1e"),
+    st.just("1e+"),
+    st.just("0x1"),
+    st.just("1_000"),
+    st.just("--1"),
+    st.just("1..2"),
+    st.just("1e1e1"),
+)
+
+
+# ---------- malformed strings ----------
+
+_MALFORMED_STRING = st.one_of(
+    st.just('"unterminated'),
+    st.just('"trailing\\'),
+    st.just('"bad\\x"'),
+    st.just('"bad\\u12"'),
+    st.just('"bad\\uZZZZ"'),
+    st.just('"\\"'),
+    st.just("'\''"),
+    st.just('"'),
+    st.just('"\\u"'),
+)
+
+
+# ---------- whitespace ----------
+
+_WS = st.text(alphabet=" \t\n\r", max_size=3)
+
+
+# ---------- recursive values ----------
+
+_literal = st.sampled_from(["true", "false", "null"])
+
+_leaf_value = st.one_of(_json_string(), _NUMBER, _literal)
+
+
+@st.composite
+def _small_value(draw):
+    """Small value with no nesting; used to seed the recursive strategy."""
+    return draw(st.one_of(_leaf_value, _empty_obj(), _empty_arr(), _malformed_leaf()))
+
+
+@st.composite
+def _empty_obj(draw):
+    ws = draw(_WS)
+    return "{" + ws + "}"
+
+
+@st.composite
+def _empty_arr(draw):
+    ws = draw(_WS)
+    return "[" + ws + "]"
+
+
+@st.composite
+def _malformed_leaf(draw):
+    return draw(st.one_of(_MALFORMED_NUMBER, _MALFORMED_STRING))
+
+
+@st.composite
+def _pair(draw):
+    key = draw(_json_string())
+    ws1 = draw(_WS)
+    ws2 = draw(_WS)
+    val = draw(_small_value())
+    return key + ws1 + ":" + ws2 + val
+
+
+@st.composite
+def _obj(draw):
+    ws1 = draw(_WS)
+    ws2 = draw(_WS)
+    ws3 = draw(_WS)
+    pair = draw(_pair())
+    # sometimes duplicate a key to exercise the parser's duplicate-key rejection
+    if draw(st.booleans()):
+        dup_key = draw(_json_string())
+        dup_val = draw(_small_value())
+        return "{" + ws1 + pair + ws2 + "," + ws3 + dup_key + ":" + dup_val + "}"
+    return "{" + ws1 + pair + ws2 + "}"
+
+
+@st.composite
+def _arr(draw):
+    ws1 = draw(_WS)
+    ws2 = draw(_WS)
+    val = draw(_small_value())
+    return "[" + ws1 + val + ws2 + "]"
+
+
+def _value_strategy():
+    return st.recursive(
+        _small_value(),
+        lambda children: st.one_of(
+            st.builds(
+                lambda ws1, ws2, ws3, items: "{"
+                + ws1
+                + ",".join(items)
+                + ws2
+                + ws3
+                + "}",
+                _WS,
+                _WS,
+                _WS,
+                st.lists(children, min_size=1, max_size=4),
+            ),
+            st.builds(
+                lambda ws1, ws2, ws3, items: "["
+                + ws1
+                + ",".join(items)
+                + ws2
+                + ws3
+                + "]",
+                _WS,
+                _WS,
+                _WS,
+                st.lists(children, min_size=1, max_size=4),
+            ),
+        ),
+        max_leaves=12,
+    )
+
+
+# ---------- deep nesting near the 2048 cap ----------
+
+@st.composite
+def _deep_nesting(draw):
+    depth = draw(
+        st.one_of(
+            st.integers(min_value=2000, max_value=2048),
+            st.integers(min_value=1800, max_value=2100),
+            st.just(2047),
+            st.just(2048),
+            st.just(2049),
+            st.just(2050),
+        )
+    )
+    open_c = draw(st.sampled_from(["[", "{"]))
+    if open_c == "[":
+        close_c = "]"
+        inner = draw(st.one_of(st.just("0"), st.just('"x"'), st.just("null")))
+    else:
+        close_c = "}"
+        inner = draw(st.one_of(st.just('"k":0'), st.just('"k":null')))
+    return open_c * depth + inner + close_c * depth
+
+
+# ---------- malformed structures ----------
+
+@st.composite
+def _malformed_structure(draw):
+    kind = draw(st.integers(min_value=0, max_value=11))
+    if kind == 0:
+        return '{"a":1,}'
+    if kind == 1:
+        return "[1,2,]"
+    if kind == 2:
+        return '{,"a":1}'
+    if kind == 3:
+        return "[,1]"
+    if kind == 4:
+        return '{"a" 1}'
+    if kind == 5:
+        return '{:1}'
+    if kind == 6:
+        return '{"a":}'
+    if kind == 7:
+        return "[1 2]"
+    if kind == 8:
+        return '{"a":1 "b":2}'
+    if kind == 9:
+        return "{'a':1}"
+    if kind == 10:
+        return "[]]"
+    return "[}"
+
+
+# ---------- trailing content (accepted by the parser) ----------
+
+_TRAILING = st.one_of(
+    st.just("abc"),
+    st.just(" garbage"),
+    st.just("xyz"),
+    st.just("0"),
+    st.just("{}"),
+    st.just("]"),
+    st.just("}"),
+    st.just("\x00"),  # placeholder replaced below
+    st.just(" /* c */"),
+    st.just(" // c"),
+)
+
+
+@st.composite
+def _with_trailing(draw):
+    base = draw(_value_strategy())
+    tail = draw(_TRAILING)
+    if tail == "\x00":
+        tail = draw(st.sampled_from(["", " ", "x", "1"]))
+    return base + tail
+
+
+# ---------- top-level ----------
+
+@st.composite
+def _json_document(draw):
+    kind = draw(st.integers(min_value=0, max_value=9))
+    if kind == 0:
+        return draw(_value_strategy())
+    if kind == 1:
+        return draw(_deep_nesting())
+    if kind == 2:
+        return draw(_malformed_structure())
+    if kind == 3:
+        return draw(_with_trailing())
+    if kind == 4:
+        return draw(_empty_obj())
+    if kind == 5:
+        return draw(_empty_arr())
+    if kind == 6:
+        return draw(_malformed_leaf())
+    if kind == 7:
+        # duplicate keys explicitly
+        return draw(
+            st.one_of(
+                st.just('{"k":0,"k":1}'),
+                st.just('{"a":1,"b":2,"a":3}'),
+                st.just('{"x":{"y":1},"x":2}'),
+            )
+        )
+    if kind == 8:
+        # extreme numbers directly
+        return draw(_NUMBER)
+    return draw(_json_string())
+
+
+@st.composite
+def _maybe_ws_wrapped(draw):
+    s = draw(_json_document())
+    pre = draw(_WS)
+    post = draw(_WS)
+    return pre + s + post
+
+
+def _strip_raw_nul(s: str) -> str:
+    # Safety net: the harness skips inputs containing a raw NUL.
+    return s.replace("\x00", "")
+
+
+# ---------- round-trip / serialize / validate oriented documents ----------
+# The parser exposes serialize, deep_copy, equals and validate paths that were
+# never exercised. Those entry points require *well-formed* JSON that parses
+# successfully, so we add a dedicated stream of strictly-valid documents built
+# to stress string-escaping on serialization (the least-covered function).
+
+_SAFE_STRING = st.builds(
+    lambda body: '"' + body + '"',
+    st.text(
+        alphabet=st.characters(
+            min_codepoint=0x20,
+            max_codepoint=0x7E,
+            blacklist_characters='"\\',
+        ),
+        max_size=8,
+    ),
+)
+
+_ESCAPE_HEAVY_STRING = st.builds(
+    lambda parts: '"' + "".join(parts) + '"',
+    st.lists(
+        st.one_of(
+            st.sampled_from(["\\\"", "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"]),
+            st.sampled_from(
+                ["\\u0000", "\\u001f", "\\u007f", "\\u00e9", "\\u20ac", "\\uFFFF"]
+            ),
+            st.builds(
+                lambda hi, lo: "\\u" + hi + "\\u" + lo,
+                st.sampled_from(["d83d", "d800", "dbff"]),
+                st.sampled_from(["de00", "dc00", "dfff"]),
+            ),
+            st.text(
+                alphabet=st.characters(
+                    min_codepoint=0x20,
+                    max_codepoint=0x7E,
+                    blacklist_characters='"\\',
+                ),
+                min_size=1,
+                max_size=3,
+            ),
+        ),
+        max_size=6,
+    ),
+)
+
+_VALID_STR = st.one_of(_SAFE_STRING, _ESCAPE_HEAVY_STRING)
+
+_VALID_NUMBER = st.one_of(
+    st.just("0"),
+    st.integers(min_value=1, max_value=10**15).map(str),
+    st.integers(min_value=-(10**15), max_value=-1).map(str),
+    st.just("-0"),
+    st.just("0.0"),
+    st.just("1e10"),
+    st.just("-1.5E-3"),
+    st.just("3.141592653589793"),
+)
+
+_VALID_LEAF = st.one_of(
+    _VALID_STR,
+    _VALID_NUMBER,
+    st.sampled_from(["true", "false", "null"]),
+)
+
+
+def _valid_value_strategy():
+    return st.recursive(
+        _VALID_LEAF,
+        lambda children: st.one_of(
+            st.builds(
+                lambda items: "{" + ",".join(items) + "}",
+                st.lists(
+                    st.builds(
+                        lambda k, v: k + ":" + v,
+                        _VALID_STR,
+                        children,
+                    ),
+                    max_size=4,
+                ),
+            ),
+            st.builds(
+                lambda items: "[" + ",".join(items) + "]",
+                st.lists(children, max_size=4),
+            ),
+        ),
+        max_leaves=10,
+    )
+
+
+@st.composite
+def _valid_document(draw):
+    return draw(_valid_value_strategy())
+
+
+@st.composite
+def _json_document_v2(draw):
+    kind = draw(st.integers(min_value=0, max_value=9))
+    if kind <= 4:
+        # bias toward strictly-valid docs so serialize/copy/equals/validate run
+        return draw(_valid_document())
+    return draw(_json_document())
+
+
+@st.composite
+def _maybe_ws_wrapped_v2(draw):
+    s = draw(_json_document_v2())
+    pre = draw(_WS)
+    post = draw(_WS)
+    return pre + s + post
+
+
+# ---------- serialize / deep_copy / equals / validate focus ----------
+# The least-covered functions (json_serialize_string, json_serialize_to_buffer_r,
+# json_value_deep_copy, json_value_equals, json_validate) are all reached only
+# via a *successfully parsed* document. Bias the stream strongly toward valid,
+# escape-heavy documents that exercise string escaping on the serialize path,
+# and include nested containers to force deep_copy/equals recursion.
+
+@st.composite
+def _serialize_focus_document(draw):
+    # A valid document built from escape-heavy strings and nested containers.
+    return draw(_valid_value_strategy())
+
+
+@st.composite
+def _serialize_focus_wrapped(draw):
+    # Exercise serialize_string / serialize_to_buffer_r with leading/trailing ws
+    # (whitespace must be reproduced/ignored consistently by serialize+validate).
+    s = draw(_serialize_focus_document())
+    pre = draw(_WS)
+    post = draw(_WS)
+    return pre + s + post
+
+
+@st.composite
+def _roundtrip_document(draw):
+    # Object with escape-heavy keys and values, plus nested arrays/objects, so
+    # deep_copy and equals must walk the full tree.
+    n = draw(st.integers(min_value=1, max_value=4))
+    pairs = []
+    for _ in range(n):
+        k = draw(_ESCAPE_HEAVY_STRING)
+        v = draw(
+            st.one_of(
+                _ESCAPE_HEAVY_STRING,
+                _VALID_NUMBER,
+                st.sampled_from(["true", "false", "null"]),
+                st.builds(
+                    lambda items: "[" + ",".join(items) + "]",
+                    st.lists(_ESCAPE_HEAVY_STRING, max_size=3),
+                ),
+                st.builds(
+                    lambda k2, v2: "{" + k2 + ":" + v2 + "}",
+                    _ESCAPE_HEAVY_STRING,
+                    _ESCAPE_HEAVY_STRING,
+                ),
+            )
+        )
+        pairs.append(k + ":" + v)
+    return "{" + ",".join(pairs) + "}"
+
+
+@st.composite
+def _strategy_v3(draw):
+    kind = draw(st.integers(min_value=0, max_value=9))
+    if kind <= 5:
+        # majority: strictly-valid docs -> serialize/copy/equals/validate run
+        return draw(_serialize_focus_wrapped())
+    if kind == 6:
+        return draw(_roundtrip_document())
+    if kind == 7:
+        return draw(_valid_document())
+    return draw(_maybe_ws_wrapped_v2())
+
+
+# ---------- v4: stronger bias toward valid docs for uncovered functions ----------
+# Coverage feedback shows json_serialize_string, json_serialize_to_buffer_r,
+# json_value_deep_copy, json_value_equals and json_validate are all at 0%.
+# These are only reachable via successfully-parsed documents, so we now emit
+# almost exclusively strictly-valid JSON, with extra escape/nesting pressure.
+
+@st.composite
+def _deep_valid_value(draw):
+    # A strictly-valid value with meaningful nesting to drive recursion in
+    # deep_copy / equals / serialize_to_buffer_r.
+    depth = draw(st.integers(min_value=0, max_value=4))
+    if depth == 0:
+        return draw(_VALID_LEAF)
+    if draw(st.booleans()):
+        n = draw(st.integers(min_value=0, max_value=4))
+        items = [draw(_deep_valid_value()) for _ in range(n)]
+        return "[" + ",".join(items) + "]"
+    n = draw(st.integers(min_value=0, max_value=4))
+    pairs = []
+    for _ in range(n):
+        k = draw(_VALID_STR)
+        v = draw(_deep_valid_value())
+        pairs.append(k + ":" + v)
+    return "{" + ",".join(pairs) + "}"
+
+
+@st.composite
+def _serialize_stress_string(draw):
+    # Strings designed to exercise every escape branch in json_serialize_string:
+    # controls, quotes, backslashes, forward slash, non-ASCII, and surrogate
+    # pairs (which must be re-emitted as \\uXXXX on serialize).
+    n = draw(st.integers(min_value=0, max_value=10))
+    parts = []
+    for _ in range(n):
+        parts.append(
+            draw(
+                st.one_of(
+                    st.sampled_from(
+                        ["\\\"", "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"]
+                    ),
+                    st.sampled_from(
+                        [
+                            "\\u0000",
+                            "\\u0001",
+                            "\\u001f",
+                            "\\u007f",
+                            "\\u0080",
+                            "\\u00e9",
+                            "\\u07ff",
+                            "\\u0800",
+                            "\\u20ac",
+                            "\\uffff",
+                        ]
+                    ),
+                    st.builds(
+                        lambda hi, lo: "\\u" + hi + "\\u" + lo,
+                        st.sampled_from(["d800", "d83d", "dbff"]),
+                        st.sampled_from(["dc00", "de00", "dfff"]),
+                    ),
+                    st.text(
+                        alphabet=st.characters(
+                            min_codepoint=0x20,
+                            max_codepoint=0x7E,
+                            blacklist_characters='"\\',
+                        ),
+                        min_size=1,
+                        max_size=3,
+                    ),
+                )
+            )
+        )
+    return '"' + "".join(parts) + '"'
+
+
+@st.composite
+def _serialize_stress_document(draw):
+    # Valid document using serialize-stress strings as keys and values, with
+    # nesting so serialize_to_buffer_r / deep_copy / equals recurse.
+    n = draw(st.integers(min_value=1, max_value=4))
+    pairs = []
+    for _ in range(n):
+        k = draw(_serialize_stress_string())
+        v = draw(
+            st.one_of(
+                _serialize_stress_string(),
+                _VALID_NUMBER,
+                st.sampled_from(["true", "false", "null"]),
+                st.builds(
+                    lambda items: "[" + ",".join(items) + "]",
+                    st.lists(_serialize_stress_string(), max_size=3),
+                ),
+                st.builds(
+                    lambda k2, v2: "{" + k2 + ":" + v2 + "}",
+                    _serialize_stress_string(),
+                    _serialize_stress_string(),
+                ),
+            )
+        )
+        pairs.append(k + ":" + v)
+    return "{" + ",".join(pairs) + "}"
+
+
+@st.composite
+def _strategy_v4(draw):
+    kind = draw(st.integers(min_value=0, max_value=9))
+    if kind <= 3:
+        # strictly-valid, escape-heavy docs -> serialize/copy/equals/validate
+        return draw(_serialize_stress_document())
+    if kind <= 6:
+        return draw(_serialize_focus_wrapped())
+    if kind == 7:
+        return draw(_deep_valid_value())
+    if kind == 8:
+        return draw(_roundtrip_document())
+    # occasional malformed / edge input to keep parser-error paths alive
+    return draw(_maybe_ws_wrapped_v2())
+
+
+strategy = _strategy_v4().map(_strip_raw_nul)
+```
+
+Here is the code coverage its last run achieved on the parser (measured with instrumentation):
+{
+  "branch_coverage_pct": 66.58,
+  "region_coverage_pct": 77.71,
+  "least_covered_functions": [
+    "json_serialize_string (0% of branches)",
+    "json_serialize_to_buffer_r (0% of branches)",
+    "json_value_deep_copy (0% of branches)",
+    "json_value_equals (0% of branches)",
+    "json_validate (0% of branches)"
+  ]
+}
+
+Make EXACTLY ONE change to the strategy: **improve_strategy** — make it a better fuzzer for this grammar, using the run feedback above where it is given.
+Change nothing else. Keep it a valid Hypothesis strategy producing `str`. Return the full revised module as one ```python code block.

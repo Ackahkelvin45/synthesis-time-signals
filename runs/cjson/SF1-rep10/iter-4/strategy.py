@@ -1,0 +1,424 @@
+from hypothesis import strategies as st
+import json
+
+# ---------------------------------------------------------------------------
+# Building blocks
+# ---------------------------------------------------------------------------
+
+# Characters that may appear raw inside a JSON string per the grammar.
+_safe_chars = st.characters(
+    blacklist_categories=("Cs",),
+    blacklist_characters='"\\',
+    min_codepoint=0x20,
+)
+
+# Raw control characters (allowed by this parser inside strings).
+_control_chars = st.sampled_from(
+    [chr(i) for i in range(0x00, 0x20)] + ["\x7f"]
+)
+
+_hex_digit = st.sampled_from("0123456789abcdefABCDEF")
+
+
+@st.composite
+def _unicode_escape(draw):
+    # \uXXXX, sometimes a surrogate (lone or paired).
+    kind = draw(st.integers(min_value=0, max_value=9))
+    if kind == 0:
+        # lone high surrogate
+        hi = draw(st.integers(min_value=0xD800, max_value=0xDBFF))
+        return "\\u%04x" % hi
+    if kind == 1:
+        # lone low surrogate
+        lo = draw(st.integers(min_value=0xDC00, max_value=0xDFFF))
+        return "\\u%04x" % lo
+    if kind == 2:
+        # valid surrogate pair
+        hi = draw(st.integers(min_value=0xD800, max_value=0xDBFF))
+        lo = draw(st.integers(min_value=0xDC00, max_value=0xDFFF))
+        return "\\u%04x\\u%04x" % (hi, lo)
+    if kind == 3:
+        # uppercase hex, arbitrary code unit
+        cu = draw(st.integers(min_value=0, max_value=0xFFFF))
+        return "\\u%04X" % cu
+    # arbitrary \uXXXX
+    return "\\u" + "".join(draw(st.lists(_hex_digit, min_size=4, max_size=4)))
+
+
+_simple_escapes = st.sampled_from(
+    ['\\"', "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"]
+)
+
+# A single "unit" inside a string body.
+_string_unit = st.one_of(
+    _simple_escapes,
+    _unicode_escape(),
+    _control_chars,
+    st.just("\x00"),
+    _safe_chars,
+)
+
+# String body: possibly empty, possibly long, possibly containing NULs.
+_string_body = st.one_of(
+    st.just(""),
+    st.lists(_string_unit, min_size=1, max_size=12).map("".join),
+    st.text(
+        alphabet=st.characters(min_codepoint=0x20, blacklist_characters='"\\'),
+        min_size=0,
+        max_size=40,
+    ),
+)
+
+
+@st.composite
+def _string(draw):
+    body = draw(_string_body)
+    # Occasionally emit an unterminated string.
+    if draw(st.integers(min_value=0, max_value=11)) == 0:
+        return '"' + body
+    return '"' + body + '"'
+
+
+# ---------------------------------------------------------------------------
+# Numbers
+# ---------------------------------------------------------------------------
+
+_int_part = st.one_of(
+    st.just("0"),
+    st.integers(min_value=1, max_value=9).map(str),
+    st.integers(min_value=1, max_value=10**18).map(str),
+    # leading zeros (accepted by this parser)
+    st.integers(min_value=0, max_value=10**6).map(lambda n: "0" + str(n)),
+    # hex (accepted by this parser)
+    st.integers(min_value=0, max_value=0xFFFFFFFF).map(lambda n: "0x%x" % n),
+)
+
+_frac_part = st.one_of(
+    st.just(""),
+    st.integers(min_value=0, max_value=10**6).map(lambda n: "." + str(n)),
+    st.just("."),  # trailing dot (accepted)
+)
+
+_exp_part = st.one_of(
+    st.just(""),
+    st.tuples(
+        st.sampled_from(["e", "E"]),
+        st.sampled_from(["", "+", "-"]),
+        st.integers(min_value=0, max_value=400).map(str),
+    ).map("".join),
+    st.just("e309"),
+    st.just("e-309"),
+    st.just("e999"),
+)
+
+
+@st.composite
+def _number(draw):
+    sign = draw(st.sampled_from(["", "-"]))
+    intp = draw(_int_part)
+    frac = draw(_frac_part)
+    exp = draw(_exp_part)
+    return sign + intp + frac + exp
+
+
+# ---------------------------------------------------------------------------
+# Malformed fragments (near-valid but broken)
+# ---------------------------------------------------------------------------
+
+_malformed = st.sampled_from(
+    [
+        "+1",
+        "-",
+        ".5",
+        ".",
+        "NaN",
+        "Infinity",
+        "-Infinity",
+        "01",
+        "1.",
+        "1e",
+        "1e+",
+        "--1",
+        "0x",
+        "0xg",
+        "'single'",
+        "{'a': 1}",
+        "{a: 1}",
+        "[1,2,]",
+        '{"a":1,}',
+        '{"a" 1}',
+        "{,}",
+        "[,]",
+        "[1,,2]",
+        '{"a":}',
+        '{"a"}',
+        "{:1}",
+        "tru",
+        "fals",
+        "nul",
+        "True",
+        "NULL",
+        "\\u",
+        '"\\u12"',
+        '"\\x41"',
+        '"unterminated',
+        "{",
+        "[",
+        "}",
+        "]",
+        ":",
+        ",",
+        "",
+        " ",
+        "\x00",
+    ]
+)
+
+
+# ---------------------------------------------------------------------------
+# Recursive JSON values
+# ---------------------------------------------------------------------------
+
+# Depth budget: concentrate near the ~1000 nesting limit.
+_depth_choices = st.one_of(
+    st.integers(min_value=0, max_value=4),
+    st.integers(min_value=5, max_value=50),
+    st.integers(min_value=900, max_value=1002),
+    st.integers(min_value=999, max_value=1001),
+)
+
+
+@st.composite
+def _depth(draw):
+    return draw(_depth_choices)
+
+
+def _deep_wrap(inner, depth, opener, closer):
+    """Wrap `inner` in `depth` nested openers/closers."""
+    return opener * depth + inner + closer * depth
+
+
+@st.composite
+def _deep_array(draw):
+    depth = draw(st.integers(min_value=900, max_value=1002))
+    leaf = draw(st.one_of(_number(), _string(), st.sampled_from(["true", "false", "null"])))
+    return "[" * depth + leaf + "]" * depth
+
+
+@st.composite
+def _deep_object(draw):
+    depth = draw(st.integers(min_value=900, max_value=1002))
+    leaf = draw(st.one_of(_number(), _string(), st.sampled_from(["true", "false", "null"])))
+    return '{"k":' * depth + leaf + "}" * depth
+
+
+# ---------------------------------------------------------------------------
+# Non-recursive value productions (leaves).
+# ---------------------------------------------------------------------------
+
+_leaf = st.one_of(
+    _string(),
+    _number(),
+    st.sampled_from(["true", "false", "null"]),
+)
+
+
+@st.composite
+def _pair(draw):
+    key = draw(_string())
+    colon = draw(st.sampled_from([":", ": ", " :", " ", ""]))
+    val = draw(_value())
+    return key + colon + val
+
+
+# ---------------------------------------------------------------------------
+# Recursive value
+# ---------------------------------------------------------------------------
+
+_value = st.recursive(
+    _leaf,
+    lambda children: st.one_of(
+        # arrays
+        st.lists(children, min_size=0, max_size=6).map(
+            lambda xs: "[" + ",".join(xs) + "]"
+        ),
+        # arrays with whitespace
+        st.lists(children, min_size=0, max_size=4).map(
+            lambda xs: "[ " + " , ".join(xs) + " ]"
+        ),
+        # objects
+        st.lists(
+            st.tuples(_string(), children).map(lambda t: t[0] + ":" + t[1]),
+            min_size=0,
+            max_size=5,
+        ).map(lambda ps: "{" + ",".join(ps) + "}"),
+        # objects with duplicate keys
+        st.tuples(
+            _string(),
+            children,
+            _string(),
+            children,
+        ).map(lambda t: "{" + t[0] + ":" + t[1] + "," + t[2] + ":" + t[3] + "}"),
+    ),
+    max_leaves=40,
+)
+
+
+# ---------------------------------------------------------------------------
+# Top-level strategy: valid-ish, deep, malformed, and combinations.
+# ---------------------------------------------------------------------------
+
+_valid_value = _value
+
+_with_trailing = st.tuples(_value, st.sampled_from(["", " ", "\x00", "abc", " 1 2"])).map(
+    lambda t: t[0] + t[1]
+)
+
+_with_bom = st.tuples(st.just("\ufeff"), _value).map(lambda t: t[0] + t[1])
+
+_whitespace_wrapped = st.tuples(
+    st.sampled_from(["", " ", "\t", "\n", "\r\n"]),
+    _value,
+    st.sampled_from(["", " ", "\t", "\n", "\r\n"]),
+).map(lambda t: t[0] + t[1] + t[2])
+
+_raw_bytes = st.one_of(
+    st.text(min_size=0, max_size=30),
+    st.lists(
+        st.integers(min_value=0, max_value=0x10FFFF).filter(
+            lambda c: not (0xD800 <= c <= 0xDFFF)
+        ),
+        min_size=0,
+        max_size=20,
+    ).map(lambda cs: "".join(chr(c) for c in cs)),
+)
+
+# Near-cap nesting around the parser's ~1000 depth limit, with various
+# opener/closer shapes to exercise depth accounting more broadly.
+@st.composite
+def _near_cap(draw):
+    depth = draw(st.integers(min_value=990, max_value=1010))
+    shape = draw(st.integers(min_value=0, max_value=5))
+    leaf = draw(_leaf)
+    if shape == 0:
+        return "[" * depth + leaf + "]" * depth
+    if shape == 1:
+        return '{"k":' * depth + leaf + "}" * depth
+    if shape == 2:
+        # array of nested arrays with trailing comma
+        return "[" * depth + leaf + "," + "]" * depth
+    if shape == 3:
+        # object with trailing comma
+        return '{"k":' * depth + leaf + "," + "}" * depth
+    if shape == 4:
+        # mixed array/object nesting
+        opener = draw(st.sampled_from(["[", '{"k":']))
+        closer = "]" if opener == "[" else "}"
+        return opener * depth + leaf + closer * depth
+    # unterminated deep nesting
+    return "[" * depth + leaf
+
+
+# ---------------------------------------------------------------------------
+# Cap-distance targeted probes.
+#
+# The run feedback showed cap_distance_mass was low (~0.126) and that the
+# parser's depth accounting diverges around the ~1000 limit.  These probes
+# concentrate tightly on the boundary (998..1004) with both well-formed and
+# deliberately broken closers so the parser's depth counter is exercised
+# right at the threshold from both sides.
+# ---------------------------------------------------------------------------
+
+@st.composite
+def _cap_probe(draw):
+    depth = draw(st.integers(min_value=996, max_value=1006))
+    shape = draw(st.integers(min_value=0, max_value=7))
+    leaf = draw(_leaf)
+    if shape == 0:
+        return "[" * depth + leaf + "]" * depth
+    if shape == 1:
+        return '{"k":' * depth + leaf + "}" * depth
+    if shape == 2:
+        # one closer short -> unterminated
+        return "[" * depth + leaf + "]" * (depth - 1)
+    if shape == 3:
+        # one closer too many
+        return "[" * depth + leaf + "]" * (depth + 1)
+    if shape == 4:
+        # object one closer short
+        return '{"k":' * depth + leaf + "}" * (depth - 1)
+    if shape == 5:
+        # mismatched closer
+        return "[" * depth + leaf + "}" * depth
+    if shape == 6:
+        # mixed openers, uniform closer
+        return ('[' * (depth // 2) + '{"k":' * (depth - depth // 2)
+                + leaf + "]" * depth)
+    # leaf replaced by nested empty containers at the boundary
+    return "[" * depth + "[]" + "]" * depth
+
+
+# ---------------------------------------------------------------------------
+# Divergence-focused probes.
+#
+# The run feedback showed 92 divergences and a low acceptance rate (~0.35),
+# with examples dominated by (a) byte-level garbage after a valid scalar
+# (e.g. b'2\xf0\x9c\x93\x90') and (b) truncated deep nesting (many '[' with
+# no closers).  These probes target exactly those shapes: a valid scalar or
+# container followed by arbitrary trailing bytes, and long runs of unmatched
+# openers at various depths.
+# ---------------------------------------------------------------------------
+
+_trailing_bytes = st.one_of(
+    st.lists(
+        st.integers(min_value=0, max_value=0x10FFFF).filter(
+            lambda c: not (0xD800 <= c <= 0xDFFF)
+        ),
+        min_size=1,
+        max_size=8,
+    ).map(lambda cs: "".join(chr(c) for c in cs)),
+    st.sampled_from(["\x00", " ", "\t", "\n", "\r", "]", "}", "\x7f"]),
+)
+
+
+@st.composite
+def _trailing_garbage(draw):
+    head = draw(st.one_of(
+        _number(),
+        _string(),
+        st.sampled_from(["true", "false", "null"]),
+        st.lists(_leaf, min_size=0, max_size=3).map(
+            lambda xs: "[" + ",".join(xs) + "]"
+        ),
+        st.lists(_string(), min_size=0, max_size=3).map(
+            lambda ks: "{" + ",".join(k + ":1" for k in ks) + "}"
+        ),
+    ))
+    tail = draw(st.lists(_trailing_bytes, min_size=1, max_size=4).map("".join))
+    return head + tail
+
+
+@st.composite
+def _unmatched_openers(draw):
+    depth = draw(st.one_of(
+        st.integers(min_value=1, max_value=10),
+        st.integers(min_value=990, max_value=1010),
+    ))
+    opener = draw(st.sampled_from(["[", '{"k":']))
+    return opener * depth
+
+
+strategy = st.one_of(
+    _valid_value,
+    _with_trailing,
+    _with_bom,
+    _whitespace_wrapped,
+    _deep_array(),
+    _deep_object(),
+    _near_cap(),
+    _cap_probe(),
+    _trailing_garbage(),
+    _unmatched_openers(),
+    _malformed,
+    _raw_bytes,
+)
