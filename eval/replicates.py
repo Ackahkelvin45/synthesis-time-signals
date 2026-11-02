@@ -58,6 +58,24 @@ CONDITIONS: dict[str, list[str]] = {
     "M2C2": [],
     "M2A5": ["--ablate", "signal"],
     "M2C3s": ["--oracle", "coverage_scalar"],
+    # SF: shared-seed, common-policy follow-up (review of October 2026). Iteration 1 is
+    # the A5 first draft of the same replicate number (runs/<target>/A5-rep<k>/iter-1);
+    # every arm gets the same edit instruction and last-working selection; only the
+    # feedback shown differs: none / proxy summary / coverage numbers / numbers + names.
+    "SF0": ["--ablate", "signal", "--policy", "common"],
+    "SF1": ["--policy", "common"],
+    "SF2": ["--oracle", "coverage_scalar", "--policy", "common"],
+    "SF3": ["--oracle", "coverage_named", "--policy", "common"],
+    # Pre-registered replication (eval/followup/PLAN_replication.md). B5 is the bridge: the
+    # September no-steering arm, unchanged, on the current backend; its first drafts seed R*/E*.
+    "B5": ["--ablate", "signal"],
+    "R0": ["--ablate", "signal", "--policy", "common"],
+    "R1": ["--policy", "common"],
+    "R2": ["--oracle", "coverage_scalar", "--policy", "common"],
+    "R3": ["--oracle", "coverage_named", "--policy", "common"],
+    "R4": ["--oracle", "coverage_body", "--policy", "common"],
+    "E0": ["--ablate", "signal", "--policy", "menu"],
+    "E1": ["--policy", "menu"],
 }
 LOCK = ROOT / "build" / ".runs.lock"
 BATCHES = ROOT / "runs" / "_batches"
@@ -124,6 +142,11 @@ def run_one(item: dict, max_examples: int | None, extra: list[str], log) -> dict
         shutil.rmtree(rd)   # partial run: discard, never reconstruct
     argv = [sys.executable, str(ROOT / "fuzz" / "loop" / "agent.py"),
             "--target", t, "--run-name", name, *CONDITIONS[item["cond"]], *extra]
+    if item["cond"].startswith("SF"):
+        argv += ["--seed-from", str(run_dir(t, f"A5-rep{item['rep']}") / "iter-1" / "strategy.py")]
+    elif item["cond"][0] in "RE":   # replication arms: the k-th drawing bridge draft (rule in the plan)
+        seeds = json.loads((ROOT / "eval" / "followup" / "replication_seeds.json").read_text())
+        argv += ["--seed-from", str(run_dir(t, f"B5-rep{seeds[t][str(item['rep'])]}") / "iter-1" / "strategy.py")]
     if max_examples:
         argv += ["--max-examples", str(max_examples)]
     t0 = time.monotonic()

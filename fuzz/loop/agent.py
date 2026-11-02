@@ -123,8 +123,10 @@ _ABLATABLE = {"production", "capmass", "novelty", "probes", "signal"}
 #   coverage_scalar  the model sees only the coverage number     (C3s)
 #   coverage_named   plus the least-covered functions, by name  (C3n; white-box
 #                    lite, the Gentoo-S analogue; names are NOT anonymized)
+#   coverage_body    plus the source of the least-covered function (follow-up R4)
 _ORACLE: str | None = None
-_ORACLES = {"coverage_scalar", "coverage_named"}
+_ORACLES = {"coverage_scalar", "coverage_named", "coverage_body"}
+BODY_MAX_LINES = 80
 # Repair path for a generator that fails the acceptance gate (DECISIONS D27,
 # paper C2'). "inplace" (every pre-registered condition): the failed code is
 # re-prompted with "Make EXACTLY ONE change". "reseed": the model is never
@@ -134,6 +136,22 @@ _ORACLES = {"coverage_scalar", "coverage_named"}
 # holds, rollback, selection and budgets are unchanged.
 _REPAIR = "inplace"
 _REPAIRS = {"inplace", "reseed"}
+# Shared-seed, common-policy follow-up (review of October 2026, points 1 and 2):
+# --seed-from copies a given first draft into iteration 1 (no model call);
+# --policy common gives every arm the same edit instruction and the same selection
+# rule (last working generator, no score rollback, no crash rule), so arms differ
+# only in the feedback text shown.
+_SEED_FROM: str | None = None
+_POLICY = "arm"
+_COMMON_ACTION = ("improve_strategy", "make it a better fuzzer for this grammar, using the run feedback above where it is given")
+# Follow-up E arms: the proxy's four content edits as a menu the model chooses from, in every arm.
+_MENU_ACTION = ("one edit of your choice from this list",
+    "add_or_upweight_production (add or upweight a grammar production the inputs under-use); "
+    "generate_nesting_toward_cap (generate nesting close to the parser's depth limit); "
+    "fix_feature_encoding (fix how one feature of the format is encoded); "
+    "broaden_exploration (diversify the structures the inputs take). "
+    "Use the run feedback above where it is given, and write the name of the edit you chose on the first line as EDIT: <name>")
+_SHARED = ("common", "menu")
 _ABLATE: set = set()
 # Provenance: every per-iteration wall-clock backstop hit (seconds). Budgets are
 # by examples/iterations; a backstop truncating one arm must be REPORTED.
@@ -808,16 +826,39 @@ def oracle_summary(cov: dict, variant: str) -> dict:
     """What the MODEL sees under a coverage-oracle condition."""
     out = {"branch_coverage_pct": cov["branch_pct"],
            "region_coverage_pct": cov["region_pct"]}
-    if variant == "coverage_named":
+    if variant in ("coverage_named", "coverage_body"):
         out["least_covered_functions"] = [
             f"{f['name']} ({f['branch_pct']:.0f}% of branches)"
             for f in cov["least_covered_functions"]]
+    if variant == "coverage_body" and cov["least_covered_functions"]:
+        name = cov["least_covered_functions"][0]["name"]
+        out["least_covered_function_source"] = function_source(name)
     return out
+
+
+def function_source(name: str) -> str:
+    """Source text of one C function of the target, first BODY_MAX_LINES lines (R4 arm)."""
+    sys.path.insert(0, str(ROOT / "eval"))
+    from cell import target_src  # noqa: E402
+    lines = target_src(_TARGET_NAME).read_text(errors="replace").splitlines()
+    pat = re.compile(r"^[A-Za-z_][^;=]*\b" + re.escape(name) + r"\s*\([^;]*$")
+    for i, ln in enumerate(lines):
+        if pat.match(ln):
+            depth, seen, j = 0, False, i
+            while j < len(lines):
+                depth += lines[j].count("{") - lines[j].count("}"); seen = seen or "{" in lines[j]
+                if seen and depth <= 0:
+                    break
+                j += 1
+            body = lines[i:j + 1]
+            cut = len(body) > BODY_MAX_LINES
+            return "\n".join(body[:BODY_MAX_LINES]) + ("\n/* ... truncated ... */" if cut else "")
+    return f"/* source of {name} not found */"
 
 
 def oracle_action(cov: dict, variant: str) -> tuple[str, str]:
     """The single next edit under a coverage-oracle condition."""
-    if variant == "coverage_named" and cov["least_covered_functions"]:
+    if variant in ("coverage_named", "coverage_body") and cov["least_covered_functions"]:
         f = cov["least_covered_functions"][0]
         return ("cover_function",
                 f"{f['name']} has {f['branch_pct']:.0f}% branch coverage; generate "
@@ -1026,6 +1067,7 @@ def _run_provenance(config, max_examples: int, harness: Path) -> dict:
         hyp = None
     return {
         "target": _TARGET_NAME, "ablate": sorted(_ABLATE), "oracle": _ORACLE,
+        "seed_from": _SEED_FROM, "policy": _POLICY,
         "repair": _REPAIR,
         "model": config.describe(), "requested_model": config.model,
         "provider_base_url": config.base_url, "mock": config.mock,
@@ -1104,7 +1146,7 @@ def run_live(harness: Path, max_examples: int) -> int:
         # A5 (no steering signal) must be free of proxy-based SELECTION too:
         # on a rejected build or a mid-run error it falls back to the last
         # WORKING generator, never to the score-best one.
-        if "signal" in _ABLATE:
+        if "signal" in _ABLATE or _POLICY in _SHARED:
             fb_code, fb_iter = current_code, current_iter
         else:
             fb_code, fb_iter = best_code, best_iter
@@ -1115,7 +1157,10 @@ def run_live(harness: Path, max_examples: int) -> int:
         # Path-A fix: when re-seeding after a build rejection, pass the previous
         # error in — do NOT gate feedback on having a non-None baseline, which
         # used to discard the error and re-send a byte-identical blind prompt.
-        if current_code is None:
+        seeded = current_code is None and it == 1 and _SEED_FROM is not None
+        if seeded:
+            messages = [{"role": "user", "content": f"(no model call) iteration 1 is the shared first draft copied from {_SEED_FROM}"}]
+        elif current_code is None:
             messages = seed_prompt(last_build_error)
         elif failed_detail is not None:   # reseed repair: never refine failed code
             messages = seed_prompt(failed_detail)
@@ -1127,7 +1172,17 @@ def run_live(harness: Path, max_examples: int) -> int:
 
         # --- obtain a usable strategy (F1/F2: never let a bad one kill/burn) ---
         try:
-            code, strategy = build_strategy(messages, idir, "", stop, config)
+            if seeded:
+                code = Path(_SEED_FROM).read_text()
+                (idir / "response.md").write_text(messages[-1]["content"])
+                screen_code(code)
+                (idir / "strategy.py").write_text(code)
+                try:
+                    strategy = load_strategy(idir / "strategy.py")
+                except Exception as e:  # noqa: BLE001
+                    raise GeneratorError(f"import: {type(e).__name__}: {e}"[:200], localized=_localize_tb(e)) from e
+            else:
+                code, strategy = build_strategy(messages, idir, "", stop, config)
         except (ValueError, GeneratorError) as e:
             detail = _fmt_gen_error(e)
             print(f"[live] iter {it}: strategy rejected ({detail}); rolling back")
@@ -1264,13 +1319,17 @@ def run_live(harness: Path, max_examples: int) -> int:
         # separate flag, NOT a huge score — folding it into the scalar made the
         # tolerance ~1e5 and froze the loop on the first crashing strategy.
         drop = best_score - sc
-        regressed = ("signal" not in _ABLATE and best_code is not None and not new_crash
+        regressed = ("signal" not in _ABLATE and _POLICY not in _SHARED and best_code is not None and not new_crash
                      and drop > max(2.0, 0.10 * abs(best_score)))
 
         # Decide the next edit BEFORE mutating `best_*`, so a guardrail-issued
         # revert still has the previous best to roll back to (it used to be
         # overwritten one line earlier, making the revert a silent no-op).
-        if "signal" in _ABLATE:
+        if _POLICY == "menu":
+            action = _MENU_ACTION
+        elif _POLICY == "common":
+            action = _COMMON_ACTION
+        elif "signal" in _ABLATE:
             # Ablation A5 (the key control): NO steering signal. The model is simply
             # asked to improve the strategy — no run summary, no score-based
             # rollback; only the validity machinery (build screen, acceptance gate
@@ -1344,7 +1403,7 @@ def run_live(harness: Path, max_examples: int) -> int:
         "source_iter": current_iter, "best_iter": best_iter,
         "best_score": None if best_score == float("-inf") else best_score,
         "has_strategy": current_code is not None,
-        "selection": ("last_working" if "signal" in _ABLATE
+        "selection": (f"last_working_{_POLICY}" if _POLICY in _SHARED else "last_working" if "signal" in _ABLATE
                       else "coverage_best_with_revert" if _ORACLE
                       else "score_best_with_revert"),
         "iterations": stop.iters, "stop_reason": stop.reason(),
@@ -1482,7 +1541,13 @@ def main() -> int:
     ap.add_argument("--repair", default="inplace", choices=sorted(_REPAIRS),
                     help="repair path for a generator that fails the gate: 'inplace' "
                          "(registered conditions) or 'reseed' (paper C2', D27)")
+    ap.add_argument("--seed-from", default=None, metavar="STRATEGY_PY",
+                    help="shared-seed follow-up: copy this first draft into iteration 1 instead of asking the model")
+    ap.add_argument("--policy", default="arm", choices=("arm", "common", "menu"),
+                    help="'arm' (registered conditions) or 'common' (same edit instruction and last-working selection in every arm; only the feedback shown differs) or 'menu' (as common, with the proxy's four content edits offered as a menu)")
     args = ap.parse_args()
+    global _SEED_FROM, _POLICY
+    _SEED_FROM, _POLICY = args.seed_from, args.policy
     _PROMPT_MODE = "legacy" if args.legacy_prompts else "anon"
     _ORACLE = args.oracle
     _REPAIR = args.repair
