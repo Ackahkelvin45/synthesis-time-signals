@@ -76,6 +76,14 @@ CONDITIONS: dict[str, list[str]] = {
     "R4": ["--oracle", "coverage_body", "--policy", "common"],
     "E0": ["--ablate", "signal", "--policy", "menu"],
     "E1": ["--policy", "menu"],
+    # Second pre-registered study (eval/followup/PLAN_replication2.md): fresh drafts from B6 (= B5),
+    # branched into Q0..Q3 (= R0..R3 under --policy strict: a gated generator falls back to the last
+    # working one), twenty pairs per target.
+    "B6": ["--ablate", "signal"],
+    "Q0": ["--ablate", "signal", "--policy", "strict"],
+    "Q1": ["--policy", "strict"],
+    "Q2": ["--oracle", "coverage_scalar", "--policy", "strict"],
+    "Q3": ["--oracle", "coverage_named", "--policy", "strict"],
 }
 LOCK = ROOT / "build" / ".runs.lock"
 BATCHES = ROOT / "runs" / "_batches"
@@ -147,6 +155,9 @@ def run_one(item: dict, max_examples: int | None, extra: list[str], log) -> dict
     elif item["cond"][0] in "RE":   # replication arms: the k-th drawing bridge draft (rule in the plan)
         seeds = json.loads((ROOT / "eval" / "followup" / "replication_seeds.json").read_text())
         argv += ["--seed-from", str(run_dir(t, f"B5-rep{seeds[t][str(item['rep'])]}") / "iter-1" / "strategy.py")]
+    elif item["cond"].startswith("Q"):   # second study: the k-th drawing B6 draft (PLAN_replication2.md)
+        seeds = json.loads((ROOT / "eval" / "followup" / "replication2_seeds.json").read_text())
+        argv += ["--seed-from", str(run_dir(t, f"B6-rep{seeds[t][str(item['rep'])]}") / "iter-1" / "strategy.py")]
     if max_examples:
         argv += ["--max-examples", str(max_examples)]
     t0 = time.monotonic()

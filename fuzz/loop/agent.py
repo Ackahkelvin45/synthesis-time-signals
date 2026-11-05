@@ -151,7 +151,12 @@ _MENU_ACTION = ("one edit of your choice from this list",
     "fix_feature_encoding (fix how one feature of the format is encoded); "
     "broaden_exploration (diversify the structures the inputs take). "
     "Use the run feedback above where it is given, and write the name of the edit you chose on the first line as EDIT: <name>")
-_SHARED = ("common", "menu")
+# --policy strict (second pre-registered study): as common, but a generator that still fails the
+# acceptance gate after its one in-iteration repair is discarded like a build rejection, and the next
+# iteration refines the last working generator with the common instruction. Under common/menu a gated
+# generator was kept and carried into the next iteration (in-place repair), so "last working" held only
+# for build rejections; common and menu keep that behaviour so their runs stay reproducible.
+_SHARED = ("common", "menu", "strict")
 _ABLATE: set = set()
 # Provenance: every per-iteration wall-clock backstop hit (seconds). Budgets are
 # by examples/iterations; a backstop truncating one arm must be REPORTED.
@@ -1187,6 +1192,8 @@ def run_live(harness: Path, max_examples: int) -> int:
             detail = _fmt_gen_error(e)
             print(f"[live] iter {it}: strategy rejected ({detail}); rolling back")
             action = ("fix_generator_error", detail)
+            if _POLICY == "strict" and fb_code is not None:
+                action = _COMMON_ACTION          # the fallback is working code: refine it, don't "fix" it
             last_build_error = detail            # so the next re-seed isn't blind
             current_code = fb_code or current_code  # don't advance on garbage
             current_iter = fb_iter if fb_code else current_iter
@@ -1238,6 +1245,10 @@ def run_live(harness: Path, max_examples: int) -> int:
                 # Keep prev_summary as-is (possibly None). Substituting {} here
                 # used to pass decide_refinement's `is not None` guard and then
                 # KeyError, killing the run before cost.md was ever written.
+                if _POLICY == "strict" and fb_code is not None:
+                    current_code, current_iter, action = fb_code, fb_iter, _COMMON_ACTION
+                    evolution.append(f"iter {it}: gated at acc={acc0:.2f}; discarded, back to iter {fb_iter}")
+                    continue
                 current_code = code
                 current_iter = it
                 if _REPAIR == "reseed":
@@ -1264,6 +1275,8 @@ def run_live(harness: Path, max_examples: int) -> int:
             detail = _fmt_gen_error(e)
             print(f"[live] iter {it}: generator errored mid-run ({detail}); rolling back")
             action = ("fix_generator_error", detail)
+            if _POLICY == "strict" and fb_code is not None:
+                action = _COMMON_ACTION          # the fallback is working code: refine it, don't "fix" it
             current_code = fb_code or code
             current_iter = fb_iter if fb_code else it
             if _REPAIR == "reseed":
@@ -1327,7 +1340,7 @@ def run_live(harness: Path, max_examples: int) -> int:
         # overwritten one line earlier, making the revert a silent no-op).
         if _POLICY == "menu":
             action = _MENU_ACTION
-        elif _POLICY == "common":
+        elif _POLICY in ("common", "strict"):
             action = _COMMON_ACTION
         elif "signal" in _ABLATE:
             # Ablation A5 (the key control): NO steering signal. The model is simply
@@ -1543,8 +1556,8 @@ def main() -> int:
                          "(registered conditions) or 'reseed' (paper C2', D27)")
     ap.add_argument("--seed-from", default=None, metavar="STRATEGY_PY",
                     help="shared-seed follow-up: copy this first draft into iteration 1 instead of asking the model")
-    ap.add_argument("--policy", default="arm", choices=("arm", "common", "menu"),
-                    help="'arm' (registered conditions) or 'common' (same edit instruction and last-working selection in every arm; only the feedback shown differs) or 'menu' (as common, with the proxy's four content edits offered as a menu)")
+    ap.add_argument("--policy", default="arm", choices=("arm", "common", "menu", "strict"),
+                    help="'arm' (registered conditions) or 'common' (same edit instruction and last-working selection in every arm; only the feedback shown differs) or 'menu' (as common, with the proxy's four content edits offered as a menu) or 'strict' (as common, and a generator that fails the acceptance gate is discarded for the last working one)")
     args = ap.parse_args()
     global _SEED_FROM, _POLICY
     _SEED_FROM, _POLICY = args.seed_from, args.policy
