@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.3446666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 96,
+      "reject": 254
+    },
+    "acceptance_rate": 0.274,
+    "max_nesting_depth": 1815,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "date_time",
+      "BOOLEAN",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.188,
+    "novelty": 42,
+    "divergences": 39,
+    "divergence_examples": [
+      "b'deep = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'[[\\'\\xcf\\x80\\xc3\\xb64\\xe6\\xb0\\xb4\\xc3\\x93\\xce\\xbbW\\xf0\\x9f\\x99\\x82\\xce\\xa9\\xf0\\x9f\\x99\\x82\\xc3\\xb1\\xce\\xbb\\']]\\n[\"\"]\\n#\\x1d6\\x7fj\\xc3\\xb3\\n\\n#x\\n[[A]]#0\\n#'",
+      "b'[[\\'\\xcf\\x80\\xc3\\xb64\\xe6\\xb0\\xb4\\xc3\\x93\\xce\\xbbW\\xf0\\x9f\\x99\\x82\\xce\\xa9\\xf0\\x9f\\x99\\x82\\xc3\\xb1\\xce\\xbb\\']]\\n[\"\"]\\n#\\x1d6\\x7fj\\xc3\\xb3\\n\\n#x\\n[[A]]#0\\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 2: expect hex char",
+        33
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        21
+      ],
+      [
+        "line 3: expect hex char",
+        17
+      ],
+      [
+        "line 5: key exists",
+        15
+      ],
+      [
+        "line 6: expect hex char",
+        12
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 205.76,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 205.76
+}

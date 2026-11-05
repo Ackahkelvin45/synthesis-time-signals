@@ -1,0 +1,122 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.911,
+  "summary": {
+    "outcomes": {
+      "valid": 254,
+      "reject": 96
+    },
+    "acceptance_rate": 0.726,
+    "max_nesting_depth": 2078,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.059,
+    "novelty": 20,
+    "divergences": 69,
+    "divergence_examples": [
+      "b'-'",
+      "b'1.'",
+      "b'[{\"\\\\uDC00\\\\t\\\\t\\\\ud5CD\\xf0\\x9f\\x8f\\xbb&\\\\b\":-1e-400,\"\\xc4\\x99\\xc3\\x81\":\"\\\\uE667\\\\\\\\#\\\\/\\\\u0005\\\\udEFB\",\"\\\\\"\\\\uDFFF\":'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 72.83,
+    "region_coverage_pct": 83.36,
+    "least_covered_functions": [
+      "json_serialize_string (0% of branches)",
+      "json_serialize_to_buffer_r (0% of branches)",
+      "json_value_deep_copy (0% of branches)",
+      "json_value_equals (0% of branches)",
+      "json_validate (0% of branches)"
+    ],
+    "least_covered_function_source": "static int json_serialize_string(const char *string, size_t len, char *buf) {\n    size_t i = 0;\n    char c = '\\0';\n    int written = -1, written_total = 0;\n    APPEND_STRING(\"\\\"\");\n    for (i = 0; i < len; i++) {\n        c = string[i];\n        switch (c) {\n            case '\\\"': APPEND_STRING(\"\\\\\\\"\"); break;\n            case '\\\\': APPEND_STRING(\"\\\\\\\\\"); break;\n            case '\\b': APPEND_STRING(\"\\\\b\"); break;\n            case '\\f': APPEND_STRING(\"\\\\f\"); break;\n            case '\\n': APPEND_STRING(\"\\\\n\"); break;\n            case '\\r': APPEND_STRING(\"\\\\r\"); break;\n            case '\\t': APPEND_STRING(\"\\\\t\"); break;\n            case '\\x00': APPEND_STRING(\"\\\\u0000\"); break;\n            case '\\x01': APPEND_STRING(\"\\\\u0001\"); break;\n            case '\\x02': APPEND_STRING(\"\\\\u0002\"); break;\n            case '\\x03': APPEND_STRING(\"\\\\u0003\"); break;\n            case '\\x04': APPEND_STRING(\"\\\\u0004\"); break;\n            case '\\x05': APPEND_STRING(\"\\\\u0005\"); break;\n            case '\\x06': APPEND_STRING(\"\\\\u0006\"); break;\n            case '\\x07': APPEND_STRING(\"\\\\u0007\"); break;\n            /* '\\x08' duplicate: '\\b' */\n            /* '\\x09' duplicate: '\\t' */\n            /* '\\x0a' duplicate: '\\n' */\n            case '\\x0b': APPEND_STRING(\"\\\\u000b\"); break;\n            /* '\\x0c' duplicate: '\\f' */\n            /* '\\x0d' duplicate: '\\r' */\n            case '\\x0e': APPEND_STRING(\"\\\\u000e\"); break;\n            case '\\x0f': APPEND_STRING(\"\\\\u000f\"); break;\n            case '\\x10': APPEND_STRING(\"\\\\u0010\"); break;\n            case '\\x11': APPEND_STRING(\"\\\\u0011\"); break;\n            case '\\x12': APPEND_STRING(\"\\\\u0012\"); break;\n            case '\\x13': APPEND_STRING(\"\\\\u0013\"); break;\n            case '\\x14': APPEND_STRING(\"\\\\u0014\"); break;\n            case '\\x15': APPEND_STRING(\"\\\\u0015\"); break;\n            case '\\x16': APPEND_STRING(\"\\\\u0016\"); break;\n            case '\\x17': APPEND_STRING(\"\\\\u0017\"); break;\n            case '\\x18': APPEND_STRING(\"\\\\u0018\"); break;\n            case '\\x19': APPEND_STRING(\"\\\\u0019\"); break;\n            case '\\x1a': APPEND_STRING(\"\\\\u001a\"); break;\n            case '\\x1b': APPEND_STRING(\"\\\\u001b\"); break;\n            case '\\x1c': APPEND_STRING(\"\\\\u001c\"); break;\n            case '\\x1d': APPEND_STRING(\"\\\\u001d\"); break;\n            case '\\x1e': APPEND_STRING(\"\\\\u001e\"); break;\n            case '\\x1f': APPEND_STRING(\"\\\\u001f\"); break;\n            case '/':\n                if (parson_escape_slashes) {\n                    APPEND_STRING(\"\\\\/\");  /* to make json embeddable in xml\\/html */\n                } else {\n                    APPEND_STRING(\"/\");\n                }\n                break;\n            default:\n                if (buf != NULL) {\n                    buf[0] = c;\n                    buf += 1;\n                }\n                written_total += 1;\n                break;\n        }\n    }\n    APPEND_STRING(\"\\\"\");\n    return written_total;\n}"
+  },
+  "coverage_in_loop": {
+    "branch_pct": 72.83,
+    "region_pct": 83.36,
+    "line_pct": 83.07,
+    "branch_pct_file": 22.41,
+    "region_pct_file": 23.42,
+    "least_covered_functions": [
+      {
+        "name": "json_serialize_string",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 427
+      },
+      {
+        "name": "json_serialize_to_buffer_r",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 317
+      },
+      {
+        "name": "json_value_deep_copy",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 71
+      },
+      {
+        "name": "json_value_equals",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 58
+      },
+      {
+        "name": "json_validate",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 54
+      }
+    ],
+    "functions_total": 144
+  },
+  "proxy_score": 71.18,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.7,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 72.83
+}

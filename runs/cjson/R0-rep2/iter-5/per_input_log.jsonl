@@ -1,0 +1,350 @@
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff 151640.  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 1"}
+{"input": "\ufeff \"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff -06  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 1"}
+{"input": " ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 1"}
+{"input": ",", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 1"}
+{"input": "", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 0"}
+{"input": ":", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 1"}
+{"input": " \"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " Infinity  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 11"}
+{"input": "[", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 1"}
+{"input": "-Infinity", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 9"}
+{"input": "-Infinity 1 2", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 13"}
+{"input": "\r\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r{}\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n-6937\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n-2  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n-2 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n-2\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n-1 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t[.4,Infinity\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 18"}
+{"input": "\ufeff\n\t[Infinity,\"\"\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 18"}
+{"input": "\ufeff\n\t[Infinity,[Infinity,\"\"\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 28"}
+{"input": "\ufeff  \"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  [\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 7"}
+{"input": "\ufeff  [  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 7 of 8"}
+{"input": "\ufeff  {,}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 7 of 8"}
+{"input": "\ufeff  {,}  \u0000\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 7 of 12"}
+{"input": "\ufeff  {,} \u0000\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 7 of 11"}
+{"input": "\ufeff\r{\t\"\u0001\\uD800\\u3Cbf\"\n:  [],\"\\udc00\t|\n:\n81.83}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 8 of 47"}
+{"input": "\ufeff\r{\t\"\\udc00\t|\n:\n81.83,\"\\udc00\t|\n:\n81.83}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 7 of 43"}
+{"input": "\ufeff -0.84e-19088\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t-0.84e-19088\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t-0.0e0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t-0.0E0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t-0.0e0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t-0.0E0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff -0.0E0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  -0\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-0\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff -0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff -2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff -2 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r{\n\t\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 7 of 8"}
+{"input": "\ufeff\n\t{\n\t\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 8 of 9"}
+{"input": "\t[\n0.33E+554883\r] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[\n0.0e0]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\n0.0e0]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\n0.0e0]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t-0e309\t [", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t[\t [", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 8 of 9"}
+{"input": "\ufeff\n\t[\t 0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 8 of 9"}
+{"input": "\ufeff\n\t[\t -0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 9 of 10"}
+{"input": "\ufeff\n\t[\n\t -0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 10 of 11"}
+{"input": "\ufeff\n\t0  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff {\"\\uDFFF\\\"\u001a0\"\n\t:\r[,],\"\\uDFFF\u0005\u143a\\uD800\u012d\r\u016e\u0002  :  [  {,[,-Infinity,[,],null]   ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 82"}
+{"input": "\ufeff {\"\\uD800\\\"\u001a0\"\n\t:\r[,],\"\\uDFFF\u0005\u143a\\uD800\u012d\r\u016e\u0002  :  [  {,[,-Infinity,[,],null]   ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 82"}
+{"input": "\ufeff {\"\\uD800\\\"\u001a0\"\n\t:\r[,],\"\\uDFFF\u0005\u0080\\uD800\u012d\r\u016e\u0002  :  [  {,[,-Infinity,[,],null]   ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 81"}
+{"input": "\ufeff {\"\\uD800\\\"\u001a0\"\n\t:\r[,],\"\\uDFFF\u0005\u0080\\ud800:\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 44"}
+{"input": "\ufeff {\"\\uD800\":\n\t\"0\",\"\": \"\"  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 28"}
+{"input": "\ufeff {\"\\uD800\":\n\t\"\\uD800\",\"\": \"\"  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 33"}
+{"input": "\ufeff {\"\\uD800\":\n\t\"\\uD800\",\"\": \"\\uD800\"  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 39"}
+{"input": " ]\t ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 4"}
+{"input": "\t]\t ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 4"}
+{"input": "  31.93E+2 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  31.2E+2 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  31.2e0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  31.0e0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  31.0e0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  31.0e0  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n[\t-42862.249E7\n\t] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n0.0E+2862", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n0.0e0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n0.0E0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff0.0E0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff0.0e0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\t]\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 6"}
+{"input": "\ufeff\r]\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 6"}
+{"input": "\ufeff\n\t{\r\"\u00b3\\u6bb0@\"  :\rtrue,\"u\"\r:\tfalse\t}  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t{\r\"\u00b3\\u6bb0@\"  :\rtrue,\"\\n\": \"@\"\r}\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t{\r\"\u00b3\\u6bb0@\"  :\rtrue,\"\\n\": \"\u0080\"\r}\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t{\r\"\u00b3\\u6bb0@\"  :\rtrue,\"\\n\": \"\u00b3\"\r}\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t{\r\"\\n\\u6bb0@\"  :\rtrue,\"\\n\": \"\u00b3\"\r}\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t{\r\"\\n\\u0000\"  :0}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t{\r\"\\n\\u0000\\\"\": \"\"} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\tfalse\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\nfalse\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " false\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\tfalse\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\tnull ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff null ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t.51547\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 12"}
+{"input": "\ufeff\n\t.0\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 9"}
+{"input": "0\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff 004\r 1 2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r004\r 1 2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-00", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-00 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-00\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff-00 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff-00", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"\\ud800\\udc00\\udbff\":  {},\"\"\n:  {'\\ueF0F\\ud800\\ude00\u0006'\nNaN}\n 1 2", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 16 of 67"}
+{"input": "  {\"\\ud800\\ude00\\udbff\":  {},\"\"\n:  {'\\ueF0F\\ud800\\ude00\u0006'\nNaN}\n 1 2", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 16 of 67"}
+{"input": "  {\"\\ud800\\ude00\\udbff\":  {},\"\"\n:  {\"\\ud800\\ude00\\udbff\"\nNaN}\n 1 2", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 16 of 66"}
+{"input": "  {\"\\ud800\\ude00\\udbff\":  {},\"\\ud800\\ude00\\udbff\"\n:  {\"\\ud800\\ude00\\udbff\"\nNaN}\n 1 2", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 16 of 84"}
+{"input": "  {\"\\ud800\\ude00\\udbff\\udbff\"  :\"\\ud800\\ude00\\udbff\",\"\":\"\\ud800\\ude00\\udbff\"\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 16 of 77"}
+{"input": "  {\"\\ud800\\ude00\\udbff\\udbff\"  :\"\\ud800\\ude00\\udbff\",\"\":\"\" ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 16 of 59"}
+{"input": "\rtrue\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\rtrue\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r0\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r0\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "5151920880.\n ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "5151920880. ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\t'\u001c\u001a\u0011\\udbff\u0016\u0138\u0019\f'  abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 25"}
+{"input": "\ufeff\t'\u001c\u001a\u0011\\ud800'", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 15"}
+{"input": "\ufeff\t'\u001c\u001a\u0011\\ud800'\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 16"}
+{"input": "\ufeff\t'\u001c\u001a\u0011\\udbff'", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 15"}
+{"input": "\ufeff\t'' \"\u0011\\udbff\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 16"}
+{"input": "\ufeff\t'' \"\\udbff\\udbff\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 21"}
+{"input": "\ufeff\t''\t \"\\udbff\\udbff\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 22"}
+{"input": "\ufeff  false\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\rfalse\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r[]\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t0.4922313E+309\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t0.0e309 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t0.0e308", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\t0.0e308\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [,]\n\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 6"}
+{"input": " [,] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 5"}
+{"input": " [,]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 6"}
+{"input": " {}\r\u0000\u0000", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {} \u0000\u0000", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\nnull\t\u0000\u0000", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tnull\t\u0000\u0000", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "338056858118e1000\rabc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e308 1 2", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e+308", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e309", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1E308 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "2e+308 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e309 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 4"}
+{"input": "  {  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 5"}
+{"input": "\ufeff[,[,]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 10"}
+{"input": "\ufeff[,[,]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 8"}
+{"input": "\ufeff[,[,[,]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 10"}
+{"input": "\ufeff[,[,[,[,]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 12"}
+{"input": "\ufeff[,[,[,[,[,[,]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 16"}
+{"input": "\ufeff[,[,[,[,[,0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 14"}
+{"input": "\ufeff[,[,[,[,[,[,[,[,[,0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 22"}
+{"input": "\ufeff  9051e03774\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  9051e03774  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  903774e03774  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  903774e+03774", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  903774e+03774  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  1e0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff 1e0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t\"i$\u0611\u0095\\u3EaE0\\udc00\\u57dD\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 19 of 32"}
+{"input": "\ufeff\n\t\"i$\u0095\u0095\\u3EaE0\\udc00\\u57dD\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 19 of 32"}
+{"input": "\ufeff\n\t\"i$\u0095\u0095\\u3EaE0\\udc00\\u57dD\"\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 19 of 34"}
+{"input": "\ufeff\n\t\"i$\u0095\u0095\u00800\\udc00\\u57dD\"\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 15 of 30"}
+{"input": "\ufeff\n\t\"i$\u0095\u0095\u00800\\udc00\\u0000\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 15 of 28"}
+{"input": "\ufeff\n\t\"i$\u00950\u00800\\udc00\\u0000\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 14 of 27"}
+{"input": "\ufeff\n\t\"i$\\u00000\u00800\\udc00\\u0000\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 18 of 31"}
+{"input": "\n\t[  -Infinity,0E6,\"\\\",[-86307.8,{,},-08894536524\n\t]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 52"}
+{"input": "\n\t[  -Infinity,0E6,\"\\\",[-86307.8,{,}]\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 39"}
+{"input": "\n\t[  -Infinity,-0E6,\"\\\",[-86307.8,{,}]\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 40"}
+{"input": "\n\t[  -Infinity,-0E6,\"\\\",[\"\",\"\"] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 32"}
+{"input": "\n\t[  -Infinity,-0E6,\"\\\",[\"\",\"\"]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 31"}
+{"input": "\n\t[  -Infinity,0e0]\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 20"}
+{"input": "\n\t[  -Infinity,0e0]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 19"}
+{"input": "\ufeff [,]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 9"}
+{"input": "\ufeff  [,]  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 10"}
+{"input": "\ufeff  [,] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 9"}
+{"input": "\ufeff [,] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 8"}
+{"input": "\n\t{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5002 of 6011"}
+{"input": "\n\t{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5002 of 6013"}
+{"input": "\ufeff\"\\udfff\u00fb\u0167\u008e\b\\udc00\u001f@  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 27"}
+{"input": "\ufeff\"\\udfff\u00fb\u0167\u008e\u0167\\udc00\u001f@  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 28"}
+{"input": "\ufeff\"\\udfff\u00fb\u0167\u008e\u0167\\udfff\u001f@  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 28"}
+{"input": "\ufeff\"\\udfff\u00fb\u0167\u008e\u0167\u0167\u001f@  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 24"}
+{"input": "\ufeff\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 4"}
+{"input": "\ufeff\rnull\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\tnull\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff}\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 5"}
+{"input": "\ufeff}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 4"}
+{"input": "[\n[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 4002"}
+{"input": "[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{[{", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 4004"}
+{"input": "\ufeff\r6755\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r6755\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r1  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  1  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  -0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"\u0007\u00a8\\uDFFF\\ucC37\\ud800\\ude00\\udbff\u009b\\u52B5\"\t:\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 51"}
+{"input": "\t{\"\u0007\u00a8\\ud800\\ucC37\\ud800\\ude00\\udbff\u009b\\u52B5\"\t:\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 51"}
+{"input": "\t{\"\\u52B5\u00a8\\ud800\\ucC37\\ud800\\ude00\\udbff\u009b\\u52B5\"\t:\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 11 of 56"}
+{"input": "\t{\"\\u52B5\u00a8\\ud800\\ucC37\\ud800\\ude00\\ud800\u009b\\u52B5\"\t:\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 11 of 56"}
+{"input": "\t{\"\\u52B5\u00a8\\ud800\\u0000\": }", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 11 of 27"}
+{"input": "\t{\"\\u52B5\u00a8\\u52B5\\u0000\": }", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 26 of 27"}
+{"input": "\ufeff -66736165. ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff -9. ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff -2.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff -2. ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff-2.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff-2. ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff-0.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  [\rtrue,{ \"\\ucFAcJ\\udc00\"\r:\r[{},true,[\nnull,true,{\r\"\u013a\"\t:\n\tnull },{},-0 ]\t]  }]\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 22 of 84"}
+{"input": "\ufeff  [\rtrue,{ \"\\ucFAc\\ud800\\udc00\"\r:\r[{},true,[\nnull,true,{\r\"\u013a\"\t:\n\tnull },{},-0 ]\t]  }]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  [\rtrue,{ \"\\ucFAc\\ud800\\udc00\"\r:\r[{},true,[\nnull,true,null],null]\n\t}] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  [\rtrue,{ \"\\ucFAc\\udc00\\udc00\"\r:\r[{},true,[\nnull,true,null],null]\n\t}] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 21 of 74"}
+{"input": "\ufeff  [\rtrue,{ \"\u001f\" :\"\"}\t]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  [\r\"\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  [\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 5"}
+{"input": "\n\t[\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 5"}
+{"input": "\ufeff\n\t{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\n\t{}\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  {\"\u00ea\u001d\\uE0da\u00b3\" :[,-Infinity,\"\\uD800\u0acd\u00c3\\udfff\u0016\t:\n0e+308  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 19 of 60"}
+{"input": "  {\"\u00ea\u001d\\uE0da\u00b3\" :[,-Infinity,\"\\uE0da\u0acd\u00c3\\udfff\u0016\t:\n0e+308  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 19 of 60"}
+{"input": "  {\"\u00ea\u001d\\uE0da\u00b3\" :[,-Infinity,\"\\uE0da\u0acd\u00c3\\udfff\u00b3\t:\n0e+308  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 19 of 61"}
+{"input": "  {\"\u00ea\u001d\\uE0da\u00b3\"\t:[,-Infinity,\"\\uE0da\u0acd\u00c3\\udfff\u00b3\t:\n0e+308  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 19 of 61"}
+{"input": "  {\"\u00ea\u001d\\uE0da\u00b3\"\t:[,-Infinity,\"\\uE0da\u0acd\u00c3\\udfff\u00b3\u00c3\n:  \"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 19 of 58"}
+{"input": "  {\"\u00ea\u001d\\uE0da\u00b3\"\t:  [,-Infinity,\"\\uE0da\u0acd\u00c3\\udfff\u00b3\u00c3\n:  \"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 21 of 60"}
+{"input": "  {\"\\uE0da\u0acd\u00c3\\udfff\u00b3\u00c3\t:  [,-Infinity,\"\\uE0da\u0acd\u00c3\\udfff\u00b3\u00c3\n:  \"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 15 of 69"}
+{"input": "\ufeff\n\t-Infinity", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 14"}
+{"input": "\ufeff-Infinity", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 12"}
+{"input": "\ufeff{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4998 of 6002"}
+{"input": "\ufeff {\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a\":{\"a", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4999 of 6003"}
+{"input": "\r1241e-693668\rabc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r1e0  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r1e0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r0e0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0e0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff  .993178\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 13"}
+{"input": "\ufeff  .0  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 5 of 9"}
+{"input": "\ufeff\n\t[null,trueabc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 15 of 18"}
+{"input": "\ufeff[null,trueabc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 13 of 16"}
+{"input": "\ufeffnull", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  -0.963e-308\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  0.0E308", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  0.0E308  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  0.0e308 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  0.0e308", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "  0.0e308  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0.0e308", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\rnull\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tnull\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff'\\\\\\\"'\n 0E+088836", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 20"}
+{"input": "\ufeff'\\\\\\\"'\n -0e0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 15"}
+{"input": "\ufeff'\\\"\\\"'\n -0e0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 15"}
+{"input": "\ufeff'\\\"'abc", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 10"}
+{"input": "\ufeff''", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 5"}
+{"input": "\ufeff\r{'\u000f\\u717a\\uDb2b\\uDFFF\u012b\\uE7d9\\r\\ud83d\\udfff' :\n}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 53"}
+{"input": "\ufeff\r{'\u000f\\u717a\\uDb2b\\uDFFF\\u0000\\uE7d9\\r\\ud83d\\udfff' :\n}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 57"}
+{"input": "\ufeff\r{'\u000f\\u717a\\uDb2b\\uDFFF\\u0000\\u717a\\r\\ud83d\\udfff' :\n}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 57"}
+{"input": "\ufeff\r{'\u000f\\u717a\\u717a\\uDFFF\\u0000\\u717a\\r\\ud83d\\udfff' :\n}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 57"}
+{"input": "\ufeff\n{'\u000f\\u717a\\u717a\\uDFFF\\u0000\\u717a\\r\\ud83d\\udfff' :\n}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 57"}
+{"input": "\ufeff\n{'\u000f\\u717a\\u0000\u000f\\u717a\\u717a\\uDFFF\\u0000' :}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 48"}
+{"input": "\ufeff\n{'\u000f\\u717a\\u717a\u000f\\u717a\\u717a\\uDFFF\\u0000' :}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 48"}
+{"input": "\ufeff {'\u009b\\ud800\\udfff\\n\\t\\uAbf0'  :  }  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 39"}
+{"input": "\ufeff {'\u009b\\ud800\\udfff\\t\\t\\uAbf0'  :  }  ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 39"}
+{"input": "\ufeff {'\u009b\\udbff\\udc00':}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 24"}
+{"input": "\ufeff {\" :\t}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 10"}
+{"input": "\ufeff {\" : }", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 10"}
+{"input": "\ufeff {\": } ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 10"}
+{"input": "\ufeff {\":} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 9"}
+{"input": "\n\t'\u1f8d\u00ed\\\\\\uDFFF\\t' ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 20"}
+{"input": "\n\t'\u1f8d\u1f8d\\\\\\uDFFF\\t' ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 21"}
+{"input": " '\u1f8d\u1f8d\\\\\\uDFFF\\t' ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 20"}
+{"input": " '\u1f8d\\\\\\\\\\uDFFF\\t' ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 19"}
+{"input": " '\u1f8d\\\\\\\\\\ud800'", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 16"}
+{"input": " '\u1f8d\\\\\\\\\\ud800' ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 17"}
+{"input": " '' ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 4"}
+{"input": "\t0.0abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t0.0\t\u0000", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t0.0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0.0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{},]\n\t\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 8"}
+{"input": "[\"\",]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 5"}
+{"input": "\t\"\\uZZZZ\"  ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\x\"\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 6"}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\\f\b\n\t\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 8"}
+{"input": "\t\"\\f\b\t\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 7"}
+{"input": "\t\"\\f\\\"\t\u0000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 8"}
+{"input": "\t\"\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 3"}
+{"input": " {   1 2", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 8"}
+{"input": "  {   1 2", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 7 of 9"}
+{"input": "\ufeff\n\tnull\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\nnull\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "NaN", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 0 of 3"}
+{"input": "\t-859411655157470029808.\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-859411655157470029808.\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-1.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t-2.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t0.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\\udbff\\\\\\t\u00cb\\ud83d\\ude00\\r\\t\"\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 32"}
+{"input": " \"\\udbff\\\\\\t\u00cb\\udbff\\r\\t\"\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 26"}
+{"input": " \"\\udbff\\r\\t\u00cb\\udbff\\r\\t\"\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 26"}
+{"input": " \"\\udbff\\t\\t\u00cb\\udbff\\r\\t\"\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 26"}
+{"input": " \"\\udbff\\t\\t\\\"\\udbff\\r\\t\"\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 2 of 26"}
+{"input": " \"\\\\\\t\\t\\\"\\udbff\\r\\t\"\r", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 10 of 22"}
+{"input": " \"\\\\\\t\\t\\\"\\ud800\" ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 10 of 18"}
+{"input": "\ufeff\t-0xdE\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\t-0xdE\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\t-0x0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\t-0x0\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff-0x0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r0e75882\n\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r0e75882\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-0e0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-0E0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-0E0\r", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-0e+0", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff\r-0E0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ufeff [\n ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 7"}
+{"input": "\ufeff\n[\n ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 6 of 7"}
+{"input": "\r{  \"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\" :\tfalse,\"\":[],\"\\ud800\\\"\\b\\ubc90\\udc00\"\t:null,\"\\\\\u012a\f\\uDFFF\\ud800\\ude00\" :\nfalse\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 28 of 126"}
+{"input": "\r{  \"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\" :\tfalse,\"\":[],\"\\ud800\\\"\\b\\ubc90\\udc00\"\t:null,\"\\\\\u012a\f\\uDFFF\\ud83d\\ude00\" :\nfalse\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 28 of 126"}
+{"input": "\r{  \"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\" :\tfalse,\"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\":[],\"\\ud800\\\"\\b\\ubc90\\udc00\"\t:null,\"\\\\\u012a\f\\uDFFF\\ud83d\\ude00\" :\nfalse\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 28 of 163"}
+{"input": "\r{  \"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\" :\tfalse,\"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\":\r[],\"\\ud800\\\"\\b\\ubc90\\udc00\"\t:null,\"\\\\\u012a\f\\uDFFF\\ud83d\\ude00\" :\nfalse\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 28 of 164"}
+{"input": "\r{  \"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ucaaF\\f\" :\tfalse,\"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\":\r[],\"\\ud800\\\"\\b\\ubc90\\udc00\"\t:null,\"\\\\\u012a\f\\uDFFF\\ud83d\\ude00\" :\nfalse\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 28 of 164"}
+{"input": "\r{  \"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ucaaF\\f\" :\tfalse,\"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\":\r[],\"\\ud800\\\"\\b\\ubc90\\udc00\"\t:null,\"\\f\u012a\f\\uDFFF\\ud83d\\ude00\" :\nfalse\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 28 of 164"}
+{"input": "\r{  \"\" :\tfalse,\"\\ucaaF\u00f6\u0017\\ud83d\\udc00\u010a\\ud800\\ufef8\\f\":\r[],\"\\ud800\\\"\\b\\ubc90\\udc00\"\t:null,\"\\f\u012a\f\\uDFFF\\ud83d\\ude00\" :\nfalse\n}\n\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 39 of 127"}
+{"input": "\r\"\\\"\\udfff\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 4 of 11"}
+{"input": "\"\\\"\\udfff\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 3 of 10"}
+{"input": "\"\\udfff\\udfff\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 14"}
+{"input": "\"\\ud800\"\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 9"}
+{"input": "\"\\ud800\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "parse error at byte 1 of 8"}

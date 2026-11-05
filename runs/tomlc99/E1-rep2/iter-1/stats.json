@@ -1,0 +1,172 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.18900000000000003,
+  "summary": {
+    "outcomes": {
+      "valid": 11,
+      "reject": 33
+    },
+    "acceptance_rate": 0.25,
+    "max_nesting_depth": 2,
+    "productions_accepted": [
+      "BOOLEAN",
+      "DEC_INT",
+      "FLOAT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "expression",
+      "floating_point",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "simple_key",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "quoted_key",
+      "dotted_key",
+      "string",
+      "date_time",
+      "table",
+      "standard_table",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "NL",
+      "COMMENT",
+      "BASIC_STRING",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 4,
+    "divergences": 0,
+    "divergence_examples": [],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        19
+      ],
+      [
+        "line 1: newline not allowed in inline table",
+        10
+      ],
+      [
+        "line 1: expect a string",
+        4
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 11,
+      "reject": 33
+    },
+    "acceptance_rate": 0.25,
+    "max_nesting_depth": 2,
+    "productions_accepted": [
+      "BOOLEAN",
+      "DEC_INT",
+      "FLOAT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "expression",
+      "floating_point",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "simple_key",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "quoted_key",
+      "dotted_key",
+      "string",
+      "date_time",
+      "table",
+      "standard_table",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "NL",
+      "COMMENT",
+      "BASIC_STRING",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 4,
+    "divergences": 0,
+    "divergence_examples": [],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 99.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 99.0
+}

@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.07766666666666668,
+  "summary": {
+    "outcomes": {
+      "valid": 24,
+      "reject": 326
+    },
+    "acceptance_rate": 0.069,
+    "max_nesting_depth": 19,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "date_time",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "COMMENT",
+      "BOOLEAN",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 14,
+    "divergences": 3,
+    "divergence_examples": [
+      "b\"ZXA1tNJg.'\\x0b\\x0b\\x0c\\xf2\\x82\\xb5\\xa4\\xc2\\xa0\\t' = [[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]\"",
+      "b\"ZXA1tNJg.'\\xc2\\xa0\\x0b\\x0c\\xf2\\x82\\xb5\\xa4\\xc2\\xa0\\t' = [[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]\"",
+      "b'\\'B\\x7f\\'.\"\\\\b\".\\'\\xc2\\x93\\xc3\\xba2\\'.\\'\\' = [[[[[1]]]]]'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: missing =",
+        210
+      ],
+      [
+        "line 1: syntax error",
+        23
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)",
+        22
+      ],
+      [
+        "line 1: bad key",
+        15
+      ],
+      [
+        "line 1: expect hex char",
+        13
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 144.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 144.0
+}

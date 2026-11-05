@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.3443333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 121,
+      "reject": 229
+    },
+    "acceptance_rate": 0.346,
+    "max_nesting_depth": 2048,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "ML_LITERAL_STRING",
+      "NAN",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE"
+    ],
+    "cap_distance_mass": 0.165,
+    "novelty": 33,
+    "divergences": 60,
+    "divergence_examples": [
+      "b'x = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {'",
+      "b'x = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {a = {'",
+      "b'\\nSj97.\\'\\xf3\\xb3\\xae\\x9d\\xf3\\xae\\xb9\\xa5\\xc3\\xbb\\x0c\\xc3\\x92\\xc2\\xb8\\xc2\\x9d\\xf3\\xa5\\xa9\\xa0\\' = \"\"\"\"\"\"\\n\\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: syntax error",
+        48
+      ],
+      [
+        "line 1: unterminated quote",
+        31
+      ],
+      [
+        "line 1: extra chars after value",
+        27
+      ],
+      [
+        "line 1: invalid or missing key",
+        26
+      ],
+      [
+        "line 1: missing =",
+        25
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 236.3,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 236.3
+}

@@ -1,0 +1,153 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.3,
+  "summary": {
+    "outcomes": {
+      "valid": 2,
+      "reject": 16
+    },
+    "acceptance_rate": 0.111,
+    "max_nesting_depth": 0,
+    "productions_accepted": [
+      "comment",
+      "document",
+      "expression"
+    ],
+    "productions_gap": [
+      "key_value",
+      "key",
+      "simple_key",
+      "unquoted_key",
+      "quoted_key",
+      "dotted_key",
+      "value",
+      "string",
+      "integer",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "table",
+      "standard_table",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "NL",
+      "COMMENT",
+      "BASIC_STRING",
+      "LITERAL_STRING",
+      "UNQUOTED_KEY",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 1,
+    "divergences": 0,
+    "divergence_examples": [],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        9
+      ],
+      [
+        "line 1: newline not allowed in inline table",
+        5
+      ],
+      [
+        "line 1: expect a string",
+        2
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 36.29,
+    "region_coverage_pct": 39.15
+  },
+  "coverage_in_loop": {
+    "branch_pct": 36.29,
+    "region_pct": 39.15,
+    "line_pct": 41.98,
+    "branch_pct_file": 28.98,
+    "region_pct_file": 31.09,
+    "least_covered_functions": [
+      {
+        "name": "norm_basic_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 126
+      },
+      {
+        "name": "parse_select",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 103
+      },
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "walk_tabpath",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 51
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 16.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 36.29
+}

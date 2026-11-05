@@ -1,0 +1,173 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.4566666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 24,
+      "reject": 41
+    },
+    "acceptance_rate": 0.369,
+    "max_nesting_depth": 3,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "LOCAL_DATE",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "simple_key",
+      "string",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "quoted_key",
+      "dotted_key",
+      "floating_point",
+      "table",
+      "standard_table",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 9,
+    "divergences": 3,
+    "divergence_examples": [
+      "b'a = [[[\\t0000-00-00\\n# c\\n,\\n\\n# c\\n]]]'",
+      "b'a = [[1979-02-30]]'",
+      "b'a = \"\\\\U001333B2\"'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1096)",
+        28
+      ],
+      [
+        "line 1: expect a string",
+        6
+      ],
+      [
+        "line 1: newline not allowed in inline table",
+        4
+      ],
+      [
+        "line 1: syntax error",
+        1
+      ],
+      [
+        "line 2: syntax error",
+        1
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 43.17,
+    "region_coverage_pct": 46.36,
+    "least_covered_functions": [
+      "norm_basic_str (0% of branches)",
+      "parse_select (0% of branches)",
+      "toml_utf8_to_ucs (0% of branches)",
+      "walk_tabpath (0% of branches)",
+      "toml_parse_file (0% of branches)"
+    ],
+    "least_covered_function_source": "static char *norm_basic_str(const char *src, int srclen, int multiline,\n                            char *errbuf, int errbufsz) {\n  char *dst = 0; /* will write to dst[] and return it */\n  int max = 0;   /* max size of dst[] */\n  int off = 0;   /* cur offset in dst[] */\n  const char *sp = src;\n  const char *sq = src + srclen;\n  int ch;\n\n  /* scan forward on src */\n  for (;;) {\n    if (off >= max - 10) { /* have some slack for misc stuff */\n      int newmax = max + 50;\n      char *x = expand(dst, max, newmax);\n      if (!x) {\n        xfree(dst);\n        snprintf(errbuf, errbufsz, \"out of memory\");\n        return 0;\n      }\n      dst = x;\n      max = newmax;\n    }\n\n    /* finished? */\n    if (sp >= sq)\n      break;\n\n    ch = *sp++;\n    if (ch != '\\\\') {\n      /* these chars must be escaped: U+0000 to U+0008, U+000A to U+001F, U+007F\n       */\n      if ((0 <= ch && ch <= 0x08) || (0x0a <= ch && ch <= 0x1f) ||\n          (ch == 0x7f)) {\n        if (!(multiline && (ch == '\\r' || ch == '\\n'))) {\n          xfree(dst);\n          snprintf(errbuf, errbufsz, \"invalid char U+%04x\", ch);\n          return 0;\n        }\n      }\n\n      // a plain copy suffice\n      dst[off++] = ch;\n      continue;\n    }\n\n    /* ch was backslash. we expect the escape char. */\n    if (sp >= sq) {\n      snprintf(errbuf, errbufsz, \"last backslash is invalid\");\n      xfree(dst);\n      return 0;\n    }\n\n    /* for multi-line, we want to kill line-ending-backslash ... */\n    if (multiline) {\n\n      // if there is only whitespace after the backslash ...\n      if (sp[strspn(sp, \" \\t\\r\")] == '\\n') {\n        /* skip all the following whitespaces */\n        sp += strspn(sp, \" \\t\\r\\n\");\n        continue;\n      }\n    }\n\n    /* get the escaped char */\n    ch = *sp++;\n    switch (ch) {\n    case 'u':\n    case 'U': {\n      int64_t ucs = 0;\n      int nhex = (ch == 'u' ? 4 : 8);\n      for (int i = 0; i < nhex; i++) {\n        if (sp >= sq) {\n          snprintf(errbuf, errbufsz, \"\\\\%c expects %d hex chars\", ch, nhex);\n          xfree(dst);\n          return 0;\n        }\n        ch = *sp++;\n        int v = ('0' <= ch && ch <= '9')\n                    ? ch - '0'\n                    : (('A' <= ch && ch <= 'F') ? ch - 'A' + 10 : -1);\n/* ... truncated ... */"
+  },
+  "coverage_in_loop": {
+    "branch_pct": 43.17,
+    "region_pct": 46.36,
+    "line_pct": 50.61,
+    "branch_pct_file": 34.48,
+    "region_pct_file": 36.81,
+    "least_covered_functions": [
+      {
+        "name": "norm_basic_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 126
+      },
+      {
+        "name": "parse_select",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 103
+      },
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "walk_tabpath",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 51
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 134.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 43.17
+}

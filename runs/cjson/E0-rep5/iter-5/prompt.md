@@ -1,0 +1,246 @@
+Here is the current Hypothesis strategy:
+
+```python
+from hypothesis import strategies as st
+import json
+
+# ---------------------------------------------------------------------------
+# Helper building blocks
+# ---------------------------------------------------------------------------
+
+def _join(parts):
+    return lambda t: "".join(t)
+
+# A safe, ordinary string body (no need to be JSON-escaped since we build raw)
+_safe_chars = st.characters(
+    blacklist_categories=("Cs",),  # avoid lone surrogates in raw text
+    blacklist_characters='"\\',
+)
+
+def _raw_string_body():
+    # Raw (unescaped) content, including control chars and NUL.
+    return st.text(
+        alphabet=st.one_of(
+            _safe_chars,
+            st.sampled_from(["\x00", "\x01", "\x09", "\x0a", "\x0d", "\x1f", "\x7f"]),
+        ),
+        max_size=12,
+    )
+
+def _escape_seq():
+    simple = st.sampled_from(
+        ['\\"', "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"]
+    )
+    hexdigits = "0123456789abcdefABCDEF"
+    unicode_esc = st.tuples(
+        st.just("\\u"),
+        st.text(alphabet=hexdigits, min_size=4, max_size=4),
+    ).map("".join)
+    # Deliberately include surrogate escapes (\ud800-\udfff)
+    surrogate_esc = st.tuples(
+        st.just("\\u"),
+        st.sampled_from(["d", "D"]),
+        st.text(alphabet="89abAB", min_size=1, max_size=1),
+        st.text(alphabet=hexdigits, min_size=2, max_size=2),
+    ).map("".join)
+    return st.one_of(simple, unicode_esc, surrogate_esc)
+
+def _json_string():
+    body = st.one_of(
+        _raw_string_body(),
+        st.lists(st.one_of(_raw_string_body(), _escape_seq()), max_size=6).map(
+            lambda parts: "".join(parts)
+        ),
+    )
+    return st.tuples(st.just('"'), body, st.just('"')).map("".join)
+
+# ---------------------------------------------------------------------------
+# Numbers
+# ---------------------------------------------------------------------------
+
+def _number():
+    digits = st.text(alphabet="0123456789", min_size=1, max_size=6)
+    int_part = st.one_of(
+        st.just("0"),
+        st.tuples(st.sampled_from("123456789"), digits).map("".join),
+        # leading-zero deviation (accepted by parser)
+        st.tuples(st.just("0"), digits).map("".join),
+        # hex deviation (accepted by parser)
+        st.tuples(st.just("0x"), st.text(alphabet="0123456789abcdefABCDEF", min_size=1, max_size=4)).map("".join),
+    )
+    sign = st.one_of(st.just(""), st.just("-"))
+    frac = st.one_of(
+        st.just(""),
+        st.tuples(st.just("."), digits).map("".join),
+        # trailing dot deviation
+        st.just("."),
+    )
+    exp = st.one_of(
+        st.just(""),
+        st.tuples(
+            st.sampled_from(["e", "E"]),
+            st.one_of(st.just(""), st.just("+"), st.just("-")),
+            digits,
+        ).map("".join),
+    )
+    # extreme magnitudes / overflow
+    extreme = st.sampled_from([
+        "1e309", "-1e309", "1e999", "1e-999", "9" * 30, "-" + "9" * 30,
+        "0e0", "1E+400", "1e-400",
+    ])
+    composed = st.tuples(sign, int_part, frac, exp).map("".join)
+    return st.one_of(composed, extreme)
+
+# ---------------------------------------------------------------------------
+# Malformed fragments (near-valid but broken)
+# ---------------------------------------------------------------------------
+
+def _malformed():
+    return st.sampled_from([
+        "",            # empty input
+        ",", "[,]", "{,}", "[1,,2]", '{"a":1,,"b":2}',
+        "[1,2,]", '{"a":1,}', '{"a" 1}', '{"a":}', '{:1}',
+        '"unterminated', "'single'", "{a:1}", "{'a':1}",
+        "-", "+1", ".5", "NaN", "Infinity", "-Infinity",
+        '["\\ud800"]', '["\\udfff"]',
+        "tru", "fals", "nul", "truex", "01", "1.", "0x10",
+        "[", "]", "{", "}", ":", "\\",
+        '"\\q"', '"\\u12"', '"\\uZZZZ"',
+    ])
+
+# ---------------------------------------------------------------------------
+# Recursive value strategy
+# ---------------------------------------------------------------------------
+
+def _leaf():
+    return st.one_of(
+        _json_string(),
+        _number(),
+        st.sampled_from(["true", "false", "null"]),
+    )
+
+def _ws():
+    return st.text(alphabet=" \t\n\r", max_size=2)
+
+def _value(draw_strategy):
+    # draw_strategy is a SearchStrategy for nested values
+    leaf = _leaf()
+
+    def make_array(t):
+        items = t
+        return "[" + ",".join(items) + "]"
+
+    def make_object(pairs):
+        return "{" + ",".join(pairs) + "}"
+
+    arr = st.lists(
+        st.tuples(_ws(), draw_strategy, _ws()).map(lambda p: p[1]),
+        max_size=4,
+    ).map(make_array)
+
+    def make_pair(kv):
+        k, v = kv
+        return k + ":" + v
+
+    obj = st.lists(
+        st.tuples(_json_string(), st.just(":"), draw_strategy).map(
+            lambda t: t[0] + t[1] + t[2]
+        ),
+        max_size=4,
+    ).map(make_object)
+
+    special = st.sampled_from(["{}", "[]"])
+
+    return st.one_of(leaf, arr, obj, special)
+
+# Depth-controlled recursive generation concentrating near the ~1000 limit.
+def _nested(depth):
+    # Build a value nested exactly `depth` levels deep using arrays.
+    return st.just("[" * depth + "0" + "]" * depth)
+
+def _deep_values():
+    # Concentrate interesting depths near the limit, including the exact cap
+    # boundary and just-past-cap cases for both arrays and objects.
+    return st.one_of(
+        st.integers(min_value=0, max_value=50).map(lambda d: "[" * d + "]" * d),
+        st.integers(min_value=990, max_value=1010).map(
+            lambda d: "[" * d + "0" + "]" * d
+        ),
+        st.integers(min_value=990, max_value=1010).map(
+            lambda d: '{"a":' * d + "0" + "}" * d
+        ),
+        st.sampled_from([999, 1000, 1001]).map(
+            lambda d: "[" * d + "]" * d
+        ),
+        # Exact-cap and one-past-cap empty containers (no inner leaf).
+        st.sampled_from([999, 1000, 1001]).map(
+            lambda d: "[" * d + "]" * d
+        ),
+        st.sampled_from([999, 1000, 1001]).map(
+            lambda d: '{"a":' * d + "0" + "}" * d
+        ),
+        # Mixed array/object nesting right at the cap.
+        st.integers(min_value=995, max_value=1005).map(
+            lambda d: "[" * (d // 2) + '{"a":' * (d - d // 2) + "0"
+            + "}" * (d - d // 2) + "]" * (d // 2)
+        ),
+        # Tightly-targeted single-depth probes around the exact cap boundary,
+        # including the exact-cap and one-past values for each container shape.
+        st.sampled_from([
+            "[" * 998 + "0" + "]" * 998,
+            "[" * 999 + "0" + "]" * 999,
+            "[" * 1000 + "0" + "]" * 1000,
+            "[" * 1001 + "0" + "]" * 1001,
+            "[" * 1002 + "0" + "]" * 1002,
+            '{"a":' * 998 + "0" + "}" * 998,
+            '{"a":' * 999 + "0" + "}" * 999,
+            '{"a":' * 1000 + "0" + "}" * 1000,
+            '{"a":' * 1001 + "0" + "}" * 1001,
+            '{"a":' * 1002 + "0" + "}" * 1002,
+        ]),
+    )
+
+# ---------------------------------------------------------------------------
+# Top-level assembly
+# ---------------------------------------------------------------------------
+
+_base = st.recursive(
+    _leaf(),
+    _value,
+    max_leaves=20,
+)
+
+_bom = st.one_of(st.just(""), st.just("\ufeff"))
+
+_trailing = st.one_of(
+    st.just(""),
+    st.sampled_from(["abc", " 2", "\x00", " xyz", "1 2", "\n"]),
+)
+
+_valid = st.tuples(_bom, _base, _trailing).map("".join)
+
+_malformed_top = st.tuples(_bom, _malformed()).map("".join)
+
+# Upweighted production: bare scalar documents with surrounding whitespace.
+# Real-world JSON parsers are frequently fed top-level scalars and
+# whitespace-padded documents; this production was under-represented.
+_scalar_doc = st.tuples(
+    _bom,
+    st.text(alphabet=" \t\n\r", max_size=3),
+    st.one_of(_json_string(), _number(), st.sampled_from(["true", "false", "null"])),
+    st.text(alphabet=" \t\n\r", max_size=3),
+).map("".join)
+
+strategy = st.one_of(
+    _valid,
+    _malformed_top,
+    _deep_values(),
+    _scalar_doc,
+    _scalar_doc,
+)
+```
+
+No run feedback is provided.
+
+Make EXACTLY ONE change to the strategy: **one edit of your choice from this list** — add_or_upweight_production (add or upweight a grammar production the inputs under-use); generate_nesting_toward_cap (generate nesting close to the parser's depth limit); fix_feature_encoding (fix how one feature of the format is encoded); broaden_exploration (diversify the structures the inputs take). Use the run feedback above where it is given, and write the name of the edit you chose on the first line as EDIT: <name>.
+Change nothing else. Keep it a valid Hypothesis strategy producing `str`. Return the full revised module as one ```python code block.

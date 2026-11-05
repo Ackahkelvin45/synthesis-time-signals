@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.8109999999999999,
+  "summary": {
+    "outcomes": {
+      "valid": 210,
+      "reject": 140
+    },
+    "acceptance_rate": 0.6,
+    "max_nesting_depth": 2042,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "ML_LITERAL_STRING"
+    ],
+    "cap_distance_mass": 0.048,
+    "novelty": 36,
+    "divergences": 121,
+    "divergence_examples": [
+      "b'dt = 0000-00-00T00:00:00'",
+      "b'dt = 2051-43-58 06:23:81.852694'",
+      "b\"'fm\\x07.\\xf1\\x98\\x93\\xa0\\xf0\\x9f\\x8f\\xbbV' = {}\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: extra chars after value",
+        27
+      ],
+      [
+        "line 1: invalid or missing key",
+        27
+      ],
+      [
+        "line 1: syntax error",
+        16
+      ],
+      [
+        "line 1: expect hex char",
+        12
+      ],
+      [
+        "line 1: unterminated quote",
+        11
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 210,
+      "reject": 140
+    },
+    "acceptance_rate": 0.6,
+    "max_nesting_depth": 2042,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "INF",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "ML_LITERAL_STRING"
+    ],
+    "cap_distance_mass": 0.048,
+    "novelty": 36,
+    "divergences": 121,
+    "divergence_examples": [
+      "b'dt = 0000-00-00T00:00:00'",
+      "b'dt = 2051-43-58 06:23:81.852694'",
+      "b\"'fm\\x07.\\xf1\\x98\\x93\\xa0\\xf0\\x9f\\x8f\\xbbV' = {}\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 251.96,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 251.96
+}

@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.2776666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 73,
+      "reject": 277
+    },
+    "acceptance_rate": 0.209,
+    "max_nesting_depth": 1991,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_TIME",
+      "ML_LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME"
+    ],
+    "cap_distance_mass": 0.342,
+    "novelty": 41,
+    "divergences": 43,
+    "divergence_examples": [
+      "b'deep = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'[[\"\".ihdATwue6frY]]#\\\\\\xc2\\xad\\xc3\\x91_l+\\x02\\xf3\\xa1\\x9f\\x8e\\xc3\\x97\\xc3\\x9fd\\x0c'",
+      "b'[[\"\".\"\".hdATwue6frY]]#\\\\\\xc2\\xad\\xc3\\x91_l+\\x02\\xf3\\xa1\\x9f\\x8e\\xc3\\x97\\xc3\\x9fd\\x0c'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        61
+      ],
+      [
+        "line 2: expect hex char",
+        33
+      ],
+      [
+        "line 2: bad escape char",
+        19
+      ],
+      [
+        "line 1: expect a string",
+        17
+      ],
+      [
+        "line 3: key exists",
+        16
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 212.84,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 212.84
+}

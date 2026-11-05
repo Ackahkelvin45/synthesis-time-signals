@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.07766666666666668,
+  "summary": {
+    "outcomes": {
+      "valid": 18,
+      "reject": 332
+    },
+    "acceptance_rate": 0.051,
+    "max_nesting_depth": 60,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "string",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "COMMENT",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 10,
+    "divergences": 8,
+    "divergence_examples": [
+      "b\"A-gl8tnE0 = {'Z' = [0o0_7_5126007073041245,\\n0o403\\n], XUc0XA = {}, 0VN7Wa_UNRXN =\"",
+      "b\"KriO.'\\xc3\\x87\\x7f\\x07B\\x01' = []\"",
+      "b\"KriO.'\\xc3\\x87\\x7fBB\\x01' = []\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: missing =",
+        210
+      ],
+      [
+        "line 1: unterminated s-quote",
+        23
+      ],
+      [
+        "line 1: syntax error",
+        17
+      ],
+      [
+        "line 1: expect hex char",
+        16
+      ],
+      [
+        "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)",
+        15
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 145.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 145.0
+}

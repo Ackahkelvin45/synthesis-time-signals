@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.18866666666666668,
+  "summary": {
+    "outcomes": {
+      "valid": 70,
+      "reject": 280
+    },
+    "acceptance_rate": 0.2,
+    "max_nesting_depth": 0,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_values",
+      "nl_or_comment",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 34,
+    "divergences": 11,
+    "divergence_examples": [
+      "b'[[\\'\\xf0\\x9d\\x95\\x8f\\xe6\\xb0\\xb4\\xc3\\xa9\\xc3\\xa9\\xc2\\xb7\\xc2\\xa8\\']]#\\xc2\\xb7\\n#\\n\\n\"\" = 0X7'",
+      "b'[[\\'0\\xf0\\x9d\\x95\\x8f\\xe6\\xb0\\xb4\\xc3\\xa9\\xc3\\xa9\\xc2\\xb7\\xc2\\xa8\\']]#\\xc2\\xb7\\n#\\n\\n\"\" = 0X7'",
+      "b'\\n\\n#\\xc2\\xbc\\xc2\\x88\\n[\"\\\\U754A3215\\\\b\\'\"]\\n#\\xc8\\xba\\xf2\\xaa\\x97\\xb2\\x06\\n\\n[[LHrsS]]#'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        52
+      ],
+      [
+        "line 2: expect hex char",
+        22
+      ],
+      [
+        "line 3: expect hex char",
+        18
+      ],
+      [
+        "line 5: expect hex char",
+        17
+      ],
+      [
+        "line 1: expect a string",
+        15
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 70,
+      "reject": 280
+    },
+    "acceptance_rate": 0.2,
+    "max_nesting_depth": 0,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "integer",
+      "key",
+      "key_value",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_values",
+      "nl_or_comment",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 34,
+    "divergences": 11,
+    "divergence_examples": [
+      "b'[[\\'\\xf0\\x9d\\x95\\x8f\\xe6\\xb0\\xb4\\xc3\\xa9\\xc3\\xa9\\xc2\\xb7\\xc2\\xa8\\']]#\\xc2\\xb7\\n#\\n\\n\"\" = 0X7'",
+      "b'[[\\'0\\xf0\\x9d\\x95\\x8f\\xe6\\xb0\\xb4\\xc3\\xa9\\xc3\\xa9\\xc2\\xb7\\xc2\\xa8\\']]#\\xc2\\xb7\\n#\\n\\n\"\" = 0X7'",
+      "b'\\n\\n#\\xc2\\xbc\\xc2\\x88\\n[\"\\\\U754A3215\\\\b\\'\"]\\n#\\xc8\\xba\\xf2\\xaa\\x97\\xb2\\x06\\n\\n[[LHrsS]]#'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 154.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 154.0
+}

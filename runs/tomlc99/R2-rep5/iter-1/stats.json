@@ -1,0 +1,165 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.35533333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 107,
+      "reject": 243
+    },
+    "acceptance_rate": 0.306,
+    "max_nesting_depth": 3071,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "LOCAL_TIME",
+      "NL",
+      "OCT_INT",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "BIN_INT",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE"
+    ],
+    "cap_distance_mass": 0.206,
+    "novelty": 37,
+    "divergences": 70,
+    "divergence_examples": [
+      "b'a = 1 # comment \\x01'",
+      "b'a = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['",
+      "b'a = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        79
+      ],
+      [
+        "line 1: syntax error",
+        39
+      ],
+      [
+        "line 1: unterminated quote",
+        23
+      ],
+      [
+        "line 2: key exists",
+        22
+      ],
+      [
+        "line 3: expect hex char",
+        19
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 67.16,
+    "region_coverage_pct": 68.34
+  },
+  "coverage_in_loop": {
+    "branch_pct": 67.16,
+    "region_pct": 68.34,
+    "line_pct": 73.37,
+    "branch_pct_file": 53.63,
+    "region_pct_file": 54.26,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      },
+      {
+        "name": "toml_rtos",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 41
+      },
+      {
+        "name": "toml_ucs_to_utf8",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 32
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 201.12,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 67.16
+}

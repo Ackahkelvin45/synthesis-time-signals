@@ -1,0 +1,390 @@
+from hypothesis import strategies as st
+import json
+
+# ---------- scalar building blocks ----------
+
+_hex = st.sampled_from("0123456789abcdefABCDEF")
+
+def _hex4():
+    return st.tuples(_hex, _hex, _hex, _hex).map(lambda t: "".join(t))
+
+# escapes: valid simple, valid unicode, lone surrogates, and invalid escapes
+_simple_escapes = st.sampled_from(['\\"', '\\\\', '\\/', '\\b', '\\f', '\\n', '\\r', '\\t'])
+
+_unicode_escape = _hex4().map(lambda h: "\\u" + h)
+
+# surrogate escapes: high (d800-dbff), low (dc00-dfff), and pairs
+def _surrogate_escapes():
+    hi = st.integers(min_value=0xD800, max_value=0xDBFF).map(lambda n: "\\u%04x" % n)
+    lo = st.integers(min_value=0xDC00, max_value=0xDFFF).map(lambda n: "\\u%04x" % n)
+    pair = st.tuples(hi, lo).map(lambda t: t[0] + t[1])
+    return st.one_of(hi, lo, pair)
+
+_invalid_escapes = st.sampled_from(['\\x', '\\u12', '\\uZZZZ', '\\', '\\q', '\\U0041'])
+
+# raw characters inside strings: printable, control bytes, NUL, high unicode
+_raw_printable = st.characters(min_codepoint=0x20, max_codepoint=0x7E,
+                               blacklist_characters='"\\')
+_raw_control = st.integers(min_value=0x00, max_value=0x1F).map(chr)
+_raw_high = st.characters(min_codepoint=0x80, max_codepoint=0x10FFFF,
+                          blacklist_categories=("Cs",))
+
+def _string_body():
+    pieces = st.one_of(
+        _raw_printable,
+        _raw_control,
+        _raw_high,
+        _simple_escapes,
+        _unicode_escape,
+        _surrogate_escapes(),
+        _invalid_escapes,
+    )
+    return st.lists(pieces, max_size=8).map(lambda xs: "".join(xs))
+
+def _valid_string():
+    return _string_body().map(lambda b: '"' + b + '"')
+
+def _unterminated_string():
+    return _string_body().map(lambda b: '"' + b)
+
+# ---------- numbers ----------
+
+_digits = st.text(alphabet="0123456789", min_size=1, max_size=6)
+_nonzero_digits = st.text(alphabet="0123456789", min_size=1, max_size=6)
+
+def _int_part():
+    return st.one_of(
+        st.just("0"),
+        _nonzero_digits,
+        # leading zeros (accepted by parser)
+        st.tuples(st.just("0"), _digits).map(lambda t: t[0] + t[1]),
+    )
+
+def _frac_part():
+    return _digits.map(lambda d: "." + d)
+
+def _exp_part():
+    sign = st.sampled_from(["", "+", "-"])
+    return st.tuples(st.sampled_from(["e", "E"]), sign, _digits).map(
+        lambda t: t[0] + t[1] + t[2]
+    )
+
+def _number():
+    sign = st.sampled_from(["", "-"])
+    base = _int_part()
+    frac = st.one_of(st.none(), _frac_part(), st.just("."))  # trailing dot accepted
+    exp = st.one_of(st.none(), _exp_part())
+    # extreme magnitudes
+    extreme = st.sampled_from([
+        "1e309", "-1e309", "1e-309", "1e308", "-1e308",
+        "1e9999", "1e-9999", "0e0", "-0", "0.0e-0",
+        "123456789012345678901234567890",
+    ])
+    composed = st.tuples(sign, base, frac, exp).map(
+        lambda t: t[0] + t[1] + (t[2] or "") + (t[3] or "")
+    )
+    return st.one_of(extreme, composed)
+
+# malformed numbers (rejected by parser)
+_bad_number = st.sampled_from([
+    "-", "+1", ".5", "-.5", "1..2", "1e", "1e+", "1e-", "--1",
+    "0x", "NaN", "Infinity", "-Infinity", "1.2.3", "e5",
+])
+
+# ---------- recursive values ----------
+
+def _value(draw, depth):
+    # depth-limited recursion handled by st.recursive
+    scalar = st.one_of(
+        _valid_string(),
+        _number(),
+        st.just("true"),
+        st.just("false"),
+        st.just("null"),
+        _bad_number,
+        _unterminated_string(),
+    )
+    return scalar
+
+def _make_value_strategy():
+    return st.recursive(
+        _value_base(),
+        lambda children: st.one_of(
+            _arr(children),
+            _obj(children),
+        ),
+        max_leaves=20,
+    )
+
+def _value_base():
+    return st.one_of(
+        _valid_string(),
+        _number(),
+        st.just("true"),
+        st.just("false"),
+        st.just("null"),
+        _bad_number,
+        _unterminated_string(),
+    )
+
+def _arr(children):
+    def build(items):
+        return "[" + ",".join(items) + "]"
+    return st.one_of(
+        st.just("[]"),
+        st.lists(children, min_size=1, max_size=5).map(build),
+        # malformed: double comma, trailing comma, leading comma
+        st.lists(children, min_size=1, max_size=4).map(
+            lambda xs: "[" + ",".join(xs) + ",]"
+        ),
+        st.lists(children, min_size=1, max_size=4).map(
+            lambda xs: "[" + ",,".join(xs) + "]"
+        ),
+        st.lists(children, min_size=1, max_size=4).map(
+            lambda xs: "[," + ",".join(xs) + "]"
+        ),
+    )
+
+def _obj(children):
+    def pair(v):
+        return st.tuples(_valid_string(), v).map(lambda t: t[0] + ":" + t[1])
+
+    def build(pairs):
+        return "{" + ",".join(pairs) + "}"
+
+    return st.one_of(
+        st.just("{}"),
+        st.lists(pair(st.one_of(children)), min_size=1, max_size=5).map(build),
+        # duplicate keys
+        st.tuples(_valid_string(), st.one_of(children)).map(
+            lambda t: "{" + t[0] + ":" + t[1] + "," + t[0] + ":" + t[1] + "}"
+        ),
+        # malformed: missing colon, trailing comma, double comma
+        st.tuples(_valid_string(), st.one_of(children)).map(
+            lambda t: "{" + t[0] + t[1] + "}"
+        ),
+        st.lists(pair(st.one_of(children)), min_size=1, max_size=4).map(
+            lambda ps: "{" + ",".join(ps) + ",}"
+        ),
+        st.lists(pair(st.one_of(children)), min_size=1, max_size=4).map(
+            lambda ps: "{" + ",,".join(ps) + "}"
+        ),
+    )
+
+_base_value = _value_base()
+
+_recursive_value = st.recursive(
+    _base_value,
+    lambda children: st.one_of(
+        _arr(children),
+        _obj(children),
+    ),
+    max_leaves=20,
+)
+
+# ---------- deep nesting near the 1000 limit ----------
+
+def _deep_nesting():
+    # depth near the limit: 995..1005
+    depth = st.integers(min_value=995, max_value=1005)
+    open_bracket = st.sampled_from(["[", "{"])
+    close_bracket = st.sampled_from(["]", "}"])
+
+    def build(t):
+        d, o, c = t
+        # alternate brackets for variety
+        opens = "".join(o if i % 2 == 0 else ("{" if o == "[" else "[") for i in range(d))
+        closes = "".join(c if i % 2 == 0 else ("}" if c == "]" else "]") for i in range(d))
+        # object needs a key:value; array needs a value
+        if o == "[":
+            inner = "0"
+        else:
+            inner = '"k":0'
+        return opens + inner + closes
+
+    return st.tuples(depth, open_bracket, close_bracket).map(build)
+
+def _deep_nesting_exact(depth, kind):
+    if kind == "arr":
+        return "[" * depth + "0" + "]" * depth
+    else:
+        return '{"k":' * depth + "0" + "}" * depth
+
+# ---------- top-level composition ----------
+
+_top_level = st.one_of(
+    _recursive_value,
+    _deep_nesting(),
+    # BOM prefix (accepted)
+    st.one_of(_recursive_value).map(lambda s: "\ufeff" + s),
+    # trailing content after a value (accepted)
+    st.tuples(_recursive_value, st.sampled_from(["", "abc", " 1 2", "\x00", "}]"])).map(
+        lambda t: t[0] + t[1]
+    ),
+    # empty input (rejected)
+    st.just(""),
+    # whitespace only (rejected)
+    st.text(alphabet=" \t\n\r", min_size=1, max_size=8),
+    # raw NUL after value
+    st.one_of(_recursive_value).map(lambda s: s + "\x00"),
+    # malformed top-level pieces
+    _bad_number,
+    _unterminated_string(),
+    st.sampled_from([",", "]", "}", ":", ",,", "[,]", "{,}", "tru", "nul", "fals"]),
+    # whitespace interleaved around and within a value (accepted)
+    st.tuples(
+        st.text(alphabet=" \t\n\r", max_size=4),
+        _recursive_value,
+        st.text(alphabet=" \t\n\r", max_size=4),
+    ).map(lambda t: t[0] + t[1] + t[2]),
+    # leading garbage before a value (rejected)
+    st.tuples(
+        st.sampled_from(["x", "]", "}", ":", ",", "nul", "tru", "fals", "\x00", "#"]),
+        _recursive_value,
+    ).map(lambda t: t[0] + t[1]),
+    # truncated containers (rejected) — exercise error paths in the parser
+    st.tuples(
+        st.sampled_from(["[", "{"]),
+        _recursive_value,
+    ).map(lambda t: t[0] + t[1]),
+    # improved: whitespace interleaved within containers and around tokens
+    st.tuples(
+        st.text(alphabet=" \t\n\r", max_size=3),
+        _recursive_value,
+        st.text(alphabet=" \t\n\r", max_size=3),
+    ).map(lambda t: t[0] + t[1] + t[2]),
+    # improved: whitespace around separators inside arrays/objects
+    st.tuples(
+        st.lists(_recursive_value, min_size=1, max_size=4),
+        st.text(alphabet=" \t\n\r", max_size=2),
+    ).map(lambda t: "[" + (t[1] + "," + t[1]).join(t[0]) + t[1] + "]"),
+    st.tuples(
+        st.lists(_recursive_value, min_size=1, max_size=4),
+        st.text(alphabet=" \t\n\r", max_size=2),
+    ).map(lambda t: "[" + (t[1] + "," + t[1]).join(t[0]) + "," + t[1] + "]"),
+    # improved: object with whitespace around colon and commas
+    st.tuples(
+        _valid_string(),
+        st.text(alphabet=" \t\n\r", max_size=2),
+        _recursive_value,
+        st.text(alphabet=" \t\n\r", max_size=2),
+    ).map(lambda t: "{" + t[0] + t[1] + ":" + t[1] + t[2] + t[3] + "}"),
+    # improved: object missing value after colon
+    st.tuples(_valid_string(), st.text(alphabet=" \t\n\r", max_size=2)).map(
+        lambda t: "{" + t[0] + t[1] + ":" + "}"
+    ),
+    # improved: array with missing value between commas
+    _recursive_value.map(lambda s: "[" + s + ",," + "0" + "]"),
+    # improved: truncated object/array at EOF (no closing bracket)
+    st.tuples(
+        st.sampled_from(["[", "{"]),
+        _recursive_value,
+        st.sampled_from([",", ":"]),
+    ).map(lambda t: t[0] + t[1] + t[2]),
+    # improved: string with embedded raw newline / control inside quotes
+    st.tuples(
+        _raw_control,
+        _raw_printable,
+    ).map(lambda t: '"' + t[0] + t[1] + '"'),
+    # improved: number followed by garbage (trailing junk after number)
+    st.tuples(_number(), st.sampled_from(["x", ".", "e", "+", "-", "0"])).map(
+        lambda t: t[0] + t[1]
+    ),
+    # improved: literal prefix mismatches exercising literal matcher
+    st.sampled_from(["t", "tr", "tru", "truex", "f", "fa", "fal", "fals", "falsey",
+                     "n", "nu", "nul", "nullz", "TRUE", "False", "NULL"]),
+    # improved: escape sequences at end of unterminated string
+    st.tuples(_string_body(), _simple_escapes).map(lambda t: '"' + t[0] + t[1]),
+    # improved: lone high surrogate followed by raw char (invalid surrogate pair)
+    st.tuples(
+        st.integers(min_value=0xD800, max_value=0xDBFF).map(lambda n: "\\u%04x" % n),
+        _raw_printable,
+    ).map(lambda t: '"' + t[0] + t[1] + '"'),
+    # improved: nested arrays with whitespace and trailing commas at depth
+    st.lists(st.lists(_recursive_value, min_size=0, max_size=3), min_size=1, max_size=3).map(
+        lambda rows: "[" + ",".join("[" + ",".join(r) + ",]" for r in rows) + "]"
+    ),
+    # improved: deep nesting that exceeds the limit (rejected)
+    st.sampled_from([1001, 1002, 1100, 2000]).map(
+        lambda d: "[" * d + "0" + "]" * d
+    ),
+    # improved: object deep nesting exceeding the limit (rejected)
+    st.sampled_from([1001, 1002, 1100, 2000]).map(
+        lambda d: '{"k":' * d + "0" + "}" * d
+    ),
+    # improved: exact boundary depth values (995..1005) both kinds
+    st.tuples(
+        st.integers(min_value=995, max_value=1005),
+        st.sampled_from(["arr", "obj"]),
+    ).map(lambda t: _deep_nesting_exact(t[0], t[1])),
+    # improved: mismatched bracket closers at depth
+    st.tuples(
+        st.integers(min_value=990, max_value=1005),
+        st.sampled_from([("[", "]"), ("[", "}"), ("{", "]"), ("{", "}")]),
+    ).map(lambda t: t[1][0] * t[0] + "0" + t[1][1] * t[0]),
+    # improved: unterminated deep nesting (rejected at EOF)
+    st.integers(min_value=995, max_value=1005).map(
+        lambda d: "[" * d + "0"
+    ),
+    # improved: deep nesting with trailing comma before close
+    st.integers(min_value=995, max_value=1005).map(
+        lambda d: "[" * d + "0," + "]" * d
+    ),
+    # improved: array with whitespace-only between brackets
+    st.text(alphabet=" \t\n\r", min_size=1, max_size=4).map(lambda w: "[" + w + "]"),
+    # improved: object with whitespace-only between braces
+    st.text(alphabet=" \t\n\r", min_size=1, max_size=4).map(lambda w: "{" + w + "}"),
+    # improved: array containing only a comma
+    st.text(alphabet=" \t\n\r", max_size=3).map(lambda w: "[" + w + "," + w + "]"),
+    # improved: object missing key (only colon and value)
+    st.tuples(_recursive_value, st.text(alphabet=" \t\n\r", max_size=2)).map(
+        lambda t: "{" + t[1] + ":" + t[0] + "}"
+    ),
+    # improved: object missing value and close
+    _valid_string().map(lambda s: "{" + s + ":"),
+    # NEW: whitespace between every structural token of a small array
+    st.tuples(
+        st.lists(_recursive_value, min_size=1, max_size=3),
+        st.text(alphabet=" \t\n\r", max_size=2),
+    ).map(lambda t: t[1] + "[" + t[1] + (t[1] + "," + t[1]).join(t[0]) + t[1] + "]" + t[1]),
+    # NEW: whitespace between every structural token of a small object
+    st.tuples(
+        st.lists(
+            st.tuples(_valid_string(), _recursive_value).map(lambda p: p[0] + ":" + p[1]),
+            min_size=1, max_size=3,
+        ),
+        st.text(alphabet=" \t\n\r", max_size=2),
+    ).map(lambda t: t[1] + "{" + t[1] + (t[1] + "," + t[1]).join(t[0]) + t[1] + "}" + t[1]),
+    # NEW: number immediately followed by a structural closer
+    st.tuples(_number(), st.sampled_from(["]", "}", ","])).map(
+        lambda t: "[" + t[0] + t[1]
+    ),
+    # NEW: key without quotes inside object (rejected)
+    st.tuples(
+        st.sampled_from(["k", "key", "a1", "_x"]),
+        _recursive_value,
+    ).map(lambda t: "{" + t[0] + ":" + t[1] + "}"),
+    # NEW: single-quoted string (rejected)
+    st.tuples(_string_body()).map(lambda t: "'" + t[0] + "'"),
+    # NEW: colon instead of comma between array elements (rejected)
+    st.tuples(_recursive_value, _recursive_value).map(
+        lambda t: "[" + t[0] + ":" + t[1] + "]"
+    ),
+    # NEW: comma instead of colon between key and value (rejected)
+    st.tuples(_valid_string(), _recursive_value).map(
+        lambda t: "{" + t[0] + "," + t[1] + "}"
+    ),
+    # NEW: literal followed immediately by structural token
+    st.tuples(
+        st.sampled_from(["true", "false", "null"]),
+        st.sampled_from(["]", "}", ",", ":"]),
+    ).map(lambda t: "[" + t[0] + t[1]),
+    # NEW: number with embedded whitespace (rejected)
+    st.tuples(_number(), st.text(alphabet=" \t\n\r", min_size=1, max_size=2), _number()).map(
+        lambda t: t[0] + t[1] + t[2]
+    ),
+    # NEW: string with backslash at very end before closing quote
+    _string_body().map(lambda b: '"' + b + "\\" + '"'),
+)
+
+strategy = _top_level

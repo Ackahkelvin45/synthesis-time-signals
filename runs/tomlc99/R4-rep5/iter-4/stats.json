@@ -1,0 +1,174 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.443,
+  "summary": {
+    "outcomes": {
+      "valid": 167,
+      "reject": 153,
+      "skip": 30
+    },
+    "acceptance_rate": 0.522,
+    "max_nesting_depth": 2741,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NL",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "dotted_key",
+      "floating_point",
+      "bool_",
+      "BOOLEAN",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT"
+    ],
+    "cap_distance_mass": 0.018,
+    "novelty": 25,
+    "divergences": 51,
+    "divergence_examples": [
+      "b'a = \"\\\\uD800\"'",
+      "b'a = \"\\\\uDFFF\"'",
+      "b'a = 1979-05-27T07:32:00.999999-99:99\\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: missing =",
+        75
+      ],
+      [
+        "line 1: syntax error",
+        17
+      ],
+      [
+        "line 1: invalid char U+007f",
+        13
+      ],
+      [
+        "line 1: expect hex char",
+        11
+      ],
+      [
+        "line 1: invalid key",
+        10
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 51.54,
+    "region_coverage_pct": 57.24,
+    "least_covered_functions": [
+      "toml_utf8_to_ucs (0% of branches)",
+      "toml_rtots (0% of branches)",
+      "toml_rtod_ex (0% of branches)",
+      "toml_parse_file (0% of branches)",
+      "norm_lit_str (0% of branches)"
+    ],
+    "least_covered_function_source": "int toml_utf8_to_ucs(const char *orig, int len, int64_t *ret) {\n  const unsigned char *buf = (const unsigned char *)orig;\n  unsigned i = *buf++;\n  int64_t v;\n\n  /* 0x00000000 - 0x0000007F:\n     0xxxxxxx\n  */\n  if (0 == (i >> 7)) {\n    if (len < 1)\n      return -1;\n    v = i;\n    return *ret = v, 1;\n  }\n  /* 0x00000080 - 0x000007FF:\n     110xxxxx 10xxxxxx\n  */\n  if (0x6 == (i >> 5)) {\n    if (len < 2)\n      return -1;\n    v = i & 0x1f;\n    for (int j = 0; j < 1; j++) {\n      i = *buf++;\n      if (0x2 != (i >> 6))\n        return -1;\n      v = (v << 6) | (i & 0x3f);\n    }\n    return *ret = v, (const char *)buf - orig;\n  }\n\n  /* 0x00000800 - 0x0000FFFF:\n     1110xxxx 10xxxxxx 10xxxxxx\n  */\n  if (0xE == (i >> 4)) {\n    if (len < 3)\n      return -1;\n    v = i & 0x0F;\n    for (int j = 0; j < 2; j++) {\n      i = *buf++;\n      if (0x2 != (i >> 6))\n        return -1;\n      v = (v << 6) | (i & 0x3f);\n    }\n    return *ret = v, (const char *)buf - orig;\n  }\n\n  /* 0x00010000 - 0x001FFFFF:\n     11110xxx 10xxxxxx 10xxxxxx 10xxxxxx\n  */\n  if (0x1E == (i >> 3)) {\n    if (len < 4)\n      return -1;\n    v = i & 0x07;\n    for (int j = 0; j < 3; j++) {\n      i = *buf++;\n      if (0x2 != (i >> 6))\n        return -1;\n      v = (v << 6) | (i & 0x3f);\n    }\n    return *ret = v, (const char *)buf - orig;\n  }\n\n  /* 0x00200000 - 0x03FFFFFF:\n     111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx\n  */\n  if (0x3E == (i >> 2)) {\n    if (len < 5)\n      return -1;\n    v = i & 0x03;\n    for (int j = 0; j < 4; j++) {\n      i = *buf++;\n      if (0x2 != (i >> 6))\n        return -1;\n      v = (v << 6) | (i & 0x3f);\n    }\n    return *ret = v, (const char *)buf - orig;\n  }\n\n  /* 0x04000000 - 0x7FFFFFFF:\n     1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx\n/* ... truncated ... */"
+  },
+  "coverage_in_loop": {
+    "branch_pct": 51.54,
+    "region_pct": 57.24,
+    "line_pct": 60.36,
+    "branch_pct_file": 41.16,
+    "region_pct_file": 45.45,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_rtots",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_rtod_ex",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      },
+      {
+        "name": "norm_lit_str",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 43
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 195.36,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 51.54
+}

@@ -1,0 +1,125 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.15533333333333335,
+  "summary": {
+    "outcomes": {
+      "valid": 26,
+      "reject": 324
+    },
+    "acceptance_rate": 0.074,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "obj",
+      "pair",
+      "value"
+    ],
+    "productions_gap": [
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 6,
+    "divergences": 20,
+    "divergence_examples": [
+      "b'\\xef\\xbb\\xbf\"\"'",
+      "b'\"\"\\x00'",
+      "b'[\"\"]\\x00'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 1 of 7",
+        9
+      ],
+      [
+        "parse error at byte 7 of 8",
+        7
+      ],
+      [
+        "parse error at byte 1 of 14",
+        7
+      ],
+      [
+        "parse error at byte 0 of 1",
+        6
+      ],
+      [
+        "parse error at byte 1 of 29",
+        6
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 26,
+      "reject": 324
+    },
+    "acceptance_rate": 0.074,
+    "max_nesting_depth": 1,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "obj",
+      "pair",
+      "value"
+    ],
+    "productions_gap": [
+      "true",
+      "false",
+      "null"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 6,
+    "divergences": 20,
+    "divergence_examples": [
+      "b'\\xef\\xbb\\xbf\"\"'",
+      "b'\"\"\\x00'",
+      "b'[\"\"]\\x00'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 41.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 41.0
+}

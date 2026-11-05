@@ -1,0 +1,8 @@
+{"input": "", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\u00e9 = 1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "a = \"\"\"\"\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = '''U\u00ff\u00af\u0100\u007f+\udab7\ude980'''", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = '''U\u00ff\u00af\u0100\u007f\u007f\udab7\ude980'''", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = '''\u007f\u00ff\u00af\u0100\u007f\u007f\udab7\ude980'''", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = '''\u007f\u00ff\u00af\u0100\u007f\u007f00'''", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "a = '''\u007f\u00ff\u00af\u0100\u007f'''", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}

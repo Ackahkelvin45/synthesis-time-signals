@@ -1,0 +1,310 @@
+import json
+from hypothesis import strategies as st
+
+# ---------- helpers ----------
+
+def _join(parts):
+    return "".join(parts)
+
+def _join_comma(parts):
+    return ",".join(parts)
+
+# ---------- scalars ----------
+
+_hex = "0123456789abcdefABCDEF"
+
+def _hex4():
+    return st.tuples(*([st.sampled_from(_hex)] * 4)).map(lambda t: "".join(t))
+
+# \uXXXX escapes including surrogates
+_unicode_escape = _hex4().map(lambda h: "\\u" + h)
+
+# simple escapes
+_simple_escape = st.sampled_from(['\\"', "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"])
+
+# safe code points (excluding quote, backslash, control chars)
+_safe_char = st.characters(
+    blacklist_categories=("Cs",),
+    blacklist_characters='\\"\x00',
+).filter(lambda c: ord(c) >= 0x20)
+
+_string_body_piece = st.one_of(
+    _safe_char,
+    _simple_escape,
+    _unicode_escape,
+)
+
+_json_string = st.lists(_string_body_piece, max_size=8).map(_join).map(lambda s: '"' + s + '"')
+
+# ---------- numbers ----------
+
+_digits = st.text(alphabet="0123456789", min_size=1, max_size=6)
+
+def _int_part():
+    return st.one_of(
+        st.just("0"),
+        st.tuples(st.sampled_from("123456789"), _digits.map(lambda d: d)).map(_join),
+    )
+
+def _frac_part():
+    return _digits.map(lambda d: "." + d)
+
+def _exp_part():
+    return st.tuples(
+        st.sampled_from("eE"),
+        st.sampled_from(["", "+", "-"]),
+        st.text(alphabet="0123456789", min_size=1, max_size=4),
+    ).map(_join)
+
+def _number():
+    sign = st.sampled_from(["", "-"])
+    frac = st.one_of(st.just(""), _frac_part())
+    exp = st.one_of(st.just(""), _exp_part())
+    return st.tuples(sign, _int_part(), frac, exp).map(_join)
+
+# extreme magnitudes
+_extreme_number = st.sampled_from([
+    "1e309", "-1e309", "1e308", "-1e308", "1e400", "1e-400",
+    "123456789012345678901234567890",
+    "-123456789012345678901234567890",
+    "1.7976931348623157e308",
+    "2.2250738585072014e-308",
+    "0e0", "0.0", "-0", "1E+10", "1e-10",
+])
+
+_number_strategy = st.one_of(_number(), _extreme_number)
+
+# ---------- recursive values ----------
+
+_key = _json_string
+
+# forward reference via deferred strategy
+_value_ref = st.deferred(lambda: _value)
+
+def _pair():
+    return st.tuples(_key, st.just(":"), _value_ref).map(_join)
+
+def _obj():
+    return st.one_of(
+        st.just("{}"),
+        st.lists(_pair(), min_size=1, max_size=4).map(lambda ps: "{" + ",".join(ps) + "}"),
+    )
+
+def _arr():
+    return st.one_of(
+        st.just("[]"),
+        st.lists(_value_ref, min_size=1, max_size=4).map(lambda vs: "[" + ",".join(vs) + "]"),
+    )
+
+_leaf = st.one_of(
+    _json_string,
+    _number_strategy,
+    st.just("true"),
+    st.just("false"),
+    st.just("null"),
+)
+
+_value = st.recursive(
+    _leaf,
+    lambda children: st.one_of(_obj(), _arr()),
+    max_leaves=12,
+)
+
+# ---------- deep nesting near the 2048 limit ----------
+
+# Bias depth mass toward the cap (2048) and just below it, since
+# cap_distance_mass was low (0.028). Mix exact-cap, near-cap, and a
+# spread across the full range.
+_deep_depth = st.one_of(
+    st.just(2048),
+    st.just(2047),
+    st.just(2046),
+    st.integers(min_value=2000, max_value=2048),
+    st.integers(min_value=1, max_value=2048),
+)
+
+def _deep_nesting():
+    open_ch = st.sampled_from(["[", "{"])
+    return st.tuples(_deep_depth, open_ch).map(lambda t: _build_deep(t[0], t[1]))
+
+def _build_deep(depth, ch):
+    if ch == "[":
+        return "[" * depth + "]" * depth
+    else:
+        return ('{"k":' * depth) + "0" + ("}" * depth)
+
+_deep = _deep_nesting()
+
+# ---------- malformed / near-valid ----------
+
+_malformed = st.sampled_from([
+    '{"a":1,,}',
+    '{"a":1,}',
+    "[1,,2]",
+    "[1,]",
+    '{"a" 1}',
+    '{"a":}',
+    '{"a":1 "b":2}',
+    '{"a":1,,"b":2}',
+    '[,]',
+    '{,}',
+    '{"a":1',
+    '[1,2',
+    '"unterminated',
+    '"unterminated\\',
+    '{"a":"unterminated}',
+    '+1',
+    '.5',
+    '-.5',
+    '01',
+    '-01',
+    '1.',
+    '00',
+    '1e',
+    '1e+',
+    '-',
+    '-.',
+    'tru',
+    'nul',
+    'fals',
+    '{"a":1}garbage',
+    '[]xyz',
+    '1abc',
+    '1 garbage',
+    'null extra',
+    'true false',
+    '{"a":1} {"b":2}',
+    '"\\uD800"',
+    '"\\uDFFF"',
+    '"\\uD800\\uDC00"',
+    '"\\u0000"',
+    '"\\u00"',
+    '"\\uZZZZ"',
+    '"\\x"',
+    '"\\"',
+    '{"a":1,"a":2}',
+    '{"k":0,"k":1}',
+    '{"a":{"b":1},"a":2}',
+])
+
+# ---------- top-level combination ----------
+
+def _with_trailing(v):
+    return st.tuples(v, st.sampled_from(["", " ", "x", " garbage", "\n", "[]"])).map(_join)
+
+_value_top = st.one_of(
+    _value,
+    _deep,
+    _malformed,
+)
+
+# avoid raw NUL bytes in final output
+_final = _value_top.map(lambda s: s.replace("\x00", ""))
+_final = st.one_of(_final, _with_trailing(_value))
+
+# Boost near-valid / edge-case malformed inputs that exercise parser
+# divergences (lone surrogates, duplicate keys, malformed numbers).
+_edge_cases = st.sampled_from([
+    '"\\uDFFF"',
+    '"\\uD800"',
+    '"\\uDBFF"',
+    '"\\uDC00"',
+    '"\\uD800\\uDC00"',
+    '{"a":{"b":1},"a":2}',
+    '{"a":1,"a":2}',
+    '{"k":0,"k":1}',
+    '-.',
+    '-',
+    '1.',
+    '01',
+    '-01',
+    '1e',
+    '1e+',
+    '+1',
+    '.5',
+    '00',
+    '{"a":1}garbage',
+    '[]xyz',
+    '1abc',
+])
+
+# ---------- targeted divergence probes ----------
+# The run showed divergences clustering on trailing-garbage after valid
+# values (e.g. b'{}x'), malformed numbers (b'1.'), and lone surrogates.
+# Generate systematic valid-value + trailing-garbage combinations and
+# near-miss number forms to exercise these divergence paths.
+_valid_core = st.one_of(
+    st.just("{}"),
+    st.just("[]"),
+    st.just("null"),
+    st.just("true"),
+    st.just("false"),
+    st.just("0"),
+    st.just('"a"'),
+    _json_string,
+    _number_strategy,
+    _value,
+)
+
+_garbage_suffix = st.sampled_from([
+    "x", "garbage", "\n", "[]", "{}", " ", "1", '"x"', "null",
+    "\x00".replace("\x00", ""), "//", "/*", "#", "\\", "'",
+    "e", ".", "+", "-", ",", ":", "]", "}",
+])
+
+_trailing_probe = st.tuples(_valid_core, _garbage_suffix).map(_join)
+
+# near-miss number forms that stress the number parser
+_near_miss_number = st.sampled_from([
+    "1.", "1.e1", "-.", "-.e1", "0x1", "0b1", "0o1",
+    "1_000", "1,000", "Infinity", "-Infinity", "NaN",
+    "1e", "1e+", "1e-", "e1", "E1",
+    "00", "01", "-00", "-01", "+0", "+1",
+    "1..2", "1.2.3", "--1", "1-", "1+",
+    ".", "+.", "-",
+    "1E10", "1e0000000010",
+    "1e999999999999999999",
+])
+
+# ---------- whitespace / trailing-garbage fuzzing ----------
+# Divergences clustered on trailing garbage after valid values. Generate
+# valid values followed by longer / more varied whitespace and garbage
+# runs, plus garbage embedded between tokens and leading whitespace.
+_ws_char = st.sampled_from([" ", "\t", "\n", "\r"])
+_ws_run = st.lists(_ws_char, min_size=0, max_size=6).map(_join)
+
+_long_garbage = st.lists(
+    st.sampled_from(list("xgarbage[]{}1\"null///*#\\',:+-e.E")),
+    min_size=1, max_size=12,
+).map(_join)
+
+_trailing_ws_probe = st.tuples(
+    _valid_core, _ws_run, _long_garbage
+).map(lambda t: t[0] + t[1] + t[2])
+
+_leading_ws_probe = st.tuples(
+    _ws_run, _valid_core, _ws_run
+).map(lambda t: t[0] + t[1] + t[2])
+
+# garbage injected between structural tokens of a small valid doc
+_interior_garbage = st.tuples(
+    st.sampled_from(["{}", "[]", '{"a":1}', "[1,2]", '{"a":[1]}']),
+    _long_garbage,
+    st.integers(min_value=0, max_value=6),
+).map(lambda t: _inject(t[0], t[1], t[2]))
+
+def _inject(doc, junk, pos):
+    if not doc:
+        return junk
+    i = pos % (len(doc) + 1)
+    return doc[:i] + junk + doc[i:]
+
+strategy = st.one_of(
+    _final,
+    _edge_cases,
+    _trailing_probe,
+    _trailing_ws_probe,
+    _leading_ws_probe,
+    _interior_garbage,
+    _near_miss_number,
+)

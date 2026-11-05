@@ -1,0 +1,125 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.4663333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 122,
+      "reject": 228
+    },
+    "acceptance_rate": 0.349,
+    "max_nesting_depth": 1500,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "false"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 11,
+    "divergences": 111,
+    "divergence_examples": [
+      "b'\"\"true'",
+      "b'\"\\xc3\\xb2\\xc2\\x94\\xc3\\x9b\\xf0\\x99\\xa7\\x88Px\\xc3\\xb6\\xc2\\x9e\"00006227020799'",
+      "b'{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 18 of 19",
+        4
+      ],
+      [
+        "parse error at byte 60 of 61",
+        4
+      ],
+      [
+        "parse error at byte 20 of 21",
+        4
+      ],
+      [
+        "parse error at byte 8 of 217",
+        4
+      ],
+      [
+        "parse error at byte 10 of 11",
+        3
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 122,
+      "reject": 228
+    },
+    "acceptance_rate": 0.349,
+    "max_nesting_depth": 1500,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "false"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 11,
+    "divergences": 111,
+    "divergence_examples": [
+      "b'\"\"true'",
+      "b'\"\\xc3\\xb2\\xc2\\x94\\xc3\\x9b\\xf0\\x99\\xa7\\x88Px\\xc3\\xb6\\xc2\\x9e\"00006227020799'",
+      "b'{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 56.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 56.0
+}

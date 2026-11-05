@@ -1,0 +1,172 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.7443333333333334,
+  "summary": {
+    "outcomes": {
+      "valid": 7,
+      "reject": 1
+    },
+    "acceptance_rate": 0.875,
+    "max_nesting_depth": 0,
+    "productions_accepted": [
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "UNQUOTED_KEY",
+      "comment",
+      "document",
+      "expression",
+      "key",
+      "key_value",
+      "simple_key",
+      "string",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "quoted_key",
+      "dotted_key",
+      "integer",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "table",
+      "standard_table",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "NL",
+      "COMMENT",
+      "BASIC_STRING",
+      "LITERAL_STRING",
+      "BOOLEAN",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 3,
+    "divergences": 5,
+    "divergence_examples": [
+      "b\"a = '''U\\xc3\\xbf\\xc2\\xaf\\xc4\\x80\\x7f+\\xf2\\xbd\\xba\\x980'''\"",
+      "b\"a = '''U\\xc3\\xbf\\xc2\\xaf\\xc4\\x80\\x7f\\x7f\\xf2\\xbd\\xba\\x980'''\"",
+      "b\"a = '''\\x7f\\xc3\\xbf\\xc2\\xaf\\xc4\\x80\\x7f\\x7f\\xf2\\xbd\\xba\\x980'''\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: missing =",
+        1
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 7,
+      "reject": 1
+    },
+    "acceptance_rate": 0.875,
+    "max_nesting_depth": 0,
+    "productions_accepted": [
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "UNQUOTED_KEY",
+      "comment",
+      "document",
+      "expression",
+      "key",
+      "key_value",
+      "simple_key",
+      "string",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "quoted_key",
+      "dotted_key",
+      "integer",
+      "floating_point",
+      "bool_",
+      "date_time",
+      "array_",
+      "array_values",
+      "comment_or_nl",
+      "nl_or_comment",
+      "table",
+      "standard_table",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "NL",
+      "COMMENT",
+      "BASIC_STRING",
+      "LITERAL_STRING",
+      "BOOLEAN",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "DEC_INT",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 3,
+    "divergences": 5,
+    "divergence_examples": [
+      "b\"a = '''U\\xc3\\xbf\\xc2\\xaf\\xc4\\x80\\x7f+\\xf2\\xbd\\xba\\x980'''\"",
+      "b\"a = '''U\\xc3\\xbf\\xc2\\xaf\\xc4\\x80\\x7f\\x7f\\xf2\\xbd\\xba\\x980'''\"",
+      "b\"a = '''\\x7f\\xc3\\xbf\\xc2\\xaf\\xc4\\x80\\x7f\\x7f\\xf2\\xbd\\xba\\x980'''\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 63.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 63.0
+}

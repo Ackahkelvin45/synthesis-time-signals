@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.35533333333333333,
+  "summary": {
+    "outcomes": {
+      "valid": 129,
+      "reject": 221
+    },
+    "acceptance_rate": 0.369,
+    "max_nesting_depth": 2999,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "COMMENT",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "NL",
+      "OFFSET_DATE_TIME",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.271,
+    "novelty": 37,
+    "divergences": 77,
+    "divergence_examples": [
+      "b'a = 1 # comment \\x01'",
+      "b'a = [{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[[{a=[['",
+      "b\"[['\\x19\\x1fK\\x08\\xc3\\xb4\\x06\\xc2\\x89\\xc2\\xaa\\xf4\\x81\\x86\\xa7\\x1e\\t\\t']]\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: expect hex char",
+        86
+      ],
+      [
+        "line 1: syntax error",
+        36
+      ],
+      [
+        "line 1: unterminated quote",
+        30
+      ],
+      [
+        "line 1: bad escape char",
+        15
+      ],
+      [
+        "line 2: key exists",
+        10
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 192.42,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 192.42
+}

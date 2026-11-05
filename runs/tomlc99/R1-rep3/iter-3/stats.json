@@ -1,0 +1,188 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.5223333333333334,
+  "summary": {
+    "outcomes": {
+      "valid": 135,
+      "reject": 215
+    },
+    "acceptance_rate": 0.386,
+    "max_nesting_depth": 2048,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "INF",
+      "OFFSET_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.111,
+    "novelty": 53,
+    "divergences": 69,
+    "divergence_examples": [
+      "b'#\\xf4\\x8a\\xb0\\xb4\\xf0\\x9c\\xa2\\xb7\\x01\\xc3\\x97+\\xf1\\xa6\\xa8\\xa5\\xc2\\x8b\\xc2\\xab'",
+      "b'[[YRw]]\\n[EHDdb1]\\n\\n\"\" = false\\n#\\xc3\\x8e\\xc3\\x8a\\xc3\\xaa^\\x15\\xc2\\x88'",
+      "b'[[EHDdb1]]\\nEHDdb1 = \\'\\'\\'\\'\\'\\'\\n\"\" = false\\n#\\xc3\\x8e\\xc3\\x8a\\xc3\\xaa^\\x15\\xc2\\x88'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: syntax error",
+        53
+      ],
+      [
+        "line 1: extra chars after value",
+        25
+      ],
+      [
+        "line 1: invalid or missing key",
+        21
+      ],
+      [
+        "line 1: unterminated quote",
+        14
+      ],
+      [
+        "line 2: key exists",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 135,
+      "reject": 215
+    },
+    "acceptance_rate": 0.386,
+    "max_nesting_depth": 2048,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE",
+      "LOCAL_DATE_TIME",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "INF",
+      "OFFSET_DATE_TIME",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.111,
+    "novelty": 53,
+    "divergences": 69,
+    "divergence_examples": [
+      "b'#\\xf4\\x8a\\xb0\\xb4\\xf0\\x9c\\xa2\\xb7\\x01\\xc3\\x97+\\xf1\\xa6\\xa8\\xa5\\xc2\\x8b\\xc2\\xab'",
+      "b'[[YRw]]\\n[EHDdb1]\\n\\n\"\" = false\\n#\\xc3\\x8e\\xc3\\x8a\\xc3\\xaa^\\x15\\xc2\\x88'",
+      "b'[[EHDdb1]]\\nEHDdb1 = \\'\\'\\'\\'\\'\\'\\n\"\" = false\\n#\\xc3\\x8e\\xc3\\x8a\\xc3\\xaa^\\x15\\xc2\\x88'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 260.22,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 260.22
+}

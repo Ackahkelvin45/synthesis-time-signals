@@ -1,0 +1,165 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.07766666666666668,
+  "summary": {
+    "outcomes": {
+      "valid": 14,
+      "reject": 336
+    },
+    "acceptance_rate": 0.04,
+    "max_nesting_depth": 36,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "DEC_INT",
+      "LITERAL_STRING",
+      "NL",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "floating_point",
+      "bool_",
+      "date_time",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "array_table",
+      "COMMENT",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "ML_LITERAL_STRING",
+      "FLOAT",
+      "INF",
+      "NAN",
+      "HEX_INT",
+      "OCT_INT",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 6,
+    "divergences": 4,
+    "divergence_examples": [
+      "b\"'\\x07\\x7f\\xf2\\x91\\x97\\x94\\xf0\\xab\\x95\\x90\\x1b\\x0c' = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]]]]]]]]]]]\"",
+      "b\"'\\x07\\x7f\\xf2\\x91\\x97\\x94\\x0c\\x1b\\x0c' = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]]]]]]]]]]]]]]\"",
+      "b\"'\\x07\\x0c\\xf2\\x91\\x97\\x94\\x0c\\x1b\\x0c' = [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]]]]]]]]]]]]]]\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: missing =",
+        211
+      ],
+      [
+        "line 1: bad key",
+        35
+      ],
+      [
+        "line 1: unterminated quote",
+        24
+      ],
+      [
+        "line 1: syntax error",
+        16
+      ],
+      [
+        "line 1: unterminated s-quote",
+        14
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 45.51,
+    "region_coverage_pct": 47.42
+  },
+  "coverage_in_loop": {
+    "branch_pct": 45.51,
+    "region_pct": 47.42,
+    "line_pct": 51.82,
+    "branch_pct_file": 36.35,
+    "region_pct_file": 37.65,
+    "least_covered_functions": [
+      {
+        "name": "toml_utf8_to_ucs",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 72
+      },
+      {
+        "name": "toml_rtots",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "toml_rtod_ex",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 56
+      },
+      {
+        "name": "parse_inline_table",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 45
+      },
+      {
+        "name": "toml_parse_file",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 44
+      }
+    ],
+    "functions_total": 82
+  },
+  "proxy_score": 121.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 45.51
+}

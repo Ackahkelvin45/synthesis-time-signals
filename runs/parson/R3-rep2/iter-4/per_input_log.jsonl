@@ -1,0 +1,350 @@
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " []\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[\"\"],\"\",\"\",\"\",\"\",\"\",\"\",\"\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":1,,}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1abc", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":\"\",\"b\":\"\"} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"a\":[],\"b\":[]}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\"} ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u0000\\b\\n\\u0000\",\"\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\",\"\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\",\"\\u007f\\u001f\\/\\u007f\\t\\f\\u001f\\uffff\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\",\"\\u007f\\u001f\\/\\u007f\\t\\u001f\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\",\"\\u007f\\u001f\\f\\u007f\\t\\u001f\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\",\"\\u007f\\u001f\\f\\u007f\\t\\u001f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\",\"\\u0000\\u007f\\u001f\\/\\u0000\\t\\f\\u001f\\uffff\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\\"\\\"\\\"\\\"\",\"\\\"\\\"\\\"\\\"\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\b\\fB\\u0080\\t\\u001f\\u0080\\u001f\\u0080\\b\\u0080\u00ca\",\"\\u001f\\u0080\\uaa1a\\r\\u007f\\u0080\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\b\\fB\\u0080\\t\\u001f\\u0080\\u001f\\u0080\\b\\u0080B\",\"\\u001f\\u0080\\uaa1a\\r\\u007f\\u0080\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\b\\fB\\u0080\\t\\u001f\\u0080\\u001f\\u0080\\b\\u0080B\",\"\\u001f\\u0080\\uaa1a\\r\\u007f\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\\"\\\"\\r\\t\\u001f\\u0080\\u001f\\u0080\\b\\u0080B\",\"\\u001f\\u0080\\uaa1a\\r\\u007f\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\\"\\\"\\r\\u0080\",\"\\u001f\\u0080\\u001f\\u0080\\b\\u0080B\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u001f\\u0080\\u001f\\u0080\\b\\u0080B\",\"\\u001f\\u0080\\u001f\\u0080\\b\\u0080B\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\",\"\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\",\"\":\"\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":[\"\"],\"b\":[\"\"]} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\/\\uffff\\uffff\\r\\b\\uffff\\uffff\u0092\\\\\\uffff\\f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\/\\uffff\\uffff\\r\\/\\uffff\\uffff\u0092\\\\\\uffff\\f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\/\\uffff\\uffff\\r\\/\\u001f\\uffff\u0092\\\\\\uffff\\f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\/\\uffff\\uffff\\r\\/\\u001f\\uffff\\u001f\\\\\\uffff\\f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\/\\uffff\\uffff\\r\\/\\u001f\\uffff\\u001f\\/\\uffff\\f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\/\\uffff\\uffff\\uffff\\/\\u001f\\uffff\\u001f\\/\\uffff\\f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\/\\uffff\\/\\uffff\\/\\u001f\\uffff\\u001f\\/\\uffff\\f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":{},\"b\":{}}\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n{\"a\":{},\"b\":{}}\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n{\"a\":[],\"b\":[]} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"a\":[],\"b\":[]} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":{},\"b\":{}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[{\"\":0.0e+0}] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[{\"\":\"\"}] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[{\"\":\"0\"}] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[{\"0\":\"0\"}] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\\\"\"\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u001f\\f\\uffff\\uffff\\u7D98\\u0000\\ueBeA\\r\\u001f\\ue5fB\",\"\\u0080\\u001f\\u007f\\u007f\\uffffv\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u001f\\r\\uffff\\uffff\\u7D98\\u0000\\ueBeA\\r\\u001f\\ue5fB\",\"\\u0080\\u001f\\u007f\\u007f\\uffffv\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u001f\\r\\uffff\\uffff\\u7D98\\u0000\\ueBeA\\r\\u001f\\u75fB\",\"\\u0080\\u001f\\u007f\\u007f\\uffffv\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u001f\\r\\uffff\\uffff\\u7D98\\u0000\\ueBeA\\r\\u001f\\u75fB\",\"\\u0080\\u001f\\u007f\\u007f\\uffff\\u001f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u001f\\r\\uffff\\uffff\\u7D98\\u0000\\ueBeA\\r\\u001f\\u75fB\",\"\\r\\u001f\\u007f\\u007f\\uffff\\u001f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u001f\\r\\uffff\\uffff\\u0240\",\"\\u007f\\u007f\\uffff\\u001f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n1", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n1\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[[],[]]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[[],[]] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[[],[]]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\"\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t\"\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],[]]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],[]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{},[]]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],[]]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 823416E+8494 ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 823416\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 823416 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 0e0 ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{\"\udb34\ude34\u00d3x\ud913\udd47\u0095\ud9d1\udf12I\uda09\udfbc\":[[],[],[[],[{\"\u00fb\\uEFcB\\f\u00dd\":{},\"\\/\\ucB72\":{},\"\":{\"\\/\\u9f7e\\r\\uA78A\u0101\\uBB99\\u055b\\ue43f\":{\"\u00a1\":[],\"\u00b0\\u11f8\\ud5Ee\\uDDEB6\\f\u00d3\":[],\"\u00a9\\/\\\\\\ude78\":{},\"g\u00a6\\u398c\\uACFd\\n\u00b0\\uf215\u00a0\":[],\"\ud837\udc51\\/\uda39\udf00\\\"\u00bf0\":{\"\\u0000\":{\"\":{\"\":{\"\":{}}}},\"\":\"\",\"\ud8ce\udd0d\\u48eA\\\\\":[{\"0\":[]}]}}}},0.0]]],\"\":\"\"},{\"\udb34\ude34\u00d3x\ud913\udd47\u0095\ud9d1\udf12I\uda09\udfbc\":[[],[],[[],[{\"\u00fb\\uEFcB\\f\u00dd\":{},\"\\/\\ucB72\":{},\"\":{\"\\/\\u9f7e\\r\\uA78A\u0101\\uBB99\\u055b\\ue43f\":{\"\u00a1\":[],\"\u00b0\\u11f8\\ud5Ee\\uDDEB6\\f\u00d3\":[],\"\u00a9\\/\\\\\\ude78\":{},\"g\u00a6\\u398c\\uACFd\\n\u00b0\\uf215\u00a0\":[],\"\ud837\udc51\\/\uda39\udf00\\\"\u00bf0\":{\"\\u0000\":{\"\":{\"\":{\"\":{}}}},\"\":\"\",\"\ud8ce\udd0d\\u48eA\\\\\":[{\"0\":[]}]}}}},0.0]]],\"\":\"\"}]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{\"\udb34\ude34\u00d3x\ud913\udd47\u0095\ud9d1\udf12I\uda09\udfbc\":[[],[],[[],[{\"\u00fb\\uEFcB\\f\u00dd\":{},\"\\/\\ucB72\":{},\"\":{\"\\/\\u9f7e\\r\\uA78A\u0101\\uBB99\\u055b\\ue43f\":{\"\u00a1\":[],\"\u00b0\\u11f8\\ud5Ee\\uDDEB6\\f\u00d3\":[],\"\u00a9\\/\\\\\\uce78\":{},\"g\u00a6\\u398c\\uACFd\\n\u00b0\\uf215\u00a0\":[],\"\ud837\udc51\\/\uda39\udf00\\\"\u00bf0\":{\"\\u0000\":{\"\":{\"\":{\"\":{}}}},\"\":\"\",\"\ud8ce\udd0d\\u48eA\\\\\":[{\"0\":[]}]}}}},0.0]]],\"\":\"\"},{\"\udb34\ude34\u00d3x\ud913\udd47\u0095\ud9d1\udf12I\uda09\udfbc\":[[],[],[[],[{\"\u00fb\\uEFcB\\f\u00dd\":{},\"\\/\\ucB72\":{},\"\":{\"\\/\\u9f7e\\r\\uA78A\u0101\\uBB99\\u055b\\ue43f\":{\"\u00a1\":[],\"\u00b0\\u11f8\\ud5Ee\\uDDEB6\\f\u00d3\":[],\"\u00a9\\/\\\\\\uce78\":{},\"g\u00a6\\u398c\\uACFd\\n\u00b0\\uf215\u00a0\":[],\"\ud837\udc51\\/\uda39\udf00\\\"\u00bf0\":{\"\\u0000\":{\"\":{\"\":{\"\":{}}}},\"\":\"\",\"\ud8ce\udd0d\\u48eA\\\\\":[{\"0\":[]}]}}}},0.0]]],\"\":\"\"}]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " \"\\u00e9\udad4\udd4f\"\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"C\\/\\u1B2a\\\\\\uae1a\\/\\ni\":[]}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"C\\/\\u1B2a\\\\\\uae12\\/\\ni\":[]}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\"\\u0000\\n\u00b5\\b\\u0080\",\"\\u0080\\u0080\\udA6a\\u007f\\u0080\\u007f\"]\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\"\\u0000\\n\u00b5\\b\\u0080\",\"\\u0080\\u0080\\udA6A\\u007f\\u0080\\u007f\"]\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\"\\u0000\\n\u00b5\\b\\u0080\",\"\\u0000\\n\u00b5\\b\\u0080\"]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\"\\u0000\\n\\n\\b\\u0080\",\"\\u0000\\n\u00b5\\b\\u0080\"]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\"\\u0000\\n\\n\\u0080\\u0080\",\"\\u0000\\n\u00b5\\b\\u0080\"]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\"\\u0000\\n\u00b5\\b\\u0080\",\"\u00b5\\n\u00b5\\b\\u0080\"]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[\"\\u0000\\n\u00b5\\b\\u0080\",\"\\\"\\n\u00b5\\b\\u0080\"]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [\"\\\\\\u261d\\u001f\\uffff\\u007f\\u007f\\uffff\ud931\uddce\",\"\\u0080\\u0080\\u007f\\b\\t\\u007f\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [\"\\\\\\u261d\\u001f\\uffff\\u007f\\u007f\\uffff\ud931\uddce\",\"\\\\\\u261d\\u001f\\uffff\\u007f\\u007f\\uffff\ud931\uddce\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [\"\ud931\uddce\\u261d\\u001f\\uffff\\u007f\\u007f\\uffff\ud931\uddce\",\"\\\\\\u261d\\u001f\\uffff\\u007f\\u007f\\uffff\ud931\uddce\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [\"\ud931\uddce\\u261d\\u001f\\uffff\\u007f\\u007f\\uffff\ud931\uddce\",\"\\\\\\u0308\\\\\\u0080\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [\"\ud931\uddce\\u261d\\u001f\\uffff\\u007f\\u007f\\uffff\ud931\uddce\",\"\\\\\\u0308\\\\\\u001f\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [\"\\\\\\u0308\\\\\\u001f\",\"\\\\\\u0308\\\\\\u001f\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [\"\\\\\\u0308\\\\\\u001f\",\"\\\\\\u0300\\\\\\u001f\"] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\nnull\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\nnull\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":{\"\\u15C5\":{}}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":{\"\\u15C5\":{},\"\":{}}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":{\"\\u15C50\":\"\"}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":{\"0\":{}}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " false\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " false ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"\\uD6b5\u00e7\":[]}\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"\\uDbb5\u00e7\":[]}\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":[{}]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":[false]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":[\"\"]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":[\"0\"]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":-0.9}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":-0.0E0}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":-0.0}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":-0}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":20}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":10.0}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":10.0e0}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},[{\"\\/\u00f5\\\"\\u02EB\":{},\"\":\"\"}]],[{},[{\"\\/\u00f5\\\"\\u02EB\":{},\"\":\"\"}]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{},{\"\\/\u00f5\\\"\\u02EB\":{},\"\":\"\"}],[{},{},{\"\\/\u00f5\\\"\\u02EB\":{},\"\":\"\"}]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{},{\"\\/\u00f5\\\"\\/\":{},\"\":\"\"}],[{},{},{\"\\/\u00f5\\\"\\/\":{},\"\":\"\"}]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{},{\"\":\"0\\/\u00f5\\\"\\/\"},\"\"],[{},{},{\"\":\"0\\/\u00f5\\\"\\/\"},\"\"]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{},{\"\":\"\u00f5\\/\u00f5\\\"\\/\"},\"\"],[{},{},{\"\":\"\u00f5\\/\u00f5\\\"\\/\"},\"\"]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},\"\u00f5\\/\u00f5\\\"\\/\",{\"\":\"\u00f5\\/\u00f5\\\"\\/\"},\"\"],[{},\"\u00f5\\/\u00f5\\\"\\/\",{\"\":\"\u00f5\\/\u00f5\\\"\\/\"},\"\"]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{},{}]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{},[],[],{},[],{},{\"\\u50fa\":{},\"\\ufc86\\ub5CA\u00a9\\ue4C8\\ub823\ud944\udc06\ud842\udf4f\":{\"\\uB2b1\":[],\"\":[{\"\\\"\\\"\ud8d5\udecb\":{\"\\uc6fa\\f\\u1DA4\\uf7e9\\uCfAe\\r\":[],\"\u00fd\\\\\\ud54f\\\"\\f{\\/{\":\"00\",\"\":[]}}],\"\":[]}},\"\",{\"\":{}},\"\\\"\\t\"]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{},[],[],{},[],{},{\"\\u50fa\":{},\"\\ufc86\\ub5CA\u00a9\\ue4C8\\ub823\ud944\udc06\ud842\udf4f\":{\"\\uB2b1\":[],\"\":[{\"\\\"\\\"\\\"\":{\"\\uc6fa\\f\\u1DA4\\uf7e9\\uCfAe\\r\":[],\"\u00fd\\\\\\ud54f\\\"\\f{\\/{\":\"00\",\"\":[]}}],\"\":[]}},\"\",{\"\":{}},\"\\\"\\t\"]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{},[],[],{},[],{},{\"\\u50fa\":{},\"\\ufc86\\ub5CA\u00a9\\ue4C8\\ub823\ud944\udc06\ud842\udf4f\":{\"\\uB2b1\":{},\"\":[{\"\\\"\\\"\\\"\":{\"\\uc6fa\\f\\u1DA4\\uf7e9\\uCfAe\\r\":[],\"\u00fd\\\\\\ud54f\\\"\\f{\\/{\":\"00\",\"\":[]}}],\"\":[]}},\"\",{\"\":{}},\"\\\"\\t\"]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{},[],[],{},[],{},{\"\\u50fa\":{},\"\\ufc86\\uB2b1\u00a9\\ue4C8\\ub823\ud944\udc06\ud842\udf4f\":{\"\\uB2b1\":{},\"\":[{\"\\\"\\\"\\\"\":{\"\\uc6fa\\f\\u1DA4\\uf7e9\\uCfAe\\r\":[],\"\u00fd\\\\\\ud54f\\\"\\f{\\/{\":\"00\",\"\":[]}}],\"\":[]}},\"\",{\"\":{}},\"\\\"\\t\"]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{},[],[],{},[],{},{\"\":[],\"\\ufc86\\uB2b1\u00a9\\ue4C8\\ub823\ud944\udc06\ud842\udf4f\":{\"\\uB2b1\":{},\"\":[{\"\\\"\\\"\\\"\":{\"\\uc6fa\\f\\u1DA4\\uf7e9\\uCfAe\\r\":[],\"\u00fd\\\\\\ud54f\\\"\\f{\\/{\":\"00\",\"\":[]}}],\"\":[]}},\"\",{\"\":{}},\"\\\"\\t\"]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0000\\/\\u001f\\u001f\\u007f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0000\\/\\u001f\\u001f\\u001f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0000\\f\\u001f\\u001f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0000\\f\\u001f\\u0000\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0000\\u001f\\f\\u0000\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0000\\u0000\\f\\u0000\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\"\"\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\"\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\"\"\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":{},\"b\":{}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\t\\n\\u0080\\t\\u0080\\u0000\\u007f\\u0000\\u001f\\u0000\\u0080\\u007f\ud979\ude98\\u0000\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\n\\n\\u0080\\t\\u0080\\u0000\\u007f\\u0000\\u001f\\u0000\\u0080\\u007f\ud979\ude98\\u0000\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\n\\n\\u0080\\t\\u0080\\u0000\\u007f\\u0000\\u001f\\n\\u0080\\u007f\ud979\ude98\\u0000\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\n\\n\\u0080\\u001f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\n\\n\\n\\u001f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\u0080\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f\u00c0\\\"\\u0080\\ucc04\\f\\u001f\\\"\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\u0080\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f\u00c0\\\"\\u0080\\ucc04\\f\\u001f\\n\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\u0080\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f\u00c0\\\"\\u0080\\u0706\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f\u00c0\\\"\\u0080\\ucc04\\f\\u001f\\n\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\u0080\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f\u00c0\\\"\\u0080\\ucc04\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f\u00c0\\\"\\u0080\\ucc04\\f\\u001f\\n\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\u0080\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f_\\\"\\u0080\\ucc04\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f\u00c0\\\"\\u0080\\ucc04\\f\\u001f\\n\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\u0080\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f_\\\"\\u0080\\ucc04\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f\u00c0\\\"\\ucc04\\ucc04\\f\\u001f\\n\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\u0080\\uffff\\\"\\t\\u0080\\u0080\\\"\\n_\\u001f_\\\"\\u0080\\ucc04\\uffff\\\"\\t\\t\\u0080\\\"\\n_\\u001f\u00c0\\\"\\ucc04\\ucc04\\f\\u001f\\n\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "false\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\nfalse\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "null ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " null ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[3.141592653589793,3.141592653589793]\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[3.141592653589793,3.141592653589793]\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1e+", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "null\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "null", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tnull", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"s\":\"\\\\\uda32\udeab\\u007f\uda14\udfb1\\n\\u0000\\uffff\u0097\\u78ab\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"s\":\"\\\"\\u0800\\u007f\uda14\udfb1\\n\\u0000\\uffff\u0097\\u78ab\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"s\":\"\\\"\\u0800\\u007f\uda14\udfb1\\n\u0097\\uffff\u0097\\u78ab\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"s\":\"\\\"\\u0800\\u007f\uda14\udfb1\\n\uda14\udfb1\\uffff\u0097\\u78ab\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"s\":\"\\\"\\u0202\\\\0\"} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"s\":\"\\\"\\\"\\/\\\"\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {\"s\":\"\\\"\\\"\\/\\\"\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [[],[{\"\":{},\"\\u5A7B\u00d5\\/\\t\\r\\n]\ud860\udd52\":{\"\\u4dc3\uda52\udc9a\\ud346\\\"\u00df\":[],\"\\\\\":{}},\"\\u6cA1\":[{\"\ud82d\udee5\\u1B1e\\\"\\u693F\ud841\ude8c\":[],\"\\ubbdC\u0084\u00e4\\u4F24\\r\u009b\":{},\"\\u0140\":{},\"\":[]}]},{}],-1e309,{},0.0,{},\"\u009aD\",[]] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [[],[{\"\":{},\"\\u5A7B\u00d5\\/\\t\\r\\n]\ud860\udd52\":{\"\":[],\"\\\\\":{}},\"\\u6cA1\":[{\"\ud82d\udee5\\u1B1e\\\"\\u693F\ud841\ude8c\":[],\"\\ubbdC\u0084\u00e4\\u4F24\\r\u009b\":{},\"\\u0140\":{},\"\":[]}]},{}],-1e309,{},0.0,{},\"\u009aD\",[]] ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " {}\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n{}\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\b\u00a2\\u0A6c\\u2cae\\b\\uE448\\\"\ud9c5\udd5d\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\b\u00a2\\u0A6c\\u2cae\\b\\uE448\\\"\\u0A6c\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\b\u00a2\\uE448\\u2cae\\b\\uE448\\\"\\u0A6c\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\b\u00a2\\u8448\\u2cae\\b\\uE448\\\"\\u0A6c\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\b\u00a2\\u8448\\u2cae\\b\\\"\\\"\\u0A6c\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\\b\u00a2\\u8448\\u0A6c\\b\\\"\\\"\\u0A6c\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n{\"s\":\"\\r\\b\\u007f\\u0000\\u0080R\\uffff\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n{\"s\":\"\\r\\b\\u007f\\u0000\\u0080RR\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"s\":\"\\r\\b\\u007f\\u0000\\u0080RR\"}\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"s\":\"\\r\\b\\u007f0\"} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"s\":\"\\\"\\u001f\\b\\u007f0\"} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"s\":\"\\\"\\\"\\\"\\n0\"} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"s\":\"\\\"\\\"\\\"\\\"0\"} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\nfalse", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ttrue ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " true ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " [{},{}]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[{},{}]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":[[],{\"\\/\\uf8cC\\f\u00bb[\\uc38bl\\f\":{\"\\n\\\\\\u04bc\u00bb\":[[0.0]]}}]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\ud81e\udc8a\\u0080\\n\\u0080\\u001fE\\uffff\\uE664\\n\\u007f\",\"\\u0080\\u001f\\u0000\\/\\u4B5e\\\\\u00b7\\u27EE\\uffff\\u001f\\u0000\u00a7\\u001f\\\\\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\ud81e\udc8a\\u0080\\n\\u0080\\u001fE\\uffff\\\\\\n\\u007f\",\"\\u0080\\u001f\\u0000\\/\\u4B5e\\\\\u00b7\\u27EE\\uffff\\u001f\\u0000\u00a7\\u001f\\\\\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\ud81e\udc8a\\u0080\\n\\u0080\\u001fE\\uffff\\\\\\n\\u007f\",\"\\u0080\\u001f\\u0000\\/\\u4B5e\\\\\u00b7\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\ud81e\udc8a\\u0080\\n\\u0080\\u001fE\\uffff\\\\\\n\\u007f\",\"\\u0080\\u001f\\u0000\\/\\u0604\\u0000\\/\\u4B5e\\\\\u00b7\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\ud81e\udc8a\\u0080\\n\\u0080\\u001fE\\uffff\\\\\\n\\u007f\",\"\\u0080\\u001f\\u0000\\/\\u0654\\u0000\\/\\u4B5e\\\\\u00b7\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\ud81e\udc8a\\u0080\\n\\u0080\\u001fE\\uffff\\\\\\n\\u007f\",\"\\u0080\\u001f\\u0000\\/\\u0654\\u0000\\/\\u001f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":{\"\\r\\uAdA1\\ud9C4\\u3dbE\\r\\ub1Ca\\r\":false,\"\\\\\u00b7\u00fd\\\\\\n\\/\udb8a\udeaa0\":{}}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":{\"\\r\\uAdA1\\ud9C4\\u3dbE\\r\\ub1Ca\\r\":false,\"\\\\\u00b7\u00fd\\\\\\n\\/00\":{}}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"\u0095\\uC9F5\\/\\tR\\uE39f\\u65d8\u00d2\":[{\"\\u51BC\u00ba\\ub54d\\tg\u0084\\\"\\uc80E\":{\"\\uc1B3\":{}},\"\\f\\r\":{\"\\ub980\u00efr\\u57FB\ud9bc\udf0c\\u7fd0\\\"\ud96b\ude66\":{},\"o\\/\\n\\/\\ufd8es\\/\\u3Df7\":[],\"\\u50dF\\u4D4bG\\f\":[],\"\\f\\/\\ub7c0\\u37d5\\uD8Dc#\":[{\"\\ud30C\\ufcdA\\ueCFF\":{},\"\\f\ubde8\\uCAe5\\\\<\\uE88C\\/\u008f\":[[[[]]],{}]},[]]},\"\\t\\na\u00a1\\u59D3\\n\":{\"\u008f\\\"\":[],\"\u00fa\\n\\/\\ueabc\":[]},\"\u00f2\\udAAf\":{}},[]],\"X\":{\"\ud953\uddef\":{},\"l\\uB5CF\\ucFf7\":[]},\"\":false}\t", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\udb9d\ude6c\\u007f\\uffff\\u0080\\uffff\\u8c3B\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\udb9d\ude6c\\u007f\\uffff\\u0080\\uffff\\u0800\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\udb9d\ude6c\\u007f\\uffff\\u0080\\uffff\\uffff\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\u007f\\uffff\\u0080\\uffff\\uffff\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\uffff\\uffff\\u0080\\uffff\\uffff\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\uffff\\uffff\\uffff\\uffff\\uffff\\uffff\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "false\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "false", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{\"\\ub4D7\\n\\\\\ud8a8\udfa6\\\"\\uBb8E\u0081\\u4216\":{\"\\t\\/\\\\\udb9c\udd28\\uB8aE\\\\y\u00ea\":[[]],\"\":{},\"\":[{\"\\t\\n\\/\":[],\"\\\"\ud9a2\udc9c\\ubCb6\":{\"\":[[],[{\"0\":-1e308}]],\"\":[],\"\":\"\"},\"\":\"\"},{\"\":[\"0\"]}],\"\":{}}},{\"\\ub4D7\\n\\\\\ud8a8\udfa6\\\"\\uBb8E\u0081\\u4216\":{\"\\t\\/\\\\\udb9c\udd28\\uB8aE\\\\y\u00ea\":[[]],\"\":{},\"\":[{\"\\t\\n\\/\":[],\"\\\"\ud9a2\udc9c\\ubCb6\":{\"\":[[],[{\"0\":-1e308}]],\"\":[],\"\":\"\"},\"\":\"\"},{\"\":[\"0\"]}],\"\":{}}}]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{\"\\ub4D7\\n\\\\\ud8a8\udfa6\\\"\\uBb8E\u0081\\u4216\":{\"\\t\\/\\\\\udb9c\udd28\\uB8aE\\\\y\u00ea\":[[]],\"\":{},\"\":[{\"\\t\\n\\/\":[],\"\\\"\ud9a2\udc9c\\ubCb6\":{\"\":[[],[{\"0\":-1e308}]],\"\":[],\"\":\"\"},\"\":\"\"},[]],\"\":{}}},{\"\\ub4D7\\n\\\\\ud8a8\udfa6\\\"\\uBb8E\u0081\\u4216\":{\"\\t\\/\\\\\udb9c\udd28\\uB8aE\\\\y\u00ea\":[[]],\"\":{},\"\":[{\"\\t\\n\\/\":[],\"\\\"\ud9a2\udc9c\\ubCb6\":{\"\":[[],[{\"0\":-1e308}]],\"\":[],\"\":\"\"},\"\":\"\"},[]],\"\":{}}}]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{\"\\ub4D7\\n\\\\\ud8a8\udfa6\\\"\\uBb8E\u0081\\u4216\":{\"\\t\\/\\\\\udb9c\udd28\\uB8aE\\\\y\ud8a8\udfa6\":[[]],\"\":{},\"\":[{\"\\t\\n\\/\":[],\"\\\"\ud9a2\udc9c\\ubCb6\":{\"\":[[],[{\"0\":-1e308}]],\"\":[],\"\":\"\"},\"\":\"\"},[]],\"\":{}}},{\"\\ub4D7\\n\\\\\ud8a8\udfa6\\\"\\uBb8E\u0081\\u4216\":{\"\\t\\/\\\\\udb9c\udd28\\uB8aE\\\\y\ud8a8\udfa6\":[[]],\"\":{},\"\":[{\"\\t\\n\\/\":[],\"\\\"\ud9a2\udc9c\\ubCb6\":{\"\":[[],[{\"0\":-1e308}]],\"\":[],\"\":\"\"},\"\":\"\"},[]],\"\":{}}}]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{\"\\ub4D7\\n\\\\\ud8a8\udfa6\\\"\\uBb8E\\t\\u4216\":{\"\\t\\/\\\\\udb9c\udd28\\uB8aE\\\\y\ud8a8\udfa6\":[[]],\"\":{},\"\":[{\"\\t\\n\\/\":[],\"\\\"\ud9a2\udc9c\\ubCb6\":{\"\":[[],[{\"0\":-1e308}]],\"\":[],\"\":\"\"},\"\":\"\"},[]],\"\":{}}},{\"\\ub4D7\\n\\\\\ud8a8\udfa6\\\"\\uBb8E\\t\\u4216\":{\"\\t\\/\\\\\udb9c\udd28\\uB8aE\\\\y\ud8a8\udfa6\":[[]],\"\":{},\"\":[{\"\\t\\n\\/\":[],\"\\\"\ud9a2\udc9c\\ubCb6\":{\"\":[[],[{\"0\":-1e308}]],\"\":[],\"\":\"\"},\"\":\"\"},[]],\"\":{}}}]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "1.", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":{\"k\":0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\udb9f\udce1\\b\\u4c8D\\ue11E\\t\uda6c\ude16\\t\\u7Eb8\":1e0,\"0\":\"\",\"\":[],\"\":{},\"\":false,\"\":\"\u00cb|\\u42E0\\uBB40\\ucFcDr\\uefd0\",\"0\":{\"\":-0},\"0\":\"\",\"\":[]}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\udb9f\udce1\\b\\u4c8D\\ue11E\\t\uda6c\ude16\\t\\u7Eb8\":1e0,\"0\":\"\",\"\":{},\"\":{},\"\":false,\"\":\"\u00cb|\\u42E0\\uBB40\\ucFcDr\\uefd0\",\"0\":{\"\":-0},\"0\":\"\",\"\":[]}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\udb9f\udce1\\u7Eb8\\u4c8D\\ue11E\\t\uda6c\ude16\\t\\u7Eb8\":1e0,\"0\":\"\",\"\":{},\"\":{},\"\":false,\"\":\"\u00cb|\\u42E0\\uBB40\\ucFcDr\\uefd0\",\"0\":{\"\":-0},\"0\":\"\",\"\":[]}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"\udb9f\udce1\\u7Eb8\\u4c8D\\ue11E\\t\uda6c\ude16\\t\\u7Eb8\":1e0,\"0\":\"\",\"\":{},\"\":{},\"\":false,\"\":\"\u00cb|\\u42E0\\uBB40\\ucFcDr\\u7Eb8\",\"0\":{\"\":-0},\"0\":\"\",\"\":[]}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n1 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 1 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":{}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[] garbage", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "true\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "true", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\r\\u0000\\u0080\\\"\\u0080\\uffff\\u0080\\f\\u0000\\b\ud926\udc97w\\u0080\u00e5\\u7fEf\\\\\\u0080\\u001f\",\"\\/\\u0000\\u0080\\u0000\\uffff\\f\\uffff\u00f5\\uffff\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\r\\u0000\\u0080\\\"\\u0080\\uffff\\u0080\\f\\u0000\\bww\\u0080\u00e5\\u7fEf\\\\\\u0080\\u001f\",\"\\/\\u0000\\u0080\\u0000\\uffff\\f\\uffff\u00f5\\uffff\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\r\\u0000\\u0080\\\"\\u0080\\uffff\\u0080\\f\\u0000\\rww\\u0080\u00e5\\u7fEf\\\\\\u0080\\u001f\",\"\\/\\u0000\\u0080\\u0000\\uffff\\f\\uffff\u00f5\\uffff\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"\u008f\":[],\"f\\uEa5b)\\u9d24\u009ax\":[{},[],{},{},{},[[]],{}],\"\\u2F44\\ucc6d\\u1a6E\\uE531\":{},\"\u00e1G\u00f4\\/\":null,\"\\r\\ufa2A\uda06\udf5e\":[]}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"\u008f\":[],\"f\\uEa5b)\\u9d24\u009ax\":[{},[],{},{},{},[{},[],{},{},{},[[]],{}],1e308]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{\"\u008f\":[],\"\u008f\":[]}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[] ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[]\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tnull ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\tnull\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\udbe1\ude5b\\u0000\\u007f\\u0080\\u0080\\u001f\\\"\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\udbe1\ude5b\\u0000\\u007f\\u0080\udbe1\ude5b\\u001f\\\"\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\udbe1\ude5b\\u0000\\u0000\\u0080\udbe1\ude5b\\u001f\\\"\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\udbe1\ude5b\\u0000\\u0000\\u0080\\\"\\u001f\\\"\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\udbe1\ude5b\\u0000\\u0000\\u0000\\\"\\u001f\\\"\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0000\\b\\u0000\\u0000\\\"\\u001f\\\"\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0000\\\"\\u0000\\u0000\\\"\\u001f\\\"\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\u58Db\\u0000\\u001f\\u0000\\u0000\\u001f\\uffff\\/\\u9bc3\\u0000\\u007f\\u0000\\uAfcC\",\"\\u0080\\/\\u0000\\u0000\\u0080\\u001f\\uffff\\uDFeC\\u001f\udacc\udf3a\\u007f\"]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u9bc3\\u0000\\u007f\\u0000\\uAfcC\",\"\\u0080\\/\\u0000\\u0000\\u0080\\u001f\\uffff\\uDFeC\\u001f\udacc\udf3a\\u007f\"]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u9bc3\\u0000\\u007f\\u0000\\uAfcC\",\"\\u0080\\/\\u0000\\u0000\\u0080\\u001f\\uffff\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u9bb3\\u0000\\u007f\\u0000\\uAfcC\",\"\\u0080\\/\\u0000\\u0000\\u0080\\u001f\\uffff\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u001f\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u9bb3\\u0000\\u007f\\u0000\\uAfcC\",\"\\u007f\\u001f\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u9bb3\\u0000\\u007f\\u0000\\uAfcC\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u58Db\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u9bb3\\u0000\\u007f\\u0000\\uAfcC\",\"\\u007f\\u001f\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u9bb3\\u0000\\u007f\\u0000\\uAfcC\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\u007f\\u58Db\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u9bb3\\u0000\\u007f\\u0000\\uAfcC\",\"\\u007f\\u001f\\u58Db\\u0000\\u001f\\u001f\\u0000\\u001f\\uffff\\/\\u58Db\\u0000\\u007f\\u0000\\uAfcC\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n\"\\u00e9\"\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\ntrue", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"v\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\\u20ac\\u20ac\udbb5\udea8\\u00e9\\u00e9\\u1716\\u20ac\\u0041\\\"\\u00e9\"\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\\u20ac\\u20ac\\\"\\u00e9\\u00e9\\u1716\\u20ac\\u0041\\\"\\u00e9\"\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\\u20ac\\u0300\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\\u20ac\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\" ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\"", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[{\"\":[{},{\"\ud99d\ude91\\u6E36\":\"\"}],\"\":\"0\"},{\"\":[{},{\"\ud99d\ude91\\u6E36\":\"\"}],\"\":\"0\"}]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n[]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\f\\u0000\\ubbFA\\b\\u001f\u00d0\",\"\udb54\udc9e\u00de\\uFeca\\ueB3C\\b\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\f\\u0000\\ubbFA\\b\\u001f\u00d0\",\"\\ubbFA\u00de\\uFeca\\ueB3C\\b\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\f\\u0000\\ubbFA\\b\\u001f\u00d0\",\"\\ubbFA\u00d0\\uFeca\\ueB3C\\b\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\f\\b\\ubbFA\\b\\u001f\u00d0\",\"\\ubbFA\u00d0\\uFeca\\ueB3C\\b\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\f\\b\\ubbFA\\b\\u001f\u00d0\",\"\\ubbFA\u00d0\\uFeca\\ueB3C\\f\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[\"\\ubbFA\u00d0\\uFeca\\ueB3C\\f\\u007f\",\"\\ubbFA\u00d0\\uFeca\\ueB3C\\f\\u007f\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":[],\"b\":[]}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\u001f\\u4f8b\\uffff\\u007f\\u0080\\uffff\\uDfeA\\ueB9e\\ua5f4\\u001f\\u0080\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\u001f\\u4f8b\\uffff\\u007f\\u0080\\uffff\\uDfeA\\u001f\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\u001f\\uffff\\uffff\\u007f\\u0080\\uffff\\uDfeA\\u001f\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\u001f\\uffff\\uffff\\u007f\\u0080\\uffff\\u0404\\uffff\\uffff\\u007f\\u0080\\uffff\\uDfeA\\u001f\"}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\u001f\\uffff\\uffff\\u007f\\u0080\\uffff\\u0404\\uffff\\uffff\\u007f\\u0080\\uffff\\u0404\\u001f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\u001f\\uffff\\uffff\\u007f\\u0080\\uffff\\u0404\\uffff\\uffff\\u0080\\u0080\\uffff\\u0404\\u001f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u001f\\u001f\\u0080\\uffff\\u007f\\u0080\\uffff\\u0404\\uffff\\uffff\\u0080\\u0080\\uffff\\u0404\\u001f\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"a\":{},\"b\":{}}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{}\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\n{}\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"\udbf4\udffa\u0100p\\u415d\\uFBbA\udb82\udec20\":-0} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"\\u415d\u0100p\\u415d\\uFBbA\udb82\udec20\":-0} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"\\u415dpp\\u415d\\uFBbA\udb82\udec20\":-0} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"\\u415dpp\\u415d\\uFBbA\udb82\udec2\udb82\udec2\":-0} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t{\"0\":{}} ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "true\t", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],{\"0\":[[1e309]]}]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],{\"0\":true,\"\":\"\"}]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],{\"0\":\"\",\"\":\"\"}]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],{\"0\":\"\",\"\":[]}]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],{\"0\":\"\"}]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[]],[]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[[]],[]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],\"\"]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[],[]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{}],[[],{}]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{}],[[]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{}],[\"0\",[]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{}],[{},{}]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[{},{}],[\"0\",{},{}]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\u00be\\u0080\\u1059\\u001fR\\b\\uffff\\uCDac\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"R\\u0080\\u1059\\u001fR\\b\\uffff\\uCDac\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"R\\u0080\\u0800\\\\\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"R\\u0080\\u0800\\u0800\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"RR\\u0800\\u0800\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"RRR\\u0800\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"RRR0\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " false", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\r\n[]\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\t[]\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[] garbage", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " -49.4E379\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": ""}
+{"input": " -10.0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " -10 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " -20 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 0.0e0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": " 0.0 ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0080\\u007f\\\"\\u001f\\/\\u0080\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0080\\u0080\\\"\\u001f\\/\\u0080\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "{\"s\":\"\\u0080\\u0080\\/\\u001f\\/\\u0080\"}", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "true ", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}

@@ -1,0 +1,104 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.3446666666666667,
+  "summary": {
+    "outcomes": {
+      "valid": 153,
+      "reject": 197
+    },
+    "acceptance_rate": 0.437,
+    "max_nesting_depth": 4096,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "false"
+    ],
+    "cap_distance_mass": 0.111,
+    "novelty": 13,
+    "divergences": 141,
+    "divergence_examples": [
+      "b'\\r\\t{\"a\":0,\"a\":1}\\r \\r \\t\\n'",
+      "b'\\t\\r\\r \\n\\n{}3{\\r\\t'",
+      "b'\\n\\r \\n-\\r\\n\\n\\r \\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "summary_shown_to_model": {
+    "outcomes": {
+      "valid": 153,
+      "reject": 197
+    },
+    "acceptance_rate": 0.437,
+    "max_nesting_depth": 4096,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [
+      "false"
+    ],
+    "cap_distance_mass": 0.111,
+    "novelty": 13,
+    "divergences": 141,
+    "divergence_examples": [
+      "b'\\r\\t{\"a\":0,\"a\":1}\\r \\r \\t\\n'",
+      "b'\\t\\r\\r \\n\\n{}3{\\r\\t'",
+      "b'\\n\\r \\n-\\r\\n\\n\\r \\n'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": []
+  },
+  "coverage_in_loop": null,
+  "proxy_score": 60.22,
+  "probes": {
+    "unicode_escape": {
+      "target": 0.9,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.375,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 60.22
+}

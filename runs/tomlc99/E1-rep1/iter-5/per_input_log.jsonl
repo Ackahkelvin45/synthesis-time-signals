@@ -1,0 +1,260 @@
+{"input": "{\"\": false}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "0000-00-0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "5391-69-5", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "[1, 2]]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid key"}
+{"input": "0000-00-00T00:00:00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "7494-16-87t05:95:26-29:3", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "\"\"\"\"\"\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "8708972..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "7308-00-0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "7308-19-0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-19-0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-05-0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-05-0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0o", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0o", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "truee", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b11110111101000_00_0_11000110", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b0_00_0_11000110", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b110001101_00_0_11000110", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b0_00_0_", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "\"\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-d-quote"}
+{"input": "\"\\uf761\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\u0000\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated quote"}
+{"input": "\"\\U00000000\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated quote"}
+{"input": "\"\\Ue6C472eF\\u0000\\UEbc5bFCA\u0007\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\Ue6C472eF\u0007\\UEbc5bFCA\u0007\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\Ue6C472eF\u0007\\UEbc5bFCA\\UEbc5bFCA\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\u0007\u0007\\UEbc5bFCA\\UEbc5bFCA\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\u0007\\U00000000\\UEbc5bFCA\\UEbc5bFCA\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\u0007\\U00000000\\U00000000\\UEbc5bFCA\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\u0007\\UEbc5bFCA\\U00000000\\UEbc5bFCA\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "[]]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid or missing key"}
+{"input": "525.4", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1525.4", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1525.", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "11525.", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "111525.", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "111521.", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "111521.", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "-390315", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1390315", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1390319", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1390313", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1390313", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-11390313", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-111390313", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "83166", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-2_0_3_0_3_1_6_2_6_4_0_6_8_2_2_2_2_6..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "-1_2_0_3_0_3_1_6_2_6_4_0_6_8_2_2_2_2_6..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "-1_2_0_3_2_3_1_6_2_6_4_0_6_8_2_2_2_2_6..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "-1_1_2_0_3_2_3_1_6_2_6_4_0_6_8_2_2_2_2_6..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "-1_1_1_2_0_3_2_3_1_6_2_6_4_0_6_8_2_2_2_2_6..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "-1_1_1_1_2_0_3_2_3_1_6_2_6_4_0_6_8_2_2_2_2..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "-1_1_1_1_2_8_3_2_3_1_6_2_6_4_0_6_8_2_2_2_2..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "{}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "0x033DD", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "[", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid or missing key"}
+{"input": "{a = 1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": ".547128924311544915e-95099", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": ".547128924311544915e+00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": ".0e+00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "0b", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "[gL.d-o.Sy0rA7siGjYW]\n#\n[['\u000b\u0002']]\n'\udb40\ude67' = {} #\ud827\udc14\n\"\".\"\\u0AFF\t\\u9BAb\".mG = [[]\n# c\n]\n\"\" = {}\n#\u0001\n[5.seGcCa.'\u0007M']\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 5: expect hex char"}
+{"input": "[gL.d-o.Sy0rA7siGjYW]\n#\n[['\u000b\u0002']]\n'\udb40\ude67' = {} #\ud827\udc14\n\"\".\"\\u9BAb\t\\u9BAb\".mG = [[]\n# c\n]\n\"\" = {}\n#\u0001\n[5.seGcCa.'\u0007M']\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 5: expect hex char"}
+{"input": "[5.seGcCa.'\u0007M']\n#\n[['\u000b\u0002']]\n'\udb40\ude67' = {} #\ud827\udc14\n\"\".\"\\u9BAb\t\\u9BAb\".mG = [[]\n# c\n]\n\"\" = {}\n#\u0001\n[5.seGcCa.'\u0007M']\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 5: expect hex char"}
+{"input": "[5.seGcCa.'\u0007M']\n#\n[['\u000b\u0002']]\n'\udb40\ude67' = {} #\ud827\udc14\n\"\".\"\\u9BAb\t\t\".mG = [[]\n# c\n]\n\"\" = {}\n#\u0001\n[5.seGcCa.'\u0007M']\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 5: expect hex char"}
+{"input": "[5.seGcCa.'\u0007M']\n#\n[['\u000b\u0002']]\n\"\".\"\\u9BAb\t\t\".mG = {} #\ud827\udc14\n\"\".\"\\u9BAb\t\t\".mG = [[]\n# c\n]\n\"\" = {}\n#\u0001\n[5.seGcCa.'\u0007M']\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 4: expect hex char"}
+{"input": "[5.seGcCa.'\u0007M']\n#\n[['\u000b\u0002']]\n\"\".\"\\u9BAb\t\t\".mG = {}\n\"\".\"\\u9BAb\t\t\".mG = [[]\n# c\n]\n\"\" = {}\n#\u0001\n[5.seGcCa.'\u0007M']\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 4: expect hex char"}
+{"input": "[5.seGcCa.'\u0007M']\n#\n[['\u000b\u0002']]\n\"\".\"\\u9BAb\t\t\".mG = {}\n\"\".\"\\u0000\u0001\u0001\" = ''\n\"\" = \"\"\n[0]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 4: expect hex char"}
+{"input": "4047-65-433", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-65-433", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-43-433", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-43-000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-00-433", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-00-000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "Vhc = [[0x0,], [], [[], [], [\"\"\"\n\\u0000\\ubF6A\u007f\n\\u4AEC\\n\u000b\"\"\",\n-6_0_6_3_9,\n0o15725261\n], []], []] #", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "Vhc = [[0x0,], [], [[], [], [\"\"\"\n\\u0000\\ubF6A\u000b\n\\u4AEC\\n\u000b\"\"\",\n-6_0_6_3_9,\n0o15725261\n], []], []] #", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "Vhc = [[0x0,], [], [[], [], [\"\"\"\n\\u0000\\u0000\"\"\",\n0x0\n# c\n], \"\",], []]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "Vhc = [[0x0,], [], [[], [], [\"\"\"\n\\u0000\\u0000\"\"\"\n]],]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "Vhc = [[0x0,], [], [0x0,],]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "Vhc = [[0x0,], [], [0x0], [0x0,]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "Vhc = [[0x0,], [], [0x0,], [0x0,]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "8866-63-688", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "8866-63-000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-63-000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": ".35E09", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": ".35e+", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "\"\"\"\\u90E1\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-d-quote"}
+{"input": "\"\"\"\\u0000\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-d-quote"}
+{"input": "\"\"\"\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-d-quote"}
+{"input": "\"\\u0000\\u0000\\f\\u0000\\UdB47245e\\u394a\" = .7\n8yy = -nan\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\u0000\\u0000\\f\\u0000\\UdB47245e\\u394a\" = .0\n8yy = -nan\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\u0000\\u0000\\f\\u0000\\UdB47245e\\u0000\" = true\n0 = .0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\u0000\\u0000\\f\\u0000\\UdB47245e\\u0000\" = true\n0 = true", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\u0000\\u0000\\f\\u0000\\U00000000\\u0000\" = true\n0 = true", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "0 = true\n0 = true", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 2: key exists"}
+{"input": "in", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "+749441020413699.96935e+98", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: bad key"}
+{"input": "+749441020413699.96935e+", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: bad key"}
+{"input": ",", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "0484-15-1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0484-15-0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-15-0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-15-1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-00-1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "\"\\u0000\\f\\t\\U4b1AB4DD\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\u0000\\t\\t\\U4b1AB4DD\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\U4b1AB4DD\\t\\t\\U4b1AB4DD\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\U4b1AB4DD\\t\\t\\t\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\\\"\\t\\t\\t\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated quote"}
+{"input": "\"\\\"\\t\\\"\\t\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated quote"}
+{"input": "\"\\\"\\\"\\\"\\t\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated quote"}
+{"input": "0o33", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1722-73-62 03:44:54.823354333", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1722-73-62 00:73:622", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1722-73-73 00:73:622", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1722-73-73 00:73:733", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-73-73 00:73:733", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-73-73T00:00:733", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-00-73T00:00:733", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "[\"\\UABf2d5F5\u007f\"]\r\n'\b\f\t\u000b\ud92b\ude12'.u7mgyhHMzoD4.'\u008f'.jLAqFGrjJaUc = {R = -46330542100642.437730273731982654, \"\" = 8_7_0_9_2_3_2_0_4_6E7}\r\n\"\\u0000\" = {'\u00b7\t\udbec\udfe0' = [], '\u0018\u0007\b\u0002\uda8d\udc86\f' = ['\u001c\u001b\udb6c\udcb4\u00e9', 0xD21_e05_1e100_D6aEa18a7702f6aF_CdCe_1_A4_E2, +5963.4,], \"\u00f8\\UFD3EbD49\" = 0x8,} #\u0001z\u0007\u00ff\f:\u0007\u00c8\u008e\t\r\n\"\u0007\" = {jJEmuAXxAIQP = {}, '' = {}, '\u0006\u0007\u000b\u0002\u00d5\f' = [true, {'' = 0xcDfef21acED, '\u0001\u007f' = -760166357186912053.2517638, '\ud893\udf33\u000b\udb81\udd81\u00da'.XHMNZG8_q.'\ud919\uddb53\ud8ed\udd37'.\"\\U808476EF\u000b\u00d4\\f\\u0000\" = 0o0,},]} #\u0001\u0002\u000b\udb5b\udedfb\u00d59G\u001b\u001c\r\nN.\"9\\UdacCC3d5\u000b\\U4Dda39b7E\u000b\".'\u001b\u0007\u00a5wqx' = {} #o\u0002\u001e\ub69b\r\n#\u000b\u0093;\r\n['\u0007\f'.6HzB.'']\r\n#\ud965\udf2d\u008f\r\n[F0_KUJp4]\r\n\"\\U3A9CCC01\f\\u77E1\".EA6vqxGo.\")\\Uc36e1eAf\\u0000\ud87a\udcd6\" = .19E+5668\r\n\"\\r\u0017\" = {} #\u001b\u0001\r\nFdcEC = ''\r\n[\"\u00ec\u00ca\\U0f0fb4AD\\u7d5C\\t\u0007\"]\r\nRjZ_.'\t' = 95705.2548 #]\u001b,\u0002F\u0007\u0001\u001b\r\ny = {}\r\n#\u0007\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "[\"\\r\u0017\"]\r\n'\b\f\t\u000b\ud92b\ude12'.u7mgyhHMzoD4.'\u008f'.jLAqFGrjJaUc = {R = -46330542100642.437730273731982654, \"\" = 8_7_0_9_2_3_2_0_4_6E7}\r\n\"\\u0000\" = {'\u00b7\t\udbec\udfe0' = [], '\u0018\u0007\b\u0002\uda8d\udc86\f' = ['\u001c\u001b\udb6c\udcb4\u00e9', 0xD21_e05_1e100_D6aEa18a7702f6aF_CdCe_1_A4_E2, +5963.4,], \"\u00f8\\UFD3EbD49\" = 0x8,} #\u0001z\u0007\u00ff\f:\u0007\u00c8\u008e\t\r\n\"\u0007\" = {jJEmuAXxAIQP = {}, '' = {}, '\u0006\u0007\u000b\u0002\u00d5\f' = [true, {'' = 0xcDfef21acED, '\u0001\u007f' = -760166357186912053.2517638, '\ud893\udf33\u000b\udb81\udd81\u00da'.XHMNZG8_q.'\ud919\uddb53\ud8ed\udd37'.\"\\U808476EF\u000b\u00d4\\f\\u0000\" = 0o0,},]} #\u0001\u0002\u000b\udb5b\udedfb\u00d59G\u001b\u001c\r\nN.\"9\\UdacCC3d5\u000b\\U4Dda39b7E\u000b\".'\u001b\u0007\u00a5wqx' = {} #o\u0002\u001e\ub69b\r\n#\u000b\u0093;\r\n['\u0007\f'.6HzB.'']\r\n#\ud965\udf2d\u008f\r\n[F0_KUJp4]\r\n\"\\U3A9CCC01\f\\u77E1\".EA6vqxGo.\")\\Uc36e1eAf\\u0000\ud87a\udcd6\" = .19E+5668\r\n\"\\r\u0017\" = {} #\u001b\u0001\r\nFdcEC = ''\r\n[\"\u00ec\u00ca\\U0f0fb4AD\\u7d5C\\t\u0007\"]\r\nRjZ_.'\t' = 95705.2548 #]\u001b,\u0002F\u0007\u0001\u001b\r\ny = {}\r\n#\u0007\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid char U+0017"}
+{"input": "[\"\\r\u0017\"]\r\n'\b\f\t\u000b\ud92b\ude12'.u7mgyhHMzoD4.'\u008f'.jLAqFGrjJaUc = {R = -46330542100642.437730273731982654, \"\" = 8_7_0_9_2_3_2_0_4_6E7}\r\n\"\\u0000\" = {'\u00b7\t\udbec\udfe0' = [], '\u0018\u0007\b\u0002\uda8d\udc86\f' = ['\u001c\u001b\udb6c\udcb4\u00e9', 0xD21_e05_1e100_D6aEa18a7702f6aF_CdCe_1_A4_E2, 95705.2548,], \"\u00f8\\UFD3EbD49\" = 0x8,} #\u0001z\u0007\u00ff\f:\u0007\u00c8\u008e\t\r\n\"\u0007\" = {jJEmuAXxAIQP = {}, '' = {}, '\u0006\u0007\u000b\u0002\u00d5\f' = [true, {'' = 0xcDfef21acED, '\u0001\u007f' = -760166357186912053.2517638, '\ud893\udf33\u000b\udb81\udd81\u00da'.XHMNZG8_q.'\ud919\uddb53\ud8ed\udd37'.\"\\U808476EF\u000b\u00d4\\f\\u0000\" = 0o0,},]} #\u0001\u0002\u000b\udb5b\udedfb\u00d59G\u001b\u001c\r\nN.\"9\\UdacCC3d5\u000b\\U4Dda39b7E\u000b\".'\u001b\u0007\u00a5wqx' = {} #o\u0002\u001e\ub69b\r\n#\u000b\u0093;\r\n['\u0007\f'.6HzB.'']\r\n#\ud965\udf2d\u008f\r\n[F0_KUJp4]\r\n\"\\U3A9CCC01\f\\u77E1\".EA6vqxGo.\")\\Uc36e1eAf\\u0000\ud87a\udcd6\" = .19E+5668\r\n\"\\r\u0017\" = {} #\u001b\u0001\r\nFdcEC = ''\r\n[\"\u00ec\u00ca\\U0f0fb4AD\\u7d5C\\t\u0007\"]\r\nRjZ_.'\t' = 95705.2548 #]\u001b,\u0002F\u0007\u0001\u001b\r\ny = {}\r\n#\u0007\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid char U+0017"}
+{"input": "[\"\\r\u0017\"]\r\n'\b\f\t\u000b\ud92b\ude12'.u7mgyhHMzoD4.'\u008f'.jLAqFGrjJaUc = {R = -46330542100642.437730273731982654, \"\" = 8_7_0_9_2_3_2_0_4_6E7}\r\n\"\\u0000\" = {'\u00b7\t\udbec\udfe0' = [], '\u0018\u0007\b\u0002\uda8d\udc86\f' = ['\u001c\u001b\udb6c\udcb4\u00e9', 0xD21_e05_1e100_D6aEa18a7702f6aF_CdCe_1_A4_E2, 95705.2548,], \"\u00f8\\UFD3EbD49\" = 0x8,} #\u0001z\u0007\u00ff\f:\u0007\u00c8\u008e\t\r\n\"\u0007\" = {jJEmuAXxAIQP = {}, '' = {}, '\u0006\u0007\u000b\u0002\u00d5\f' = [true, {jJEmuAXxAIQP = 0b0}]}\r\n0 = []\r\n#\r\n[0]\r\n0 = \"\"\r\n[0]\r\n[[0]]\r\n0 = \"\"\r\n\"\" = ''", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid char U+0017"}
+{"input": "[\"\\r\u0017\"]\r\n'\b\f\t\u000b\ud92b\ude12'.u7mgyhHMzoD4.'\u008f'.jLAqFGrjJaUc = {R = -46330542100642.437730273731982654, \"\" = 8_7_0_9_2_3_2_0_4_6E7}\r\n\"\\r\u0017\" = {'\u00b7\t\udbec\udfe0' = [], '\u0018\u0007\b\u0002\uda8d\udc86\f' = ['\u001c\u001b\udb6c\udcb4\u00e9', 0xD21_e05_1e100_D6aEa18a7702f6aF_CdCe_1_A4_E2, 95705.2548,], \"\u00f8\\UFD3EbD49\" = 0x8,} #\u0001z\u0007\u00ff\f:\u0007\u00c8\u008e\t\r\n\"\u0007\" = {jJEmuAXxAIQP = {}, '' = {}, '\u0006\u0007\u000b\u0002\u00d5\f' = [true, {jJEmuAXxAIQP = 0b0}]}\r\n0 = []\r\n#\r\n[0]\r\n0 = \"\"\r\n[0]\r\n[[0]]\r\n0 = \"\"\r\n\"\" = ''", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid char U+0017"}
+{"input": "[\"\\r\u0017\"]\r\n'\b\f\t\u000b\ud92b\ude12'.u7mgyhHMzoD4.'\u008f'.jLAqFGrjJaUc = {R = -46330542100642.437730273731982654, \"\" = 8_7_0_9_2_3_2_0_4_6E7}\r\n\"\\r\u0017\" = {'\u00b7\t\udbec\udfe0' = [], '\u0018\u0007\b\u0002\uda8d\udc86\f' = ['\u001c\u001b\udb6c\udcb4\u00e9', 0xD21_e05_1e100_D6aEa18a7702f6aF_CdCe_1_A4_E2, 95705.2548,], \"\u00f8\\UFD3EbD49\" = 0x8,} #\u0001z\u0007\u00ff\f:\u0007\u00c8\u008e\t\r\n\"\u0007\" = {jJEmuAXxAIQP = {}, '' = {}, '\u0006\u0007\u000b\u0002\u00d5\f' = \"\"}\r\n0 = \"\"\r\n[0]\r\n[0]\r\n0 = \"\"\r\n[0]", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid char U+0017"}
+{"input": "[N]\r\n#r\f\b", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[N]\r\n#\u0001\f\b", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[N]\r\n#\b\f\b", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[N]\r\n#\b\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[N]]\r\n#\b\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "[[N]]\r\n0 = []\r\n", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "CqUda = {\"\\u0000\\b\\ua2Ea\" = -60982, 3pCF = .36, ER_C7E = .64073, NLvKx = true}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "CqUda = {\"\\u0000\\b\\ua2Ea\" = -60982, 3pCF = .64073, ER_C7E = .64073, NLvKx = true}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "0 = {\"\\u0000\\b\\ua2Ea\" = -60982, 3pCF = .64073, ER_C7E = .00, '' = 0.0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "0 = {\"\\u0000\\b\\ua2Ea\" = -60982, 3pCF = .64073, ER_C7E = .64073, '' = 0.0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "0 = {\"\\u0000\\b\\ua2Ea\" = -0, 3pCF = .64073, ER_C7E = .64073, '' = 0.0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "0 = {'0' = .00, 0 = .0, 0 = 0.3, ER_C7E = .64073}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: key exists"}
+{"input": "0 = {'0' = .00, ER_C7E = .0, 0 = 0.3, ER_C7E = .64073}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: key exists"}
+{"input": "43313..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "13313..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "1331..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "11331..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "11131..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "13131..", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "internal error (/Users/kelvinackah/Desktop/projects/research/agentic_fuzzing/vendor/tomlc99/toml.c:1113)"}
+{"input": "8967-13-65t78:13:80.7788", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "8967-13-65t00:13:80.7788", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "8967-13-65t00:13:00.7788", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "8967-13-65t00:13:65.000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-13-65t00:00:000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-13-65t00:13:65.000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "\"\"\"ac ", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-d-quote"}
+{"input": "97:47:233", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "47:47:233", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "47:47:477", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "72:36:0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "06:36:0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "06:06:0", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "{a = 1}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "0x3DfeF_F30_bCf_aFb9_5_ccE_C30_e0bCE1e3c933a0B", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0x3DfeF_F30_bCf_aFb9_C30_ccE_C30_e0bCE1e3c933a0B", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0x3DfeF_F30_bCf_aFb9_C30_3DfeF_C30_e0bCE1e3c933a0B", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0x3DfeF_F30_bCf_aFb9_C30_3DfeF_C30_F3", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0x3DfeF_F30_bCf_aFb9_C30_3DfeF_C30_bC", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0x3DfeF_F30_bCf_aFb9_C30_3DfeF_aFb9_bC", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0x3DfeF_F30_bCf_aFb9_aFb9_3DfeF_aFb9_bC", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "+na", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": ".39e600", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": ".39e+00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "1066-69-95T32:71:522", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1066-69-95T32:00:522", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1066-69-95T69:00:522", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1066-69-95T00:69:955", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "1066-69-95T00:69:699", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0000-69-95T00:00:699", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0o1300", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "'\t\b\u00d1\u0087' = [[[[[[[[[[[[[[[[[[[[[[1]]]]]]]]]]]]]]]]]]]]]]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "\"\" = [1]", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "+9", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "+19", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "+1", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "+9", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "+19", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "+119", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "fals", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b00111001", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0o546777300100", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-67443901E-711", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-67443901e00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "67443901e00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0e00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "na", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-2932938871398", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-12932938871398", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-112932938871398", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1112932938871398", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1112938938871398", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1112928938871398", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1112928938821398", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0x6", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "''.24Co-LWdQc.\"\\UDb90fA9e\\U4753e9Ca\" = {\"\\u0000\" = 0b1, \"\\u0000\\u0000\\u27DE\\u0000\t\".\"\u00ca\".\"\ud8e0\ude35\" = 0xD61afa}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "''.24Co-LWdQc.\"\\UDb90fA9e\\U4753e9Ca\" = {\"\\u0000\" = 0b1, ''.24Co-LWdQc.\"\\UDb90fA9e\\U4753e9Ca\" = 0xD61afa}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "''.24Co-LWdQc.\"\u0001\" = {\"\\u0000\" = 0b1, ''.24Co-LWdQc.\"\\UDb90fA9e\\U4753e9Ca\" = 0xD61afa}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid char U+0001"}
+{"input": "''.24Co-LWdQc.\"\u0001\" = {\"\\u0000\" = 0b1, ''.24Co-LWdQc.\"\\UDb90fA9e\\u0000\" = 0xD61afa}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid char U+0001"}
+{"input": "''.24Co-LWdQc.\"\u0001\" = {\"\\u0000\" = 0b1, ''.24Co-LWdQc.24Co-LWdQc = 0xD61afa}\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: invalid char U+0001"}
+{"input": "''.24Co-LWdQc.\"\\u0000\" = {\"\\u0000\" = 0b1, ''.24Co-LWdQc.24Co-LWdQc = 0xD61afa}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: key exists"}
+{"input": "''.24Co-LWdQc.\"\\u0000\" = {''.24Co-LWdQc.24Co-LWdQc = 0b1, ''.24Co-LWdQc.24Co-LWdQc = 0xD61afa}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: key exists"}
+{"input": "'''''", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-s-quote"}
+{"input": "-97.56182128281457", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-197.56182128281457", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-1197.56182128281457", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-11197.56182128281457", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-11997.56182128281457", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "falsee", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "tru", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "{\"\\ud9f1\\ude35\\u00bf\\u00a2\\ud966\\ude5d\\ud9f4\\ude3d\\u00ee\": 189, \"\\u00d0\\u00abL\\u00f9-\\u009f\\u008f\": {\"{\\u00f9[ce\\udb2f\\udd26\\u0080\": \"\\u00c8X\\u00ca\\u009f\", \"\\u00a9\\u008c\": null, \"unquoted_key\": true}}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "{\"\\ud9f1\\ude35\\u00bf\\u00a2\\ud966\\ude5d\\ud9f4\\ude3d\\u00ee\": 189, \"\\ud9f1\\ude35\\u00bf\\u00a2\\ud966\\ude5d\\ud9f4\\ude3d\\u00ee\": 189}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "{\"\": 189, \"\\ud9f1\\ude35\\u00bf\\u00a2\\ud966\\ude5d\\ud9f4\\ude3d\\u00ee\": 189}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "{\"\\ud9f1\\ude35\\u00bf\\u00a2\\ud966\\ude5d\\ud9f4\\ude3d\\u00ee\": 189, \"\\ud9f1\\ude35\\u00bf\\u00a2\\ud966\\ude5d\\ud9f4\\ude3d\\u00ee\": 0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "{\"\": 189, \"\\ud9f1\\ude35\\u00bf\\u00a2\\ud966\\ude5d\\ud9f4\\ude3d\\u00ee\": 0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "{\"\": 0}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "{}", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: syntax error"}
+{"input": "\"\"\"\\UB8Ec131c\"\"\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: expect hex char"}
+{"input": "\"\"\"\\U00000000\"\"\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b0111_0100011_111110110_111011100001001_10_00001010101100000", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b0111_01000111", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0b01111", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "'' = .0\r\n-Infinity.\"\\u286b\".'\u001b\u007f\u000b\u007f\u0007'.\"\\u9f59\" = 70:90:81.035312498\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 2: expect hex char"}
+{"input": "'' = .0\r\n-Infinity.\"\\u286b\".'\u001b\u007f\u000b\u007f\u0007'.\"\\u286b\" = 70:90:81.035312498\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 2: expect hex char"}
+{"input": "'' = .0\r\n'' = 70:90:81.035312498\r\n", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 2: key exists"}
+{"input": "'' = .0\r\n'' = true", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 2: key exists"}
+{"input": "'' = true\r\n'' = true", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 2: key exists"}
+{"input": "\"\\u0000\"\"", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated quote"}
+{"input": "'''\ud96e\udd1dk\r\n''", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-s-quote"}
+{"input": "'''kk\r\n''", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-s-quote"}
+{"input": "'''k\r\n\r\n''", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: unterminated triple-s-quote"}
+{"input": "0b011101", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-00", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "68:40:3", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "32:40:3", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "32:32:3", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "-na", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "0o36015766", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "863526690138188", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "863926690138188", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "863926699138188", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "86392669913800", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "186392669913800", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "186392669910800", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "186362669910800", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}
+{"input": "'\f\t\u000b\u00c7\u0002'.MWchgZiq6f3H.'\u001b\b\t\u001b\u00b3\ud867\uddd0'.'\u007f\ud8d2\udc03\u007f\u0002\u0004\u0019' = 69495.\n'' = 956656112654080.9197656336E0\nv = -351960305106118037649.0\n9KFEMwTy8uQP = -nan", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "'\f\t\u000b\u00c7\u0002'.\"\".'\u001b\b\t\u001b\u00b3\ud867\uddd0'.'\u007f\ud8d2\udc03\u007f\u0002\u0004\u0019' = 69495.\n'' = 956656112654080.9197656336E0\nv = -351960305106118037649.0\n9KFEMwTy8uQP = -nan", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "'\f\t\u000b\u00c7\u0002'.\"\".'\u001b\b\t\u001b\u00b3\ud867\uddd0'.'\u007f\ud8d2\udc03\u007f\u0002\u0004\u0019' = 69495.\n'' = 956656112654080.9197656336E0\nv = -351560305106118037649.0\n9KFEMwTy8uQP = -nan", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "'\f\t\u000b\u00c7\u0002'.\"\".'\u001b\b\t\u001b\u00b3\ud867\uddd0'.'\u007f\ud8d2\udc03\u007f\u0002\u0004\u0019' = 69495.\n'' = 99495.9197656336E0\nv = -351560305106118037649.0\n9KFEMwTy8uQP = -nan", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "'\f\t\u000b\u00c7\u0002'.\"\".'\u001b\b\t\u001b\u00b3\ud867\uddd0'.'\u007f\ud8d2\udc03\u007f\u0002\u0004\u0019' = 69495.\n'' = 99495.9197656336E0\nv = 69495.0\n9KFEMwTy8uQP = -nan", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "'\f\t\u000b\u00c7\u0002'.\"\".'\u001b\b\t\u001b\u00b3\ud867\uddd0'.'\u007f\ud8d2\udc03\u000b\u0002\u0004\u0019' = 69495.\n'' = 99495.9197656336E0\nv = 69495.0\n9KFEMwTy8uQP = -nan", "outcome": "valid", "exit_code": 0, "signal": null, "timed_out": false, "detail": ""}
+{"input": "'\f\t\u000b\u00c7\u0002'.\"\".'\u001b\b\t\u001b\u00b3\ud867\uddd0'.'\u007f\ud8d2\udc03\u000b\u0002\u0004\u0019' = 69495.\n'' = 99495.9197656336E0\nv = 69495.0\n'\f\t\u000b\u00c7\u0002'.\"\".'\u001b\b\t\u001b\u00b3\ud867\uddd0'.'\u007f\ud8d2\udc03\u000b\u0002\u0004\u0019' = -nan", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 4: key exists"}
+{"input": "0o52123661427", "outcome": "reject", "exit_code": 2, "signal": null, "timed_out": false, "detail": "", "reject_reason": "line 1: missing ="}

@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.37766666666666665,
+  "summary": {
+    "outcomes": {
+      "valid": 123,
+      "reject": 227
+    },
+    "acceptance_rate": 0.351,
+    "max_nesting_depth": 3972,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BOOLEAN",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "ML_BASIC_STRING",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "bool_",
+      "comment",
+      "comment_or_nl",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "date_time",
+      "ML_LITERAL_STRING",
+      "INF",
+      "NAN",
+      "BIN_INT",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE_TIME",
+      "LOCAL_DATE",
+      "LOCAL_TIME"
+    ],
+    "cap_distance_mass": 0.016,
+    "novelty": 61,
+    "divergences": 52,
+    "divergence_examples": [
+      "b'[[LPT1.\"\"]] #\\x16\\x1d\\xd0\\x96\\xd0\\x96'",
+      "b'[[\\'\\'.\"\"]] #\\x16\\x1d\\xd0\\x96\\xd0\\x96'",
+      "b\"'\\xd0\\x96\\x17\\x04\\xce\\xb1'.'' = 0xe #\\xce\\xb1\\xce\\xb1\""
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: syntax error",
+        34
+      ],
+      [
+        "line 1: extra chars after value",
+        23
+      ],
+      [
+        "line 1: newline not allowed in inline table",
+        15
+      ],
+      [
+        "line 2: expect hex char",
+        15
+      ],
+      [
+        "line 2: key exists",
+        13
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 236.32,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 236.32
+}

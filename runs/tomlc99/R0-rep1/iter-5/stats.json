@@ -1,0 +1,123 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.43333333333333335,
+  "summary": {
+    "outcomes": {
+      "valid": 142,
+      "reject": 208
+    },
+    "acceptance_rate": 0.406,
+    "max_nesting_depth": 64,
+    "productions_accepted": [
+      "BASIC_STRING",
+      "BIN_INT",
+      "COMMENT",
+      "DEC_INT",
+      "FLOAT",
+      "HEX_INT",
+      "LITERAL_STRING",
+      "LOCAL_DATE_TIME",
+      "LOCAL_TIME",
+      "ML_LITERAL_STRING",
+      "NAN",
+      "NL",
+      "OCT_INT",
+      "UNQUOTED_KEY",
+      "array_",
+      "array_table",
+      "array_values",
+      "comment",
+      "comment_or_nl",
+      "date_time",
+      "document",
+      "dotted_key",
+      "expression",
+      "floating_point",
+      "inline_table",
+      "inline_table_keyvals",
+      "inline_table_keyvals_non_empty",
+      "integer",
+      "key",
+      "key_value",
+      "nl_or_comment",
+      "quoted_key",
+      "simple_key",
+      "standard_table",
+      "string",
+      "table",
+      "unquoted_key",
+      "value"
+    ],
+    "productions_gap": [
+      "bool_",
+      "BOOLEAN",
+      "ML_BASIC_STRING",
+      "INF",
+      "OFFSET_DATE_TIME",
+      "LOCAL_DATE"
+    ],
+    "cap_distance_mass": 0.0,
+    "novelty": 63,
+    "divergences": 43,
+    "divergence_examples": [
+      "b\"'\\xc2\\x91'.'\\t\\x0b\\x0c\\x06\\x7f\\x07'.'\\xf1\\x82\\xa9\\xa5b\\xc3\\xbf\\xc8\\xbe\\x0c6'.RiZp = {'\\x19\\t&\\x0b\\x01\\x0c' = +4_7_8_1_9_8_8_9_4_3.5302, '\\xc2\\x82\\xf2\\x82\\xa7\"",
+      "b\"'\\xc2\\x91'.'\\x01\\x0b\\x0c\\x06\\x7f\\x07'.'\\xf1\\x82\\xa9\\xa5b\\xc3\\xbf\\xc8\\xbe\\x0c6'.RiZp = {'\\x19\\t&\\x0b\\x01\\x0c' = +4_7_8_1_9_8_8_9_4_3.5302, '\\xc2\\x82\\xf2\\x82\\xa7\"",
+      "b'\\'\\xc2\\x91\\'.\\'\\x01\\x0b\\x0c\\x06\\x7f\\x07\\'.0 = \"\"'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "line 1: missing =",
+        60
+      ],
+      [
+        "line 1: expect hex char",
+        43
+      ],
+      [
+        "line 3: expect hex char",
+        14
+      ],
+      [
+        "line 1: bad escape char",
+        8
+      ],
+      [
+        "line 1: unterminated quote",
+        7
+      ]
+    ]
+  },
+  "summary_shown_to_model": null,
+  "coverage_in_loop": null,
+  "proxy_score": 253.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "deep_nesting": {
+      "target": 1.0,
+      "oracle": 0.0
+    },
+    "duplicate_keys": {
+      "target": 0.0,
+      "oracle": 0.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {},
+  "new_crash": false,
+  "score": 253.0
+}

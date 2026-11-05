@@ -1,0 +1,143 @@
+{
+  "mode": "deepseek-chat",
+  "validate_acceptance": 0.4666666666666666,
+  "summary": {
+    "outcomes": {
+      "valid": 181,
+      "reject": 169
+    },
+    "acceptance_rate": 0.517,
+    "max_nesting_depth": 1002,
+    "productions_accepted": [
+      "NUMBER",
+      "STRING",
+      "arr",
+      "false",
+      "json",
+      "null",
+      "obj",
+      "pair",
+      "true",
+      "value"
+    ],
+    "productions_gap": [],
+    "cap_distance_mass": 0.0,
+    "novelty": 36,
+    "divergences": 78,
+    "divergence_examples": [
+      "b'\\xef\\xbb\\xbftrue'",
+      "b'[\"\\x1f\",true]'",
+      "b'{\"K\":\"\\r\",\"K\":\"\\r\",\"K\":\"\",\"K\":\"\"}'"
+    ],
+    "unique_crash_signatures": [],
+    "reject_reasons_sample": [
+      [
+        "parse error at byte 4 of 5",
+        3
+      ],
+      [
+        "parse error at byte 9 of 10",
+        3
+      ],
+      [
+        "parse error at byte 105 of 106",
+        3
+      ],
+      [
+        "parse error at byte 31 of 32",
+        3
+      ],
+      [
+        "parse error at byte 50 of 86",
+        3
+      ]
+    ]
+  },
+  "summary_shown_to_model": {
+    "branch_coverage_pct": 77.84,
+    "region_coverage_pct": 94.43,
+    "least_covered_functions": [
+      "cJSON_Compare (0% of branches)",
+      "print_value (0% of branches)",
+      "print_string_ptr (0% of branches)",
+      "print_number (0% of branches)",
+      "print_object (0% of branches)"
+    ],
+    "least_covered_function_source": "CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive)\n{\n    if ((a == NULL) || (b == NULL) || ((a->type & 0xFF) != (b->type & 0xFF)))\n    {\n        return false;\n    }\n\n    /* check if type is valid */\n    switch (a->type & 0xFF)\n    {\n        case cJSON_False:\n        case cJSON_True:\n        case cJSON_NULL:\n        case cJSON_Number:\n        case cJSON_String:\n        case cJSON_Raw:\n        case cJSON_Array:\n        case cJSON_Object:\n            break;\n\n        default:\n            return false;\n    }\n\n    /* identical objects are equal */\n    if (a == b)\n    {\n        return true;\n    }\n\n    switch (a->type & 0xFF)\n    {\n        /* in these cases and equal type is enough */\n        case cJSON_False:\n        case cJSON_True:\n        case cJSON_NULL:\n            return true;\n\n        case cJSON_Number:\n            if (compare_double(a->valuedouble, b->valuedouble))\n            {\n                return true;\n            }\n            return false;\n\n        case cJSON_String:\n        case cJSON_Raw:\n            if ((a->valuestring == NULL) || (b->valuestring == NULL))\n            {\n                return false;\n            }\n            if (strcmp(a->valuestring, b->valuestring) == 0)\n            {\n                return true;\n            }\n\n            return false;\n\n        case cJSON_Array:\n        {\n            cJSON *a_element = a->child;\n            cJSON *b_element = b->child;\n\n            for (; (a_element != NULL) && (b_element != NULL);)\n            {\n                if (!cJSON_Compare(a_element, b_element, case_sensitive))\n                {\n                    return false;\n                }\n\n                a_element = a_element->next;\n                b_element = b_element->next;\n            }\n\n            /* one of the arrays is longer than the other */\n            if (a_element != b_element) {\n                return false;\n            }\n\n            return true;\n/* ... truncated ... */"
+  },
+  "coverage_in_loop": {
+    "branch_pct": 77.84,
+    "region_pct": 94.43,
+    "line_pct": 87.29,
+    "branch_pct_file": 26.07,
+    "region_pct_file": 26.69,
+    "least_covered_functions": [
+      {
+        "name": "cJSON_Compare",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 128
+      },
+      {
+        "name": "print_value",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 81
+      },
+      {
+        "name": "print_string_ptr",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 79
+      },
+      {
+        "name": "print_number",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 78
+      },
+      {
+        "name": "print_object",
+        "branch_pct": 0.0,
+        "region_pct": 0.0,
+        "regions": 78
+      }
+    ],
+    "functions_total": 112
+  },
+  "proxy_score": 86.0,
+  "probes": {
+    "unicode_escape": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "big_number": {
+      "target": 0.5,
+      "oracle": 0.625
+    },
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    },
+    "duplicate_keys": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "empty_container": {
+      "target": 1.0,
+      "oracle": 1.0
+    },
+    "near_valid_malformed": {
+      "target": 0.0,
+      "oracle": 0.0
+    }
+  },
+  "target_deviations": {
+    "deep_nesting": {
+      "target": 0.0,
+      "oracle": 1.0
+    }
+  },
+  "new_crash": false,
+  "score": 77.84
+}
