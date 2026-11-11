@@ -38,7 +38,7 @@ for extra in 25 26 27 28 29 30; do
 done
 $PY eval/followup/replication_seeds.py --arm B6 --need 20 --out replication2_seeds.json --inputs $M/replication2_b6seed*_*.jsonl > /dev/null 2>&1 || { say "draft rule: fewer than 20 drawing drafts after 30 B6 replicates, stopped for a decision"; exit 1; }
 # phase 2: the four arms, 20 pairs per target; measured as two halves in parallel (six processes)
-fund 3.5; batch replication2_arms Q0,Q1,Q2,Q3 1 20
+fund 1.0; batch replication2_arms Q0,Q1,Q2,Q3 1 20   # gate lowered from 3.5 on the 2026-11-11 resume: 74 of 240 runs remained (DEVIATIONS 3)
 say "measuring arms"
 measure arms1 final "Q0 Q1 Q2 Q3" 1 10 & measure arms2 final "Q0 Q1 Q2 Q3" 11 20 & wait
 say "measured; running the analysis once"
