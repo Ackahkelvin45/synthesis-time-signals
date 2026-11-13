@@ -30,6 +30,8 @@ measure() { local t; say "measuring $1"; for t in ${6:-parson tomlc99 cjson}; do
 # phase 1: fresh first drafts (B6 = B5), 24 per target, more for a short target up to 30
 fund 1.5; batch replication2_b6 B6 1 24
 measure b6seed1 seed B6 1 12 & measure b6seed2 seed B6 13 24 & wait
+# the draft mapping is computed once; a resume never rewrites it (DEVIATIONS 4 changed one entry by hand)
+if [ ! -f eval/followup/replication2_seeds.json ]; then
 for extra in 25 26 27 28 29 30; do
   $PY eval/followup/replication_seeds.py --arm B6 --need 20 --out replication2_seeds.json --inputs $M/replication2_b6seed*_*.jsonl > /dev/null 2>&1 && break
   short=$($PY eval/followup/replication_seeds.py --arm B6 --need 20 --out replication2_seeds.json --inputs $M/replication2_b6seed*_*.jsonl 2>&1 | grep -o "[a-z0-9]*: [0-9]* drawing" | cut -d: -f1 | paste -sd, -)
@@ -37,6 +39,7 @@ for extra in 25 26 27 28 29 30; do
   measure b6seed_x$extra seed B6 $extra $extra "${short//,/ }"
 done
 $PY eval/followup/replication_seeds.py --arm B6 --need 20 --out replication2_seeds.json --inputs $M/replication2_b6seed*_*.jsonl > /dev/null 2>&1 || { say "draft rule: fewer than 20 drawing drafts after 30 B6 replicates, stopped for a decision"; exit 1; }
+fi
 # phase 2: the four arms, 20 pairs per target; measured as two halves in parallel (six processes)
 fund 1.0; batch replication2_arms Q0,Q1,Q2,Q3 1 20   # gate lowered from 3.5 on the 2026-11-11 resume: 74 of 240 runs remained (DEVIATIONS 3)
 say "measuring arms"
