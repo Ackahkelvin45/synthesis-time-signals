@@ -19,14 +19,20 @@ TARGETS, NEED, SEEDS = ("parson", "tomlc99", "cjson"), 10, 20
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--inputs", nargs="+", required=True)
     ap.add_argument("--arm", default="B5"); ap.add_argument("--need", type=int, default=NEED)
-    ap.add_argument("--out", default="replication_seeds.json"); a = ap.parse_args()
+    ap.add_argument("--out", default="replication_seeds.json")
+    # The plan's rule says "the iteration-1 generator draws". The measured `seed` condition is the EARLIEST
+    # iteration that draws (eval/cell.py seed_strategy_path), so without this flag a replicate whose
+    # iteration 1 failed to build is accepted on its iteration 2 or 3 cells (DEVIATIONS_replication2.md, 4).
+    # Both studies ran without the flag; it is here so the rule as written can be computed.
+    ap.add_argument("--require-iter1", action="store_true"); a = ap.parse_args()
     ok = defaultdict(lambda: defaultdict(dict))
     for src in a.inputs:
         for line in Path(src).read_text().splitlines():
             if not line.strip(): continue
             r = json.loads(line); pr = parse_run_cond(r["condition"])
             if pr and pr[0] == a.arm and pr[2] == "seed":
-                ok[r["target"]][pr[1]][r["seed"]] = "error" not in r
+                ok[r["target"]][pr[1]][r["seed"]] = "error" not in r and (
+                    not a.require_iter1 or str(r.get("strategy_ref", "")).endswith("/iter-1/strategy.py"))
     out, short = {}, []
     for t in TARGETS:
         good = [j for j in sorted(ok[t]) if len(ok[t][j]) == SEEDS and all(ok[t][j].values())]

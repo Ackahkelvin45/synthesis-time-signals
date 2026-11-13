@@ -91,6 +91,12 @@ def main():
                 g += sum(bool(json.loads(f.read_text()).get("gated")) for f in rd.glob("iter-*/stats.json"))
                 fb += "discarded, back to iter" in ((rd / "evolution.md").read_text(errors="replace") if (rd / "evolution.md").exists() else "")
         print(f"- {arm}: {g} gated iterations, {fb} runs with a gate fallback")
+    # pairs whose shared iteration-1 draft was rejected at build or gated (identical in all four arms;
+    # read from the Q0 run): DEVIATIONS_replication2.md, 4
+    bad = {t: sum(any(l.startswith("- iter 1: build rejected") or "iter 1: gated" in l for l in
+                      (ROOT.parents[1] / "runs" / t / f"Q0-rep{k}" / "evolution.md").read_text(errors="replace").splitlines())
+                  for k in range(1, REPS + 1)) for t in TARGETS}
+    print("- pairs whose shared first draft failed at iteration 1: " + ", ".join(f"{t} {bad[t]}" for t in TARGETS))
     for t in TARGETS:
         for arm in BARE + TEXT:
             for k in range(1, REPS + 1):
