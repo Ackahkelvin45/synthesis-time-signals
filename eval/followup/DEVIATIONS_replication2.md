@@ -27,3 +27,9 @@ The launcher's 3.5 USD gate before the arms batch was sized for 240 runs. On the
 - **Decision.** The study keeps the rule as computed for the 59 pairs that ran, so no finished run is relabelled or discarded. Pair 19 of tomlc99 takes replicate 24, the only unused tomlc99 replicate whose iteration-1 cells all draw (replicate 23 is already pair 20). Under the rule as written, tomlc99 would have had only 16 drawing drafts of 23 and needed further B6 replicates; parson 20 and cjson 21.
 - **Code.** replication_seeds.py gains `--require-iter1`, off by default so both studies' mappings are reproducible; with it the rule as written is computed. replication2_report.py adds one descriptive line: the number of pairs per target whose shared draft failed at iteration 1. No contrast is added.
 - **For the paper.** The draft rule is described as computed, and the counts above are reported with the second study.
+
+## 5. Host restart during phase-2 measurement (found 2026-11-20)
+
+- **What happened.** All 240 Q finals were complete on 2026-11-13. Measurement started at 13:00Z, and the host restarted at 18:12Z with 2 271 of 4 800 cells written. Nothing ran from then until 2026-11-20.
+- **Effect on data.** None. eval/matrix.py appends one cell per line and skips cells already present, so the relaunch measures only the missing cells. The cells already written, error cells included, were measured once under the same parallel setting. They go through the one re-measurement of error cells exactly as planned. No cell value was read before the relaunch: only line and error counts.
+- **Disk.** The regenerable draw cache (build/_inputs) was cleared to make room. Cached draws are reproducible from the strategy file, n and seed (eval/_draw.py), and cells already present are never redrawn.
