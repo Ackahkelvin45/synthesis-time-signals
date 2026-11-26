@@ -34,6 +34,7 @@ import json
 import os
 import shutil
 import subprocess
+import threading
 import sys
 from pathlib import Path
 
@@ -298,6 +299,7 @@ def input_set_id(ref: str, n: int, seed: int) -> str:
 
 
 DRAW_TIMEOUT_S = 900
+DRAW_MEM_GB = 6
 
 
 class DrawError(RuntimeError):
@@ -322,14 +324,36 @@ def draw_examples(ref: str, n: int, seed: int) -> list[str]:
     # A generator that raises, hangs, or eats memory on some seed is a DATA
     # POINT about that generator, never a reason to kill a matrix shard:
     # bounded by DRAW_TIMEOUT_S; failures surface as DrawError to the caller.
+    # A watchdog thread ends a draw whose memory passes DRAW_MEM_GB: one generator that grows without bound
+    # (parson Q3-rep16 of the second study) exhausted the host's memory and restarted it. Below the cap
+    # nothing changes: same subprocess, same timeout, same output (DEVIATIONS_replication2.md, 6).
+    p = subprocess.Popen([sys.executable, str(_DRAW), ref, str(n), str(seed)],
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    over = threading.Event()
+
+    def _watch():
+        # macOS footprint (top's MEM: resident + compressed + swapped). RSS alone stays near 3 GB while
+        # this generator's footprint passes 40 GB, so RSS cannot see it. top itself takes about a second.
+        while p.poll() is None:
+            out = subprocess.run(["top", "-l", "1", "-pid", str(p.pid), "-stats", "mem"],
+                                 capture_output=True, text=True).stdout.split()
+            m = out[-1].rstrip("+-") if out else ""
+            if m[-1:] in "BKMGT" and m[:-1].replace(".", "", 1).isdigit():
+                gb = float(m[:-1]) * {"B": 1e-9, "K": 1e-6, "M": 1e-3, "G": 1, "T": 1e3}[m[-1]]
+                if gb > DRAW_MEM_GB:
+                    over.set(); p.kill(); return
+    threading.Thread(target=_watch, daemon=True).start()
     try:
-        proc = subprocess.run([sys.executable, str(_DRAW), ref, str(n), str(seed)],
-                              capture_output=True, text=True, check=True, timeout=DRAW_TIMEOUT_S)
+        stdout, stderr = p.communicate(timeout=DRAW_TIMEOUT_S)
     except subprocess.TimeoutExpired as e:
+        p.kill(); p.communicate()
         raise DrawError(f"draw timed out after {DRAW_TIMEOUT_S}s") from e
-    except subprocess.CalledProcessError as e:
-        tail = (e.stderr or "").strip().splitlines()[-3:]
-        raise DrawError("draw failed: " + " | ".join(tail)[:400]) from e
+    if over.is_set():
+        raise DrawError(f"draw exceeded {DRAW_MEM_GB} GB of memory")
+    if p.returncode != 0:
+        tail = (stderr or "").strip().splitlines()[-3:]
+        raise DrawError("draw failed: " + " | ".join(tail)[:400])
+    proc = subprocess.CompletedProcess(p.args, p.returncode, stdout, stderr)
     draw_s = round(_time.monotonic() - t0, 3)
     payload = json.loads(proc.stdout)
     xs = payload["examples"]
